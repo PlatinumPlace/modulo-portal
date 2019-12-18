@@ -25,6 +25,7 @@ class dealAPI
     public $Tipo_de_poliza;
     public $Tipo_de_vehiculo;
     public $Valor_Asegurado;
+    public $Es_nuevo;
 
     public function getRecords($myid,$page=1,$per_page=100)
     {
@@ -54,9 +55,9 @@ class dealAPI
 
     public function createRecord()
     {
-        $moduleIns = ZCRMRestClient::getInstance()->getModuleInstance("Deals"); //to get the instance of the module
+        $moduleIns = ZCRMRestClient::getInstance()->getModuleInstance("Deals");
         $records = array();
-        $record = ZCRMRecord::getInstance("Deals", null);  //To get ZCRMRecord instance
+        $record = ZCRMRecord::getInstance("Deals", null);
         $record->setFieldValue("Deal_Name", "Trato realizado desde el portal");
         $record->setFieldValue("Lead_Source", "Portal GNB");
         $record->setFieldValue("Contact_Name", $this->Contact_Name); 
@@ -77,9 +78,10 @@ class dealAPI
         $record->setFieldValue("Valor_Asegurado", $this->Valor_Asegurado);
         $record->setFieldValue("Tipo_de_vehiculo", $this->Tipo_de_vehiculo);
         $record->setFieldValue("Tipo_de_poliza", $this->Tipo_de_poliza);
+        $record->setFieldValue("Es_nuevo", $this->Es_nuevo);
 
-        array_push($records, $record); // pushing the record to the array.
-        $responseIn = $moduleIns->createRecords($records); // updating the records.$trigger,$lar_id are optional
+        array_push($records, $record);  
+        $responseIn = $moduleIns->createRecords($records); 
         foreach ($responseIn->getEntityResponses() as $responseIns) {
             $detail = json_decode(json_encode($responseIns->getDetails()), true);
             $result = $detail['id'];
@@ -110,11 +112,23 @@ class dealAPI
             $result['Tipo_de_poliza'] = $record->getFieldValue("Tipo_de_poliza");
             $result['Tipo_de_vehiculo'] = $record->getFieldValue("Tipo_de_vehiculo");
             $result['Valor_Asegurado'] = $record->getFieldValue("Valor_Asegurado");
+            $result['Es_nuevo'] = $record->getFieldValue("Es_nuevo");
         } catch (ZCRMException $ex) {
             echo $ex->getMessage(); // To get ZCRMException error message
             echo $ex->getExceptionCode(); // To get ZCRMException error code
             echo $ex->getFile(); // To get the file name that throws the Exception
         }
         return $result;
+    }
+
+    public function uploadAttachment($id,$file_path)
+    {
+        $record = ZCRMRestClient::getInstance()->getRecordInstance("Deals", $id);
+        $responseIns = $record->uploadAttachment($file_path);
+        echo "HTTP Status Code:" . $responseIns->getHttpStatusCode();
+        echo "Status:" . $responseIns->getStatus(); 
+        echo "Message:" . $responseIns->getMessage();
+        echo "Code:" . $responseIns->getCode();
+        echo "Details:" . $responseIns->getDetails()['id'];
     }
 }

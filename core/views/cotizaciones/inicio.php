@@ -24,7 +24,7 @@
                       }
                       ?>
                 </td>
-                <td><a href="index.php?controller=dealController&action=dealDetail&id=<?= $value['id']?>" class="btn btn-primary">Ver</a></td>
+                <td><a href="index.php?controller=HomeController&action=cotizacion_detalles&id=<?= $value['id']?>" class="btn btn-primary">Ver</a></td>
                 <td></td>
               </tr>
             <?php endforeach ?>

@@ -4,6 +4,7 @@ include "core/controllers/HomeController.php";
 include "core/models/dealAPI.php";
 include "core/models/productAPI.php";
 include "core/models/quoteAPI.php";
+include "core/models/vendorAPI.php";
 include "zohoapi/config.php";
 
 //Aqui tomas las petisiones get

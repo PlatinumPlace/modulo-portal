@@ -16,8 +16,10 @@ ob_start();
 
     <link href="lib/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
     <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
-
+    <link href="lib/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
     <link href="lib/css/sb-admin-2.min.css" rel="stylesheet">
+    <link href="lib/vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
+
 
 </head>
 
@@ -71,8 +73,8 @@ ob_start();
                 </nav>
 
                 <div class="container-fluid">
-                        <!-- Contenido de las vistas  -->
-                        <?php require_once("core/router.php") ?>
+                    <!-- Contenido de las vistas  -->
+                    <?php require_once("core/router.php") ?>
                 </div>
                 <br>
                 <footer class="sticky-footer bg-white">
@@ -84,30 +86,32 @@ ob_start();
                 </footer>
 
 
-                </div>
+            </div>
 
-                </div>
+        </div>
 
-                <a class="scroll-to-top rounded" href="#page-top">
-                    <i class="fas fa-angle-up"></i>
-                </a>
+        <a class="scroll-to-top rounded" href="#page-top">
+            <i class="fas fa-angle-up"></i>
+        </a>
 
 
-                <script src="lib/vendor/jquery/jquery.min.js"></script>
-                <script src="lib/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+        <script src="lib/vendor/jquery/jquery.min.js"></script>
+        <script src="lib/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 
-                <script src="lib/vendor/jquery-easing/jquery.easing.min.js"></script>
+        <script src="lib/vendor/jquery-easing/jquery.easing.min.js"></script>
 
-                <script src="lib/js/sb-admin-2.min.js"></script>
+        <script src="lib/js/sb-admin-2.min.js"></script>
 
-                <script src="lib/vendor/chart.js/Chart.min.js"></script>
+        <script src="lib/vendor/chart.js/Chart.min.js"></script>
 
-                <script src="lib/js/demo/chart-area-demo.js"></script>
-                <script src="lib/js/demo/chart-pie-demo.js"></script>
+        <script src="lib/js/demo/chart-area-demo.js"></script>
+        <script src="lib/js/demo/chart-pie-demo.js"></script>
+        <script src="lib/js/bootstrap.min.js"></script>
+
 
 </body>
 
 </html>
 <?php
-ob_end_flush();
+                    ob_end_flush();
 ?>

@@ -6,7 +6,6 @@ use zcrmsdk\crm\setup\restclient\ZCRMRestClient;
 
 class quoteAPI
 {
-
     public function getRecordByCriteria($dealid)
     {
         $moduleIns = ZCRMRestClient::getInstance()->getModuleInstance("Quotes");
@@ -22,7 +21,7 @@ class quoteAPI
                     $result[$cont]['ListPrice'] = $lineItem->getListPrice();
                     $result[$cont]['Total'] = $lineItem->getNetTotal();
                     $result[$cont]['Tax'] = $lineItem->getTaxAmount();
-                    $result[$cont]['id'] = $lineItem->getProduct()->getEntityId();
+                    $result[$cont]['id_product'] = $lineItem->getProduct()->getEntityId();
                     $cont++;
                 }
             }
