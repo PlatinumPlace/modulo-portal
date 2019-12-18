@@ -41,15 +41,11 @@ ob_start();
 
             <li class="nav-item">
                 <a class="nav-link" href="index.php?controller=HomeController&action=crear_cotizacion">
-                    <span>Nueva cotizacion</span></a>
+                    <span>Nueva cotizacion</span>
+                </a>
             </li>
 
             <hr class="sidebar-divider d-none d-md-block">
-
-            <li class="nav-item">
-                <a class="nav-link" href="index.php?controller=HomeController&action=mis_cotizaciones">
-                    <span>Todas las cotizaciones</span></a>
-            </li>
 
             <div class="text-center d-none d-md-inline">
                 <button class="rounded-circle border-0" id="sidebarToggle"></button>

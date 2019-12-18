@@ -14,14 +14,32 @@ class HomeController
 
     public function pagina_inicio()
     {
+        $mydeals = $this->dealAPI->getRecords("3222373000000751142");
+        //$mydeals = $this->deal->getRecords($_SESSION['user_id']);
+        $ganancias_mensuales = 0;
+        $ganancias_anuales = 0;
+        $cotizaciones_pendientes = 0;
+        foreach ($mydeals as $value) {
+            if ($value["Stage"] == "Emitida" && date("m", strtotime($value["Closing_Date"] . "- 30 days")) == date('m')) {
+                $ganancias_mensuales += $value["Amount"];
+            }
+            if ($value["Stage"] == "Emitida" && date("Y", strtotime($value["Closing_Date"] . "- 30 days")) == date('Y')) {
+                $ganancias_anuales += $value["Amount"];
+            }
+            if ($value["Stage"] == "Cotizado") {
+                $cotizaciones_pendientes += 1;
+            }
+        }
+
         require_once("core/views\home\inicio.php");
     }
 
-    public function mis_cotizaciones()
+    public function cotizaciones_pendientes()
     {
         $mydeals = $this->dealAPI->getRecords("3222373000000751142");
         //$mydeals = $this->deal->getRecords($_SESSION['user_id']);
-        require_once("core/views\cotizaciones\inicio.php");
+        
+        require_once("core/views\cotizaciones\cotizaciones_pendientes.php");
     }
 
     public function crear_cotizacion()

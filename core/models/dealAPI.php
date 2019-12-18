@@ -39,10 +39,8 @@ class dealAPI
             foreach ($records as $record) {
                 $result[$cont]['id'] = $record->getEntityId();
                 $result[$cont]['Stage'] = $record->getFieldValue("Stage");
-                $lineItems = $record->getLineItems();
-                foreach ($lineItems as $lineItem) {
-                    $result[$cont]['Total'] = $lineItem->getNetTotal();
-                }
+                $result[$cont]['Amount'] = $record->getFieldValue("Amount");
+                $result[$cont]['Closing_Date'] = $record->getFieldValue("Closing_Date");
                 $cont++;
             }
             return $result;
