@@ -40,9 +40,15 @@ ob_start();
             </div>
 
             <li class="nav-item">
-                <a class="nav-link" href="index.php?controller=HomeController&action=crear_cotizacion">
-                    <span>Nueva cotizacion</span>
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages" aria-expanded="true" aria-controls="collapsePages">
+                    <i class="fas fa-fw fa-folder"></i>
+                    <span>Cotizaciones</span>
                 </a>
+                <div id="collapsePages" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        <a class="collapse-item" href="index.php?controller=HomeController&action=crear_cotizacion_vehiculo"><small>Nueva cotizacion para vehiculo</small></a>
+                    </div>
+                </div>
             </li>
 
             <hr class="sidebar-divider d-none d-md-block">
@@ -109,5 +115,5 @@ ob_start();
 
 </html>
 <?php
-                    ob_end_flush();
+ob_end_flush();
 ?>

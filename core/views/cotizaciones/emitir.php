@@ -8,10 +8,10 @@
                             <label class="form-control-plaintext"><b>Aseguradora seleccionada</b></label>
                         </div>
                         <div class="col">
-                            <select class="form-control-plaintext">
+                            <select class="form-control-plaintext" name="aseguradora">
                                 <?php foreach ($quote as $key => $product) : ?>
                                     <?php $detail = $productAPI->getRecord($product['id_product']) ?>
-                                    <option><?= $detail['Vendor_Name'] ?></option>
+                                    <option value="<?= $detail['Vendor_Name_id'] ?>"><?= $detail['Vendor_Name'] ?></option>
                                 <?php endforeach ?>
                             </select>
                         </div>
@@ -24,7 +24,7 @@
                 <div class="card-body">
                     <div class="form-row">
                         <div class="col">
-                            <input type="file" class="form-control-plaintext" required name="contratos">
+                            <input type="file" class="form-control-plaintext" name="firmas">
                         </div>
                     </div>
                 </div>

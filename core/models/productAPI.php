@@ -15,6 +15,7 @@ class productAPI
         try {
 
             $result['Vendor_Name']= $record->getFieldValue("Vendor_Name")->getLookupLabel();
+            $result['Vendor_Name_id']= $record->getFieldValue("Vendor_Name")->getEntityId();
             $result['Asistencia_vial']= $record->getFieldValue("Asistencia_vial");
             $result['Colisi_n_y_vuelco']= $record->getFieldValue("Colisi_n_y_vuelco");
             $result['Da_os_Propiedad_ajena']= $record->getFieldValue("Da_os_Propiedad_ajena");

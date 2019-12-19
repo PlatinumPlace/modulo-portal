@@ -23,7 +23,7 @@
               <tr>
                 <td><?= $value['Stage'] ?></td>
                 <td><?= $value['Closing_Date'] ?> (Quedan <?= $dias_restantes ?> dia<?= $retVal = ($dias_restantes > 1) ? "s" : ""; ?>) </td>
-                <td><a href="index.php?controller=HomeController&action=cotizacion_detalles&id=<?= $value['id'] ?>" class="btn btn-primary">Ver</a></td>
+                <td><a href="index.php?controller=HomeController&action=cotizacion_detalles_vehiculo&id=<?= $value['id'] ?>" class="btn btn-primary">Ver</a></td>
               </tr>
             <?php endif ?>
           <?php endforeach ?>

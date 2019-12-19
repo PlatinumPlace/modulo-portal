@@ -1,7 +1,7 @@
 <div class="d-sm-flex align-items-center justify-content-between mb-4">
     <h1 class="h3 mb-0 text-gray-800">Crear cotizacion</h1>
 </div>
-<form method="POST" action="index.php?controller=HomeController&action=crear_cotizacion">
+<form method="POST" action="index.php?controller=HomeController&action=crear_cotizacion_vehiculo">
 
     <div class="row">
 

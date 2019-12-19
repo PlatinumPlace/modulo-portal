@@ -6,9 +6,9 @@
 <div class="menu">
 <a href="lib/print/Cotizacion.php?id=<?= $id ?>" target="blank" class="btn btn-link">Imprimir</a>
 |
-<a href="file\Contratos.pdf" download class="btn btn-link">Descagar contratos</a>
+<a href="file\contratos\vehiculo.pdf" download class="btn btn-link">Descagar contratos</a>
 |
-<a href="index.php?controller=HomeController&action=emitir_cotizacion&id=<?=$id?>" class="btn btn-link">Subir documentos</a>
+<a href="index.php?controller=HomeController&action=emitir_cotizacion&id=<?=$id?>" class="btn btn-link">Emitir poliza</a>
 </div>
 <hr>
 <center>

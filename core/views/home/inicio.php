@@ -10,8 +10,8 @@
       <div class="card-body">
         <div class="row no-gutters align-items-center">
           <div class="col mr-2">
-            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Ganancias Mensuales</div>
-            <div class="h5 mb-0 font-weight-bold text-gray-800">RD$ <?= number_format($ganancias_mensuales, 2) ?></div>
+            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Ingresos Mensuales</div>
+            <div class="h5 mb-0 font-weight-bold text-gray-800">RD$ <?= number_format($ingresos_mensuales, 2) ?></div>
           </div>
           <div class="col-auto">
             <i class="fas fa-calendar fa-2x text-gray-300"></i>
@@ -26,8 +26,8 @@
       <div class="card-body">
         <div class="row no-gutters align-items-center">
           <div class="col mr-2">
-            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Ganancias Anuales</div>
-            <div class="h5 mb-0 font-weight-bold text-gray-800">RD$ <?= number_format($ganancias_anuales, 2) ?></div>
+            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Ingresos Anuales</div>
+            <div class="h5 mb-0 font-weight-bold text-gray-800">RD$ <?= number_format($ingresos_anuales, 2) ?></div>
           </div>
           <div class="col-auto">
             <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
@@ -42,16 +42,9 @@
       <div class="card-body">
         <div class="row no-gutters align-items-center">
           <div class="col mr-2">
-            <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Tasks</div>
-            <div class="row no-gutters align-items-center">
-              <div class="col-auto">
-                <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">50%</div>
-              </div>
-              <div class="col">
-                <div class="progress progress-sm mr-2">
-                  <div class="progress-bar bg-info" role="progressbar" style="width: 50%" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
-                </div>
-              </div>
+            <div class="text-xs font-weight-bold text-warning text-uppercase mb-1"><a href="index.php?controller=HomeController&action=cotizaciones_pendientes">Pólizas en trámite</a></div>
+            <div class="h5 mb-0 font-weight-bold text-gray-800">
+              <?= $cotizaciones_tramite ?>
             </div>
           </div>
           <div class="col-auto">
