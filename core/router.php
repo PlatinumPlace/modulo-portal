@@ -1,9 +1,10 @@
 <?php
 // Aqui se incluyen los controladores que usaremos
 include "core/controllers/HomeController.php";
-include "core/models/dealAPI.php";
-include "core/models/productAPI.php";
-include "core/models/quoteAPI.php";
+include "core/controllers/cotizaciones.php";
+include "core/models/dealsAPI.php";
+include "core/models/productsAPI.php";
+include "core/models/quotesAPI.php";
 include "zohoapi/config.php";
 
 //Aqui tomas las petisiones get

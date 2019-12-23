@@ -4,7 +4,7 @@ use zcrmsdk\crm\crud\ZCRMRecord;
 use zcrmsdk\crm\exception\ZCRMException;
 use zcrmsdk\crm\setup\restclient\ZCRMRestClient;
 
-class productAPI
+class productsAPI
 {
 
     public function getRecord($id)

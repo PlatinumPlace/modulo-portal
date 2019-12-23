@@ -4,17 +4,17 @@ use zcrmsdk\crm\crud\ZCRMRecord;
 use zcrmsdk\crm\exception\ZCRMException;
 use zcrmsdk\crm\setup\restclient\ZCRMRestClient;
 
-class quoteAPI
+class quotesAPI
 {
     public function getRecordByCriteria($dealid)
     {
         $moduleIns = ZCRMRestClient::getInstance()->getModuleInstance("Quotes");
         $criteria = "Deal_Name:equals:" . $dealid;
         $param_map = array("page" => 1, "per_page" => 1);
-        $response = $moduleIns->searchRecordsByCriteria($criteria, $param_map);
-        $records = $response->getData();
-        $cont = 0;
         try {
+            $response = $moduleIns->searchRecordsByCriteria($criteria, $param_map);
+            $records = $response->getData();
+            $cont = 0;
             foreach ($records as $record) {
                 $lineItems = $record->getLineItems();
                 foreach ($lineItems as $lineItem) {

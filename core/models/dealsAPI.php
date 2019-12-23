@@ -4,7 +4,7 @@ use zcrmsdk\crm\crud\ZCRMRecord;
 use zcrmsdk\crm\setup\restclient\ZCRMRestClient;
 use zcrmsdk\crm\exception\ZCRMException;
 
-class dealAPI
+class dealsAPI
 {
     public $Contact_Name;
     public $Direcci_n_del_asegurado;
@@ -33,11 +33,11 @@ class dealAPI
     {
         $moduleIns = ZCRMRestClient::getInstance()->getModuleInstance("Deals");
         $criteria = "Contact_Name:equals:" . $myid;
-        $param_map = array("page" => $page, "per_page" => $per_page);
-        $response = $moduleIns->searchRecordsByCriteria($criteria, $param_map);
-        $records = $response->getData(); // To get response data
         $cont = 0;
         try {
+            $param_map = array("page" => $page, "per_page" => $per_page);
+            $response = $moduleIns->searchRecordsByCriteria($criteria, $param_map);
+            $records = $response->getData();
             foreach ($records as $record) {
                 $result[$cont]['id'] = $record->getEntityId();
                 $result[$cont]['Stage'] = $record->getFieldValue("Stage");
@@ -47,9 +47,9 @@ class dealAPI
             }
             return $result;
         } catch (ZCRMException $ex) {
-            echo $ex->getMessage(); // To get ZCRMException error message
-            echo $ex->getExceptionCode(); // To get ZCRMException error code
-            echo $ex->getFile(); // To get the file name that throws the Exception
+            //echo $ex->getMessage(); // To get ZCRMException error message
+            //echo $ex->getExceptionCode(); // To get ZCRMException error code
+            //echo $ex->getFile(); // To get the file name that throws the Exception
         }
     }
 
@@ -92,10 +92,11 @@ class dealAPI
 
     public function getRecord($id)
     {
-        $moduleIns = ZCRMRestClient::getInstance()->getModuleInstance("Deals"); // To get module instance
-        $response = $moduleIns->getRecord($id); // To get module records
-        $record = $response->getData(); // To get response data
+        $moduleIns = ZCRMRestClient::getInstance()->getModuleInstance("Deals");
+        $result = null;
         try {
+            $response = $moduleIns->getRecord($id);
+            $record = $response->getData();
             $result['Plan'] = $record->getFieldValue("Plan");
             $result['Nombre_del_asegurado'] = $record->getFieldValue("Nombre_del_asegurado");
             $result['Direcci_n_del_asegurado'] = $record->getFieldValue("Direcci_n_del_asegurado");
@@ -114,11 +115,10 @@ class dealAPI
             $result['Valor_Asegurado'] = $record->getFieldValue("Valor_Asegurado");
             $result['Es_nuevo'] = $record->getFieldValue("Es_nuevo");
             $result['Stage'] = $record->getFieldValue("Stage");
-            
         } catch (ZCRMException $ex) {
-            echo $ex->getMessage(); // To get ZCRMException error message
-            echo $ex->getExceptionCode(); // To get ZCRMException error code
-            echo $ex->getFile(); // To get the file name that throws the Exception
+            //echo $ex->getMessage(); // To get ZCRMException error message
+            //echo $ex->getExceptionCode(); // To get ZCRMException error code
+            //echo $ex->getFile(); // To get the file name that throws the Exception
         }
         return $result;
     }

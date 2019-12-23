@@ -1,4 +1,12 @@
-<form method="POST" action="index.php?controller=HomeController&action=emitir_cotizacion&id=<?=$id?>" enctype="multipart/form-data">
+<div class="d-sm-flex align-items-center justify-content-between mb-4">
+    <h1 class="h3 mb-0 text-gray-800">
+        Emision de póliza provisional
+    </h1>
+    <a href="index.php?controller=cotizaciones&action=detalles&id=<?= $id ?>" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i class="fas fa-arrow-circle-left"></i> Regresar</a>
+</div>
+
+<hr>
+<form method="POST" action="index.php?controller=cotizaciones&action=emitir_poliza&id=<?=$id?>" enctype="multipart/form-data">
     <div class="row">
         <div class="col-lg-8">
             <div class="card mb-4 py-3 border-left-primary">
@@ -9,9 +17,9 @@
                         </div>
                         <div class="col">
                             <select class="form-control-plaintext" name="aseguradora">
-                                <?php foreach ($quote as $key => $product) : ?>
-                                    <?php $detail = $productAPI->getRecord($product['id_product']) ?>
-                                    <option value="<?= $detail['Vendor_Name_id'] ?>"><?= $detail['Vendor_Name'] ?></option>
+                                <?php foreach ($cotiazcion as $key => $producto) : ?>
+                                    <?php $detalles = $productos->getRecord($producto['id_product']) ?>
+                                    <option value="<?= $detalles['Vendor_Name_id'] ?>"><?= $detalles['Vendor_Name'] ?></option>
                                 <?php endforeach ?>
                             </select>
                         </div>

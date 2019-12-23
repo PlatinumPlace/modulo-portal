@@ -46,7 +46,7 @@ ob_start();
                 </a>
                 <div id="collapsePages" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
-                        <a class="collapse-item" href="index.php?controller=HomeController&action=crear_cotizacion_vehiculo"><small>Nueva cotizacion para vehiculo</small></a>
+                        <a class="collapse-item" href="index.php?controller=cotizaciones&action=crear">Auto</a>
                     </div>
                 </div>
             </li>
@@ -82,7 +82,7 @@ ob_start();
                 <footer class="sticky-footer bg-white">
                     <div class="container my-auto">
                         <div class="copyright text-center my-auto">
-                            <span>Copyright &copy; Your Website 2019</span>
+                            <span>Copyright &copy; Grupo Nobe SRL <?= date("Y") ?></span>
                         </div>
                     </div>
                 </footer>

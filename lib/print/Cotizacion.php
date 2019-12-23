@@ -1,18 +1,16 @@
 <?php
 
-include "../../core/models/dealAPI.php";
-include "../../core/models/productAPI.php";
-include "../../core/models/quoteAPI.php";
+include "../../core/models/dealsAPI.php";
+include "../../core/models/productsAPI.php";
+include "../../core/models/quotesAPI.php";
 include "../../zohoapi/config.php";
 
 $id = $_GET['id'];
-$dealAPI = new dealAPI;
+$dealAPI = new dealsAPI;
 $deal = $dealAPI->getRecord($id);
-$quoteAPI = new quoteAPI;
+$quoteAPI = new quotesAPI;
 $quote = $quoteAPI->getRecordByCriteria($id);
-$productsDetail = new productAPI;
-
-
+$productsAPI = new productsAPI;
 
 ?>
 <!DOCTYPE html>
@@ -41,16 +39,22 @@ $productsDetail = new productAPI;
 
     <div id="wrapper">
 
+
+
         <div id="content-wrapper" class="d-flex flex-column">
 
             <div id="content">
 
+
                 <div class="container-fluid">
-                    <h2>
-                        COTIZACION <br>
-                        SEGURO VEHICULO DE MOTOR <br>
-                        PLAN <?= strtoupper($deal['Plan']) ?>
-                    </h2>
+                    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+                        <h1 class="h3 mb-0 text-gray-800">
+                            COTIZACION <br>
+                            SEGURO VEHICULO DE MOTOR <br>
+                            PLAN <?= strtoupper($deal['Plan']) ?>
+                        </h1>
+                    </div>
+
                     <hr>
                     <center>
                         DATOS DEL CLIENTE
@@ -143,7 +147,7 @@ $productsDetail = new productAPI;
                     <br>
                     <div class="row">
                         <?php foreach ($quote as $key => $product) : ?>
-                            <?php $detail = $productsDetail->getRecord($product['id_product']) ?>
+                            <?php $detail = $productsAPI->getRecord($product['id_product']) ?>
                             <div class="col-lg-6">
                                 <div class="card mb-4 py-3 border-left-primary">
                                     <div class="card-body">
@@ -188,10 +192,23 @@ $productsDetail = new productAPI;
                         <?php endforeach ?>
                     </div>
                 </div>
+                <br>
+                <footer class="sticky-footer bg-white">
+                    <div class="container my-auto">
+                        <div class="copyright text-center my-auto">
+                            <span>Copyright &copy; Grupo Nobe SRL <?= date("Y") ?></span>
+                        </div>
+                    </div>
+                </footer>
+
+
             </div>
+
         </div>
 
-        <script src="../vendor/jquery/jquery.min.js"></script>
+        <a class="scroll-to-top rounded" href="#page-top">
+            <i class="fas fa-angle-up"></i>
+        </a>.. <script src="../vendor/jquery/jquery.min.js"></script>
         <script src="../vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 
         <script src="../vendor/jquery-easing/jquery.easing.min.js"></script>
@@ -203,10 +220,10 @@ $productsDetail = new productAPI;
         <script src="../js/demo/chart-area-demo.js"></script>
         <script src="../js/demo/chart-pie-demo.js"></script>
         <script src="../js/bootstrap.min.js"></script>
-
         <script>
-            window.print();
+            print();
         </script>
+
 </body>
 
 </html>
