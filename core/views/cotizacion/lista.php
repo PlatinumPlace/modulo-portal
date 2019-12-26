@@ -26,7 +26,7 @@
                 <tr>
                   <td>' . $trato['Stage'] . '</td>
                   <td>' . $trato['Closing_Date'] . '</td>
-                  <td><a href="index.php?controller=cotizaciones&action=detalles&id=' . $trato['id'] . '" class="btn btn-primary">Ver</a></td>
+                  <td><a href="index.php?controller=CotizacionController&action=detalles&id=' . $trato['id'] . '" class="btn btn-primary">Ver</a></td>
                 </tr>
                 ';
               }

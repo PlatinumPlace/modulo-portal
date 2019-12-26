@@ -4,11 +4,11 @@
         SEGURO VEHICULO DE MOTOR <br>
         PLAN <?= strtoupper($trato['Plan']) ?>
     </h1>
-    <a href="index.php?controller=cotizaciones&action=inicio&filtro=<?= $trato['Stage'] ?>" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i class="fas fa-arrow-circle-left"></i> Ir a la lista</a>
+    <a href="index.php?controller=CotizacionController&action=lista" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i class="fas fa-arrow-circle-left"></i> Ir a la lista</a>
     <a href="lib/print/Cotizacion.php?id=<?= $id ?>" target="blank" class="d-none d-sm-inline-block btn btn-sm btn-success shadow-sm"><i class="fas fa-print"></i> Imprimir</a>
     <?php if ($trato['Stage'] == "Cotizado") : ?>
         <a href="file\contratos\vehiculo.pdf" download class="d-none d-sm-inline-block btn btn-sm btn-info shadow-sm"><i class="fas fa-file-download"></i> Descagar contratos</a>
-        <a href="index.php?controller=cotizaciones&action=emitir_poliza&id=<?= $id ?>" class="d-none d-sm-inline-block btn btn-sm btn-secondary shadow-sm"><i class="fas fa-file-import"></i> Emitir poliza</a>
+        <a href="index.php?controller=CotizacionController&action=emitir_poliza&id=<?= $id ?>" class="d-none d-sm-inline-block btn btn-sm btn-secondary shadow-sm"><i class="fas fa-file-import"></i> Emitir poliza</a>
     <?php endif ?>
 </div>
 

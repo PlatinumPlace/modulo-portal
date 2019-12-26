@@ -11,7 +11,7 @@
       <div class="card-body">
         <div class="row no-gutters align-items-center">
           <div class="col mr-2">
-            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1"><a href="index.php?controller=cotizaciones&action=inicio">Cotizaciones totales</a></div>
+            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1"><a href="index.php?controller=CotizacionController&action=lista">Cotizaciones totales</a></div>
             <div class="h5 mb-0 font-weight-bold text-gray-800"><?= $tratos_totales ?></div>
           </div>
           <div class="col-auto">
@@ -27,7 +27,7 @@
       <div class="card-body">
         <div class="row no-gutters align-items-center">
           <div class="col mr-2">
-            <div class="text-xs font-weight-bold text-warning text-uppercase mb-1"><a href="index.php?controller=cotizaciones&action=inicio&filtro=Cotizado">Cotizaciones pendientes</a></div>
+            <div class="text-xs font-weight-bold text-warning text-uppercase mb-1"><a href="index.php?controller=CotizacionController&action=lista&filtro=Cotizado">Cotizaciones pendientes</a></div>
             <div class="h5 mb-0 font-weight-bold text-gray-800">
               <?= $tratos_pendientes ?>
             </div>
@@ -45,7 +45,7 @@
       <div class="card-body">
         <div class="row no-gutters align-items-center">
           <div class="col mr-2">
-            <div class="text-xs font-weight-bold text-success text-uppercase mb-1"><a href="index.php?controller=cotizaciones&action=inicio&filtro=En trámite/Emitido">Pólizas emitidas en el mes</a></div>
+            <div class="text-xs font-weight-bold text-success text-uppercase mb-1"><a href="index.php?controller=CotizacionController&action=lista&filtro=En trámite/Emitido">Pólizas emitidas en el mes</a></div>
             <div class="h5 mb-0 font-weight-bold text-gray-800"><?= $tratos_emitidos ?></div>
           </div>
           <div class="col-auto">
@@ -61,7 +61,7 @@
       <div class="card-body">
         <div class="row no-gutters align-items-center">
           <div class="col mr-2">
-            <div class="text-xs font-weight-bold text-warning text-uppercase mb-1"><a href="index.php?controller=cotizaciones&action=inicio&filtro=En trámite">Pólizas que vencen en el mes</a></div>
+            <div class="text-xs font-weight-bold text-warning text-uppercase mb-1"><a href="index.php?controller=CotizacionController&action=lista&filtro=En trámite">Pólizas que vencen en el mes</a></div>
             <div class="h5 mb-0 font-weight-bold text-gray-800">
               <?= $tratos_vencen ?>
             </div>

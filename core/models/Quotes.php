@@ -4,9 +4,9 @@ use zcrmsdk\crm\crud\ZCRMRecord;
 use zcrmsdk\crm\exception\ZCRMException;
 use zcrmsdk\crm\setup\restclient\ZCRMRestClient;
 
-class quotesAPI
+class Quotes
 {
-    public function getRecordByCriteria($dealid)
+    public function getRecordByOtherId($dealid)
     {
         $moduleIns = ZCRMRestClient::getInstance()->getModuleInstance("Quotes");
         $criteria = "Deal_Name:equals:" . $dealid;

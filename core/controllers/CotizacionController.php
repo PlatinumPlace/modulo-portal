@@ -1,24 +1,24 @@
 <?php
 
-class cotizaciones
+class CotizacionController
 {
-    public $dealsAPI;
-    public $productsAPI;
-    public $quotesAPI;
+    public $Deals;
+    public $Quotes;
 
     function __construct()
     {
-        $this->dealsAPI = new dealsAPI;
-        $this->quotesAPI = new quotesAPI;
+        $this->Deals = new Deals;
+        $this->ZohoAPI = new ZohoAPI;
+        $this->Quotes = new Quotes;
     }
 
-    public function inicio()
+    public function lista()
     {
-        $tratos = $this->dealsAPI->getRecords("3222373000000751142");
-        $filtro= (isset($_GET['filtro'])) ? $_GET['filtro'] : "Cotizado/En trámite/Emitido/Abandonado" ;
+        $tratos = $this->ZohoAPI->getMyRecords("Deals", "3222373000000751142");
+        $filtro = (isset($_GET['filtro'])) ? $_GET['filtro'] : "Cotizado/En trámite/Emitido/Abandonado";
         //$mydeals = $this->deal->getRecords($_SESSION['user_id']);
 
-        require_once("core/views\cotizaciones\inicio.php");
+        require_once("core/views\cotizacion\lista.php");
     }
 
     public function crear()
@@ -46,36 +46,30 @@ class cotizaciones
             $this->dealsAPI->Stage = "Prospeccion";
             $this->dealsAPI->Es_nuevo = $retVal = ($_POST['Es_nuevo'] == 0) ? true : false;
 
-            $tratoid = $this->dealsAPI->createRecord();
-
-            if ($tratoid != null) {
-                header("Location: index.php?controller=HomeController&action=alerta&origen=cotizaciones/crear&estado=exitoso&id=" . $tratoid);
-            } else {
-                header("Location: index.php?controller=HomeController&action=alerta&estado=error");
-            }
+            $tratoid = $this->ZohoAPI->createRecord("Deals", $this->dealsAPI);
         }
-        require_once("core/views\cotizaciones\crear.php");
+        require_once("core/views\cotizacion\crear.php");
     }
 
     public function detalles()
     {
         $id = $_GET['id'];
-        $trato = $this->dealsAPI->getRecord($id);
-        $cotizacion = $this->quotesAPI->getRecordByCriteria($id);
-        $productos = new productsAPI;
-        require_once("core/views\cotizaciones\detalles.php");
+        $trato = $this->ZohoAPI->getRecord("Deals", $id);
+        $cotizacion = $this->Quotes->getRecordByOtherId($id);
+        $productos = new Products;
+        require_once("core/views\cotizacion\detalles.php");
     }
 
     public function emitir_poliza()
     {
         $id = $_GET['id'];
-        $cotiazcion = $this->quotesAPI->getRecordByCriteria($id);
-        $productos = new productsAPI;
+        $cotiazcion = $this->Quotes->getRecordByOtherId($id);
+        $productos = new Products;
 
         if ($_POST) {
             $this->dealsAPI->Aseguradora = $_POST["aseguradora"];
             $this->dealsAPI->Stage = "En trámite";
-            $this->dealsAPI->updateRecord($id);
+            $this->ZohoAPI->updateRecord("Deals", $id,$this->dealsAPI);
 
             if ($_FILES) {
                 $rutaDeSubidas = dirname(__DIR__, 2) . "/file/contratos firmados/" . $id;
@@ -95,6 +89,6 @@ class cotizaciones
             header("Location: index.php?controller=HomeController&action=alerta&estado=exitoso&origen=cotizaciones/emitir_poliza&id=" . $id);
         }
 
-        require_once("core/views\cotizaciones/emitir_poliza.php");
+        require_once("core/views\cotizacion/emitir_poliza.php");
     }
 }

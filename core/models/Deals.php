@@ -4,8 +4,10 @@ use zcrmsdk\crm\crud\ZCRMRecord;
 use zcrmsdk\crm\setup\restclient\ZCRMRestClient;
 use zcrmsdk\crm\exception\ZCRMException;
 
-class dealsAPI
+class Deals
 {
+    public $Lead_Source = "Portal GNB";
+    public $Deal_Name = "Trato realizado desde el portal";
     public $Contact_Name;
     public $Direcci_n_del_asegurado;
     public $A_o_de_Fabricacion;

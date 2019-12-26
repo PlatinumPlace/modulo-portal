@@ -1,11 +1,12 @@
 <?php
 // Aqui se incluyen los controladores que usaremos
 include "core/controllers/HomeController.php";
-include "core/controllers/cotizaciones.php";
-include "core/models/dealsAPI.php";
-include "core/models/productsAPI.php";
-include "core/models/quotesAPI.php";
+include "core/controllers/CotizacionController.php";
 include "zohoapi/config.php";
+include "core/models/ZohoAPI.php";
+include "core/models/Deals.php";
+include "core/models/Products.php";
+include "core/models/Quotes.php";
 
 //Aqui tomas las petisiones get
 if (isset($_GET["controller"]) && isset($_GET["action"])) {
@@ -20,5 +21,5 @@ if (isset($_GET["controller"]) && isset($_GET["action"])) {
     call_user_func(array($Controller, $_GET["action"]));
 } else {
     $home = new HomeController;
-    call_user_func(array($home, "pagina_inicio"));
+    call_user_func(array($home, "pagina_principal"));
 }

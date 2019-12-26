@@ -2,16 +2,18 @@
 
 class HomeController
 {
-    public $dealsAPI;
+    public $Deals;
+    public $ZohoAPI;
 
     function __construct()
     {
-        $this->dealsAPI = new dealsAPI;
+        $this->Deals = new Deals;
+        $this->ZohoAPI = new ZohoAPI;
     }
 
-    public function pagina_inicio()
+    public function pagina_principal()
     {
-        $tratos = $this->dealsAPI->getRecords("3222373000000751142");
+        $tratos = $this->ZohoAPI->getMyRecords("Deals","3222373000000751142");
         //$mydeals = $this->deal->getRecords($_SESSION['user_id']);
         $tratos_totales = 0;
         $tratos_emitidos = 0;
