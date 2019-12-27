@@ -1,9 +1,9 @@
 <div class="d-sm-flex align-items-center justify-content-between mb-4">
-  <h1 class="h3 mb-0 text-gray-800">Todas las cotizaciones</h1>
-  <a href="index.php" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i class="fas fa-arrow-circle-left"></i> Regresar al dashboard</a>
+  <h1 class="h3 mb-0 text-gray-800">Cotizaciones</h1>
+  <a href="index.php" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">Regresar al dashboard</a>
 </div>
 
-<hr>
+<br>
 
 <div class="card shadow mb-4">
   <div class="card-body">

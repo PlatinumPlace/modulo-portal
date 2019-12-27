@@ -7,48 +7,51 @@ class CotizacionController
 
     function __construct()
     {
-        $this->Deals = new Deals;
-        $this->ZohoAPI = new ZohoAPI;
+        $this->oferta = new Deals;
         $this->Quotes = new Quotes;
     }
 
     public function lista()
     {
-        $tratos = $this->ZohoAPI->getMyRecords("Deals", "3222373000000751142");
+        $tratos = $this->oferta->buscar_por_contacto("3222373000000751142");
         $filtro = (isset($_GET['filtro'])) ? $_GET['filtro'] : "Cotizado/En trámite/Emitido/Abandonado";
-        //$mydeals = $this->deal->getRecords($_SESSION['user_id']);
-
-        require_once("core/views\cotizacion\lista.php");
+       
+        require("core/views/template/header.php");
+        require("core/views/cotizacion/lista.php");
+        require("core/views/template/footer.php");
     }
 
-    public function crear()
+    public function crear_auto()
     {
         if ($_POST) {
 
-            //$this->dealsAPI->Contact_Name = $_SESSION['user_id'];
-            $this->dealsAPI->Contact_Name = "3222373000000751142";
-            $this->dealsAPI->Direcci_n_del_asegurado = $_POST['Direcci_n_del_asegurado'];
-            $this->dealsAPI->A_o_de_Fabricacion = $_POST['A_o_de_Fabricacion'];
-            $this->dealsAPI->Chasis = $_POST['Chasis'];
-            $this->dealsAPI->Color = $_POST['Color'];
-            $this->dealsAPI->Email_del_asegurado = $_POST['Email_del_asegurado'];
-            $this->dealsAPI->Marca = $_POST['Marca'];
-            $this->dealsAPI->Modelo = $_POST['Modelo'];
-            $this->dealsAPI->Nombre_del_asegurado = $_POST['Nombre_del_asegurado'];
-            $this->dealsAPI->Placa = $_POST['Placa'];
-            $this->dealsAPI->Plan = $_POST['Plan'];
-            $this->dealsAPI->Type = "Vehículo";
-            $this->dealsAPI->RNC_Cedula_del_asegurado = $_POST['RNC_Cedula_del_asegurado'];
-            $this->dealsAPI->Telefono_del_asegurado = $_POST['Telefono_del_asegurado'];
-            $this->dealsAPI->Tipo_de_poliza = $_POST['Tipo_de_poliza'];
-            $this->dealsAPI->Tipo_de_vehiculo = $_POST['Tipo_de_vehiculo'];
-            $this->dealsAPI->Valor_Asegurado = $_POST['Valor_Asegurado'];
-            $this->dealsAPI->Stage = "Prospeccion";
-            $this->dealsAPI->Es_nuevo = $retVal = ($_POST['Es_nuevo'] == 0) ? true : false;
+            $this->oferta->Contact_Name = "3222373000000751142";
+            $this->oferta->Direcci_n_del_asegurado = $_POST['Direcci_n_del_asegurado'];
+            $this->oferta->A_o_de_Fabricacion = $_POST['A_o_de_Fabricacion'];
+            $this->oferta->Chasis = $_POST['Chasis'];
+            $this->oferta->Color = $_POST['Color'];
+            $this->oferta->Email_del_asegurado = $_POST['Email_del_asegurado'];
+            $this->oferta->Marca = $_POST['Marca'];
+            $this->oferta->Modelo = $_POST['Modelo'];
+            $this->oferta->Nombre_del_asegurado = $_POST['Nombre_del_asegurado'];
+            $this->oferta->Placa = $_POST['Placa'];
+            $this->oferta->Plan = $_POST['Plan'];
+            $this->oferta->Type = "Vehículo";
+            $this->oferta->RNC_Cedula_del_asegurado = $_POST['RNC_Cedula_del_asegurado'];
+            $this->oferta->Telefono_del_asegurado = $_POST['Telefono_del_asegurado'];
+            $this->oferta->Tipo_de_poliza = $_POST['Tipo_de_poliza'];
+            $this->oferta->Tipo_de_vehiculo = $_POST['Tipo_de_vehiculo'];
+            $this->oferta->Valor_Asegurado = $_POST['Valor_Asegurado'];
+            $this->oferta->Stage = "Prospeccion";
+            $this->oferta->Es_nuevo = ($_POST['Es_nuevo'] == 0) ? true : false;
 
-            $tratoid = $this->ZohoAPI->createRecord("Deals", $this->dealsAPI);
+            $oferta_id = $this->oferta->crear();
+
+            header("?page=alerta");
         }
-        require_once("core/views\cotizacion\crear.php");
+        require("core/views/template/header.php");
+        require("core/views/cotizacion/crear.php");
+        require("core/views/template/footer.php");
     }
 
     public function detalles()

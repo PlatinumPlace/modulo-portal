@@ -1,35 +1,22 @@
 <?php
 
-use zcrmsdk\crm\crud\ZCRMRecord;
-use zcrmsdk\crm\exception\ZCRMException;
-use zcrmsdk\crm\setup\restclient\ZCRMRestClient;
-
-class Quotes
+class Quotes extends ZohoAPI
 {
-    public function getRecordByOtherId($dealid)
+
+    public $Subject;
+    public $Deducible;
+    public $Contact_Name;
+    public $Account_Name;
+    public $Deal_Name;
+    public $Quote_Number;
+    public $Poliza;
+    public $Owner;
+    public $Terms_and_Conditions;
+    public $Valid_Till;
+
+    public function buscar_por_trato($trato_id)
     {
-        $moduleIns = ZCRMRestClient::getInstance()->getModuleInstance("Quotes");
-        $criteria = "Deal_Name:equals:" . $dealid;
-        $param_map = array("page" => 1, "per_page" => 1);
-        try {
-            $response = $moduleIns->searchRecordsByCriteria($criteria, $param_map);
-            $records = $response->getData();
-            $cont = 0;
-            foreach ($records as $record) {
-                $lineItems = $record->getLineItems();
-                foreach ($lineItems as $lineItem) {
-                    $result[$cont]['ListPrice'] = $lineItem->getListPrice();
-                    $result[$cont]['Total'] = $lineItem->getNetTotal();
-                    $result[$cont]['Tax'] = $lineItem->getTaxAmount();
-                    $result[$cont]['id_product'] = $lineItem->getProduct()->getEntityId();
-                    $cont++;
-                }
-            }
-            return $result;
-        } catch (ZCRMException $ex) {
-            echo $ex->getMessage(); // To get ZCRMException error message
-            echo $ex->getExceptionCode(); // To get ZCRMException error code
-            echo $ex->getFile(); // To get the file name that throws the Exception
-        }
+        $resultado = $this->searchRecordsByCriteria("Quotes", $this, "Deal_Name:equals:" . $trato_id);
+        return $resultado;
     }
 }

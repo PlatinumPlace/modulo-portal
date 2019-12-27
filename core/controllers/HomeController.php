@@ -3,18 +3,15 @@
 class HomeController
 {
     public $Deals;
-    public $ZohoAPI;
 
     function __construct()
     {
-        $this->Deals = new Deals;
-        $this->ZohoAPI = new ZohoAPI;
+        $this->oferta = new Deals;
     }
 
     public function pagina_principal()
     {
-        $tratos = $this->ZohoAPI->getMyRecords("Deals","3222373000000751142");
-        //$mydeals = $this->deal->getRecords($_SESSION['user_id']);
+        $tratos = $this->oferta->buscar_por_contacto("3222373000000751142");
         $tratos_totales = 0;
         $tratos_emitidos = 0;
         $tratos_vencen = 0;
@@ -36,7 +33,9 @@ class HomeController
             }
         }
 
-        require_once("core/views\home\inicio.php");
+        require("core/views/template/header.php");
+        require("core/views/home/inicio.php");
+        require("core/views/template/footer.php");
     }
 
     public function alerta()
@@ -61,7 +60,9 @@ class HomeController
             $descripcion = "";
             $accion = "index.php";
         }
-        require_once("core/views/home/alerta.php");
+        require("core/views/template/header.php");
+        require("core/views/home/alerta.php");
+        require("core/views/template/footer.php");
     }
 
 }
