@@ -43,32 +43,38 @@ class API
         return $result;
     }
 
-    public function searchRecordsByCriteria($module_name, &$record_model, $criteria, $Product = false)
+    public function searchRecordsByCriteria($module_name, &$record_model, $criteria, $Product_details = false)
     {
         $moduleIns = ZCRMRestClient::getInstance()->getModuleInstance($module_name);
         $param_map = array("page" => 1, "per_page" => 100);
         $results = array();
-        $cont = 0;
+        $cont1 = 0;
+        $cont2 = 0;
         try {
             $response = $moduleIns->searchRecordsByCriteria($criteria, $param_map);
             $records = $response->getData();
             foreach ($records as $record) {
 
                 foreach ($record_model as $propertie => $propertie_value) {
-                    $results[$cont]['id'] = $record->getEntityId();
-                    $results[$cont][$propertie] = $record->getFieldValue($propertie);
+                    $results[$cont1]['id'] = $record->getEntityId();
+                    $results[$cont1][$propertie] = $record->getFieldValue($propertie);
                 }
 
-                if ($Product == true) {
+                if ($Product_details == true) {
                     $lineItems = $record->getLineItems();
+
                     foreach ($lineItems as $lineItem) {
-                        $result[$cont]['ListPrice'] = $lineItem->getListPrice();
-                        $result[$cont]['Total'] = $lineItem->getNetTotal();
-                        $result[$cont]['Tax'] = $lineItem->getTaxAmount();
-                        $result[$cont]['id_product'] = $lineItem->getProduct()->getEntityId();
+                        $results[$cont1]['Product_details'][$cont2] = array(
+                                'Product_id' => $lineItem->getProduct()->getEntityId(),
+                                'ListPrice' => $lineItem->getListPrice(),
+                                'Total' => $lineItem->getNetTotal(),
+                                'Tax' => $lineItem->getTaxAmount()
+                        );
+                        $cont2++;
                     }
                 }
-                $cont++;
+
+                $cont1++;
             }
         } catch (ZCRMException $ex) {
             echo $ex->getMessage();

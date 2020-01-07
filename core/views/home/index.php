@@ -3,7 +3,7 @@
   <div class="col s12 m3">
     <div class="card blue-grey darken-1">
       <div class="card-content white-text">
-        <span class="card-title">Cotizaciones totales</span>
+        <span class="card-title">Cotizaciónes totales</span>
         <p><?= $tratos_totales ?></p>
       </div>
       <div class="card-action">
@@ -15,7 +15,7 @@
   <div class="col s12 m3">
     <div class="card blue-grey darken-1">
       <div class="card-content white-text">
-        <span class="card-title">Cotizaciones pendientes</span>
+        <span class="card-title">Cotizaciónes pendientes</span>
         <p><?= $tratos_pendientes ?></p>
       </div>
       <div class="card-action">

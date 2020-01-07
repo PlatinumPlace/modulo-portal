@@ -34,14 +34,15 @@ class Deals extends API
 
     public function buscar_por_contacto($contacto_id)
     {
-        $resultado = $this->searchRecordsByCriteria("Deals", $this, "Contact_Name:equals:" . $contacto_id);
+        $criterio = "Contact_Name:equals:" . $contacto_id;
+        $resultado = $this->searchRecordsByCriteria("Deals", $this, $criterio);
         return $resultado;
     }
 
-    public function detalles($trato_id)
+    public function detalles($oferta_id)
     {
-        $trato = $this->getRecord("Deals", $this, $trato_id);
-        return $trato;
+        $resultado = $this->getRecord("Deals", $this, $oferta_id);
+        return $resultado;
     }
 
     public function actualizar($oferta_id)

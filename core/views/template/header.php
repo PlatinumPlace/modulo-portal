@@ -14,28 +14,41 @@
 
 <body>
 
-    <nav class="blue lighten-1" role="navigation">
-        <div class="nav-wrapper container"><a id="logo-container" href="index.php" class="brand-logo">GNB Portal</a>
-            <ul class="right hide-on-med-and-down">
-                <li><a href="api/install.php">Instalar API</a></li>
-            </ul>
-
-            <ul id="nav-mobile" class="sidenav">
-                <li><a href="#">Navbar Link</a></li>
-            </ul>
-            <a href="#" data-target="nav-mobile" class="sidenav-trigger"><i class="material-icons">menu</i></a>
+    <header>
+        <div class="navbar-fixed">
+            <nav>
+                <div class="nav-wrapper blue">
+                    <a href="#!" class="brand-logo">GNB Portal</a>
+                    <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">menu</i></a>
+                </div>
+            </nav>
         </div>
-    </nav>
 
-    <div class="fixed-action-btn">
-        <a class="btn-floating btn-large red">
-            <i class="large material-icons">mode_edit</i>
-        </a>
-        <ul>
-            <li><a class="btn-floating yellow darken-1" href="?page=create"><i class="material-icons">create</i></a></li>
-            <li><a class="btn-floating red" href="index.php"><i class="material-icons">dashboard</i></a></li>
+        <ul class="sidenav" id="mobile-demo">
+            <li><a href="index.php">Dashboard</a></li>
+            <li>
+                <div class="divider"></div>
+            </li>
+            <li><a class="subheader">Cotizaciones</a></li>
+            <li><a href="?page=create">Nueva cotizacion</a></li>
+            <li><a href="api/install.php">Instalar API</a></li>
         </ul>
-    </div>
 
-    <div class="container">
-        <div class="section">
+        <ul id="slide-out" class="sidenav sidenav-fixed">
+            <li>
+                <div class="user-view">
+                    <div class="background">
+                        &nbsp;
+                    </div>
+                    &nbsp;
+                </div>
+            </li>
+            <li>
+                <div class="divider"></div>
+            </li>
+            <li><a href="index.php"><i class="material-icons">dashboard</i>Dashboard</a></li>
+            <li><a href="?page=create"><i class="material-icons">create</i>Nueva cotizacion</a></li>
+            <li><a href="api/install.php">Instalar API</a></li>
+        </ul>
+    </header>
+    <main>

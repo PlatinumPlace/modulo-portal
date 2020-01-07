@@ -2,17 +2,18 @@
 
 class HomeController
 {
-    public $Deals;
+    public $oferta;
+    public $cotizacion;
 
     function __construct()
     {
-        $this->oferta = new Deals;
+        $this->ofertas = new Deals;
+        $this->cotizaciones = new Quotes;
     }
 
     public function pagina_principal()
     {
-
-        $oferta = $this->oferta->buscar_por_contacto("3222373000000751142");
+        $oferta = $this->ofertas->buscar_por_contacto("3222373000000751142");
         $tratos_totales = 0;
         $tratos_emitidos = 0;
         $tratos_vencen = 0;
@@ -61,41 +62,34 @@ class HomeController
             $this->oferta->Tipo_de_poliza = $_POST['Tipo_de_poliza'];
             $this->oferta->Tipo_de_vehiculo = $_POST['Tipo_de_vehiculo'];
             $this->oferta->Valor_Asegurado = $_POST['Valor_Asegurado'];
-            $this->oferta->Stage = "Prospeccion";
+            $this->oferta->Stage = "Prospección";
             $this->oferta->Es_nuevo = ($_POST['Es_nuevo'] == 0) ? true : false;
 
-            $oferta_id = $this->oferta->crear();
+            $oferta_id = $this->ofertas->crear();
+            $pagina_de_destino = "details";
 
-            header("?page=alerta");
+            header('Location: ?page=loading&destiny=' . $pagina_de_destino . '&id=' . $oferta_id);
         }
         require("core/views/template/header.php");
         require("core/views/home/create.php");
         require("core/views/template/footer.php");
     }
 
-    public function alerta()
+    public function pantalla_de_carga()
     {
-        $id = $_GET['id'];
-        $origen = explode("/", $_GET['origen']);
-        if (in_array("cotizaciones", $origen) && in_array("crear", $origen)) {
-            $accion = "index.php?controller=" . $origen[0] . "&action=detalles&id=" . $id;
-        } elseif (in_array("cotizaciones", $origen) && in_array("emitir_poliza", $origen)) {
-            $accion = "index.php?controller=" . $origen[0] . "&action=detalles&id=" . $id;
-        } else {
-            $accion = "index.php";
-        }
-        if ($_GET['estado'] == "exitoso") {
-            $titulo = "Acción realizada exitosamente";
-            $alerta = "success";
-            $descripcion = "";
-        } elseif ($_GET['estado'] == "error") {
-            $titulo = "Ha ocurrido un problema";
-            $alerta = "danger";
-            $descripcion = "";
-            $accion = "index.php";
-        }
         require("core/views/template/header.php");
-        require("core/views/home/alerta.php");
+        require("core/views/home/load_page.php");
+        require("core/views/template/footer.php");
+    }
+
+    public function detalles_cotizacion()
+    {
+        $oferta_id = $_GET['id'];
+        $oferta = $this->ofertas->detalles($oferta_id);
+        $cotizacion = $this->cotizaciones->buscar_por_trato($oferta_id);
+        $productos = new Products;
+        require("core/views/template/header.php");
+        require("core/views/home/details.php");
         require("core/views/template/footer.php");
     }
 }
