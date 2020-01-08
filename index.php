@@ -16,9 +16,15 @@ switch ($page) {
     case 'loading':
         $controller->pantalla_de_carga();
         break;
-        case 'details':
-            $controller->detalles_cotizacion();
-            break;
+    case 'details':
+        $controller->detalles_cotizacion();
+        break;
+    case 'list':
+        $controller->cotizaciones_lista();
+        break;
+    case 'complete':
+        $controller->completar_cotizacion();
+        break;
 
     default:
         $controller->pagina_principal();

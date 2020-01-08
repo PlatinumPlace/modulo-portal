@@ -3,11 +3,11 @@
   <div class="col s12 m3">
     <div class="card blue-grey darken-1">
       <div class="card-content white-text">
-        <span class="card-title">Cotizaciónes totales</span>
+        <span class="card-title">Cotizaciones totales</span>
         <p><?= $tratos_totales ?></p>
       </div>
       <div class="card-action">
-        <a href="#">Ver mas</a>
+        <a href="?page=list">Ver mas</a>
       </div>
     </div>
   </div>
@@ -15,11 +15,11 @@
   <div class="col s12 m3">
     <div class="card blue-grey darken-1">
       <div class="card-content white-text">
-        <span class="card-title">Cotizaciónes pendientes</span>
+        <span class="card-title">Cotizaciones pendientes</span>
         <p><?= $tratos_pendientes ?></p>
       </div>
       <div class="card-action">
-        <a href="#">Ver mas</a>
+        <a href="?page=list&filter=Cotizando">Ver mas</a>
       </div>
     </div>
   </div>
@@ -31,7 +31,7 @@
         <p><?= $tratos_emitidos ?></p>
       </div>
       <div class="card-action">
-        <a href="#">Ver mas</a>
+        <a href="?page=list&filter=En trámite">Ver mas</a>
       </div>
     </div>
   </div>
@@ -43,7 +43,7 @@
         <p><?= $tratos_vencen ?></p>
       </div>
       <div class="card-action">
-        <a href="#">Ver mas</a>
+        <a href="?page=list&filter=En trámite">Ver mas</a>
       </div>
     </div>
   </div>
