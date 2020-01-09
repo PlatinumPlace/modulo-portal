@@ -25,6 +25,8 @@ class Deals extends API
     public $Stage;
     public $Aseguradora;
     public $Closing_Date;
+    public $Amount;
+
 
     public function crear()
     {

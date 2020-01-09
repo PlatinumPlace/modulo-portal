@@ -9,6 +9,7 @@
             <tr>
                 <th>No. Aprobación</th>
                 <th>Estado</th>
+                <th>Ganancias</th>
                 <th>Opciones</th>
             </tr>
         </thead>
@@ -21,6 +22,7 @@
                         <tr>
                             <td><?= $cotizaciones[0]['Quote_Number'] ?></td>
                             <td><?= $oferta["Stage"] ?></td>
+                            <td>RD$<?= number_format($oferta['Amount'], 2) ?></td>
                             <td><a href="?page=details&id=<?= $oferta['id'] ?>" data-tooltip="Ver detalles" class="tooltipped blue waves-effect waves-light btn-small btn-floating"><i class="material-icons left">details</i></a></td>
                         </tr>
                     <?php endif ?>

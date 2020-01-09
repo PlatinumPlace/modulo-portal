@@ -111,8 +111,11 @@ class HomeController
         $cotizaciones = $this->cotizaciones->buscar_por_trato($oferta_id);
 
         if ($_POST) {
-            $this->ofertas->Aseguradora = $_POST["aseguradora"];
-            $this->ofertas->Stage = "En trámite";
+            if ($oferta['Stage'] == "Cotizando") {
+                $this->ofertas->Aseguradora = $_POST["aseguradora"];
+                $this->ofertas->Stage = "En trámite";
+                $this->ofertas->actualizar($oferta_id);
+            }
 
             if ($_FILES) {
                 $rutaDeSubidas = dirname(__DIR__, 2) . "/file/contratos firmados/" . $oferta_id;
@@ -129,8 +132,7 @@ class HomeController
                     echo "Error al subir archivo";
                 }
             }
-            
-            $this->ofertas->actualizar($oferta_id);
+
             $pagina_de_destino = "details";
             header('Location: ?page=loading&destiny=' . $pagina_de_destino . '&id=' . $oferta_id);
         }

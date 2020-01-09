@@ -21,12 +21,13 @@
                 $contrato = null;
             }
             ?>
-            <?php if ($oferta["Stage"] == "Cotizando" or $oferta["Stage"] == "En trámite" and $contrato == null) : ?>
-                <li><a href="?page=complete&id=<?= $oferta_id ?>" class="btn-floating red tooltipped" data-tooltip="Descargar cotización"><i class="material-icons">file_download</i></a></li>
+            <?php if ($contrato == null) : ?>
                 <li><a href="?page=complete&id=<?= $oferta_id ?>" class="btn-floating blue tooltipped" data-tooltip="Completar cotización"><i class="material-icons">recent_actors</i></a></li>
             <?php endif ?>
-            <?php if ($oferta["Stage"] == "En trámite") : ?>
+            <?php if ($oferta["Stage"] == "En trámite" or $oferta["Stage"] == "Emitida") : ?>
                 <li><a href="?page=complete&id=<?= $oferta_id ?>" class="btn-floating yellow tooltipped" data-tooltip="Descargar póliza"><i class="material-icons">cloud_download</i></a></li>
+            <?php elseif ($oferta["Stage"] == "Cotizando") : ?>
+                <li><a href="?page=complete&id=<?= $oferta_id ?>" class="btn-floating red tooltipped" data-tooltip="Descargar cotización"><i class="material-icons">file_download</i></a></li>
             <?php endif ?>
         </ul>
     </div>
