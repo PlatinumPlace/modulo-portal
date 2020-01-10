@@ -1,4 +1,5 @@
 </main>
+
 <footer class="page-footer blue">
     <div class="footer-copyright">
         <div class="container">
@@ -6,7 +7,6 @@
         </div>
     </div>
 </footer>
-
 
 <!--  Scripts-->
 <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>

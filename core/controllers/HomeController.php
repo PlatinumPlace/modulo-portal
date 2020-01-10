@@ -11,6 +11,7 @@ class HomeController
         $this->ofertas = new Deals;
         $this->cotizaciones = new Quotes;
         $this->productos = new Products;
+        $this->coberturas = new Coberturas;
     }
 
     public function pagina_principal()
@@ -47,15 +48,20 @@ class HomeController
     {
         if ($_POST) {
 
+            foreach ($_POST as $key => $value) {
+                echo $value;
+            }
+
             $this->ofertas->Contact_Name = "3222373000000751142";
             $this->ofertas->Direcci_n_del_asegurado = $_POST['Direcci_n_del_asegurado'];
-            $this->ofertas->A_o_de_Fabricacion = $_POST['A_o_de_Fabricacion'];
+            $this->ofertas->A_o_de_Fabricacion = (int) $_POST['A_o_de_Fabricacion'];
             $this->ofertas->Chasis = $_POST['Chasis'];
             $this->ofertas->Color = $_POST['Color'];
             $this->ofertas->Email_del_asegurado = $_POST['Email_del_asegurado'];
             $this->ofertas->Marca = $_POST['Marca'];
             $this->ofertas->Modelo = $_POST['Modelo'];
             $this->ofertas->Nombre_del_asegurado = $_POST['Nombre_del_asegurado'];
+            $this->ofertas->Apellido_del_asegurado = $_POST['Apellido_del_asegurado'];
             $this->ofertas->Placa = $_POST['Placa'];
             $this->ofertas->Plan = $_POST['Plan'];
             $this->ofertas->Type = "Vehículo";
@@ -64,7 +70,6 @@ class HomeController
             $this->ofertas->Tipo_de_poliza = $_POST['Tipo_de_poliza'];
             $this->ofertas->Tipo_de_vehiculo = $_POST['Tipo_de_vehiculo'];
             $this->ofertas->Valor_Asegurado = $_POST['Valor_Asegurado'];
-            $this->ofertas->Stage = "Prospección";
             $this->ofertas->Es_nuevo = ($_POST['Es_nuevo'] == 0) ? true : false;
 
             $oferta_id = $this->ofertas->crear();
@@ -88,7 +93,7 @@ class HomeController
     {
         $oferta_id = $_GET['id'];
         $oferta = $this->ofertas->detalles($oferta_id);
-        $cotizaciones = $this->cotizaciones->buscar_por_trato($oferta_id);
+        $cotizaciones = $this->cotizaciones->buscar_por_oferta($oferta_id);
         require("core/views/template/header.php");
         require("core/views/home/details.php");
         require("core/views/template/footer.php");
@@ -113,7 +118,6 @@ class HomeController
         if ($_POST) {
             if ($oferta['Stage'] == "Cotizando") {
                 $this->ofertas->Aseguradora = $_POST["aseguradora"];
-                $this->ofertas->Stage = "En trámite";
                 $this->ofertas->actualizar($oferta_id);
             }
 

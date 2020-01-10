@@ -3,6 +3,7 @@
 include "core/controllers/HomeController.php";
 include "core/models/API.php";
 include "core/models/Deals.php";
+include "core/models/Coberturas.php";
 include "core/models/Products.php";
 include "core/models/Quotes.php";
 

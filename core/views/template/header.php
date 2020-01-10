@@ -15,13 +15,50 @@
 <body>
 
     <header>
+
         <div class="navbar-fixed">
+
             <nav>
                 <div class="nav-wrapper blue">
-                    <a href="#!" class="brand-logo">GNB Portal</a>
+
+                    <a href="index.php" class="brand-logo center">Portal</a>
+
+                    <!-- Menu izquierdo -->
+                    <!-- dropdown1 Structure -->
+                    <ul id="dropdown1" class="dropdown-content">
+                        <li><a href="?page=create">Nueva cotizacion</a></li>
+                        <li><a href="?page=search">Buscar cotizacion</a></li>
+                    </ul>
+                    <!-- dropdown1 Structure -->
+                    <ul id="nav-mobile" class="left hide-on-med-and-down">
+                        <li><a href="index.php">Dashboard</a></li>
+                        <!-- Dropdown Trigger -->
+                        <li><a class="dropdown-trigger" href="#!" data-target="dropdown1">Cotizaciones<i class="material-icons right">arrow_drop_down</i></a></li>
+                    </ul>
+                    <!-- Menu izquierdo -->
+
+
+
+                    <!-- Menu derecho -->
+                    <!-- dropdown2 Structure -->
+                    <ul id="dropdown2" class="dropdown-content">
+                        <li><a href="#!">one</a></li>
+                        <li><a href="#!">two</a></li>
+                        <li class="divider"></li>
+                        <li><a href="#!">three</a></li>
+                    </ul>
+                    <!-- dropdown2 Structure -->
+                    <ul id="nav-mobile" class="right hide-on-med-and-down">
+                        <li><a href="api/install.php">Instalar API</a></li>
+                        <!-- Dropdown Trigger -->
+                        <li><a class="dropdown-trigger" href="#!" data-target="dropdown2">Dropdown<i class="material-icons right">arrow_drop_down</i></a></li>
+                    </ul>
+                    <!-- Menu derecho -->
+
                     <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">menu</i></a>
                 </div>
             </nav>
+
         </div>
 
         <ul class="sidenav" id="mobile-demo">
@@ -31,24 +68,7 @@
             </li>
             <li><a class="subheader">Cotizaciones</a></li>
             <li><a href="?page=create">Nueva cotizacion</a></li>
-            <li><a href="api/install.php">Instalar API</a></li>
-        </ul>
-
-        <ul id="slide-out" class="sidenav sidenav-fixed">
-            <li>
-                <div class="user-view">
-                    <div class="background">
-                        &nbsp;
-                    </div>
-                    &nbsp;
-                </div>
-            </li>
-            <li>
-                <div class="divider"></div>
-            </li>
-            <li><a href="index.php"><i class="material-icons">dashboard</i>Dashboard</a></li>
-            <li><a href="?page=create"><i class="material-icons">create</i>Nueva cotizacion</a></li>
-            <li><a href="api/install.php">Instalar API</a></li>
         </ul>
     </header>
+
     <main>

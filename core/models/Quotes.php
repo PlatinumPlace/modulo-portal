@@ -2,12 +2,12 @@
 
 class Quotes extends API
 {
-    public $Subject;
+    public $Quote_Stage;
     public $Deducible;
     public $Quote_Number;
     public $Poliza;
 
-    public function buscar_por_trato($oferta_id)
+    public function buscar_por_oferta($oferta_id)
     {
         $criterio = "Deal_Name:equals:" . $oferta_id;
         $resultado = $this->searchRecordsByCriteria("Quotes", $this, $criterio, $Product_details = true);

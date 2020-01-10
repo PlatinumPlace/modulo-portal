@@ -25,6 +25,7 @@ class Deals extends API
     public $Stage;
     public $Aseguradora;
     public $Closing_Date;
+    public $Apellido_del_asegurado;
     public $Amount;
 
 
