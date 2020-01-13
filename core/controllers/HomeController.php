@@ -14,6 +14,7 @@ class HomeController
         $this->coberturas = new Coberturas;
     }
 
+
     public function pagina_principal()
     {
         $ofertas = $this->ofertas->buscar_por_contacto("3222373000000751142");
@@ -94,6 +95,14 @@ class HomeController
         $oferta_id = $_GET['id'];
         $oferta = $this->ofertas->detalles($oferta_id);
         $cotizaciones = $this->cotizaciones->buscar_por_oferta($oferta_id);
+
+        $nombre_fichero = "file/contratos firmados/" . $oferta_id . "/Contrato Firmado.pdf";
+        if (file_exists($nombre_fichero)) {
+            $contrato = true;
+        } else {
+            $contrato = null;
+        }
+
         require("core/views/template/header.php");
         require("core/views/home/details.php");
         require("core/views/template/footer.php");
@@ -113,7 +122,7 @@ class HomeController
     {
         $oferta_id = $_GET['id'];
         $oferta = $this->ofertas->detalles($oferta_id);
-        $cotizaciones = $this->cotizaciones->buscar_por_trato($oferta_id);
+        $cotizaciones = $this->cotizaciones->buscar_por_oferta($oferta_id);
 
         if ($_POST) {
             if ($oferta['Stage'] == "Cotizando") {

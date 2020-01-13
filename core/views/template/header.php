@@ -27,7 +27,6 @@
                     <!-- dropdown1 Structure -->
                     <ul id="dropdown1" class="dropdown-content">
                         <li><a href="?page=create">Nueva cotizacion</a></li>
-                        <li><a href="?page=search">Buscar cotizacion</a></li>
                     </ul>
                     <!-- dropdown1 Structure -->
                     <ul id="nav-mobile" class="left hide-on-med-and-down">
@@ -40,18 +39,9 @@
 
 
                     <!-- Menu derecho -->
-                    <!-- dropdown2 Structure -->
-                    <ul id="dropdown2" class="dropdown-content">
-                        <li><a href="#!">one</a></li>
-                        <li><a href="#!">two</a></li>
-                        <li class="divider"></li>
-                        <li><a href="#!">three</a></li>
-                    </ul>
-                    <!-- dropdown2 Structure -->
+
                     <ul id="nav-mobile" class="right hide-on-med-and-down">
-                        <li><a href="api/install.php">Instalar API</a></li>
-                        <!-- Dropdown Trigger -->
-                        <li><a class="dropdown-trigger" href="#!" data-target="dropdown2">Dropdown<i class="material-icons right">arrow_drop_down</i></a></li>
+
                     </ul>
                     <!-- Menu derecho -->
 

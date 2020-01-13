@@ -87,8 +87,8 @@ if (isset($_POST['grant_token'])) {
         <button type="submit">Generar token</button>
     </form>
     <?php
-    $archivo = "token/zcrm_oauthtokens.txt";
-    if (filesize($archivo) > 0) {
+    $token = "token/zcrm_oauthtokens.txt";
+    if (filesize($token) > 0 and file_exists("config.php")) {
         echo '
         <hr>
         <h4>Token generado exitosamente.</h4>

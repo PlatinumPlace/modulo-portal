@@ -12,23 +12,12 @@
         </a>
         <ul>
             <li><a href="?page=list" class="btn-floating green tooltipped" data-tooltip="Lista de cotizaciónes"><i class="material-icons">list</i></a></li>
-            <?php
-            $nombre_fichero = "file/contratos firmados/" . $oferta_id . "/Contrato Firmado.pdf";
-            $contrato = null;
-            if (file_exists($nombre_fichero)) {
-                $contrato = true;
-            } else {
-                $contrato = null;
-            }
-            ?>
             <?php if ($contrato == null) : ?>
                 <li><a href="?page=complete&id=<?= $oferta_id ?>" class="btn-floating blue tooltipped" data-tooltip="Completar cotización"><i class="material-icons">recent_actors</i></a></li>
             <?php endif ?>
             <?php if ($oferta["Stage"] == "En trámite" or $oferta["Stage"] == "Emitida") : ?>
                 <li><a href="?page=complete&id=<?= $oferta_id ?>" class="btn-floating yellow tooltipped" data-tooltip="Descargar póliza"><i class="material-icons">cloud_download</i></a></li>
-            <?php endif ?>
-            <?php if ($oferta["Stage"] == "Cotizando") : ?>
-                <li><a href="?page=complete&id=<?= $oferta_id ?>" class="btn-floating blue tooltipped" data-tooltip="Completar cotización"><i class="material-icons">recent_actors</i></a></li>
+            <?php elseif ($oferta["Stage"] == "Cotizando") : ?>
                 <li><a href="?page=complete&id=<?= $oferta_id ?>" class="btn-floating red tooltipped" data-tooltip="Descargar cotización"><i class="material-icons">file_download</i></a></li>
             <?php endif ?>
         </ul>

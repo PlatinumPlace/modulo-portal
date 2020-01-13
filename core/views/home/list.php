@@ -18,7 +18,7 @@
             <?php if (!empty($ofertas)) : ?>
                 <?php foreach ($ofertas as $oferta_key => $oferta) : ?>
                     <?php if (in_array($oferta["Stage"], $estado)) : ?>
-                        <?php $cotizaciones = $this->cotizaciones->buscar_por_trato($oferta['id']) ?>
+                        <?php $cotizaciones = $this->cotizaciones->buscar_por_oferta($oferta['id']) ?>
                         <tr>
                             <td><?= $cotizaciones[0]['Quote_Number'] ?></td>
                             <td><?= $oferta["Stage"] ?></td>
