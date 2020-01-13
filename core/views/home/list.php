@@ -16,14 +16,20 @@
 
         <tbody>
             <?php if (!empty($ofertas)) : ?>
-                <?php foreach ($ofertas as $oferta_key => $oferta) : ?>
-                    <?php if (in_array($oferta["Stage"], $estado)) : ?>
-                        <?php $cotizaciones = $this->cotizaciones->buscar_por_oferta($oferta['id']) ?>
+                <?php foreach ($ofertas as $oferta) : ?>
+                    <?php if (in_array($oferta->getFieldValue("Stage"), $estado)) : ?>
+                        <?php $criterio = "Deal_Name:equals:" . $oferta->getEntityId() ?>
+                        <?php $cotizaciones = $this->api->searchRecordsByCriteria("Quotes", $criterio) ?>
                         <tr>
-                            <td><?= $cotizaciones[0]['Quote_Number'] ?></td>
-                            <td><?= $oferta["Stage"] ?></td>
-                            <td>RD$<?= number_format($oferta['Amount'], 2) ?></td>
-                            <td><a href="?page=details&id=<?= $oferta['id'] ?>" data-tooltip="Ver detalles" class="tooltipped blue waves-effect waves-light btn-small btn-floating"><i class="material-icons left">details</i></a></td>
+                            <td>
+                                <?php foreach ($cotizaciones as $cotizacion) : ?>
+                                    <?= $cotizacion->getFieldValue('Quote_Number') ?>
+                                    <?php break ?>
+                                <?php endforeach ?>
+                            </td>
+                            <td><?= $oferta->getFieldValue("Stage") ?></td>
+                            <td>RD$<?= number_format($oferta->getFieldValue('Amount'), 2) ?></td>
+                            <td><a href="?page=details&id=<?= $oferta->getEntityId() ?>" data-tooltip="Ver detalles" class="tooltipped blue waves-effect waves-light btn-small btn-floating"><i class="material-icons left">details</i></a></td>
                         </tr>
                     <?php endif ?>
                 <?php endforeach ?>

@@ -8,10 +8,11 @@
         <div class='row'>
             <div class="input-field col s12">
                 <select name="aseguradora">
-                    <?php foreach ($cotizaciones as $cotizacion_key => $cotizacion) : ?>
-                        <?php foreach ($cotizacion['Product_details'] as $producto_key => $producto) : ?>
-                            <?php $producto_detalles = $this->productos->detalles($producto['Product_id']) ?>
-                            <option value="<?= $producto_detalles['Vendor_Name_id'] ?>"><?= $producto_detalles['Vendor_Name'] ?></option>
+                    <?php foreach ($cotizaciones as $cotizacion) : ?>
+                        <?php $planes = $cotizacion->getLineItems() ?>
+                        <?php foreach ($planes as $plan) : ?>
+                            <?php $plan_detalles = $this->api->getRecord("Products", $plan->getProduct()->getEntityId()) ?>
+                            <option value="<?= $plan_detalles->getFieldValue('Vendor_Name')->getEntityId() ?>"><?= $plan_detalles->getFieldValue('Vendor_Name')->getLookupLabel() ?></option>
                         <?php endforeach ?>
                     <?php endforeach ?>
                 </select>

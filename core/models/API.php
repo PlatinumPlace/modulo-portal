@@ -4,26 +4,23 @@ use zcrmsdk\crm\crud\ZCRMRecord;
 use zcrmsdk\crm\setup\restclient\ZCRMRestClient;
 use zcrmsdk\crm\exception\ZCRMException;
 
+
 include "././api/config.php";
 
 class API
 {
 
-    public function createRecord($module_name, &$record_model)
+    public function createRecord($module_name, Array $record_model)
     {
         $moduleIns = ZCRMRestClient::getInstance()->getModuleInstance($module_name);
         $records = array();
         $record = ZCRMRecord::getInstance($module_name, null);
-
         foreach ($record_model as $propertie => $propertie_value) {
-
             if ($propertie_value != null) {
                 $record->setFieldValue($propertie, $propertie_value);
             }
         }
-
         array_push($records, $record);
-
         $responseIn = $moduleIns->createRecords($records);
         foreach ($responseIn->getEntityResponses() as $responseIns) {
             echo "HTTP Status Code:" . $responseIn->getHttpStatusCode();
@@ -37,44 +34,18 @@ class API
             echo "Details:" . json_encode($responseIns->getDetails());
             echo "<br/>";
             $Details = json_decode(json_encode($responseIns->getDetails()), true);
-            $result = $Details['id'];
+            $result_id = $Details['id'];
         }
-
-        return $result;
+        return $result_id;
     }
 
-    public function searchRecordsByCriteria($module_name, &$record_model, $criteria, $Product_details = false)
+    public function searchRecordsByCriteria($module_name, $criteria)
     {
         $moduleIns = ZCRMRestClient::getInstance()->getModuleInstance($module_name);
-        $results = array();
-        $cont1 = 0;
-        $cont2 = 0;
+        $records = null;
         try {
             $response = $moduleIns->searchRecordsByCriteria($criteria);
             $records = $response->getData();
-            foreach ($records as $record) {
-
-                foreach ($record_model as $propertie => $propertie_value) {
-                    $results[$cont1]['id'] = $record->getEntityId();
-                    $results[$cont1][$propertie] = $record->getFieldValue($propertie);
-                }
-
-                if ($Product_details == true) {
-                    $lineItems = $record->getLineItems();
-
-                    foreach ($lineItems as $lineItem) {
-                        $results[$cont1]['Product_details'][$cont2] = array(
-                                'Product_id' => $lineItem->getProduct()->getEntityId(),
-                                'ListPrice' => $lineItem->getListPrice(),
-                                'Total' => $lineItem->getNetTotal(),
-                                'Tax' => $lineItem->getTaxAmount()
-                        );
-                        $cont2++;
-                    }
-                }
-
-                $cont1++;
-            }
         } catch (ZCRMException $ex) {
             echo $ex->getMessage();
             echo "<br/>";
@@ -83,29 +54,36 @@ class API
             echo $ex->getFile();
             echo "<br/>";
         }
-        return $results;
+        return $records;
     }
 
-    public function getRecord($module_name,$record_id)
+    public function getRecord($module_name, $record_id)
     {
         $moduleIns = ZCRMRestClient::getInstance()->getModuleInstance($module_name);
-        $response = $moduleIns->getRecord($record_id);
-        $record = $response->getData();
+        $record = null;
+        try {
+            $response = $moduleIns->getRecord($record_id);
+            $record = $response->getData();
+        } catch (ZCRMException $ex) {
+            echo $ex->getMessage();
+            echo "<br/>";
+            echo $ex->getExceptionCode();
+            echo "<br/>";
+            echo $ex->getFile();
+            echo "<br/>";
+        }
         return $record;
     }
 
-    public function updateRecord($module_name, &$record_model, $record_id)
+    public function updateRecord($module_name, Array $record_model, $record_id)
     {
         $record = ZCRMRestClient::getInstance()->getRecordInstance($module_name, $record_id);
-
         foreach ($record_model as $propertie => $propertie_value) {
-
             if ($propertie_value != null) {
                 $record->setFieldValue($propertie, $propertie_value);
             }
         }
-
-        $responseIns = $record->update(); // to update the record
+        $responseIns = $record->update();
         echo "HTTP Status Code:" . $responseIns->getHttpStatusCode();
         echo "<br/>";
         echo "Status:" . $responseIns->getStatus();

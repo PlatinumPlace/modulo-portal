@@ -120,7 +120,7 @@
             </div>
             <br>
 
-            <button class="btn waves-effect waves-light" type="submit" name="action">Cotizar
+            <button class="btn waves-effect waves-light" type="submit" name="submit">Cotizar
                 <i class="material-icons right">send</i>
             </button>
         </form>

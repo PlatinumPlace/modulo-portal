@@ -2,84 +2,40 @@
 
 class HomeController
 {
-    public $ofertas;
-    public $cotizaciones;
-    public $productos;
+    public $api;
 
     function __construct()
     {
-        $this->ofertas = new Deals;
-        $this->cotizaciones = new Quotes;
-        $this->productos = new Products;
-        $this->coberturas = new Coberturas;
+        $this->api = new API;
     }
-
 
     public function pagina_principal()
     {
-        $ofertas = $this->ofertas->buscar_por_contacto("3222373000000751142");
-        $tratos_totales = 0;
-        $tratos_emitidos = 0;
-        $tratos_vencen = 0;
-        $tratos_pendientes = 0;
-
+        $criterio = "Contact_Name:equals:" . "3222373000000751142";
+        $ofertas = $this->api->searchRecordsByCriteria("Deals", $criterio);
+        $ofertas_totales = 0;
+        $ofertas_emitidos = 0;
+        $ofertas_vencen = 0;
+        $ofertas_pendientes = 0;
         if (!empty($ofertas)) {
-            foreach ($ofertas as $trato) {
+            foreach ($ofertas as $oferta) {
 
-                $tratos_totales += 1;
+                $ofertas_totales += 1;
 
-                if ($trato["Stage"] == "En trámite" || $trato["Stage"] == "Emitido" && date("m", strtotime($trato["Closing_Date"] . "- 1 month")) == date('m')) {
-                    $tratos_emitidos += 1;
+                if ($oferta->getFieldValue("Stage") == "En trámite" || $oferta->getFieldValue("Stage") == "Emitido" && date("m", strtotime($oferta->getFieldValue("Closing_Date") . "- 1 month")) == date('m')) {
+                    $ofertas_emitidos += 1;
                 }
-                if ($trato["Stage"] == "En trámite" && date("m", strtotime($trato["Closing_Date"] . "- 1 month")) == date('m')) {
-                    $tratos_vencen += 1;
+                if ($oferta->getFieldValue("Stage") == "En trámite" && date("m", strtotime($oferta->getFieldValue("Closing_Date") . "- 1 month")) == date('m')) {
+                    $ofertas_vencen += 1;
                 }
-                if ($trato["Stage"] == "Cotizando") {
-                    $tratos_pendientes += 1;
+                if ($oferta->getFieldValue("Stage") == "Cotizando") {
+                    $ofertas_pendientes += 1;
                 }
             }
         }
 
         require("core/views/template/header.php");
         require("core/views/home/index.php");
-        require("core/views/template/footer.php");
-    }
-
-    public function crear_cotizacion()
-    {
-        if ($_POST) {
-
-            foreach ($_POST as $key => $value) {
-                echo $value;
-            }
-
-            $this->ofertas->Contact_Name = "3222373000000751142";
-            $this->ofertas->Direcci_n_del_asegurado = $_POST['Direcci_n_del_asegurado'];
-            $this->ofertas->A_o_de_Fabricacion = (int) $_POST['A_o_de_Fabricacion'];
-            $this->ofertas->Chasis = $_POST['Chasis'];
-            $this->ofertas->Color = $_POST['Color'];
-            $this->ofertas->Email_del_asegurado = $_POST['Email_del_asegurado'];
-            $this->ofertas->Marca = $_POST['Marca'];
-            $this->ofertas->Modelo = $_POST['Modelo'];
-            $this->ofertas->Nombre_del_asegurado = $_POST['Nombre_del_asegurado'];
-            $this->ofertas->Apellido_del_asegurado = $_POST['Apellido_del_asegurado'];
-            $this->ofertas->Placa = $_POST['Placa'];
-            $this->ofertas->Plan = $_POST['Plan'];
-            $this->ofertas->Type = "Vehículo";
-            $this->ofertas->RNC_Cedula_del_asegurado = $_POST['RNC_Cedula_del_asegurado'];
-            $this->ofertas->Telefono_del_asegurado = $_POST['Telefono_del_asegurado'];
-            $this->ofertas->Tipo_de_poliza = $_POST['Tipo_de_poliza'];
-            $this->ofertas->Tipo_de_vehiculo = $_POST['Tipo_de_vehiculo'];
-            $this->ofertas->Valor_Asegurado = $_POST['Valor_Asegurado'];
-            $this->ofertas->Es_nuevo = ($_POST['Es_nuevo'] == 0) ? true : false;
-
-            $oferta_id = $this->ofertas->crear();
-            $pagina_de_destino = "details";
-
-            header('Location: ?page=loading&destiny=' . $pagina_de_destino . '&id=' . $oferta_id);
-        }
-        require("core/views/template/header.php");
-        require("core/views/home/create.php");
         require("core/views/template/footer.php");
     }
 
@@ -90,11 +46,56 @@ class HomeController
         require("core/views/template/footer.php");
     }
 
+    public function cotizaciones_lista()
+    {
+        $criterio = "Contact_Name:equals:" . "3222373000000751142";
+        $ofertas = $this->api->searchRecordsByCriteria("Deals", $criterio);
+        $filtro = (isset($_GET['filter'])) ? $_GET['filter'] : "Cotizando/En trámite/Emitido/Abandonado";
+        $estado = explode("/", $filtro);
+        require("core/views/template/header.php");
+        require("core/views/home/list.php");
+        require("core/views/template/footer.php");
+    }
+
+    public function crear_cotizacion()
+    {
+        if (isset($_POST["submit"])) {
+            $oferta["Contact_Name"] = "3222373000000751142";
+            $oferta["Lead_Source"] = "Portal GNB";
+            $oferta["Deal_Name"] = "Trato realizado desde el portal";
+            $oferta["Direcci_n_del_asegurado"] = $_POST['Direcci_n_del_asegurado'];
+            $oferta["A_o_de_Fabricacion"] = (int) $_POST['A_o_de_Fabricacion'];
+            $oferta["Chasis"] = $_POST['Chasis'];
+            $oferta["Color"] = $_POST['Color'];
+            $oferta["Email_del_asegurado"] = $_POST['Email_del_asegurado'];
+            $oferta["Marca"] = $_POST['Marca'];
+            $oferta["Modelo"] = $_POST['Modelo'];
+            $oferta["Nombre_del_asegurado"] = $_POST['Nombre_del_asegurado'];
+            $oferta["Apellido_del_asegurado"] = $_POST['Apellido_del_asegurado'];
+            $oferta["Placa"] = $_POST['Placa'];
+            $oferta["Plan"] = $_POST['Plan'];
+            $oferta["Type"] = "Vehículo";
+            $oferta["RNC_Cedula_del_asegurado"] = $_POST['RNC_Cedula_del_asegurado'];
+            $oferta["Telefono_del_asegurado"] = $_POST['Telefono_del_asegurado'];
+            $oferta["Tipo_de_poliza"] = $_POST['Tipo_de_poliza'];
+            $oferta["Tipo_de_vehiculo"] = $_POST['Tipo_de_vehiculo'];
+            $oferta["Valor_Asegurado"] = $_POST['Valor_Asegurado'];
+            $oferta["Es_nuevo"] = ($_POST['Es_nuevo'] == 0) ? true : false;
+            $oferta_id = $this->api->createRecord("Deals",$oferta);
+            $pagina_de_destino = "details";
+            header('Location: ?page=loading&destiny=' . $pagina_de_destino . '&id=' . $oferta_id);
+        }
+        require("core/views/template/header.php");
+        require("core/views/home/create.php");
+        require("core/views/template/footer.php");
+    }
+
     public function detalles_cotizacion()
     {
         $oferta_id = $_GET['id'];
-        $oferta = $this->ofertas->detalles($oferta_id);
-        $cotizaciones = $this->cotizaciones->buscar_por_oferta($oferta_id);
+        $oferta = $this->api->getRecord("Deals", $oferta_id);
+        $criterio = "Deal_Name:equals:" . $oferta_id;
+        $cotizaciones = $this->api->searchRecordsByCriteria("Quotes", $criterio);
 
         $contrato = null;
         $nombre_fichero = "file/contratos firmados/" . $oferta_id . "/Contrato Firmado.pdf";
@@ -107,26 +108,17 @@ class HomeController
         require("core/views/template/footer.php");
     }
 
-    public function cotizaciones_lista()
-    {
-        $ofertas = $this->ofertas->buscar_por_contacto("3222373000000751142");
-        $filtro = (isset($_GET['filter'])) ? $_GET['filter'] : "Cotizando/En trámite/Emitido/Abandonado";
-        $estado = explode("/", $filtro);
-        require("core/views/template/header.php");
-        require("core/views/home/list.php");
-        require("core/views/template/footer.php");
-    }
-
     public function completar_cotizacion()
     {
         $oferta_id = $_GET['id'];
-        $oferta = $this->ofertas->detalles($oferta_id);
-        $cotizaciones = $this->cotizaciones->buscar_por_oferta($oferta_id);
+        $oferta = $this->api->getRecord("Deals", $oferta_id);
+        $criterio = "Deal_Name:equals:" . $oferta_id;
+        $cotizaciones = $this->api->searchRecordsByCriteria("Quotes", $criterio);
 
         if ($_POST) {
-            if ($oferta['Stage'] == "Cotizando") {
-                $this->ofertas->Aseguradora = $_POST["aseguradora"];
-                $this->ofertas->actualizar($oferta_id);
+            if ($oferta->getFieldValue('Stage') == "Cotizando") {
+                $ofertas_cambios["Aseguradora"] = $_POST["aseguradora"];
+                $this->api->updateRecord("Deals",$ofertas_cambios,$oferta_id);
             }
 
             if ($_FILES) {
