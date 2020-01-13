@@ -96,11 +96,10 @@ class HomeController
         $oferta = $this->ofertas->detalles($oferta_id);
         $cotizaciones = $this->cotizaciones->buscar_por_oferta($oferta_id);
 
+        $contrato = null;
         $nombre_fichero = "file/contratos firmados/" . $oferta_id . "/Contrato Firmado.pdf";
         if (file_exists($nombre_fichero)) {
             $contrato = true;
-        } else {
-            $contrato = null;
         }
 
         require("core/views/template/header.php");

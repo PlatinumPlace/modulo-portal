@@ -44,7 +44,7 @@ class Deals extends API
 
     public function detalles($oferta_id)
     {
-        $resultado = $this->getRecord("Deals", $this, $oferta_id);
+        $resultado = $this->getRecord("Deals", $oferta_id);
         return $resultado;
     }
 
