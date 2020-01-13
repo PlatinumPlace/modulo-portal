@@ -147,7 +147,7 @@
                                     <hr>
                                     <div class="row">
                                         <div class="col s4"><b>Prima Neta:</b> RD$<?= number_format($producto['ListPrice'], 2) ?></div>
-                                        <div class="col s4"><b>ISC:</b> <br> RD$<?= number_format($producto['Tax'], 2) ?></div>
+                                        <div class="col s4"><b>ISC:</b> RD$<?= number_format($producto['Tax'], 2) ?></div>
                                         <div class="col s4"><b>Prima Total:</b> RD$<?= number_format($producto['Total'], 2) ?></div>
                                     </div>
                                 </P>
