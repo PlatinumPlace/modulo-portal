@@ -144,4 +144,20 @@ class HomeController
         require("core/views/home/complete.php");
         require("core/views/template/footer.php");
     }
+
+    public function descargar_cotizacion()
+    {
+        $oferta_id = $_GET['id'];
+        $oferta = $this->api->getRecord("Deals", $oferta_id);
+        $criterio = "Deal_Name:equals:" . $oferta_id;
+        $cotizaciones = $this->api->searchRecordsByCriteria("Quotes", $criterio);
+        require("core/views/home/download_1.php");
+    }
+
+    public function descargar_poliza()
+    {
+        require("core/views/template/header.php");
+        require("core/views/home/download_2.php");
+        require("core/views/template/footer.php");
+    }
 }

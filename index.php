@@ -28,6 +28,12 @@ switch ($page) {
     case 'complete':
         $controller->completar_cotizacion();
         break;
+    case 'download_1':
+        $controller->descargar_cotizacion();
+        break;
+    case 'download_2':
+        $controller->descargar_poliza();
+        break;
 
     default:
         $controller->pagina_principal();

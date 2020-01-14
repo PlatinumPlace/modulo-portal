@@ -1,6 +1,6 @@
 <div class='container'>
     <h4 class="header">
-        COTIZACION PARA <br>
+        COTIZACIÓN PARA <br>
         SEGURO VEHICULO DE MOTOR <br>
         PLAN <?= strtoupper($oferta->getFieldValue('Plan')) ?> <?= strtoupper($oferta->getFieldValue('Tipo_de_poliza')) ?>
     </h4>
@@ -15,9 +15,9 @@
                 <li><a href="?page=complete&id=<?= $oferta_id ?>" class="btn-floating blue tooltipped" data-tooltip="Completar cotización"><i class="material-icons">recent_actors</i></a></li>
             <?php endif ?>
             <?php if ($oferta->getFieldValue("Stage") == "En trámite" or $oferta->getFieldValue("Stage") == "Emitida") : ?>
-                <li><a href="?page=complete&id=<?= $oferta_id ?>" class="btn-floating yellow tooltipped" data-tooltip="Descargar póliza"><i class="material-icons">cloud_download</i></a></li>
+                <li><a href="?page=download_2&id=<?= $oferta_id ?>" class="btn-floating yellow tooltipped" data-tooltip="Descargar póliza"><i class="material-icons">cloud_download</i></a></li>
             <?php elseif ($oferta->getFieldValue("Stage") == "Cotizando") : ?>
-                <li><a href="?page=complete&id=<?= $oferta_id ?>" class="btn-floating red tooltipped" data-tooltip="Descargar cotización"><i class="material-icons">file_download</i></a></li>
+                <li><a href="?page=download_1&id=<?= $oferta_id ?>" class="btn-floating red tooltipped" data-tooltip="Descargar cotización"><i class="material-icons">file_download</i></a></li>
             <?php endif ?>
         </ul>
     </div>

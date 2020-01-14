@@ -12,7 +12,7 @@
 <input type="text" value="<?= $_GET['destiny'] ?>" id="destiny" hidden>
 
 <script>
-    var time = 1000;
+    var time = 1500;
     var destiny = document.getElementById('destiny').value;
     var id = document.getElementById('id').value;
     setTimeout(function() {
