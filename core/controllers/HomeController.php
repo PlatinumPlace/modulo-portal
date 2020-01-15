@@ -22,14 +22,21 @@ class HomeController
 
                 $ofertas_totales += 1;
 
-                if ($oferta->getFieldValue("Stage") == "En trámite" || $oferta->getFieldValue("Stage") == "Emitido" && date("m", strtotime($oferta->getFieldValue("Closing_Date") . "- 1 month")) == date('m')) {
-                    $ofertas_emitidos += 1;
-                }
-                if ($oferta->getFieldValue("Stage") == "En trámite" && date("m", strtotime($oferta->getFieldValue("Closing_Date") . "- 1 month")) == date('m')) {
-                    $ofertas_vencen += 1;
+                $oferta_id = $oferta->getEntityId();
+
+                $criterio = "Deal_Name:equals:" . $oferta_id;
+                $cotizaciones = $this->api->searchRecordsByCriteria("Quotes", $criterio);
+
+                foreach ($cotizaciones as $cotizacion) {
+                    if (date("Y-m-d", strtotime($cotizacion->getFieldValue("Valid_Till") . "- 1 year")) == date('Y-m-d')) {
+                        $ofertas_emitidos++;
+                    }
+                    if (date("Y-m-d", strtotime($cotizacion->getFieldValue("Valid_Till"))) == date('Y-m-d')) {
+                        $ofertas_vencen++;
+                    }
                 }
                 if ($oferta->getFieldValue("Stage") == "Cotizando") {
-                    $ofertas_pendientes += 1;
+                    $ofertas_pendientes++;
                 }
             }
         }
@@ -81,7 +88,7 @@ class HomeController
             $oferta["Tipo_de_vehiculo"] = $_POST['Tipo_de_vehiculo'];
             $oferta["Valor_Asegurado"] = $_POST['Valor_Asegurado'];
             $oferta["Es_nuevo"] = ($_POST['Es_nuevo'] == 0) ? true : false;
-            $oferta_id = $this->api->createRecord("Deals",$oferta);
+            $oferta_id = $this->api->createRecord("Deals", $oferta);
             $pagina_de_destino = "details";
             header('Location: ?page=loading&destiny=' . $pagina_de_destino . '&id=' . $oferta_id);
         }
@@ -98,7 +105,7 @@ class HomeController
         $cotizaciones = $this->api->searchRecordsByCriteria("Quotes", $criterio);
 
         $contrato = null;
-        $nombre_fichero = "file/contratos firmados/" . $oferta_id . "/Contrato Firmado.pdf";
+        $nombre_fichero = "file/contratos firmados/" . $oferta_id . ".pdf";
         if (file_exists($nombre_fichero)) {
             $contrato = true;
         }
@@ -118,16 +125,16 @@ class HomeController
         if ($_POST) {
             if ($oferta->getFieldValue('Stage') == "Cotizando") {
                 $ofertas_cambios["Aseguradora"] = $_POST["aseguradora"];
-                $this->api->updateRecord("Deals",$ofertas_cambios,$oferta_id);
+                $this->api->updateRecord("Deals", $ofertas_cambios, $oferta_id);
             }
 
             if ($_FILES) {
-                $rutaDeSubidas = dirname(__DIR__, 2) . "/file/contratos firmados/" . $oferta_id;
+                $rutaDeSubidas = dirname(__DIR__, 2) . "/file/contratos firmados/";
                 if (!is_dir($rutaDeSubidas)) {
                     mkdir($rutaDeSubidas, 0777, true);
                 }
                 $extension = pathinfo($_FILES["firma"]["name"], PATHINFO_EXTENSION);
-                $nombreArchivo = "Contrato Firmado." . $extension;
+                $nombreArchivo = $oferta_id . "." . $extension;
                 $nuevaUbicacion = $rutaDeSubidas . "/" . $nombreArchivo;
                 $resultado = move_uploaded_file($_FILES["firma"]["tmp_name"], $nuevaUbicacion);
                 if ($resultado === true) {
@@ -156,8 +163,10 @@ class HomeController
 
     public function descargar_poliza()
     {
-        require("core/views/template/header.php");
+        $oferta_id = $_GET['id'];
+        $oferta = $this->api->getRecord("Deals", $oferta_id);
+        $criterio = "Deal_Name:equals:" . $oferta_id;
+        $cotizaciones = $this->api->searchRecordsByCriteria("Quotes", $criterio);
         require("core/views/home/download_2.php");
-        require("core/views/template/footer.php");
     }
 }

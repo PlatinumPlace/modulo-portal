@@ -1,9 +1,10 @@
 <div class='container'>
-
     <div class="row">
         <form class="col s12" method="post" action="?page=create">
 
-            <h5>Datos del cliente</h5>
+            <div class="col s12 center">
+                <h5>Datos del cliente</h5>
+            </div>
             <div class="row">
                 <div class="col s6">
                     <div class="input-field">
@@ -12,11 +13,11 @@
                     </div>
                     <div class="input-field">
                         <input id="RNC_Cedula_del_asegurado" type="text" class="validate" name="RNC_Cedula_del_asegurado" required>
-                        <label for="RNC_Cedula_del_asegurado">RNC Cedula del asegurado</label>
+                        <label for="RNC_Cedula_del_asegurado">RNC/Cédula</label>
                     </div>
                     <div class="input-field">
                         <input id="Telefono_del_asegurado" type="text" class="validate" name="Telefono_del_asegurado">
-                        <label for="Telefono_del_asegurado">Telefono del cliente</label>
+                        <label for="Telefono_del_asegurado">Teléfono </label>
                     </div>
                 </div>
                 <div class="col s6">
@@ -26,19 +27,18 @@
                     </div>
                     <div class="input-field">
                         <input id="Email_del_asegurado" type="email" class="validate" name="Email_del_asegurado">
-                        <label for="Email_del_asegurado">Correo del cliente</label>
+                        <label for="Email_del_asegurado">Correo</label>
                     </div>
                     <div class="input-field">
                         <input id="Direcci_n_del_asegurado" type="text" class="validate" name="Direcci_n_del_asegurado">
-                        <label for="Direcci_n_del_asegurado">Direccion del cliente</label>
+                        <label for="Direcci_n_del_asegurado">Dirección</label>
                     </div>
                 </div>
             </div>
-            <br>
 
-
-
-            <h5>Datos de la póliza</h5>
+            <div class="col s12 center">
+                <h5>Datos de la póliza</h5>
+            </div>
             <div class="row">
                 <div class="col s6">
                     <div class="input-field">
@@ -61,23 +61,23 @@
                     </div>
                 </div>
             </div>
-            <br>
 
-
-            <h5>Datos del vehículo</h5>
+            <div class="col s12 center">
+                <h5>Datos del vehículo</h5>
+            </div>
             <div class="row">
                 <div class="col s6">
                     <div class="input-field">
                         <input id="Marca" type="text" class="validate" name="Marca">
-                        <label for="Marca">Marca del vehículo</label>
+                        <label for="Marca">Marca</label>
                     </div>
                     <div class="input-field">
                         <input id="Modelo" type="text" class="validate" name="Modelo">
-                        <label for="Modelo">Modelo del vehículo</label>
+                        <label for="Modelo">Modelo</label>
                     </div>
                     <div class="input-field">
                         <input id="Tipo_de_vehiculo" type="text" class="validate" name="Tipo_de_vehiculo" required>
-                        <label for="Tipo_de_vehiculo">Tipo de vehículo</label>
+                        <label for="Tipo_de_vehiculo">Tipo</label>
                     </div>
                     <div class="input-field">
                         <input id="Chasis" type="text" class="validate" name="Chasis" required>
@@ -118,7 +118,6 @@
                     </div>
                 </div>
             </div>
-            <br>
 
             <button class="btn waves-effect waves-light" type="submit" name="submit">Cotizar
                 <i class="material-icons right">send</i>
