@@ -10,20 +10,20 @@ if (!file_exists($nombre_fichero)) {
 
 
 $controller = new HomeController;
-$page  = (isset($_GET['page'])) ? $_GET['page'] : null;
+$pagina  = (isset($_GET['pagina'])) ? $_GET['pagina'] : null;
 
-switch ($page) {
-    case 'create':
+switch ($pagina) {
+    default:
+        $controller->pagina_principal();
+        break;
+    case 'lista':
+        $controller->lista();
+        break;
+    case 'crear_cotizacion':
         $controller->crear_cotizacion();
         break;
-    case 'loading':
-        $controller->pantalla_de_carga();
-        break;
-    case 'details':
+    case 'detalles_cotizacion':
         $controller->detalles_cotizacion();
-        break;
-    case 'list':
-        $controller->cotizaciones_lista();
         break;
     case 'complete':
         $controller->completar_cotizacion();
@@ -33,9 +33,5 @@ switch ($page) {
         break;
     case 'download_2':
         $controller->descargar_poliza();
-        break;
-
-    default:
-        $controller->pagina_principal();
         break;
 }

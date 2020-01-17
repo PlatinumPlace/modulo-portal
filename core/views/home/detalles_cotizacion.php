@@ -1,135 +1,131 @@
 <div class="fixed-action-btn">
-    <a class="btn-floating btn-large red">
+    <a class="btn-floating btn-large">
         <i class="large material-icons">mode_edit</i>
     </a>
     <ul>
         <li><a href="?page=list" class="btn-floating green tooltipped" data-tooltip="Lista de cotizaciónes"><i class="material-icons">list</i></a></li>
-        <?php if ($contrato == null) : ?>
-            <li><a href="?page=complete&id=<?= $oferta_id ?>" class="btn-floating blue tooltipped" data-tooltip="Completar cotización"><i class="material-icons">recent_actors</i></a></li>
-        <?php endif ?>
-        <?php if ($oferta->getFieldValue("Stage") == "En trámite" or $oferta->getFieldValue("Stage") == "Emitida") : ?>
-            <li><a href="?page=download_2&id=<?= $oferta_id ?>" class="btn-floating yellow tooltipped" data-tooltip="Descargar póliza"><i class="material-icons">cloud_download</i></a></li>
-        <?php elseif ($oferta->getFieldValue("Stage") == "Cotizando") : ?>
-            <li><a href="?page=download_1&id=<?= $oferta_id ?>" class="btn-floating red tooltipped" data-tooltip="Descargar cotización"><i class="material-icons">file_download</i></a></li>
-        <?php endif ?>
+        <li><a href="?page=complete&id=<?= $oferta_id ?>" class="btn-floating grenn tooltipped" data-tooltip="Emitir"><i class="material-icons">recent_actors</i></a></li>
+        <li><a href="?page=download_2&id=<?= $oferta_id ?>" class="btn-floating yellow tooltipped" data-tooltip="Descargar póliza"><i class="material-icons">cloud_download</i></a></li>
+        <li><a href="?page=download_1&id=<?= $oferta_id ?>" class="btn-floating red tooltipped" data-tooltip="Descargar cotización"><i class="material-icons">file_download</i></a></li>
     </ul>
 </div>
-<div class="container">
-    <div class="row">
-        <div class="col s6 center">
-            <h5>
-                COTIZACIÓN<br>
-                SEGURO VEHICULO DE MOTOR <br>
-                PLAN <?= strtoupper($oferta->getFieldValue('Plan')) ?> <?= strtoupper($oferta->getFieldValue('Tipo_de_poliza')) ?>
-            </h5>
-        </div>
-        <div class="col s4">
-            <?php foreach ($cotizaciones as $cotizacion) : ?>
-                <p>
-                    Cotización <?= $cotizacion->getFieldValue('Quote_Number') ?><br>
-                    Fecha <?= date('d/m/Y') ?>
-                </p>
-                <?php break ?>
-            <?php endforeach ?>
-        </div>
+<div class="row">
+    <div class="col s12 m4 l2">
+        <img src="files\logo.png" width="150" height="130">
+    </div>
+    <div class="col s12 m4 l8 center">
+        <h5>
+            COTIZACIÓN<br>
+            SEGURO VEHICULO DE MOTOR <br>
+            PLAN <?= strtoupper($oferta->getFieldValue('Plan')) ?> <?= strtoupper($oferta->getFieldValue('Tipo_de_poliza')) ?>
+        </h5>
+    </div>
+    <div class="col s12 m4 l2">
+        <?php foreach ($cotizaciones as $cotizacion) : ?>
+            <p>
+                <b>No. de cotización</b> <?= $cotizacion->getFieldValue('Quote_Number') ?><br>
+                <b>Fecha</b> <br> <?= date('d/m/Y') ?>
+            </p>
+            <?php break ?>
+        <?php endforeach ?>
+    </div>
 
-        <div class="col s12 center">
-            <h6>DATOS DEL CLIENTE</h6>
-        </div>
-        <div class="col s12 m6">
-            <div class="card blue-grey darken-1">
-                <div class="card-content white-text">
-                    <div class="row">
-                        <div class="col s4">
-                            <P>
-                                <b>Cliente:</b><br>
-                                <b>Cédula/RNC:</b><br>
-                                <b>Direccion:</b><br>
-                                <b>Email: </b>
-                            </P>
-                        </div>
-                        <div class="col s8">
-                            <P>
-                                <?= $oferta->getFieldValue('Nombre_del_asegurado') . " " . $oferta->getFieldValue('Apellido_del_asegurado') ?><br>
-                                <?= $oferta->getFieldValue('RNC_Cedula_del_asegurado') ?><br>
-                                <?= $oferta->getFieldValue('Direcci_n_del_asegurado') ?><br>
-                                <?= $oferta->getFieldValue('Email_del_asegurado') ?>
-                            </P>
-                        </div>
+    <div class="col s12 center">
+        <h6>DATOS DEL CLIENTE</h6>
+    </div>
+    <div class="col s12 m6">
+        <div class="card blue-grey darken-1">
+            <div class="card-content white-text">
+                <div class="row">
+                    <div class="col s4">
+                        <P>
+                            <b>Cliente:</b><br>
+                            <b>Cédula/RNC:</b><br>
+                            <b>Direccion:</b><br>
+                            <b>Email: </b>
+                        </P>
+                    </div>
+                    <div class="col s8">
+                        <P>
+                            <?= $oferta->getFieldValue('Nombre_del_asegurado') . " " . $oferta->getFieldValue('Apellido_del_asegurado') ?><br>
+                            <?= $oferta->getFieldValue('RNC_Cedula_del_asegurado') ?><br>
+                            <?= $oferta->getFieldValue('Direcci_n_del_asegurado') ?><br>
+                            <?= $oferta->getFieldValue('Email_del_asegurado') ?>
+                        </P>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="col s12 m6">
-            <div class="card blue-grey darken-1">
-                <div class="card-content white-text">
-                    <div class="row">
-                        <div class="col s6">
-                            <P>
-                                <b>Tel. Residencia:</b><br>
-                                <b>Tel. Celular:</b><br>
-                                <b>Tel. Trabajo:</b><br>
-                                <b>Otro:</b>
-                            </P>
-                        </div>
-                        <div class="col s6">
-                            <P>
-                                <?= $oferta->getFieldValue('Telefono_del_asegurado') ?>
-                            </P>
-                        </div>
+    </div>
+    <div class="col s12 m6">
+        <div class="card blue-grey darken-1">
+            <div class="card-content white-text">
+                <div class="row">
+                    <div class="col s6">
+                        <P>
+                            <b>Tel. Residencia:</b><br>
+                            <b>Tel. Celular:</b><br>
+                            <b>Tel. Trabajo:</b><br>
+                            <b>Otro:</b>
+                        </P>
+                    </div>
+                    <div class="col s6">
+                        <P>
+                            <?= $oferta->getFieldValue('Telefono_del_asegurado') ?>
+                        </P>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="col s12 center">
-            <h6>DATOS DEL VEHICULO</h6>
-        </div>
-        <div class="col s12 m6">
-            <div class="card blue-grey darken-1">
-                <div class="card-content white-text">
-                    <div class="row">
-                        <div class="col s6">
-                            <P>
-                                <b>Tipo:</b><br>
-                                <b>Marca:</b><br>
-                                <b>Modelo:</b><br>
-                                <b>Año:</b><br>
-                                <b>Suma Asegurado:</b>
-                            </P>
-                        </div>
-                        <div class="col s6">
-                            <P>
-                                <?= $oferta->getFieldValue('Tipo_de_vehiculo') ?><br>
-                                <?= $oferta->getFieldValue('Marca') ?><br>
-                                <?= $oferta->getFieldValue('Modelo') ?><br>
-                                <?= $oferta->getFieldValue('A_o_de_Fabricacion') ?><br>
-                                RD$<?= number_format($oferta->getFieldValue('Valor_Asegurado'), 2) ?>
-                            </P>
-                        </div>
+    </div>
+    <div class="col s12 center">
+        <h6>DATOS DEL VEHICULO</h6>
+    </div>
+    <div class="col s12 m6">
+        <div class="card blue-grey darken-1">
+            <div class="card-content white-text">
+                <div class="row">
+                    <div class="col s6">
+                        <P>
+                            <b>Tipo:</b><br>
+                            <b>Marca:</b><br>
+                            <b>Modelo:</b><br>
+                            <b>Año:</b><br>
+                            <b>Suma Asegurado:</b>
+                        </P>
+                    </div>
+                    <div class="col s6">
+                        <P>
+                            <?= $oferta->getFieldValue('Tipo_de_vehiculo') ?><br>
+                            <?= $oferta->getFieldValue('Marca') ?><br>
+                            <?= $oferta->getFieldValue('Modelo') ?><br>
+                            <?= $oferta->getFieldValue('A_o_de_Fabricacion') ?><br>
+                            RD$<?= number_format($oferta->getFieldValue('Valor_Asegurado'), 2) ?>
+                        </P>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="col s12 m6">
-            <div class="card blue-grey darken-1">
-                <div class="card-content white-text">
-                    <div class="row">
-                        <div class="col s6">
-                            <P>
-                                <b>Chasis:</b><br>
-                                <b>Placa:</b><br>
-                                <b>Color:</b><br>
-                                <b>Condiciones:</b>
-                            </P>
-                        </div>
-                        <div class="col s6">
-                            <P>
-                                <?= $oferta->getFieldValue('Chasis') ?><br>
-                                <?= $oferta->getFieldValue('Placa') ?><br>
-                                <?= $oferta->getFieldValue('Color') ?><br>
-                                <?= $retVal = ($oferta->getFieldValue('Es_nuevo') == 1) ? "Nuevo" : "Usado"; ?>
-                            </P>
-                        </div>
+    </div>
+    <div class="col s12 m6">
+        <div class="card blue-grey darken-1">
+            <div class="card-content white-text">
+                <div class="row">
+                    <div class="col s6">
+                        <P>
+                            <b>Chasis:</b><br>
+                            <b>Placa:</b><br>
+                            <b>Color:</b><br>
+                            <b>Condiciones:</b>
+                        </P>
+                    </div>
+                    <div class="col s6">
+                        <P>
+                            <?= $oferta->getFieldValue('Chasis') ?><br>
+                            <?= $oferta->getFieldValue('Placa') ?><br>
+                            <?= $oferta->getFieldValue('Color') ?><br>
+                            <?= $retVal = ($oferta->getFieldValue('Es_nuevo') == 1) ? "Nuevo" : "Usado"; ?>
+                        </P>
                     </div>
                 </div>
             </div>

@@ -17,48 +17,38 @@
     <header>
 
         <div class="navbar-fixed">
-
-            <nav>
-                <div class="nav-wrapper blue">
-
-                    <a href="index.php" class="brand-logo center">Portal</a>
-
-                    <!-- Menu izquierdo -->
-                    <!-- dropdown1 Structure -->
-                    <ul id="dropdown1" class="dropdown-content">
-                        <li><a href="?page=create">Nueva cotizacion</a></li>
-                    </ul>
-                    <!-- dropdown1 Structure -->
-                    <ul id="nav-mobile" class="left hide-on-med-and-down">
-                        <li><a href="index.php">Dashboard</a></li>
-                        <!-- Dropdown Trigger -->
-                        <li><a class="dropdown-trigger" href="#!" data-target="dropdown1">Cotizaciones<i class="material-icons right">arrow_drop_down</i></a></li>
-                    </ul>
-                    <!-- Menu izquierdo -->
-
-
-
-                    <!-- Menu derecho -->
-
-                    <ul id="nav-mobile" class="right hide-on-med-and-down">
-
-                    </ul>
-                    <!-- Menu derecho -->
-
-                    <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">menu</i></a>
+            <nav class="blue">
+                <div class="nav-wrapper">
+                    <a href="index.php" class="brand-logo center">Logo</a>
+                    <a href="#" data-target="slide-out" class="sidenav-trigger"><i class="material-icons">menu</i></a>
                 </div>
             </nav>
-
         </div>
 
-        <ul class="sidenav" id="mobile-demo">
-            <li><a href="index.php">Dashboard</a></li>
+
+        <ul id="slide-out" class="sidenav sidenav-fixed">
+            <!--
+            <li>
+                <div class="user-view">
+                    <div class="background">
+                        <img src="images/office.jpg">
+                    </div>
+                    <a href="#user"><img class="circle" src="images/yuna.jpg"></a>
+                    <a href="#name"><span class="white-text name">John Doe</span></a>
+                    <a href="#email"><span class="white-text email">jdandturk@gmail.com</span></a>
+                </div>
+            </li>
+            -->
+            <li><a href="index.php"><i class="material-icons">dashboard</i>Dashboard</a></li>
             <li>
                 <div class="divider"></div>
             </li>
             <li><a class="subheader">Cotizaciones</a></li>
-            <li><a href="?page=create">Nueva cotizacion</a></li>
+            <li><a class="waves-effect" href="?pagina=lista"><i class="material-icons">list</i>Lista</a></li>
+            <li><a class="waves-effect" href="?pagina=crear_cotizacion"><i class="material-icons">create</i>Crear nueva</a></li>
         </ul>
+
     </header>
 
     <main>
+        <div class="container">

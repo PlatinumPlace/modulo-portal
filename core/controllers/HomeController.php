@@ -16,57 +16,53 @@ class HomeController
         $ofertas_totales = 0;
         $ofertas_emitidos = 0;
         $ofertas_vencen = 0;
-        $ofertas_pendientes = 0;
         if (!empty($ofertas)) {
             foreach ($ofertas as $oferta) {
-
                 $ofertas_totales += 1;
-
+                $filtro_1 = $oferta->getFieldValue("Stage");
                 $oferta_id = $oferta->getEntityId();
-
                 $criterio = "Deal_Name:equals:" . $oferta_id;
                 $cotizaciones = $this->api->searchRecordsByCriteria("Quotes", $criterio);
-
-                foreach ($cotizaciones as $cotizacion) {
-                    if (date("Y-m-d", strtotime($cotizacion->getFieldValue("Valid_Till") . "- 1 year")) == date('Y-m-d')) {
-                        $ofertas_emitidos++;
+                if (!empty($cotizaciones)) {
+                    foreach ($cotizaciones as $cotizacion) {
+                        if (date("Y-m-d", strtotime($cotizacion->getFieldValue("Valid_Till") . "- 1 year")) == date('Y-m-d')) {
+                            $ofertas_emitidos++;
+                            $filtro_1 = $oferta->getFieldValue("Stage");
+                        }
+                        if (date("Y-m-d", strtotime($cotizacion->getFieldValue("Valid_Till"))) == date('Y-m-d')) {
+                            $ofertas_vencen++;
+                            $filtro_2 = $oferta->getFieldValue("Stage");
+                        }
                     }
-                    if (date("Y-m-d", strtotime($cotizacion->getFieldValue("Valid_Till"))) == date('Y-m-d')) {
-                        $ofertas_vencen++;
-                    }
-                }
-                if ($oferta->getFieldValue("Stage") == "Cotizando") {
-                    $ofertas_pendientes++;
                 }
             }
         }
 
         require("core/views/template/header.php");
-        require("core/views/home/index.php");
+        require("core/views/home/pagina_principal.php");
         require("core/views/template/footer.php");
     }
 
-    public function pantalla_de_carga()
+    public function lista()
     {
-        require("core/views/template/header.php");
-        require("core/views/home/load_page.php");
-        require("core/views/template/footer.php");
-    }
-
-    public function cotizaciones_lista()
-    {
-        $criterio = "Contact_Name:equals:" . "3222373000000751142";
+        if (isset($_GET['filtro'])) {
+            $filtro = $_GET['filtro'];
+            $estado = explode("/", $filtro);
+        }
+        if ($_POST) {
+            $criterio = "((Contact_Name:equals:" . "3222373000000751142" . ") and (Nombre_del_asegurado:equals:" . $_POST['buscar'] . "))";
+        } else {
+            $criterio = "Contact_Name:equals:" . "3222373000000751142";
+        }
         $ofertas = $this->api->searchRecordsByCriteria("Deals", $criterio);
-        $filtro = (isset($_GET['filter'])) ? $_GET['filter'] : "Cotizando/En trámite/Emitido/Abandonado";
-        $estado = explode("/", $filtro);
         require("core/views/template/header.php");
-        require("core/views/home/list.php");
+        require("core/views/home/lista.php");
         require("core/views/template/footer.php");
     }
 
     public function crear_cotizacion()
     {
-        if (isset($_POST["submit"])) {
+        if ($_POST) {
             $oferta["Contact_Name"] = "3222373000000751142";
             $oferta["Lead_Source"] = "Portal GNB";
             $oferta["Deal_Name"] = "Trato realizado desde el portal";
@@ -89,12 +85,22 @@ class HomeController
             $oferta["Valor_Asegurado"] = $_POST['Valor_Asegurado'];
             $oferta["Es_nuevo"] = ($_POST['Es_nuevo'] == 0) ? true : false;
             $oferta_id = $this->api->createRecord("Deals", $oferta);
-            $pagina_de_destino = "details";
-            header('Location: ?page=loading&destiny=' . $pagina_de_destino . '&id=' . $oferta_id);
+            $pagina_de_destino = "detalles_cotizacion";
+            $mensaje = "Cotización realizada exitosamente";
         }
         require("core/views/template/header.php");
-        require("core/views/home/create.php");
+        require("core/views/home/crear_cotizacion.php");
         require("core/views/template/footer.php");
+
+        if ($_POST) {
+            echo '<script>
+                    document.addEventListener("DOMContentLoaded", function () {
+                        var Modalelem = document.querySelector(".modal");
+                        var instance = M.Modal.init(Modalelem);
+                        instance.open();
+                    });
+                </script>';
+        }
     }
 
     public function detalles_cotizacion()
@@ -111,7 +117,7 @@ class HomeController
         }
 
         require("core/views/template/header.php");
-        require("core/views/home/details.php");
+        require("core/views/home/detalles_cotizacion.php");
         require("core/views/template/footer.php");
     }
 
