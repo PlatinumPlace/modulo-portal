@@ -16,37 +16,49 @@
 
     <header>
 
+        <!-- Dropdown Structure -->
+        <!--
+        <ul id="dropdown1" class="dropdown-content">
+            <li><a href="#!">two</a></li>
+            <li class="divider"></li>
+            <li><a href="#!">three</a></li>
+        </ul>
+         -->
+
         <div class="navbar-fixed">
-            <nav class="blue">
-                <div class="nav-wrapper">
-                    <a href="index.php" class="brand-logo center">Logo</a>
-                    <a href="#" data-target="slide-out" class="sidenav-trigger"><i class="material-icons">menu</i></a>
+            <nav>
+                <div class="nav-wrapper blue">
+                    <a href="index.php" class="brand-logo center">Portal</a>
+                    <!--
+                    <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">menu</i></a>
+                    -->
+                    <ul id="nav-mobile" class="left hide-on-med-and-down">
+                        <li><a href="index.php"><i class="material-icons tooltipped" data-tooltip="Dashboard">view_module</i></a></li>
+                        <li><a href="?pagina=crear_cotizacion"><i class="material-icons">add</i></a></li>
+                        <li><a href="?pagina=buscar_cotizaciones"><i class="material-icons">search</i></a></li>
+                    </ul>
+                    <!-- 
+                    <ul class="right hide-on-med-and-down">
+                        <li><a href="sass.html"><i class="material-icons">search</i></a></li>
+                        <li><a href="badges.html"><i class="material-icons">view_module</i></a></li>
+                        <li><a href="collapsible.html"><i class="material-icons">refresh</i></a></li>
+                        <li><a href="mobile.html"><i class="material-icons">more_vert</i></a></li>
+                        <li><a class="dropdown-trigger" href="#!" data-target="dropdown1">Dropdown<i class="material-icons right">arrow_drop_down</i></a></li>
+                    </ul>
+                     -->
                 </div>
             </nav>
         </div>
 
-
-        <ul id="slide-out" class="sidenav sidenav-fixed">
-            <!--
-            <li>
-                <div class="user-view">
-                    <div class="background">
-                        <img src="images/office.jpg">
-                    </div>
-                    <a href="#user"><img class="circle" src="images/yuna.jpg"></a>
-                    <a href="#name"><span class="white-text name">John Doe</span></a>
-                    <a href="#email"><span class="white-text email">jdandturk@gmail.com</span></a>
-                </div>
-            </li>
-            -->
-            <li><a href="index.php"><i class="material-icons">dashboard</i>Dashboard</a></li>
-            <li>
-                <div class="divider"></div>
-            </li>
-            <li><a class="subheader">Cotizaciones</a></li>
-            <li><a class="waves-effect" href="?pagina=lista"><i class="material-icons">list</i>Lista</a></li>
-            <li><a class="waves-effect" href="?pagina=crear_cotizacion"><i class="material-icons">create</i>Crear nueva</a></li>
+        <!-- Mobile Menu -->
+        <!-- 
+        <ul class="sidenav" id="mobile-demo">
+            <li><a href="sass.html">Sass</a></li>
+            <li><a href="badges.html">Components</a></li>
+            <li><a href="collapsible.html">Javascript</a></li>
+            <li><a href="mobile.html">Mobile</a></li>
         </ul>
+        -->
 
     </header>
 

@@ -14,24 +14,23 @@ class HomeController
         $criterio = "Contact_Name:equals:" . "3222373000000751142";
         $ofertas = $this->api->searchRecordsByCriteria("Deals", $criterio);
         $ofertas_totales = 0;
-        $ofertas_emitidos = 0;
-        $ofertas_vencen = 0;
+        $ofertas_emiciones = 0;
+        $ofertas_vencimientos = 0;
         if (!empty($ofertas)) {
             foreach ($ofertas as $oferta) {
                 $ofertas_totales += 1;
-                $filtro_1 = $oferta->getFieldValue("Stage");
                 $oferta_id = $oferta->getEntityId();
                 $criterio = "Deal_Name:equals:" . $oferta_id;
                 $cotizaciones = $this->api->searchRecordsByCriteria("Quotes", $criterio);
                 if (!empty($cotizaciones)) {
                     foreach ($cotizaciones as $cotizacion) {
                         if (date("Y-m-d", strtotime($cotizacion->getFieldValue("Valid_Till") . "- 1 year")) == date('Y-m-d')) {
-                            $ofertas_emitidos++;
-                            $filtro_1 = $oferta->getFieldValue("Stage");
+                            $ofertas_emiciones++;
+                            $filtro_emitidos = $oferta->getFieldValue("Stage");
                         }
                         if (date("Y-m-d", strtotime($cotizacion->getFieldValue("Valid_Till"))) == date('Y-m-d')) {
-                            $ofertas_vencen++;
-                            $filtro_2 = $oferta->getFieldValue("Stage");
+                            $ofertas_vencimientos++;
+                            $filtro_vencen = $oferta->getFieldValue("Stage");
                         }
                     }
                 }
@@ -43,20 +42,33 @@ class HomeController
         require("core/views/template/footer.php");
     }
 
-    public function lista()
+    public function buscar_cotizaciones()
     {
-        if (isset($_GET['filtro'])) {
-            $filtro = $_GET['filtro'];
-            $estado = explode("/", $filtro);
-        }
         if ($_POST) {
-            $criterio = "((Contact_Name:equals:" . "3222373000000751142" . ") and (Nombre_del_asegurado:equals:" . $_POST['buscar'] . "))";
-        } else {
-            $criterio = "Contact_Name:equals:" . "3222373000000751142";
+            switch ($_POST['opcion']) {
+                case 'nombre':
+                    $criterio = "((Contact_Name:equals:" . "3222373000000751142" . ") and (Nombre_del_asegurado:equals:" . $_POST['busqueda'] . "))";
+                    break;
+                    /*
+                case 'numero':
+                    $criterio = "((Contact_Name:equals:" . "3222373000000751142" . ") and (Quote_Number:equals:" . $_POST['busqueda'] . "))";
+                    break;
+                    */
+            }
+            $ofertas = $this->api->searchRecordsByCriteria("Deals", $criterio);
         }
-        $ofertas = $this->api->searchRecordsByCriteria("Deals", $criterio);
         require("core/views/template/header.php");
-        require("core/views/home/lista.php");
+        require("core/views/home/buscar_cotizaciones.php");
+        require("core/views/template/footer.php");
+    }
+
+    public function lista_cotizaciones()
+    {
+        $criterio = "Contact_Name:equals:" . "3222373000000751142";
+        $ofertas = $this->api->searchRecordsByCriteria("Deals", $criterio);
+        $filtro = (isset($_GET['filtro'])) ? $_GET['filtro'] : null ;
+        require("core/views/template/header.php");
+        require("core/views/home/lista_cotizaciones.php");
         require("core/views/template/footer.php");
     }
 
@@ -65,7 +77,7 @@ class HomeController
         if ($_POST) {
             $oferta["Contact_Name"] = "3222373000000751142";
             $oferta["Lead_Source"] = "Portal GNB";
-            $oferta["Deal_Name"] = "Trato realizado desde el portal";
+            $oferta["Deal_Name"] = "Oferta realizado desde el portal";
             $oferta["Direcci_n_del_asegurado"] = $_POST['Direcci_n_del_asegurado'];
             $oferta["A_o_de_Fabricacion"] = (int) $_POST['A_o_de_Fabricacion'];
             $oferta["Chasis"] = $_POST['Chasis'];
@@ -85,8 +97,12 @@ class HomeController
             $oferta["Valor_Asegurado"] = $_POST['Valor_Asegurado'];
             $oferta["Es_nuevo"] = ($_POST['Es_nuevo'] == 0) ? true : false;
             $oferta_id = $this->api->createRecord("Deals", $oferta);
-            $pagina_de_destino = "detalles_cotizacion";
-            $mensaje = "Cotización realizada exitosamente";
+            if (!empty($oferta_id)) {
+                $mensaje = "Cotización realizada exitosamente";
+                $pagina_de_destino = "ver_cotizacion";
+            }else {
+                $mensaje = "Ha ocurrido un error,intentelo mas tarde";
+            }
         }
         require("core/views/template/header.php");
         require("core/views/home/crear_cotizacion.php");
@@ -103,7 +119,7 @@ class HomeController
         }
     }
 
-    public function detalles_cotizacion()
+    public function ver_cotizacion()
     {
         $oferta_id = $_GET['id'];
         $oferta = $this->api->getRecord("Deals", $oferta_id);
@@ -117,9 +133,65 @@ class HomeController
         }
 
         require("core/views/template/header.php");
-        require("core/views/home/detalles_cotizacion.php");
+        require("core/views/home/ver_cotizacion.php");
         require("core/views/template/footer.php");
     }
+
+    public function descargar_cotizacion()
+    {
+        $oferta_id = $_GET['id'];
+        $oferta = $this->api->getRecord("Deals", $oferta_id);
+        $criterio = "Deal_Name:equals:" . $oferta_id;
+        $cotizaciones = $this->api->searchRecordsByCriteria("Quotes", $criterio);
+        require("core/views/home/descargar_cotizacion.php");
+    }
+
+    public function editar_cotizacion()
+    {
+        $oferta_id = $_GET['id'];
+        $oferta = $this->api->getRecord("Deals", $oferta_id);
+        if ($_POST) {
+            $ofertas_cambios["Contact_Name"] = "3222373000000751142";
+            $ofertas_cambios["Direcci_n_del_asegurado"] = $_POST['Direcci_n_del_asegurado'];
+            $ofertas_cambios["A_o_de_Fabricacion"] = (int) $_POST['A_o_de_Fabricacion'];
+            $ofertas_cambios["Chasis"] = $_POST['Chasis'];
+            $ofertas_cambios["Color"] = $_POST['Color'];
+            $ofertas_cambios["Email_del_asegurado"] = $_POST['Email_del_asegurado'];
+            $ofertas_cambios["Marca"] = $_POST['Marca'];
+            $ofertas_cambios["Modelo"] = $_POST['Modelo'];
+            $ofertas_cambios["Nombre_del_asegurado"] = $_POST['Nombre_del_asegurado'];
+            $ofertas_cambios["Apellido_del_asegurado"] = $_POST['Apellido_del_asegurado'];
+            $ofertas_cambios["Placa"] = $_POST['Placa'];
+            $ofertas_cambios["Plan"] = $_POST['Plan'];
+            $ofertas_cambios["Type"] = "Vehículo";
+            $ofertas_cambios["RNC_Cedula_del_asegurado"] = $_POST['RNC_Cedula_del_asegurado'];
+            $ofertas_cambios["Telefono_del_asegurado"] = $_POST['Telefono_del_asegurado'];
+            $ofertas_cambios["Tipo_de_poliza"] = $_POST['Tipo_de_poliza'];
+            $ofertas_cambios["Tipo_de_vehiculo"] = $_POST['Tipo_de_vehiculo'];
+            $ofertas_cambios["Valor_Asegurado"] = $_POST['Valor_Asegurado'];
+            $ofertas_cambios["Es_nuevo"] = ($_POST['Es_nuevo'] == 0) ? true : false;
+            $this->api->updateRecord("Deals", $ofertas_cambios, $oferta_id);
+            if (!empty($oferta_id)) {
+                $mensaje = "Acción realizada exitosamente";
+            }else {
+                $mensaje = "Ha ocurrido un error,intentelo mas tarde";
+            }
+        }
+        require("core/views/template/header.php");
+        require("core/views/home/editar_cotizacion.php");
+        require("core/views/template/footer.php");
+
+        if ($_POST) {
+            echo '<script>
+                    document.addEventListener("DOMContentLoaded", function () {
+                        var Modalelem = document.querySelector(".modal");
+                        var instance = M.Modal.init(Modalelem);
+                        instance.open();
+                    });
+                </script>';
+        }
+    }
+
 
     public function completar_cotizacion()
     {
@@ -158,7 +230,7 @@ class HomeController
         require("core/views/template/footer.php");
     }
 
-    public function descargar_cotizacion()
+    public function descargar2_cotizacion()
     {
         $oferta_id = $_GET['id'];
         $oferta = $this->api->getRecord("Deals", $oferta_id);

@@ -10,9 +10,8 @@
   padding: 0 15px;
 }
 .icon-block .material-icons {
-	font-size: inherit;
+  font-size: inherit;
 }
-
 
 /* Sticky Footer */
 body {
@@ -23,17 +22,4 @@ body {
 
 main {
   flex: 1 0 auto;
-}
-
-
-
-/* Sidenav */
-header, main, footer {
-  padding-left: 120px;
-}
-
-@media only screen and (max-width : 992px) {
-  header, main, footer {
-    padding-left: 0;
-  }
 }

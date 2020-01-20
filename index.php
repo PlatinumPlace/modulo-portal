@@ -2,12 +2,12 @@
 
 include "core/controllers/HomeController.php";
 include "core/models/API.php";
+include "api/config.php";
 
 $nombre_fichero = "api/config.php";
 if (!file_exists($nombre_fichero)) {
     header("Location: api/install.php");
 }
-
 
 $controller = new HomeController;
 $pagina  = (isset($_GET['pagina'])) ? $_GET['pagina'] : null;
@@ -16,22 +16,22 @@ switch ($pagina) {
     default:
         $controller->pagina_principal();
         break;
-    case 'lista':
-        $controller->lista();
+    case 'buscar_cotizaciones':
+        $controller->buscar_cotizaciones();
+        break;
+    case 'lista_cotizaciones':
+        $controller->lista_cotizaciones();
         break;
     case 'crear_cotizacion':
         $controller->crear_cotizacion();
         break;
-    case 'detalles_cotizacion':
-        $controller->detalles_cotizacion();
+    case 'ver_cotizacion':
+        $controller->ver_cotizacion();
         break;
-    case 'complete':
-        $controller->completar_cotizacion();
-        break;
-    case 'download_1':
+    case 'descargar_cotizacion':
         $controller->descargar_cotizacion();
         break;
-    case 'download_2':
-        $controller->descargar_poliza();
+    case 'editar_cotizacion':
+        $controller->editar_cotizacion();
         break;
 }

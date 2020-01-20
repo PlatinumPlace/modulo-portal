@@ -7,7 +7,7 @@
         <p><?= $ofertas_totales ?></p>
       </div>
       <div class="card-action">
-        <a href="?pagina=lista">Ver mas</a>
+        <a href="?pagina=buscar_cotizaciones">Ver mas</a>
       </div>
     </div>
   </div>
@@ -16,10 +16,10 @@
     <div class="card blue-grey darken-1">
       <div class="card-content white-text">
         <span class="card-title">Emisiones del Mes</span>
-        <p><?= $ofertas_emitidos ?></p>
+        <p><?= $ofertas_emiciones ?></p>
       </div>
       <div class="card-action">
-        <a href="?pagina=lista&filtro=<?= $filtro_1 ?>">Ver mas</a>
+        <a href="?pagina=lista_cotizaciones&filtro=<?= $filtro_emisiones ?>">Ver mas</a>
       </div>
     </div>
   </div>
@@ -28,10 +28,10 @@
     <div class="card blue-grey darken-1">
       <div class="card-content white-text">
         <span class="card-title">Vencimientos del Mes</span>
-        <p><?= $ofertas_vencen ?></p>
+        <p><?= $ofertas_vencimientos ?></p>
       </div>
       <div class="card-action">
-        <a href="?pagina=lista&filtro=<?= $filtro_2 ?>">Ver mas</a>
+        <a href="?pagina=lista_cotizaciones&filtro=<?= $filtro_vencimientos ?>">Ver mas</a>
       </div>
     </div>
   </div>

@@ -1,7 +1,8 @@
-</main>
 </div>
-<footer class="page-footer white">
-    <div class="footer-copyright black-text">
+</main>
+
+<footer class="page-footer blue">
+    <div class="footer-copyright">
         <div class="container">
             © <?= date('Y') ?> GrupoNobe
         </div>

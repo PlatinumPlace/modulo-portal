@@ -4,11 +4,26 @@ use zcrmsdk\crm\crud\ZCRMRecord;
 use zcrmsdk\crm\setup\restclient\ZCRMRestClient;
 use zcrmsdk\crm\exception\ZCRMException;
 
-
-include "././api/config.php";
-
 class API
 {
+
+    public function searchRecordsByCriteria($module_name, $criteria)
+    {
+        $moduleIns = ZCRMRestClient::getInstance()->getModuleInstance($module_name);
+        $records = null;
+        try {
+            $response = $moduleIns->searchRecordsByCriteria($criteria);
+            $records = $response->getData();
+        } catch (ZCRMException $ex) {
+            echo $ex->getMessage();
+            echo "<br/>";
+            echo $ex->getExceptionCode();
+            echo "<br/>";
+            echo $ex->getFile();
+            echo "<br/>";
+        }
+        return $records;
+    }
 
     public function createRecord($module_name, Array $record_model)
     {
@@ -37,24 +52,6 @@ class API
             $result_id = $Details['id'];
         }
         return $result_id;
-    }
-
-    public function searchRecordsByCriteria($module_name, $criteria)
-    {
-        $moduleIns = ZCRMRestClient::getInstance()->getModuleInstance($module_name);
-        $records = null;
-        try {
-            $response = $moduleIns->searchRecordsByCriteria($criteria);
-            $records = $response->getData();
-        } catch (ZCRMException $ex) {
-            echo $ex->getMessage();
-            echo "<br/>";
-            echo $ex->getExceptionCode();
-            echo "<br/>";
-            echo $ex->getFile();
-            echo "<br/>";
-        }
-        return $records;
     }
 
     public function getRecord($module_name, $record_id)
