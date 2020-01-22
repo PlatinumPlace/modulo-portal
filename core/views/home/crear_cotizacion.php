@@ -4,9 +4,8 @@
         <h4><?= $mensaje ?></h4>
     </div>
     <div class="modal-footer">
-        <a href="?pagina=crear_cotizacion" class="modal-close waves-effect waves-green btn-flat">Hacer otra cotización</a>
-        <?php if (!empty($oferta_id)) : ?>
-            <a href="?pagina=<?= $pagina_de_destino ?>&id=<?= $oferta_id ?>" class="modal-close waves-effect waves-green btn-flat">Ver detalles de la cotización</a>
+        <?php if (!empty($resultado)) : ?>
+            <a href="?pagina=ver_cotizacion&id=<?= $resultado["id"] ?>" class="modal-close waves-effect waves-green btn-flat">Ver detalles de la cotización</a>
         <?php endif ?>
     </div>
 </div>

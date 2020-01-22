@@ -14,7 +14,7 @@ class HomeController
         $criterio = "Contact_Name:equals:" . "3222373000000751142";
         $ofertas = $this->api->searchRecordsByCriteria("Deals", $criterio);
         $ofertas_totales = 0;
-        $ofertas_emiciones = 0;
+        $ofertas_emisiones = 0;
         $ofertas_vencimientos = 0;
         if (!empty($ofertas)) {
             foreach ($ofertas as $oferta) {
@@ -25,12 +25,12 @@ class HomeController
                 if (!empty($cotizaciones)) {
                     foreach ($cotizaciones as $cotizacion) {
                         if (date("Y-m-d", strtotime($cotizacion->getFieldValue("Valid_Till") . "- 1 year")) == date('Y-m-d')) {
-                            $ofertas_emiciones++;
-                            $filtro_emitidos = $oferta->getFieldValue("Stage");
+                            $ofertas_emisiones++;
+                            $filtro_emisiones = $oferta->getFieldValue("Stage");
                         }
                         if (date("Y-m-d", strtotime($cotizacion->getFieldValue("Valid_Till"))) == date('Y-m-d')) {
                             $ofertas_vencimientos++;
-                            $filtro_vencen = $oferta->getFieldValue("Stage");
+                            $filtro_vencimientos = $oferta->getFieldValue("Stage");
                         }
                     }
                 }
@@ -56,6 +56,9 @@ class HomeController
                     */
             }
             $ofertas = $this->api->searchRecordsByCriteria("Deals", $criterio);
+        } else {
+            $criterio = "Contact_Name:equals:" . "3222373000000751142";
+            $ofertas = $this->api->searchRecordsByCriteria("Deals", $criterio);
         }
         require("core/views/template/header.php");
         require("core/views/home/buscar_cotizaciones.php");
@@ -66,7 +69,7 @@ class HomeController
     {
         $criterio = "Contact_Name:equals:" . "3222373000000751142";
         $ofertas = $this->api->searchRecordsByCriteria("Deals", $criterio);
-        $filtro = (isset($_GET['filtro'])) ? $_GET['filtro'] : null ;
+        $filtro = (isset($_GET['filtro'])) ? $_GET['filtro'] : null;
         require("core/views/template/header.php");
         require("core/views/home/lista_cotizaciones.php");
         require("core/views/template/footer.php");
@@ -96,11 +99,10 @@ class HomeController
             $oferta["Tipo_de_vehiculo"] = $_POST['Tipo_de_vehiculo'];
             $oferta["Valor_Asegurado"] = $_POST['Valor_Asegurado'];
             $oferta["Es_nuevo"] = ($_POST['Es_nuevo'] == 0) ? true : false;
-            $oferta_id = $this->api->createRecord("Deals", $oferta);
-            if (!empty($oferta_id)) {
+            $resultado = $this->api->createRecord("Deals", $oferta);
+            if (!empty($resultado)) {
                 $mensaje = "Cotización realizada exitosamente";
-                $pagina_de_destino = "ver_cotizacion";
-            }else {
+            } else {
                 $mensaje = "Ha ocurrido un error,intentelo mas tarde";
             }
         }
@@ -125,11 +127,24 @@ class HomeController
         $oferta = $this->api->getRecord("Deals", $oferta_id);
         $criterio = "Deal_Name:equals:" . $oferta_id;
         $cotizaciones = $this->api->searchRecordsByCriteria("Quotes", $criterio);
-
-        $contrato = null;
-        $nombre_fichero = "file/contratos firmados/" . $oferta_id . ".pdf";
-        if (file_exists($nombre_fichero)) {
-            $contrato = true;
+        if (!empty($cotizaciones)) {
+            foreach ($cotizaciones as $cotizacion) {
+                $planes = $cotizacion->getLineItems();
+                foreach ($planes as $plan) {
+                    $plan_detalles = $this->api->getRecord("Products", $plan->getProduct()->getEntityId());
+                    $criterio = "Aseguradora:equals:" . $plan_detalles->getFieldValue('Vendor_Name')->getEntityId();
+                    $coberturas = $this->api->searchRecordsByCriteria("Coberturas", $criterio);
+                    foreach ($coberturas as $cobertura) {
+                        if (
+                            $cobertura->getFieldValue('Aseguradora')->getEntityId() == $plan_detalles->getFieldValue('Vendor_Name')->getEntityId()
+                            and
+                            $cobertura->getFieldValue('Socio_IT')->getEntityId() == $oferta->getFieldValue('Account_Name')->getEntityId()
+                        ) {
+                            $this->api->downloadRecordPhoto("Products", $plan->getProduct()->getEntityId());
+                        }
+                    }
+                }
+            }
         }
 
         require("core/views/template/header.php");
@@ -173,7 +188,7 @@ class HomeController
             $this->api->updateRecord("Deals", $ofertas_cambios, $oferta_id);
             if (!empty($oferta_id)) {
                 $mensaje = "Acción realizada exitosamente";
-            }else {
+            } else {
                 $mensaje = "Ha ocurrido un error,intentelo mas tarde";
             }
         }
@@ -192,59 +207,102 @@ class HomeController
         }
     }
 
-
-    public function completar_cotizacion()
+    public function eliminar_cotizacion()
     {
         $oferta_id = $_GET['id'];
-        $oferta = $this->api->getRecord("Deals", $oferta_id);
-        $criterio = "Deal_Name:equals:" . $oferta_id;
-        $cotizaciones = $this->api->searchRecordsByCriteria("Quotes", $criterio);
-
         if ($_POST) {
-            if ($oferta->getFieldValue('Stage') == "Cotizando") {
-                $ofertas_cambios["Aseguradora"] = $_POST["aseguradora"];
-                $this->api->updateRecord("Deals", $ofertas_cambios, $oferta_id);
+            $criterio = "Deal_Name:equals:" . $oferta_id;
+            $cotizaciones = $this->api->searchRecordsByCriteria("Quotes", $criterio);
+            if (!empty($cotizaciones)) {
+                foreach ($cotizaciones as $cotizacion) {
+                    $cotizacion_id = $cotizacion->getEntityId();
+                    break;
+                }
             }
+            $resultado_1 = $this->api->deleteRecord("Quotes", $cotizacion_id);
+            $resultado = $this->api->deleteRecord("Deals", $oferta_id);
+            if (!empty($resultado)) {
+                $mensaje = "Acción realizada exitosamente";
+            } else {
+                $mensaje = "Ha ocurrido un error,intentelo mas tarde";
+            }
+        } else {
+            $oferta = $this->api->getRecord("Deals", $oferta_id);
+        }
+        require("core/views/template/header.php");
+        require("core/views/home/eliminar_cotizacion.php");
+        require("core/views/template/footer.php");
+        if ($_POST) {
+            echo '<script>
+                document.addEventListener("DOMContentLoaded", function () {
+                    var Modalelem = document.querySelector(".modal");
+                    var instance = M.Modal.init(Modalelem);
+                    instance.open();
+                });
+            </script>';
+        }
+    }
 
-            if ($_FILES) {
-                $rutaDeSubidas = dirname(__DIR__, 2) . "/file/contratos firmados/";
+    public function emitir_cotizacion()
+    {
+        $oferta_id = $_GET['id'];
+        $ruta_cotizacion = "file/Cotizaciones/" . $oferta_id;
+        if ($_POST) {
+            $oferta = $this->api->getRecord("Deals", $oferta_id);
+            if ($oferta->getFieldValue('Aseguradora') == null) {
+                $ofertas_cambios["Aseguradora"] = $_POST["aseguradora"];
+                $resultado = $this->api->updateRecord("Deals", $ofertas_cambios, $oferta_id);
+            }
+            if (isset($_FILES["cotizacion_firmada"])) {
+                $rutaDeSubidas = dirname(__DIR__, 2) . "/" . $ruta_cotizacion;
                 if (!is_dir($rutaDeSubidas)) {
                     mkdir($rutaDeSubidas, 0777, true);
                 }
-                $extension = pathinfo($_FILES["firma"]["name"], PATHINFO_EXTENSION);
-                $nombreArchivo = $oferta_id . "." . $extension;
+                $extension = pathinfo($_FILES["cotizacion_firmada"]["name"], PATHINFO_EXTENSION);
+                $archivonombre = $_FILES["cotizacion_firmada"]["name"];
+                $nombreArchivo = $archivonombre . "." . $extension;
                 $nuevaUbicacion = $rutaDeSubidas . "/" . $nombreArchivo;
-                $resultado = move_uploaded_file($_FILES["firma"]["tmp_name"], $nuevaUbicacion);
-                if ($resultado === true) {
-                    echo "Archivo subido correctamente";
-                } else {
-                    echo "Error al subir archivo";
+                move_uploaded_file($_FILES["cotizacion_firmada"]["tmp_name"], $nuevaUbicacion);
+            }
+            if (isset($_FILES["expedientes"])) {
+                $rutaDeSubidas = dirname(__DIR__, 2) . "/" . $ruta_cotizacion;
+                if (!is_dir($rutaDeSubidas)) {
+                    mkdir($rutaDeSubidas, 0777, true);
+                }
+                foreach ($_FILES["expedientes"]['tmp_name'] as $key => $tmp_name) {
+                    if ($_FILES["expedientes"]["name"][$key]) {
+                        $extension = pathinfo($_FILES["expedientes"]["name"][$key], PATHINFO_EXTENSION);
+                        $archivonombre = $_FILES["expedientes"]["name"][$key];
+                        $nombreArchivo = $archivonombre . "." . $extension;
+                        $nuevaUbicacion = $rutaDeSubidas . "/" . $nombreArchivo;
+                        move_uploaded_file($_FILES["expedientes"]["tmp_name"][$key], $nuevaUbicacion);
+                    }
                 }
             }
-
-            $pagina_de_destino = "details";
-            header('Location: ?page=loading&destiny=' . $pagina_de_destino . '&id=' . $oferta_id);
+            if (!empty($resultado)) {
+                $mensaje = "Acción realizada exitosamente";
+            } else {
+                if (isset($_FILES["expedientes"])) {
+                    $mensaje = "Archivos subidos exitosamente";
+                } else {
+                    $mensaje = "Ha ocurrido un error,intentelo mas tarde";
+                }
+            }
+        } else {
+            $criterio = "Deal_Name:equals:" . $oferta_id;
+            $cotizaciones = $this->api->searchRecordsByCriteria("Quotes", $criterio);
         }
         require("core/views/template/header.php");
-        require("core/views/home/complete.php");
+        require("core/views/home/emitir_cotizacion.php");
         require("core/views/template/footer.php");
-    }
-
-    public function descargar2_cotizacion()
-    {
-        $oferta_id = $_GET['id'];
-        $oferta = $this->api->getRecord("Deals", $oferta_id);
-        $criterio = "Deal_Name:equals:" . $oferta_id;
-        $cotizaciones = $this->api->searchRecordsByCriteria("Quotes", $criterio);
-        require("core/views/home/download_1.php");
-    }
-
-    public function descargar_poliza()
-    {
-        $oferta_id = $_GET['id'];
-        $oferta = $this->api->getRecord("Deals", $oferta_id);
-        $criterio = "Deal_Name:equals:" . $oferta_id;
-        $cotizaciones = $this->api->searchRecordsByCriteria("Quotes", $criterio);
-        require("core/views/home/download_2.php");
+        if ($_POST) {
+            echo '<script>
+                document.addEventListener("DOMContentLoaded", function () {
+                    var Modalelem = document.querySelector(".modal");
+                    var instance = M.Modal.init(Modalelem);
+                    instance.open();
+                });
+            </script>';
+        }
     }
 }

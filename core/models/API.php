@@ -25,7 +25,7 @@ class API
         return $records;
     }
 
-    public function createRecord($module_name, Array $record_model)
+    public function createRecord($module_name, array $record_model)
     {
         $moduleIns = ZCRMRestClient::getInstance()->getModuleInstance($module_name);
         $records = array();
@@ -48,10 +48,9 @@ class API
             echo "<br/>";
             echo "Details:" . json_encode($responseIns->getDetails());
             echo "<br/>";
-            $Details = json_decode(json_encode($responseIns->getDetails()), true);
-            $result_id = $Details['id'];
+            $result = json_decode(json_encode($responseIns->getDetails()), true);
         }
-        return $result_id;
+        return $result;
     }
 
     public function getRecord($module_name, $record_id)
@@ -72,7 +71,7 @@ class API
         return $record;
     }
 
-    public function updateRecord($module_name, Array $record_model, $record_id)
+    public function updateRecord($module_name, array $record_model, $record_id)
     {
         $record = ZCRMRestClient::getInstance()->getRecordInstance($module_name, $record_id);
         foreach ($record_model as $propertie => $propertie_value) {
@@ -90,5 +89,38 @@ class API
         echo "Code:" . $responseIns->getCode();
         echo "<br/>";
         echo "Details:" . json_encode($responseIns->getDetails());
+        return $result = json_encode($responseIns->getDetails(), true);
+    }
+
+    public function deleteRecord($module_name, $record_id)
+    {
+        $record = ZCRMRestClient::getInstance()->getRecordInstance($module_name, $record_id);
+        $responseIns = $record->delete();
+        echo "HTTP Status Code:" . $responseIns->getHttpStatusCode();
+        echo "<br/>";
+        echo "Status:" . $responseIns->getStatus();
+        echo "<br/>";
+        echo "Message:" . $responseIns->getMessage();
+        echo "<br/>";
+        echo "Code:" . $responseIns->getCode();
+        echo "<br/>";
+        echo "Details:" . json_encode($responseIns->getDetails());
+        return $result = json_encode($responseIns->getDetails(), true);
+    }
+
+    public function downloadRecordPhoto($module_name, $record_id)
+    {
+        $record = ZCRMRestClient::getInstance()->getRecordInstance($module_name, $record_id);
+        $fileResponseIns = $record->downloadPhoto();
+        $ruta_cotizacion = "file/Aseguradoras";
+        $filePath = dirname(__DIR__, 2) . "/" . $ruta_cotizacion;
+        if (!is_dir($filePath)) {
+            mkdir($filePath, 0777, true);
+        }
+        $fp = fopen($filePath . $fileResponseIns->getFileName(), "w");
+        $stream = $fileResponseIns->getFileContent();
+        fputs($fp, $stream);
+        fclose($fp);
+        return $result = $fileResponseIns->getFileName();
     }
 }

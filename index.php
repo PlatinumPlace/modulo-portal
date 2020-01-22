@@ -34,4 +34,10 @@ switch ($pagina) {
     case 'editar_cotizacion':
         $controller->editar_cotizacion();
         break;
+    case 'eliminar_cotizacion':
+        $controller->eliminar_cotizacion();
+        break;
+    case 'emitir_cotizacion':
+        $controller->emitir_cotizacion();
+        break;
 }

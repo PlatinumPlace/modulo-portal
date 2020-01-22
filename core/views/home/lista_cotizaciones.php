@@ -3,6 +3,7 @@
         <tr>
             <th>No. de cotización</th>
             <th>Nombre del cliente</th>
+            <th>Bien Asegurado</th>
             <th>Suma Asegurada</th>
             <th>Estado</th>
             <th>Opciones</th>
@@ -25,6 +26,7 @@
                             <?php endif ?>
                         </td>
                         <td><?= $oferta->getFieldValue('Nombre_del_asegurado') . " " . $oferta->getFieldValue('Apellido_del_asegurado') ?></td>
+                        <td><?= $oferta->getFieldValue('Type')  ?></td>
                         <td>RD$<?= number_format($oferta->getFieldValue('Valor_Asegurado'), 2) ?></td>
                         <td><?= $oferta->getFieldValue("Stage") ?></td>
                         <td>

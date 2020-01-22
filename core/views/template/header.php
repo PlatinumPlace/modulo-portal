@@ -34,8 +34,8 @@
                     -->
                     <ul id="nav-mobile" class="left hide-on-med-and-down">
                         <li><a href="index.php"><i class="material-icons tooltipped" data-tooltip="Dashboard">view_module</i></a></li>
-                        <li><a href="?pagina=crear_cotizacion"><i class="material-icons">add</i></a></li>
-                        <li><a href="?pagina=buscar_cotizaciones"><i class="material-icons">search</i></a></li>
+                        <li><a href="?pagina=crear_cotizacion"><i class="material-icons tooltipped" data-tooltip="Nueva cotización">add</i></a></li>
+                        <li><a href="?pagina=buscar_cotizaciones"><i class="material-icons tooltipped" data-tooltip="Buscar cotización">search</i></a></li>
                     </ul>
                     <!-- 
                     <ul class="right hide-on-med-and-down">

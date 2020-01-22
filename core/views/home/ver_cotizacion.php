@@ -11,7 +11,7 @@
 </div>
 <div class="row">
     <div class="col s12 m4 l2">
-        <img src="files\logo.png" width="150" height="130">
+        <img src="logo.png" width="150" height="130">
     </div>
     <div class="col s12 m4 l8 center">
         <h5>
