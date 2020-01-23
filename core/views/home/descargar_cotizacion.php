@@ -31,7 +31,40 @@
         <div class="container">
             <div class="row">
                 <div class="col-2">
-                    <img src="logo.png" width="150" height="130">
+                    <?php if (!empty($cotizaciones)) : ?>
+                        <?php foreach ($cotizaciones as $cotizacion) : ?>
+                            <?php $planes = $cotizacion->getLineItems() ?>
+                            <?php foreach ($planes as $plan) : ?>
+                                <?php $plan_detalles = $this->api->getRecord("Products", $plan->getProduct()->getEntityId()) ?>
+                                <?php
+                                $criterio = "Aseguradora:equals:" . $plan_detalles->getFieldValue('Vendor_Name')->getEntityId();
+                                $coberturas = $this->api->searchRecordsByCriteria("Coberturas", $criterio);
+                                ?>
+                                <?php foreach ($coberturas as $cobertura) : ?>
+                                    <?php if (
+                                        $cobertura->getFieldValue('Aseguradora')->getEntityId() == $plan_detalles->getFieldValue('Vendor_Name')->getEntityId()
+                                        and
+                                        $cobertura->getFieldValue('Socio_IT')->getEntityId() == $oferta->getFieldValue('Account_Name')->getEntityId()
+                                    ) : ?>
+                                        <?php if ($oferta->getFieldValue('Aseguradora') != null) : ?>
+                                            <?php
+                                            $ruta_imagen = $this->api->downloadRecordPhoto(
+                                                "Vendors",
+                                                $plan_detalles->getFieldValue('Vendor_Name')->getEntityId(),
+                                                "file/Aseguradoras/"
+                                            );
+                                            ?>
+                                            <img height="120" width="130" src="<?= $ruta_imagen ?>" alt="<?= $plan_detalles->getFieldValue('Vendor_Name')->getLookupLabel() ?>">
+                                        <?php else : ?>
+                                            <img src="logo.png" width="150" height="130">
+                                        <?php endif ?>
+                                    <?php endif ?>
+                                    <?php break ?>
+                                <?php endforeach ?>
+                            <?php endforeach ?>
+                            <?php break ?>
+                        <?php endforeach ?>
+                    <?php endif ?>
                 </div>
                 <div class="col-8">
                     <center>
@@ -142,7 +175,7 @@
                 <div class="col-12">
                     <div class="row bg-primary text-white" style="padding: 20px;">
                         <div class="col">
-                            <h5>COBERTURAS</h5>
+                            <h4>COBERTURAS</h4>
                         </div>
                         <?php if (!empty($cotizaciones)) : ?>
                             <?php foreach ($cotizaciones as $cotizacion) : ?>
@@ -160,7 +193,16 @@
                                             $cobertura->getFieldValue('Socio_IT')->getEntityId() == $oferta->getFieldValue('Account_Name')->getEntityId()
                                         ) : ?>
                                             <div class="col-2">
-                                                <h5><?= $plan_detalles->getFieldValue('Vendor_Name')->getLookupLabel() ?></h5>
+                                                <?php if ($oferta->getFieldValue('Aseguradora') == null) : ?>
+                                                    <?php
+                                                    $ruta_imagen = $this->api->downloadRecordPhoto(
+                                                        "Vendors",
+                                                        $plan_detalles->getFieldValue('Vendor_Name')->getEntityId(),
+                                                        "file/Aseguradoras/"
+                                                    );
+                                                    ?>
+                                                    <img height="50" width="70" src="<?= $ruta_imagen ?>" alt="<?= $plan_detalles->getFieldValue('Vendor_Name')->getLookupLabel() ?>">
+                                                <?php endif ?>
                                             </div>
                                         <?php endif ?>
                                         <?php break ?>
@@ -269,7 +311,14 @@
                                                 $cobertura->getFieldValue('Socio_IT')->getEntityId() == $oferta->getFieldValue('Account_Name')->getEntityId()
                                             ) : ?>
                                                 <div class="col">
-                                                    <h4><?= $oferta->getFieldValue('Aseguradora')->getLookupLabel() ?></h4>
+                                                    <?php
+                                                    $ruta_imagen = $this->api->downloadRecordPhoto(
+                                                        "Vendors",
+                                                        $plan_detalles->getFieldValue('Vendor_Name')->getEntityId(),
+                                                        "file/Aseguradoras/"
+                                                    );
+                                                    ?>
+                                                    <img height="70" width="85" src="<?= $ruta_imagen ?>" alt="<?= $plan_detalles->getFieldValue('Vendor_Name')->getLookupLabel() ?>">
                                                     <P>
                                                         <b>PÓLIZA </b><?= $cotizacion->getFieldValue('Poliza')->getLookupLabel() ?><br>
                                                         <b>MARCA </b><?= $oferta->getFieldValue('Marca') ?><br>
@@ -345,8 +394,8 @@
         var time = 500;
         var id = document.getElementById('id').value;
         setTimeout(function() {
-            //window.print();
-            //window.location = "?pagina=ver_cotizacion&id=" + id;
+            window.print();
+            window.location = "?pagina=ver_cotizacion&id=" + id;
         }, time);
     </script>
 </body>

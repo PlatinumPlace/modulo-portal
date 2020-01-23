@@ -56,8 +56,10 @@
                         <td>
                             <a href="?pagina=emitir_cotizacion&id=<?= $oferta->getEntityId() ?>" data-tooltip="Emitir" class="tooltipped green waves-effect waves-light btn-small btn-floating"><i class="material-icons">recent_actors</i></a>
                             <a href="?pagina=ver_cotizacion&id=<?= $oferta->getEntityId() ?>" data-tooltip="Detalles" class="tooltipped blue waves-effect waves-light btn-small btn-floating"><i class="material-icons">details</i></a>
+                            <?php if ($oferta->getFieldValue('Aseguradora') == null) : ?>
                             <a href="?pagina=editar_cotizacion&id=<?= $oferta->getEntityId() ?>" data-tooltip="Editar" class="tooltipped yellow waves-effect waves-light btn-small btn-floating"><i class="material-icons">edit</i></a>
                             <a href="?pagina=eliminar_cotizacion&id=<?= $oferta->getEntityId() ?>" data-tooltip="Eliminar" class="tooltipped red waves-effect waves-light btn-small btn-floating"><i class="material-icons">delete</i></a>
+                            <?php endif ?>
                             <a href="?pagina=descargar_cotizacion&id=<?= $oferta->getEntityId() ?>" data-tooltip="Descargar" class="tooltipped waves-effect waves-light btn-small btn-floating"><i class="material-icons">file_download</i></a>
                         </td>
                     </tr>

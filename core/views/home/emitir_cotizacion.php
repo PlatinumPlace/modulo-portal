@@ -31,7 +31,7 @@
             <div class="col s12">
                 <div class="file-field input-field">
                     <div class="btn">
-                        <span>Cotización Firmada</span>
+                        <span>Cargar Cotización Firmada</span>
                         <input type="file" name="cotizacion_firmada" required>
                     </div>
                     <div class="file-path-wrapper">

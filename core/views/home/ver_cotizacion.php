@@ -31,7 +31,6 @@
             <?php endforeach ?>
         <?php endif ?>
     </div>
-
     <div class="col s12 center">
         <h6>DATOS DEL CLIENTE</h6>
     </div>
@@ -134,12 +133,10 @@
             </div>
         </div>
     </div>
-    <div class="col s12 left">
-        <h6>COBERTURAS</h6>
-    </div>
     <div class="col s12">
         <div class="row">
             <div class="col">
+                <h6>COBERTURAS</h6>
                 <p><b>&nbsp;</b></p>
                 <p>
                     <b>DAÑOS PROPIOS</b><br>
@@ -181,7 +178,14 @@
                                 $cobertura->getFieldValue('Socio_IT')->getEntityId() == $oferta->getFieldValue('Account_Name')->getEntityId()
                             ) : ?>
                                 <div class="col">
-                                    <p><b><?= $plan_detalles->getFieldValue('Vendor_Name')->getLookupLabel() ?></b></p>
+                                    <?php
+                                    $ruta_imagen = $this->api->downloadRecordPhoto(
+                                        "Vendors",
+                                        $plan_detalles->getFieldValue('Vendor_Name')->getEntityId(),
+                                        "file/Aseguradoras/"
+                                    );
+                                    ?>
+                                    <img height="50" width="70" src="<?= $ruta_imagen ?>" alt="<?= $plan_detalles->getFieldValue('Vendor_Name')->getLookupLabel() ?>">
                                     <p>
                                         <b>&nbsp;</b><br>
                                         <?= $cobertura->getFieldValue('Riesgos_comprensivos') ?>%<br>

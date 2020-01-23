@@ -127,26 +127,6 @@ class HomeController
         $oferta = $this->api->getRecord("Deals", $oferta_id);
         $criterio = "Deal_Name:equals:" . $oferta_id;
         $cotizaciones = $this->api->searchRecordsByCriteria("Quotes", $criterio);
-        if (!empty($cotizaciones)) {
-            foreach ($cotizaciones as $cotizacion) {
-                $planes = $cotizacion->getLineItems();
-                foreach ($planes as $plan) {
-                    $plan_detalles = $this->api->getRecord("Products", $plan->getProduct()->getEntityId());
-                    $criterio = "Aseguradora:equals:" . $plan_detalles->getFieldValue('Vendor_Name')->getEntityId();
-                    $coberturas = $this->api->searchRecordsByCriteria("Coberturas", $criterio);
-                    foreach ($coberturas as $cobertura) {
-                        if (
-                            $cobertura->getFieldValue('Aseguradora')->getEntityId() == $plan_detalles->getFieldValue('Vendor_Name')->getEntityId()
-                            and
-                            $cobertura->getFieldValue('Socio_IT')->getEntityId() == $oferta->getFieldValue('Account_Name')->getEntityId()
-                        ) {
-                            $this->api->downloadRecordPhoto("Products", $plan->getProduct()->getEntityId());
-                        }
-                    }
-                }
-            }
-        }
-
         require("core/views/template/header.php");
         require("core/views/home/ver_cotizacion.php");
         require("core/views/template/footer.php");
