@@ -57,6 +57,7 @@
                                             <img height="120" width="130" src="<?= $ruta_imagen ?>" alt="<?= $plan_detalles->getFieldValue('Vendor_Name')->getLookupLabel() ?>">
                                         <?php else : ?>
                                             <img src="logo.png" width="150" height="130">
+                                            <?php break ?>
                                         <?php endif ?>
                                     <?php endif ?>
                                     <?php break ?>

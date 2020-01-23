@@ -15,14 +15,12 @@ class API
             $response = $moduleIns->searchRecordsByCriteria($criteria);
             $records = $response->getData();
         } catch (ZCRMException $ex) {
-            /*
             echo $ex->getMessage();
             echo "<br/>";
             echo $ex->getExceptionCode();
             echo "<br/>";
             echo $ex->getFile();
             echo "<br/>";
-            */
         }
         return $records;
     }
@@ -40,7 +38,6 @@ class API
         array_push($records, $record);
         $responseIn = $moduleIns->createRecords($records);
         foreach ($responseIn->getEntityResponses() as $responseIns) {
-            /*
             echo "HTTP Status Code:" . $responseIn->getHttpStatusCode();
             echo "<br/>";
             echo "Status:" . $responseIns->getStatus();
@@ -51,7 +48,6 @@ class API
             echo "<br/>";
             echo "Details:" . json_encode($responseIns->getDetails());
             echo "<br/>";
-            */
             $result = json_decode(json_encode($responseIns->getDetails()), true);
         }
         return $result;
@@ -65,14 +61,12 @@ class API
             $response = $moduleIns->getRecord($record_id);
             $record = $response->getData();
         } catch (ZCRMException $ex) {
-            /*
             echo $ex->getMessage();
             echo "<br/>";
             echo $ex->getExceptionCode();
             echo "<br/>";
             echo $ex->getFile();
             echo "<br/>";
-            */
         }
         return $record;
     }
@@ -86,7 +80,6 @@ class API
             }
         }
         $responseIns = $record->update();
-        /*
         echo "HTTP Status Code:" . $responseIns->getHttpStatusCode();
         echo "<br/>";
         echo "Status:" . $responseIns->getStatus();
@@ -96,7 +89,6 @@ class API
         echo "Code:" . $responseIns->getCode();
         echo "<br/>";
         echo "Details:" . json_encode($responseIns->getDetails());
-        */
         return $result = json_encode($responseIns->getDetails(), true);
     }
 
@@ -104,7 +96,6 @@ class API
     {
         $record = ZCRMRestClient::getInstance()->getRecordInstance($module_name, $record_id);
         $responseIns = $record->delete();
-        /*
         echo "HTTP Status Code:" . $responseIns->getHttpStatusCode();
         echo "<br/>";
         echo "Status:" . $responseIns->getStatus();
@@ -114,7 +105,6 @@ class API
         echo "Code:" . $responseIns->getCode();
         echo "<br/>";
         echo "Details:" . json_encode($responseIns->getDetails());
-        */
         return $result = json_encode($responseIns->getDetails(), true);
     }
 
@@ -132,5 +122,23 @@ class API
         fclose($fp);
         $result = $fileRoute . $fileResponseIns->getFileName();
         return $result;
+    }
+
+    public function getRecords($module_name)
+    {
+        $moduleIns = ZCRMRestClient::getInstance()->getModuleInstance($module_name);
+        $records = null;
+        try {
+            $response = $moduleIns->getRecords();
+            $records = $response->getData();
+        } catch (ZCRMException $ex) {
+            echo $ex->getMessage();
+            echo "<br/>";
+            echo $ex->getExceptionCode();
+            echo "<br/>";
+            echo $ex->getFile();
+            echo "<br/>";
+        }
+        return $records;
     }
 }

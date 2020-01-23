@@ -77,6 +77,8 @@ class HomeController
 
     public function crear_cotizacion()
     {
+        $marcas = $this->api->getRecords("Marcas");
+        $marca_id=null;
         if ($_POST) {
             $oferta["Contact_Name"] = "3222373000000751142";
             $oferta["Lead_Source"] = "Portal GNB";
@@ -119,6 +121,20 @@ class HomeController
                     });
                 </script>';
         }
+
+
+
+
+        /*
+<?php
+                    $criterio = "Marca:equals:" . $marca_id;
+                    $modelos = $this->api->searchRecordsByCriteria("Modelos", $criterio);
+                    ?>
+                    <?php foreach ($modelos as $modelo) : ?>
+                        <option value="<?= $modelo->getEntityId() ?>"><?= $modelo->getFieldValue('Name') ?></option>
+                    <?php endforeach ?>
+
+        */
     }
 
     public function ver_cotizacion()

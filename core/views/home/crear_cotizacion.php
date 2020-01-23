@@ -77,12 +77,20 @@
         </div>
         <div class="row">
             <div class="input-field col s6">
-                <input id="Marca" type="text" class="validate" name="Marca">
-                <label for="Marca">Marca</label>
+                <select name="Marca" id="marcas" onchange="modelos()">
+                    <?php if (!empty($marcas)) : ?>
+                        <?php foreach ($marcas as $marca) : ?>
+                            <option value="<?= $marca->getEntityId() ?>"><?= $marca->getFieldValue('Name') ?></option>
+                        <?php endforeach ?>
+                    <?php endif ?>
+                </select>
+                <label>Marcas</label>
             </div>
             <div class="input-field col s6">
-                <input id="Modelo" type="text" class="validate" name="Modelo">
-                <label for="Modelo">Modelo</label>
+                <select name="Modelo">
+                    <div id="modelos"></div>
+                </select>
+                <label>Modelos</label>
             </div>
             <div class="input-field col s6">
                 <input id="Tipo_de_vehiculo" type="text" class="validate" name="Tipo_de_vehiculo" required>
@@ -132,3 +140,10 @@
         </button>
     </form>
 </div>
+<script>
+    function modelos() {
+        var marca_id = document.getElementById("marcas").value;
+        document.getElementById("modelos").innerHTML =
+            "<option>" + marca_id + "</option>";
+    }
+</script>
