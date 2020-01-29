@@ -46,22 +46,22 @@
                                         and
                                         $cobertura->getFieldValue('Socio_IT')->getEntityId() == $oferta->getFieldValue('Account_Name')->getEntityId()
                                     ) : ?>
-                                        <?php if ($oferta->getFieldValue('Aseguradora') != null) : ?>
+                                        <?php if ($oferta->getFieldValue('Aseguradora') == null) : ?>
+                                            <img src="img/portal/logo.png" width="150" height="130">
+                                        <?php else : ?>
                                             <?php
                                             $ruta_imagen = $this->api->downloadRecordPhoto(
                                                 "Vendors",
                                                 $plan_detalles->getFieldValue('Vendor_Name')->getEntityId(),
-                                                "file/Aseguradoras/"
+                                                "img/Aseguradoras/"
                                             );
                                             ?>
-                                            <img height="120" width="130" src="<?= $ruta_imagen ?>" alt="<?= $plan_detalles->getFieldValue('Vendor_Name')->getLookupLabel() ?>">
-                                        <?php else : ?>
-                                            <img src="logo.png" width="150" height="130">
-                                            <?php break ?>
+                                            <img height="100" width="110" src="<?= $ruta_imagen ?>" alt="<?= $plan_detalles->getFieldValue('Vendor_Name')->getLookupLabel() ?>">
                                         <?php endif ?>
                                     <?php endif ?>
                                     <?php break ?>
                                 <?php endforeach ?>
+                                <?php break ?>
                             <?php endforeach ?>
                             <?php break ?>
                         <?php endforeach ?>
@@ -173,10 +173,13 @@
                         </div>
                     </div>
                 </div>
+                <div class="col-12 d-flex justify-content-center p-3 mb-2 bg-primary text-white" style="width: 200px;">
+                    <h4>COBERTURAS</h4>
+                </div>
                 <div class="col-12">
-                    <div class="row bg-primary text-white" style="padding: 20px;">
+                    <div class="row">
                         <div class="col">
-                            <h4>COBERTURAS</h4>
+                            &nbsp;
                         </div>
                         <?php if (!empty($cotizaciones)) : ?>
                             <?php foreach ($cotizaciones as $cotizacion) : ?>
@@ -199,7 +202,7 @@
                                                     $ruta_imagen = $this->api->downloadRecordPhoto(
                                                         "Vendors",
                                                         $plan_detalles->getFieldValue('Vendor_Name')->getEntityId(),
-                                                        "file/Aseguradoras/"
+                                                        "img/Aseguradoras/"
                                                     );
                                                     ?>
                                                     <img height="50" width="70" src="<?= $ruta_imagen ?>" alt="<?= $plan_detalles->getFieldValue('Vendor_Name')->getLookupLabel() ?>">
@@ -362,6 +365,7 @@
                     </div>
                 </div>
             <?php else : ?>
+                <br><br><br>
                 <div class="row">
                     <div class="col">
                         <p>

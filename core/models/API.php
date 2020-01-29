@@ -89,7 +89,8 @@ class API
         echo "Code:" . $responseIns->getCode();
         echo "<br/>";
         echo "Details:" . json_encode($responseIns->getDetails());
-        return $result = json_encode($responseIns->getDetails(), true);
+        $result = json_decode(json_encode($responseIns->getDetails()), true);
+        return $result;
     }
 
     public function deleteRecord($module_name, $record_id)

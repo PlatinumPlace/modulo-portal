@@ -16,9 +16,6 @@ switch ($pagina) {
     default:
         $controller->pagina_principal();
         break;
-    case 'buscar_cotizaciones':
-        $controller->buscar_cotizaciones();
-        break;
     case 'lista_cotizaciones':
         $controller->lista_cotizaciones();
         break;
