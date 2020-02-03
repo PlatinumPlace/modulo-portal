@@ -8,7 +8,7 @@
     <div class="section">
 
         <div class="row">
-            <form class="col s12" method="post" action="?page=add">
+            <form class="col s12" method="POST" action="?pagina=crear">
                 <div class="row">
                     <div class="input-field col s6">
                         <i class="material-icons prefix">account_circle</i>

@@ -22,9 +22,9 @@
                         <td>RD$<?= number_format($trato->getFieldValue('Valor_Asegurado'), 2) ?></td>
                         <td><?= $trato->getFieldValue("Stage") ?></td>
                         <td>
-                            <a href="?page=details&id=<?= $trato->getEntityId() ?>" class="btn-floating btn-small waves-effect waves-light blue tooltipped" data-position="bottom" data-tooltip="Detalles"><i class="material-icons">details</i></a>
+                            <a href="?pagina=detalles&id=<?= $trato->getEntityId() ?>" class="btn-floating btn-small waves-effect waves-light blue tooltipped" data-position="bottom" data-tooltip="Detalles"><i class="material-icons">details</i></a>
                             <?php if ($trato->getFieldValue('Activo') != false and $trato->getFieldValue('Aseguradora') == null) : ?>
-                                <a href="?page=emit&id=<?= $trato->getEntityId() ?>" class="btn-floating btn-small waves-effect waves-light tooltipped" data-position="bottom" data-tooltip="Emitir"><i class="material-icons">recent_actors</i></a>
+                                <a href="?pagina=emitir&id=<?= $trato->getEntityId() ?>" class="btn-floating btn-small waves-effect waves-light tooltipped" data-position="bottom" data-tooltip="Emitir"><i class="material-icons">recent_actors</i></a>
                             <?php endif ?>
                             <a class="btn-floating btn-small waves-effect waves-light green tooltipped" data-position="bottom" data-tooltip="Descargar" href="?page=download&id=<?= $trato->getEntityId() ?>"><i class="material-icons">cloud_download</i></a>
                         </td>

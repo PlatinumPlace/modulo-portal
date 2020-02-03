@@ -6,86 +6,26 @@ class portal
 
     function __construct()
     {
-        $this->cotizaciones = new cotizacion;
+        $this->cotizaciones = new cotizaciones;
     }
 
     public function pagina_principal()
     {
-        $cotizaciones = $this->cotizaciones->resumen("3222373000000751142");
+        $cotizaciones = $this->cotizaciones->resumen();
         require("template/header.php");
-        require("pages/portal/index.php");
+        require("pages/portal/pagina_principal.php");
         require("template/footer.php");
     }
 
-    public function lista_cotizaciones()
-    {
-        $filtro = $_GET['filter'];
-        $criterio = "Contact_Name:equals:" . "3222373000000751142";
-        $ofertas = $this->api->searchRecordsByCriteria("Deals", $criterio);
-        require("core/views/template/header.php");
-        require("core/views/home/list.php");
-        require("core/views/template/footer.php");
-    }
-
-    public function buscar_cotizacion()
-    {
-        if ($_POST) {
-            switch ($_POST['opcion']) {
-                case 'nombre':
-                    $criterio = "((Contact_Name:equals:" . "3222373000000751142" . ") and (Nombre_del_asegurado:equals:" . $_POST['buscar'] . "))";
-                    break;
-                case 'numero':
-                    $criterio = "((Contact_Name:equals:" . "3222373000000751142" . ") and (No_de_cotizaci_n:equals:" . $_POST['buscar'] . "))";
-                    break;
-            }
-            $trato_id = $_GET['id'];
-        } else {
-            $criterio = "Contact_Name:equals:" . "3222373000000751142";
-        }
-        $tratos = $this->api->searchRecordsByCriteria("Deals", $criterio);
-        require("core/views/template/header.php");
-        require("core/views/home/search.php");
-        require("core/views/template/footer.php");
-    }
 
     public function crear_cotizacion()
     {
         if ($_POST) {
-            $trato["Contact_Name"] = "3222373000000751142";
-            $trato["Lead_Source"] = "Portal GNB";
-            $trato["Deal_Name"] = "Trato creado desde el portal";
-            $trato["Direcci_n_del_asegurado"] = $_POST['direccion'];
-            $trato["A_o_de_Fabricacion"] = $_POST['A_o_de_Fabricacion'];
-            $trato["Chasis"] = $_POST['chasis'];
-            $trato["Color"] = $_POST['color'];
-            $trato["Email_del_asegurado"] = $_POST['email'];
-            $trato["Marca"] = $_POST['marca'];
-            $trato["Modelo"] = $_POST['modelo'];
-            $trato["Nombre_del_asegurado"] = $_POST['nombre'];
-            $trato["Apellido_del_asegurado"] = $_POST['apellido'];
-            $trato["Placa"] = $_POST['placa'];
-            $trato["Plan"] = $_POST['plan'];
-            $trato["Type"] = "Vehículo";
-            $trato["RNC_Cedula_del_asegurado"] = $_POST['cedula'];
-            $trato["Telefono_del_asegurado"] = $_POST['telefono'];
-            $trato["Tipo_de_poliza"] = $_POST['poliza'];
-            $trato["Tipo_de_vehiculo"] = $_POST['Tipo_de_vehiculo'];
-            $trato["Valor_Asegurado"] = $_POST['Valor_Asegurado'];
-            if (isset($_POST['estado'])) {
-                $trato["Es_nuevo"] = true;
-            } else {
-                $trato["Es_nuevo"] = false;
-            }
-            $resultado = $this->api->createRecord("Deals", $trato);
-            if (!empty($resultado)) {
-                $mensaje = "Cotización realizada exitosamente";
-            } else {
-                $mensaje = "Ha ocurrido un error,intentelo mas tarde";
-            }
+            $mensaje = $this->cotizaciones->crear();
         }
-        require("core/views/template/header.php");
-        require("core/views/home/add.php");
-        require("core/views/template/footer.php");
+        require("template/header.php");
+        require("pages/portal/crear_cotizacion.php");
+        require("template/footer.php");
         if ($_POST) {
             echo '
             <script>
@@ -96,6 +36,18 @@ class portal
             </script>
             ';
         }
+    }
+
+    public function buscar_cotizacion()
+    {
+        if ($_POST) {
+            $resultados = $this->cotizaciones->buscar();
+        }else {
+            $resultados = $this->cotizaciones->lista();
+        }
+        require("template/header.php");
+        require("pages/portal/buscar_cotizacion.php");
+        require("template/footer.php");
     }
 
     public function ver_cotizacion()
@@ -148,6 +100,24 @@ class portal
         require("core/views/home/edit.php");
         require("core/views/template/footer.php");
 
+        if ($_POST) {
+            echo '
+            <script>
+            $(document).ready(function(){
+                $("#modal").modal();
+                $("#modal").modal("open"); 
+             });
+            </script>
+            ';
+        }
+    }
+
+    public function eliminar_cotizacion()
+    {
+        $trato_id = $_GET['id'];
+        $cambios["Activo"] = false;
+        $resultado = $this->api->updateRecord("Deals", $cambios, $trato_id);
+        $this->buscar_cotizacion();
         if ($_POST) {
             echo '
             <script>
@@ -217,21 +187,12 @@ class portal
         }
     }
 
-    public function eliminar_cotizacion()
+    public function lista_cotizaciones()
     {
-        $trato_id = $_GET['id'];
-        $cambios["Activo"] = false;
-        $resultado = $this->api->updateRecord("Deals", $cambios, $trato_id);
-        $this->buscar_cotizacion();
-        if ($_POST) {
-            echo '
-            <script>
-            $(document).ready(function(){
-                $("#modal").modal();
-                $("#modal").modal("open"); 
-             });
-            </script>
-            ';
-        }
+        $filtro = (isset($_GET['filter'])) ? $_GET['filter'] : "" ;;
+        $resultados = $this->cotizaciones->lista();
+        require("template/header.php");
+        require("pages/portal/lista_cotizaciones.php");
+        require("template/footer.php");
     }
 }
