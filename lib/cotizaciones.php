@@ -95,4 +95,38 @@ class cotizaciones
         $criterio = "Contact_Name:equals:" . $_SESSION['usuario']['id'];
         return $tratos = $this->api->searchRecordsByCriteria("Deals", $criterio);
     }
+
+    public function detalles()
+    {
+        $resultado['trato'] = $this->api->getRecord("Deals", $_GET['id']);
+        $resultado['cotizacion'] = $this->api->getRecord("Quotes", $resultado['trato']->getFieldValue('Cotizaci_n')->getEntityId());
+        return $resultado;
+    }
+
+    public function imagen_asegradora($plan_id)
+    {
+        $plan_detalles = $this->api->getRecord("Products", $plan_id);
+        if ($plan_detalles->getFieldValue('Vendor_Name') != null) {
+            $ruta_imagen = $this->api->downloadRecordPhoto(
+                "Vendors",
+                $plan_detalles->getFieldValue('Vendor_Name')->getEntityId(),
+                "img/Aseguradoras/"
+            );
+        } else {
+            $ruta_imagen = null;
+        }
+        return $ruta_imagen;
+    }
+
+    public function coberturas($plan_id, $cuenta_id)
+    {
+        $plan_detalles = $this->api->getRecord("Products", $plan_id);
+        if ($plan_detalles->getFieldValue('Vendor_Name') != null) {
+            $criterio = "((Aseguradora:equals:" . $plan_detalles->getFieldValue('Vendor_Name')->getEntityId() . ") and (Socio_IT:equals:" . $cuenta_id . "))";
+            $coberturas = $this->api->searchRecordsByCriteria("Coberturas", $criterio);
+        } else {
+            $coberturas = null;
+        }
+        return $coberturas;
+    }
 }

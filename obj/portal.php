@@ -52,12 +52,10 @@ class portal
 
     public function ver_cotizacion()
     {
-        $trato_id = $_GET['id'];
-        $trato = $this->api->getRecord("Deals", $trato_id);
-        $cotizacion = $this->api->getRecord("Quotes", $trato->getFieldValue('Cotizaci_n')->getEntityId());
-        require("core/views/template/header.php");
-        require("core/views/home/details.php");
-        require("core/views/template/footer.php");
+        $resultado = $this->cotizaciones->detalles();
+        require("template/header.php");
+        require("pages/portal/ver_cotizacion.php");
+        require("template/footer.php");
     }
 
     public function descargar_cotizacion()
