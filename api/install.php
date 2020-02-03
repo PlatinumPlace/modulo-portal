@@ -12,9 +12,8 @@ if (file_exists("config.php")) {
 }
 
 
-if (isset($_POST['client_id'])) {
+if ($_POST['client_id']) {
 
-    // Creamos el archivo config.php. Si ya existe,lo modificamos.
     $config = fopen("config.php", "w+") or die("No se puede abrir/crear el archivo!");
     $php = '<?php 
     use zcrmsdk\crm\setup\restclient\ZCRMRestClient;
@@ -32,7 +31,7 @@ if (isset($_POST['client_id'])) {
     fwrite($config, $php);
     fclose($config);
 }
-if (isset($_POST['grant_token'])) {
+if ($_POST['grant_token']) {
     $carpeta = dirname(__FILE__) . "/token";
     if (!file_exists($carpeta)) {
         mkdir($carpeta, 0777, true);
@@ -44,25 +43,24 @@ if (isset($_POST['grant_token'])) {
     $oAuthClient = ZohoOAuth::getClientInstance();
     $grantToken = $_POST['grant_token'];
     $oAuthTokens = $oAuthClient->generateAccessToken($grantToken);
+    $mensaje = "Token generado.";
 }
 ?>
-
-
 <!DOCTYPE html>
-<html>
-
+<html lang="en">
 <head>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Instalador de ZOHO API</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Install ZOHO API</title>
 </head>
-
 <body>
-    <h2>Antes de empezar,instala/actualiza el PHP SDK de zoho en tudominio/api</h2>
-    <h3>Primero: ingresa <a href="https://accounts.zoho.com/developerconsole" target="_blank">aqui</a> para registrar la aplicacion en zoho.com.</h3>
-    <p>(Nota: tu URIs de redireccionamiento autorizados es: tudominio/api/install.php)</p>
-    <hr>
-    <h3>Segundo: completas el formulario para crear el archivo config.php.</h3>
-    <form method="POST" action="install.php">
+<h1>Primero: Registrar la aplicaion en
+    <a href="https://accounts.zoho.com/developerconsole" target="_blank">zoho</a>.
+</h1>
+<hr>
+<h1>Segundo: Crear el archivo config.php.</h1>
+<form method="POST" action="install.php">
         <label>ID de cliente</label>
         <input type="text" name="client_id" required>
         <br>
@@ -77,25 +75,19 @@ if (isset($_POST['grant_token'])) {
         <br>
         <button type="submit">Crear</button>
     </form>
-    <hr>
-    <h3><a href="https://accounts.zoho.com/developerconsole" target="_blank">Vuelve a ingresar aqui</a> y crear un codigo de cliente propio.</h3>
-    <p>(Nota: Puedes usar como scope: ZohoCRM.modules.ALL,ZohoCRM.settings.ALL,aaaserver.profile.READ)</p>
+</body>
+<hr>
+    <h1>
+    Tercero: En la aplicacion ya registrada,crear una clave de <a href="https://accounts.zoho.com/developerconsole" target="_blank">client propio</a>.
+    </h1>
+    <p>(Nota:Usar la clave siguente dara al API acceso total al CRM, ZohoCRM.modules.ALL,ZohoCRM.settings.ALL,aaaserver.profile.READ)</p>
     <form action="install.php" method="post">
         <label>Codigo</label>
         <input type="text" name="grant_token">
         <br>
         <button type="submit">Generar token</button>
     </form>
-    <?php
-    $token = "token/zcrm_oauthtokens.txt";
-    if (filesize($token) > 0 and file_exists("config.php")) {
-        echo '
-        <hr>
-        <h4>Token generado exitosamente.</h4>
-        <p><a href="../index.php">Finalizar</a></p>
-        ';
-    }
-    ?>
-</body>
-
+    <?= $alerta = isset($mensaje)?>
+    <br>
+    <a href="../index.php">Ir a index.php</a>
 </html>

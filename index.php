@@ -1,40 +1,44 @@
 <?php
 
-include "core/controllers/HomeController.php";
-include "core/models/API.php";
 include "api/config.php";
+include "obj/portal.php";
+include "lib/api.php";
+include "lib/cotizacion.php";
 
-$nombre_fichero = "api/config.php";
-if (!file_exists($nombre_fichero)) {
+$config_api = "api/config.php";
+if (!file_exists($config_api)) {
     header("Location: api/install.php");
 }
 
-$controller = new HomeController;
+$portal = new portal;
 $pagina  = (isset($_GET['pagina'])) ? $_GET['pagina'] : null;
 
 switch ($pagina) {
     default:
-        $controller->pagina_principal();
+        $portal->pagina_principal();
         break;
-    case 'lista_cotizaciones':
-        $controller->lista_cotizaciones();
+    case 'buscar':
+        $portal->buscar_cotizacion();
         break;
-    case 'crear_cotizacion':
-        $controller->crear_cotizacion();
+    case 'crear':
+        $portal->crear_cotizacion();
         break;
-    case 'ver_cotizacion':
-        $controller->ver_cotizacion();
+    case 'lista':
+        $portal->lista_cotizaciones();
         break;
-    case 'descargar_cotizacion':
-        $controller->descargar_cotizacion();
+    case 'detalles':
+        $portal->ver_cotizacion();
         break;
-    case 'editar_cotizacion':
-        $controller->editar_cotizacion();
+    case 'descargar':
+        $portal->descargar_cotizacion();
         break;
-    case 'eliminar_cotizacion':
-        $controller->eliminar_cotizacion();
+    case 'editar':
+        $portal->editar_cotizacion();
         break;
-    case 'emitir_cotizacion':
-        $controller->emitir_cotizacion();
+    case 'eliminar':
+        $portal->eliminar_cotizacion();
+        break;
+    case 'emitir':
+        $portal->emitir_cotizacion();
         break;
 }
