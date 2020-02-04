@@ -89,19 +89,18 @@ class api
         return $result;
     }
 
-    public function downloadRecordPhoto($module_name, $record_id, $fileRoute)
+    public function downloadRecordPhoto($module_name, $record_id, $filePath)
     {
-        $record = ZCRMRestClient::getInstance()->getRecordInstance($module_name, $record_id);
-        $filePath = dirname(__DIR__, 2) . "/" . $fileRoute;
         if (!is_dir($filePath)) {
-            mkdir($filePath, 0777, true);
+            mkdir($filePath, 0755, true);
         }
-        $fileResponseIns = $record->downloadPhoto();
-        $fp = fopen($filePath . $fileResponseIns->getFileName(), "w");
+        $record = ZCRMRestClient::getInstance()->getRecordInstance($module_name, $record_id);
+        $fileResponseIns = $record->downloadPhoto(); 
+        $fp = fopen($filePath.$fileResponseIns->getFileName(), "w"); 
         $stream = $fileResponseIns->getFileContent();
         fputs($fp, $stream);
         fclose($fp);
-        $result = $fileRoute . $fileResponseIns->getFileName();
+        $result = $filePath . $fileResponseIns->getFileName();
         return $result;
     }
 

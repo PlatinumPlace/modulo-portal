@@ -45,7 +45,7 @@
                         <td><?= $trato->getFieldValue("Stage") ?></td>
                         <td>
                             <a href="?pagina=detalles&id=<?= $trato->getEntityId() ?>" class="btn-floating btn-small waves-effect waves-light blue tooltipped" data-position="bottom" data-tooltip="Detalles"><i class="material-icons">details</i></a>
-                            <?php if ($trato->getFieldValue('Activo') != false and $trato->getFieldValue('Aseguradora') == null) : ?>
+                            <?php if ($trato->getFieldValue('Activo') == true) : ?>
                                 <a href="?pagina=emitir&id=<?= $trato->getEntityId() ?>" class="btn-floating btn-small waves-effect waves-light tooltipped" data-position="bottom" data-tooltip="Emitir"><i class="material-icons">recent_actors</i></a>
                                 <a href="?pagina=editar&id=<?= $trato->getEntityId() ?>" class="btn-floating btn-small waves-effect waves-light yellow tooltipped" data-position="bottom" data-tooltip="Editar"><i class="material-icons">edit</i></a>
                             <?php endif ?>

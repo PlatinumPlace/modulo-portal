@@ -6,14 +6,12 @@
             PLAN <?= strtoupper($resultado['trato']->getFieldValue('Plan')) ?> <?= strtoupper($resultado['trato']->getFieldValue('Tipo_de_poliza')) ?>
         </h3>
         <div class="row center">
-            <?php if ($resultado['trato']->getFieldValue('Aseguradora') != null) : ?>
-                <a href="?pagina=emitir&id=<?= $_GET['id'] ?>" class="btn-large waves-effect waves-light">Emitir</a>
-            <?php endif ?>
+            <a href="?pagina=emitir&id=<?= $resultado['trato']->getEntityId() ?>" class="btn-large waves-effect waves-light">Emitir</a>
             <?php if ($resultado['trato']->getFieldValue('Aseguradora') == null) : ?>
-                <a href="?pagina=editar&id=<?= $_GET['id'] ?>" class="btn-large waves-effect waves-light yellow">Editar</a>
+                <a href="?pagina=editar&id=<?= $resultado['trato']->getEntityId() ?>" class="btn-large waves-effect waves-light yellow">Editar</a>
                 <button data-target="modal" class="btn modal-trigger btn-large waves-effect waves-light red">Eliminar</button>
             <?php endif ?>
-            <a href="?pagina=descargar&id=<?= $_GET['id'] ?>" class="btn-large waves-effect waves-light green">Descargar</a>
+            <a href="?pagina=descargar&id=<?= $resultado['trato']->getEntityId() ?>" class="btn-large waves-effect waves-light green">Descargar</a>
         </div>
 
     </div>
@@ -224,6 +222,6 @@
     </div>
     <div class="modal-footer">
         <a href="#!" class="modal-close waves-effect waves-green btn-flat">No</a>
-        <a href="?page=delete&id=<?= $trato_id ?>" class="modal-close waves-effect waves-green btn-flat">Si</a>
+        <a href="?pagina=eliminar&id=<?= $resultado['trato']->getEntityId() ?>" class="modal-close waves-effect waves-green btn-flat">Si</a>
     </div>
 </div>

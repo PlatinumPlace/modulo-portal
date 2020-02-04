@@ -145,6 +145,6 @@
         <h4><?= $mensaje ?></h4>
     </div>
     <div class="modal-footer">
-        <a href="?page=details&id=<?= $resultado['id'] ?>" class="modal-close waves-effect waves-green btn-flat">Aceptar</a>
+        <a href="?pagina=detalles&id=<?= $resultado['id'] ?>" class="modal-close waves-effect waves-green btn-flat">Aceptar</a>
     </div>
 </div>

@@ -69,12 +69,7 @@ class cotizaciones
         } else {
             $trato["Es_nuevo"] = false;
         }
-        $resultado = $this->api->createRecord("Deals", $trato);
-        if (!empty($resultado)) {
-            return $mensaje = "Cotización realizada exitosamente";
-        } else {
-            return $mensaje = "Ha ocurrido un error,intentelo mas tarde";
-        }
+        return $resultado = $this->api->createRecord("Deals", $trato);
     }
 
     public function buscar()
@@ -128,5 +123,82 @@ class cotizaciones
             $coberturas = null;
         }
         return $coberturas;
+    }
+
+    public function editar()
+    {
+        $cambios["A_o_de_Fabricacion"] = $_POST['A_o_de_Fabricacion'];
+        $cambios["Chasis"] = $_POST['chasis'];
+        $cambios["Color"] = $_POST['color'];
+        $cambios["Marca"] = $_POST['marca'];
+        $cambios["Modelo"] = $_POST['modelo'];
+        $cambios["Placa"] = $_POST['placa'];
+        $cambios["Plan"] = $_POST['plan'];
+        $cambios["Type"] = "Vehículo";
+        $cambios["Tipo_de_poliza"] = $_POST['poliza'];
+        $cambios["Tipo_de_vehiculo"] = $_POST['Tipo_de_vehiculo'];
+        $cambios["Valor_Asegurado"] = $_POST['Valor_Asegurado'];
+        if (isset($_POST['estado'])) {
+            $cambios["Es_nuevo"] = true;
+        } else {
+            $cambios["Es_nuevo"] = false;
+        }
+        $resultado = $this->api->updateRecord("Deals", $cambios, $_GET['id']);
+        if (!empty($resultado)) {
+            $mensaje = "Cambios realizados exitosamente";
+        } else {
+            $mensaje = "Ha ocurrido un error,intentelo mas tarde";
+        }
+        return $mensaje;
+    }
+
+    public function eliminar()
+    {
+        $cambios["Activo"] = false;
+        $this->api->updateRecord("Deals", $cambios, $_GET['id']);
+    }
+
+    public function emitir()
+    {
+        $ruta_cotizacion = "file/cotizaciones/" . $_GET['id'];
+        if (!is_dir($ruta_cotizacion)) {
+            mkdir($ruta_cotizacion, 0755, true);
+        }
+        if ($_POST['Aseguradora']) {
+            $cambios["Aseguradora"] = $_POST["aseguradora"];
+            $resultado = $this->api->updateRecord("Deals", $cambios, $_GET['id']);
+        }
+        if (isset($_FILES["cotizacion_firmada"])) {
+            $extension = pathinfo($_FILES["cotizacion_firmada"]["name"], PATHINFO_EXTENSION);
+            $archivonombre = $_FILES["cotizacion_firmada"]["name"];
+            $nombreArchivo = $archivonombre . "." . $extension;
+            $nuevaUbicacion = $ruta_cotizacion . "/" . $nombreArchivo;
+            move_uploaded_file($_FILES["cotizacion_firmada"]["tmp_name"], $nuevaUbicacion);
+        }
+        if (isset($_FILES["expedientes"])) {
+            foreach ($_FILES["expedientes"]['tmp_name'] as $key => $tmp_name) {
+                if ($_FILES["expedientes"]["name"][$key]) {
+                    $extension = pathinfo($_FILES["expedientes"]["name"][$key], PATHINFO_EXTENSION);
+                    $archivonombre = $_FILES["expedientes"]["name"][$key];
+                    $nombreArchivo = $archivonombre . "." . $extension;
+                    $nuevaUbicacion = $ruta_cotizacion . "/" . $nombreArchivo;
+                    move_uploaded_file($_FILES["expedientes"]["tmp_name"][$key], $nuevaUbicacion);
+                }
+            }
+        }
+        if (!empty($resultado)) {
+            $mensaje = "Cambios realizados exitosamente";
+        } else {
+            $mensaje = "Ha ocurrido un error,intentelo mas tarde";
+        }
+        return $mensaje;
+    }
+
+    public function aseguradora($plan_id)
+    {
+        $plan_detalles = $this->api->getRecord("Products", $plan_id);
+        $resultado['nombre'] = $plan_detalles->getFieldValue('Vendor_Name')->getLookupLabel();
+        $resultado['id'] = $plan_detalles->getFieldValue('Vendor_Name')->getEntityId();
+        return $resultado;
     }
 }
