@@ -141,15 +141,17 @@
                     <div class="col">
                         &nbsp;
                     </div>
-                    <?php $planes = $resultado['cotizacion']->getLineItems() ?>
-                    <?php foreach ($planes as $plan) : ?>
-                        <?php $ruta_imagen = $this->cotizaciones->imagen_asegradora($plan->getProduct()->getEntityId()) ?>
-                        <?php if ($ruta_imagen != null) : ?>
-                            <div class="col-2">
-                                <img height="80" width="100" src="<?= $ruta_imagen ?>">
-                            </div>
-                        <?php endif ?>
-                    <?php endforeach ?>
+                    <?php if ($resultado['trato']->getFieldValue('Aseguradora') == null) : ?>
+                        <?php $planes = $resultado['cotizacion']->getLineItems() ?>
+                        <?php foreach ($planes as $plan) : ?>
+                            <?php $ruta_imagen = $this->cotizaciones->imagen_asegradora($plan->getProduct()->getEntityId()) ?>
+                            <?php if ($ruta_imagen != null) : ?>
+                                <div class="col-2">
+                                    <img height="80" width="100" src="<?= $ruta_imagen ?>">
+                                </div>
+                            <?php endif ?>
+                        <?php endforeach ?>
+                    <?php endif ?>
                 </div>
             </div>
             <div class="col-12 border">
@@ -224,20 +226,19 @@
                 <div class="card">
                     <div class="card-content">
                         <div class="row">
-                            <?php
-                            $criterio = "((Aseguradora:equals:" . $resultado['trato']->getFieldValue('Aseguradora')->getEntityId() . ") and (Socio_IT:equals:" . $trato->getFieldValue('Account_Name')->getEntityId() . "))";
-                            $coberturas = $this->api->searchRecordsByCriteria("Coberturas", $criterio);
-                            ?>
+                            <?php $coberturas = $this->cotizaciones->coberturas(
+                                $plan->getProduct()->getEntityId(),
+                                $resultado['trato']->getFieldValue('Account_Name')->getEntityId()
+                            ) ?>
                             <?php foreach ($coberturas as $cobertura) : ?>
                                 <div class="col">
-                                    <?php
-                                    $ruta_imagen = $this->api->downloadRecordPhoto(
-                                        "Vendors",
-                                        $plan_detalles->getFieldValue('Vendor_Name')->getEntityId(),
-                                        "img/Aseguradoras/"
-                                    );
-                                    ?>
-                                    <img height="100" width="160" src="<?= $ruta_imagen ?>" alt="<?= $plan_detalles->getFieldValue('Vendor_Name')->getLookupLabel() ?>">
+                                    <?php $planes = $resultado['cotizacion']->getLineItems() ?>
+                                    <?php foreach ($planes as $plan) : ?>
+                                        <?php $ruta_imagen = $this->cotizaciones->imagen_asegradora($plan->getProduct()->getEntityId()) ?>
+                                        <?php if ($ruta_imagen != null) : ?>
+                                            <img height="100" width="160" src="<?= $ruta_imagen ?>">
+                                        <?php endif ?>
+                                    <?php endforeach ?>
                                     <P>
                                         <b>PÓLIZA </b><?= $resultado['cotizacion']->getFieldValue('Poliza')->getLookupLabel() ?><br>
                                         <b>MARCA </b><?= $resultado['trato']->getFieldValue('Marca') ?><br>
@@ -245,7 +246,7 @@
                                         <b>AÑO </b><?= $resultado['trato']->getFieldValue('A_o_de_Fabricacion') ?><br>
                                         <b>CHASIS </b><?= $resultado['trato']->getFieldValue('Chasis') ?><br>
                                         <b>PLACA </b><?= $resultado['trato']->getFieldValue('Placa') ?><br>
-                                        <b>VIGENTE HASTA </b><?= $resultado['trato']->getFieldValue('Valid_Till') ?>
+                                        <b>VIGENTE HASTA </b><?= $resultado['trato']->getFieldValue('Closing_Date') ?>
                                     </P>
                                 </div>
                                 <div class="col">
@@ -313,7 +314,7 @@
         var id = document.getElementById('id').value;
         setTimeout(function() {
             window.print();
-            window.location = "?page=details&id=" + id;
+            window.location = "?pagina=detalles&id=" + id;
         }, time);
     </script>
 </body>

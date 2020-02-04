@@ -28,7 +28,7 @@
             <p><?= $cotizaciones['emisiones'] ?></p>
           </div>
           <div class="card-action">
-            <a href="?pagina=lista&filtro=<?= $resultado['filtro_emisiones'] ?>">Ver más</a>
+            <a href="?pagina=lista&filtro=<?= $cotizaciones['filtro_emisiones'] ?>">Ver más</a>
           </div>
         </div>
       </div>
@@ -40,7 +40,7 @@
             <p><?= $cotizaciones['vencimientos'] ?></p>
           </div>
           <div class="card-action">
-            <a href="?pagina=lista&filtro=<?= $resultado['filtro_vencimientos'] ?>">Ver más</a>
+            <a href="?pagina=lista&filtro=<?= $cotizaciones['filtro_vencimientos'] ?>">Ver más</a>
           </div>
         </div>
       </div>

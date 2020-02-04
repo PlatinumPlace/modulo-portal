@@ -4,8 +4,23 @@ use zcrmsdk\crm\crud\ZCRMRecord;
 use zcrmsdk\crm\setup\restclient\ZCRMRestClient;
 use zcrmsdk\crm\exception\ZCRMException;
 
+require "api/vendor/autoload.php";
+
 class api
 {
+    public $configuration = array(
+        "client_id" => "1000.V7L8VMN80GML7K9DY0VJX8KSW0LNNH",
+        "client_secret" => "38622f6e95cfcff79c3b0b0b995964e8a933856bb4",
+        "redirect_uri" => "http://localhost/portal/api/install.php",
+        "currentUserEmail" => "tecnologia@gruponobe.com",
+        "token_persistence_path" => "api/token"
+    );
+
+    public function __construct()
+    {
+        ZCRMRestClient::initialize($this->configuration);
+    }
+
 
     public function searchRecordsByCriteria($module_name, $criteria)
     {
@@ -95,8 +110,8 @@ class api
             mkdir($filePath, 0755, true);
         }
         $record = ZCRMRestClient::getInstance()->getRecordInstance($module_name, $record_id);
-        $fileResponseIns = $record->downloadPhoto(); 
-        $fp = fopen($filePath.$fileResponseIns->getFileName(), "w"); 
+        $fileResponseIns = $record->downloadPhoto();
+        $fp = fopen($filePath . $fileResponseIns->getFileName(), "w");
         $stream = $fileResponseIns->getFileContent();
         fputs($fp, $stream);
         fclose($fp);

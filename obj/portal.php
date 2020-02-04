@@ -57,7 +57,7 @@ class portal
 
     public function lista_cotizaciones()
     {
-        $filtro = (isset($_GET['filter'])) ? $_GET['filter'] : "";;
+        $filtro = (isset($_GET['filtro'])) ? $_GET['filtro'] : "";
         $resultados = $this->cotizaciones->lista();
         require("template/header.php");
         require("pages/portal/lista_cotizaciones.php");

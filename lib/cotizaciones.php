@@ -11,9 +11,7 @@ class cotizaciones
 
     public function resumen()
     {
-        $criterio = "Contact_Name:equals:" . $_SESSION['usuario']['id'];
-        $tratos = $this->api->searchRecordsByCriteria("Deals", $criterio);
-        $resultado = array();
+        $tratos = $this->lista();
         $resultado['total'] = 0;
         $resultado['emisiones'] = 0;
         $resultado['vencimientos'] = 0;
@@ -24,7 +22,7 @@ class cotizaciones
                 and
                 date(
                     "Y-m",
-                    strtotime($trato->getFieldValue("Closing_Date") . "- 1 month")
+                    strtotime($trato->getFieldValue("Closing_Date") . "- 1 year")
                 ) == date('Y-m')
             ) {
                 $resultado['emisiones'] += 1;
@@ -33,10 +31,10 @@ class cotizaciones
             if (
                 $trato->getFieldValue("Aseguradora") != null
                 and
-                date("Y-m", strtotime($trato->getFieldValue("Closing_Date") . "- 1 years")) == date('Y-m')
+                date("Y-m", strtotime($trato->getFieldValue("Closing_Date"))) == date('Y-m')
             ) {
                 $resultado['vencimientos'] += 1;
-                $resultado['filtro_vencimientos'] = $trato->getFieldValue("Stage");
+                $resultado['filtro_vencimientos'] = date("Y-m", strtotime($trato->getFieldValue("Closing_Date")));
             }
         }
         return $resultado;
@@ -160,17 +158,18 @@ class cotizaciones
 
     public function emitir()
     {
+        $trato = $this->detalles();
         $ruta_cotizacion = "file/cotizaciones/" . $_GET['id'];
         if (!is_dir($ruta_cotizacion)) {
             mkdir($ruta_cotizacion, 0755, true);
         }
-        if ($_POST['Aseguradora']) {
+        if ($_POST['aseguradora']) {
             $cambios["Aseguradora"] = $_POST["aseguradora"];
             $resultado = $this->api->updateRecord("Deals", $cambios, $_GET['id']);
         }
         if (isset($_FILES["cotizacion_firmada"])) {
             $extension = pathinfo($_FILES["cotizacion_firmada"]["name"], PATHINFO_EXTENSION);
-            $archivonombre = $_FILES["cotizacion_firmada"]["name"];
+            $archivonombre = "Cotización No. " . $trato['trato']->getFieldValue('No_de_cotizaci_n');
             $nombreArchivo = $archivonombre . "." . $extension;
             $nuevaUbicacion = $ruta_cotizacion . "/" . $nombreArchivo;
             move_uploaded_file($_FILES["cotizacion_firmada"]["tmp_name"], $nuevaUbicacion);
@@ -186,11 +185,7 @@ class cotizaciones
                 }
             }
         }
-        if (!empty($resultado)) {
-            $mensaje = "Cambios realizados exitosamente";
-        } else {
-            $mensaje = "Ha ocurrido un error,intentelo mas tarde";
-        }
+        $mensaje = "Cambios realizados exitosamente";
         return $mensaje;
     }
 

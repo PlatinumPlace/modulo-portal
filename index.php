@@ -1,16 +1,15 @@
 <?php
 
-include "api/config.php";
+include "obj/instalador_api.php";
 include "obj/portal.php";
 include "obj/iniciar_sesion.php";
 include "lib/api.php";
 include "lib/autenticar.php";
 include "lib/cotizaciones.php";
 
-$config_api = "api/config.php";
-if (!file_exists($config_api)) {
-    header("Location: api/install.php");
-}
+//$api = new instalador_api;
+//$api->instalar();
+
 
 session_start();
 

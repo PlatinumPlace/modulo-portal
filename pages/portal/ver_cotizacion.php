@@ -7,7 +7,7 @@
         </h3>
         <div class="row center">
             <a href="?pagina=emitir&id=<?= $resultado['trato']->getEntityId() ?>" class="btn-large waves-effect waves-light">Emitir</a>
-            <?php if ($resultado['trato']->getFieldValue('Aseguradora') == null) : ?>
+            <?php if ($resultado['trato']->getFieldValue('Activo') == true and $resultado['trato']->getFieldValue('Aseguradora') == null) : ?>
                 <a href="?pagina=editar&id=<?= $resultado['trato']->getEntityId() ?>" class="btn-large waves-effect waves-light yellow">Editar</a>
                 <button data-target="modal" class="btn modal-trigger btn-large waves-effect waves-light red">Eliminar</button>
             <?php endif ?>

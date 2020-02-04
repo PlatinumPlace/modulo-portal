@@ -30,6 +30,7 @@
                 <th>Bien Asegurado</th>
                 <th>Suma Asegurada</th>
                 <th>Estado</th>
+                <th>Fecha de cierre</th>
                 <th>Opciones</th>
             </tr>
         </thead>
@@ -43,9 +44,10 @@
                         <td><?= $trato->getFieldValue('Type')  ?></td>
                         <td>RD$<?= number_format($trato->getFieldValue('Valor_Asegurado'), 2) ?></td>
                         <td><?= $trato->getFieldValue("Stage") ?></td>
+                        <td><?= $trato->getFieldValue("Closing_Date") ?></td>
                         <td>
                             <a href="?pagina=detalles&id=<?= $trato->getEntityId() ?>" class="btn-floating btn-small waves-effect waves-light blue tooltipped" data-position="bottom" data-tooltip="Detalles"><i class="material-icons">details</i></a>
-                            <?php if ($trato->getFieldValue('Activo') == true) : ?>
+                            <?php if ($trato->getFieldValue('Activo') == true and $trato->getFieldValue('Aseguradora') == null) : ?>
                                 <a href="?pagina=emitir&id=<?= $trato->getEntityId() ?>" class="btn-floating btn-small waves-effect waves-light tooltipped" data-position="bottom" data-tooltip="Emitir"><i class="material-icons">recent_actors</i></a>
                                 <a href="?pagina=editar&id=<?= $trato->getEntityId() ?>" class="btn-floating btn-small waves-effect waves-light yellow tooltipped" data-position="bottom" data-tooltip="Editar"><i class="material-icons">edit</i></a>
                             <?php endif ?>

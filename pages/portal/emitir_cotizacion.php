@@ -9,29 +9,31 @@
 
     <div class="row">
       <form class="col s12" action="?pagina=emitir&id=<?= $resultado['trato']->getEntityId() ?>" method="post" enctype="multipart/form-data">
-        <div class="row">
-          <div class="input-field col s12">
-            <select name="aseguradora">
-              <?php $planes = $resultado['cotizacion']->getLineItems() ?>
-              <?php foreach ($planes as $plan) : ?>
-                <?php $aseguradora = $this->cotizaciones->aseguradora($plan->getProduct()->getEntityId()) ?>
-                <option value="<?= $aseguradora['id'] ?>"><?= $aseguradora['nombre'] ?></option>
-              <?php endforeach ?>
-            </select>
-            <label>Selecciona unau aseguradora</label>
-          </div>
-        </div>
-        <div class="row">
-          <div class="file-field input-field">
-            <div class="btn">
-              <span>Cargar Cotización Firmada</span>
-              <input type="file" name="cotizacion_firmada" required>
-            </div>
-            <div class="file-path-wrapper">
-              <input class="file-path validate" type="text">
+        <?php if ($resultado['trato']->getFieldValue('Aseguradora') == null) : ?>
+          <div class="row">
+            <div class="input-field col s12">
+              <select name="aseguradora">
+                <?php $planes = $resultado['cotizacion']->getLineItems() ?>
+                <?php foreach ($planes as $plan) : ?>
+                  <?php $aseguradora = $this->cotizaciones->aseguradora($plan->getProduct()->getEntityId()) ?>
+                  <option value="<?= $aseguradora['id'] ?>"><?= $aseguradora['nombre'] ?></option>
+                <?php endforeach ?>
+              </select>
+              <label>Selecciona unau aseguradora</label>
             </div>
           </div>
-        </div>
+          <div class="row">
+            <div class="file-field input-field">
+              <div class="btn">
+                <span>Cargar Cotización Firmada</span>
+                <input type="file" name="cotizacion_firmada" required>
+              </div>
+              <div class="file-path-wrapper">
+                <input class="file-path validate" type="text">
+              </div>
+            </div>
+          </div>
+        <?php endif ?>
         <div class="row">
           <div class="file-field input-field">
             <div class="btn">
