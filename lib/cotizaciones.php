@@ -57,6 +57,7 @@ class cotizaciones
         $trato["Placa"] = $_POST['placa'];
         $trato["Plan"] = $_POST['plan'];
         $trato["Type"] = "Vehículo";
+        $trato["Activo"] = true;
         $trato["RNC_Cedula_del_asegurado"] = $_POST['cedula'];
         $trato["Telefono_del_asegurado"] = $_POST['telefono'];
         $trato["Tipo_de_poliza"] = $_POST['poliza'];

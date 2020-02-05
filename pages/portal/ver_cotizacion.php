@@ -222,6 +222,6 @@
     </div>
     <div class="modal-footer">
         <a href="#!" class="modal-close waves-effect waves-green btn-flat">No</a>
-        <a href="?pagina=eliminar&id=<?= $resultado['trato']->getEntityId() ?>" class="modal-close waves-effect waves-green btn-flat">Si</a>
+        <a href="?pagina=eliminar&del&id=<?= $resultado['trato']->getEntityId() ?>" class="modal-close waves-effect waves-green btn-flat">Si</a>
     </div>
 </div>

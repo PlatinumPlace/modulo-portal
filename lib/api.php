@@ -9,10 +9,10 @@ require "api/vendor/autoload.php";
 class api
 {
     public $configuration = array(
-        "client_id" => "1000.V7L8VMN80GML7K9DY0VJX8KSW0LNNH",
-        "client_secret" => "38622f6e95cfcff79c3b0b0b995964e8a933856bb4",
-        "redirect_uri" => "http://localhost/portal/api/install.php",
-        "currentUserEmail" => "tecnologia@gruponobe.com",
+        "client_id" => "",
+        "client_secret" => "",
+        "redirect_uri" => "",
+        "currentUserEmail" => "",
         "token_persistence_path" => "api/token"
     );
 

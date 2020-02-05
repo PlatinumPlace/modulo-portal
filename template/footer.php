@@ -3,7 +3,7 @@
 <footer class="page-footer blue">
   <div class="footer-copyright">
     <div class="container">
-      Copyright &copy; GrupoNobe <?= date('Y') ?>
+      Copyright &copy; Grupo Nobe <?= date('Y') ?>
     </div>
 </footer>
 
