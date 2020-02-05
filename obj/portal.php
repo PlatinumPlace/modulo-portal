@@ -2,7 +2,7 @@
 
 class portal
 {
-    public $cotizacion;
+    public $cotizaciones;
 
     function __construct()
     {
@@ -31,6 +31,23 @@ class portal
         require("template/header.php");
         require("pages/portal/crear_cotizacion.php");
         require("template/footer.php");
+        echo '<script>
+                function obtener_modelos(val) {
+                    {
+                        $.ajax({
+                            url: "api/obtener_modelos.php",
+                            type: "POST",
+                            data: {
+                                marcas_id: val.value
+                            },
+                            success: function(response) {
+                                document.getElementById("modelo").innerHTML = response;
+                            }
+                        });
+                    }
+                }
+            </script>
+        ';
         if ($_POST) {
             echo '
             <script>

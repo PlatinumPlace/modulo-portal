@@ -15,26 +15,28 @@ class cotizaciones
         $resultado['total'] = 0;
         $resultado['emisiones'] = 0;
         $resultado['vencimientos'] = 0;
-        foreach ($tratos as $trato) {
-            $resultado['total'] += 1;
-            if (
-                $trato->getFieldValue("Aseguradora") != null
-                and
-                date(
-                    "Y-m",
-                    strtotime($trato->getFieldValue("Closing_Date") . "- 1 year")
-                ) == date('Y-m')
-            ) {
-                $resultado['emisiones'] += 1;
-                $resultado['filtro_emisiones'] = $trato->getFieldValue("Stage");
-            }
-            if (
-                $trato->getFieldValue("Aseguradora") != null
-                and
-                date("Y-m", strtotime($trato->getFieldValue("Closing_Date"))) == date('Y-m')
-            ) {
-                $resultado['vencimientos'] += 1;
-                $resultado['filtro_vencimientos'] = date("Y-m", strtotime($trato->getFieldValue("Closing_Date")));
+        if (!empty($tratos)) {
+            foreach ($tratos as $trato) {
+                $resultado['total'] += 1;
+                if (
+                    $trato->getFieldValue("Aseguradora") != null
+                    and
+                    date(
+                        "Y-m",
+                        strtotime($trato->getFieldValue("Closing_Date") . "- 1 year")
+                    ) == date('Y-m')
+                ) {
+                    $resultado['emisiones'] += 1;
+                    $resultado['filtro_emisiones'] = $trato->getFieldValue("Stage");
+                }
+                if (
+                    $trato->getFieldValue("Aseguradora") != null
+                    and
+                    date("Y-m", strtotime($trato->getFieldValue("Closing_Date"))) == date('Y-m')
+                ) {
+                    $resultado['vencimientos'] += 1;
+                    $resultado['filtro_vencimientos'] = date("Y-m", strtotime($trato->getFieldValue("Closing_Date")));
+                }
             }
         }
         return $resultado;
@@ -50,8 +52,11 @@ class cotizaciones
         $trato["Chasis"] = $_POST['chasis'];
         $trato["Color"] = $_POST['color'];
         $trato["Email_del_asegurado"] = $_POST['email'];
-        $trato["Marca"] = $_POST['marca'];
-        $trato["Modelo"] = $_POST['modelo'];
+        $marca = $this->api->getRecord("Marcas", $_POST['marca']);
+        $trato["Marca"] = $marca->getFieldValue('Name');
+        $modelo = $this->api->getRecord("Modelos", $_POST['modelo']);
+        $trato["Modelo"] = $modelo->getFieldValue('Name');
+        $trato["Tipo_de_vehiculo"] = $modelo->getFieldValue('Tipo');
         $trato["Nombre_del_asegurado"] = $_POST['nombre'];
         $trato["Apellido_del_asegurado"] = $_POST['apellido'];
         $trato["Placa"] = $_POST['placa'];
@@ -61,7 +66,6 @@ class cotizaciones
         $trato["RNC_Cedula_del_asegurado"] = $_POST['cedula'];
         $trato["Telefono_del_asegurado"] = $_POST['telefono'];
         $trato["Tipo_de_poliza"] = $_POST['poliza'];
-        $trato["Tipo_de_vehiculo"] = $_POST['Tipo_de_vehiculo'];
         $trato["Valor_Asegurado"] = $_POST['Valor_Asegurado'];
         if (isset($_POST['estado'])) {
             $trato["Es_nuevo"] = true;
@@ -196,5 +200,10 @@ class cotizaciones
         $resultado['nombre'] = $plan_detalles->getFieldValue('Vendor_Name')->getLookupLabel();
         $resultado['id'] = $plan_detalles->getFieldValue('Vendor_Name')->getEntityId();
         return $resultado;
+    }
+
+    public function marcas()
+    {
+        return $Marcas = $this->api->getRecords("Marcas");
     }
 }

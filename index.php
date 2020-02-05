@@ -1,15 +1,14 @@
 <?php
-
+include "api/vendor/autoload.php";
 include "obj/instalador_api.php";
-include "obj/portal.php";
-include "obj/iniciar_sesion.php";
 include "lib/api.php";
 include "lib/autenticar.php";
 include "lib/cotizaciones.php";
+include "obj/portal.php";
+include "obj/iniciar_sesion.php";
 
 //$api = new instalador_api;
 //$api->instalar();
-
 
 session_start();
 

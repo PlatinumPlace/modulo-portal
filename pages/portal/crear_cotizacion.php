@@ -70,25 +70,22 @@
                 <div class="row">
                     <div class="input-field col s6">
                         <i class="material-icons prefix">directions_car</i>
-                        <select name="marca">
-                            <option selected>Selecciona un modelo</option>
+                        <select name="marca" id="marca" onchange="obtener_modelos(this)">
+                            <option selected disabled>Selecciona una marca</option>
+                            <?php $marcas = $this->cotizaciones->marcas() ?>
+                            <?php foreach ($marcas as $marca) : ?>
+                                <option value="<?= $marca->getEntityId() ?>"><?= $marca->getFieldValue('Name') ?></option>
+                            <?php endforeach ?>
                         </select>
-                        <label for="nombre">Selecciona una marca</label>
+                        <label>Selecciona una marca</label>
                     </div>
                     <div class="input-field col s6">
-                        <i class="material-icons prefix">directions_car</i>
-                        <select name="modelo">
-                            <option selected>Selecciona un modelo</option>
+                        <select name="modelo" id="modelo" class="browser-default">
+                            <div id="modelo"></div>
                         </select>
-                        <label for="apellido">Selecciona un modelo</label>
                     </div>
                 </div>
                 <div class="row">
-                    <div class="input-field col s6">
-                        <i class="material-icons prefix">directions_car</i>
-                        <input id="Tipo_de_vehiculo" type="text" class="form-control" name="Tipo_de_vehiculo" required>
-                        <label for="Tipo_de_vehiculo">Tipo_de_vehiculo</label>
-                    </div>
                     <div class="input-field col s6">
                         <i class="material-icons prefix">attach_money</i>
                         <input id="Valor_Asegurado" type="number" class="validate" name="Valor_Asegurado" required>
