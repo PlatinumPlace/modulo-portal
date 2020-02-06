@@ -1,25 +1,28 @@
 <?php
 
-class portal
+class portal_controller
 {
-    public $cotizaciones;
+    public $tratos;
+    public $marcas;
+
 
     function __construct()
     {
-        $this->cotizaciones = new cotizaciones;
+        $this->cotizaciones = new cotizacion_model;
+        $this->marcas = new marcas_model;
     }
 
     public function pagina_principal()
     {
         $cotizaciones = $this->cotizaciones->resumen();
-        require("template/header.php");
-        require("pages/portal/pagina_principal.php");
-        require("template/footer.php");
+        require("views/template/header.php");
+        require("views/portal/pagina_principal.php");
+        require("views/template/footer.php");
     }
-
 
     public function crear_cotizacion()
     {
+        $marcas = $this->marcas->obtener_marcas();
         if ($_POST) {
             $resultado = $this->cotizaciones->crear();
             if (!empty($resultado)) {
@@ -28,36 +31,36 @@ class portal
                 $mensaje = "Ha ocurrido un error,intentelo mas tarde";
             }
         }
-        require("template/header.php");
-        require("pages/portal/crear_cotizacion.php");
-        require("template/footer.php");
+        require("views/template/header.php");
+        require("views/portal/crear_cotizacion.php");
+        require("views/template/footer.php");
         echo '<script>
-                function obtener_modelos(val) {
-                    {
-                        $.ajax({
-                            url: "api/obtener_modelos.php",
-                            type: "POST",
-                            data: {
-                                marcas_id: val.value
-                            },
-                            success: function(response) {
-                                document.getElementById("modelo").innerHTML = response;
-                            }
-                        });
-                    }
+            function obtener_modelos(val) {
+                {
+                    $.ajax({
+                        url: "lib/obtener_modelos.php",
+                        type: "POST",
+                        data: {
+                            marcas_id: val.value
+                        },
+                        success: function(response) {
+                            document.getElementById("modelo").innerHTML = response;
+                        }
+                    });
                 }
-            </script>
-        ';
+            }    
+        </script>';
         if ($_POST) {
-            echo '
-            <script>
-            $(document).ready(function(){
-                $("#modal").modal();
-                $("#modal").modal("open"); 
-             });
-            </script>
-            ';
+            echo '<script>$("#modal").modal("show")</script>';
         }
+    }
+
+    public function ver_cotizacion()
+    {
+        $resultado = $this->cotizaciones->detalles();
+        require("views/template/header.php");
+        require("views/portal/ver_cotizacion.php");
+        require("views/template/footer.php");
     }
 
     public function buscar_cotizacion()
@@ -67,32 +70,24 @@ class portal
         } else {
             $resultados = $this->cotizaciones->lista();
         }
-        require("template/header.php");
-        require("pages/portal/buscar_cotizacion.php");
-        require("template/footer.php");
+        require("views/template/header.php");
+        require("views/portal/buscar_cotizacion.php");
+        require("views/template/footer.php");
     }
 
     public function lista_cotizaciones()
     {
         $filtro = (isset($_GET['filtro'])) ? $_GET['filtro'] : "";
         $resultados = $this->cotizaciones->lista();
-        require("template/header.php");
-        require("pages/portal/lista_cotizaciones.php");
-        require("template/footer.php");
-    }
-
-    public function ver_cotizacion()
-    {
-        $resultado = $this->cotizaciones->detalles();
-        require("template/header.php");
-        require("pages/portal/ver_cotizacion.php");
-        require("template/footer.php");
+        require("views/template/header.php");
+        require("views/portal/buscar_cotizacion.php");
+        require("views/template/footer.php");
     }
 
     public function descargar_cotizacion()
     {
         $resultado = $this->cotizaciones->detalles();
-        require("pages/portal/descargar_cotizacion.php");
+        require("views/portal/descargar_cotizacion.php");
     }
 
     public function editar_cotizacion()
@@ -101,9 +96,9 @@ class portal
         if ($_POST) {
             $mensaje = $this->cotizaciones->editar();
         }
-        require("template/header.php");
-        require("pages/portal/editar_cotizacion.php");
-        require("template/footer.php");
+        require("views/template/header.php");
+        require("views/portal/editar_cotizacion.php");
+        require("views/template/footer.php");
         if ($_POST) {
             echo '
             <script>
@@ -128,9 +123,9 @@ class portal
         if ($_POST) {
             $mensaje = $this->cotizaciones->emitir();
         }
-        require("template/header.php");
-        require("pages/portal/emitir_cotizacion.php");
-        require("template/footer.php");
+        require("views/template/header.php");
+        require("views/portal/emitir_cotizacion.php");
+        require("views/template/footer.php");
         if ($_POST) {
             echo '
             <script>

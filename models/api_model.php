@@ -4,15 +4,13 @@ use zcrmsdk\crm\crud\ZCRMRecord;
 use zcrmsdk\crm\setup\restclient\ZCRMRestClient;
 use zcrmsdk\crm\exception\ZCRMException;
 
-require "api/vendor/autoload.php";
-
-class api
+class api_model
 {
     public $configuration = array(
-        "client_id" => "",
-        "client_secret" => "",
-        "redirect_uri" => "",
-        "currentUserEmail" => "",
+        "client_id" => "1000.6SM53DOWIRAR3JKMCHVGZZG4108SPH",
+        "client_secret" => "66ae479d5cc7b5f7bb6794572b05798f705844264e",
+        "redirect_uri" => "http://localhost/portal/instalador_api.php",
+        "currentUserEmail" => "tecnologia@gruponobe.com",
         "token_persistence_path" => "api/token"
     );
 
@@ -20,7 +18,6 @@ class api
     {
         ZCRMRestClient::initialize($this->configuration);
     }
-
 
     public function searchRecordsByCriteria($module_name, $criteria)
     {

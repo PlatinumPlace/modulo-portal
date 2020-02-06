@@ -1,17 +1,11 @@
 <?php
 
-class cotizaciones
+class cotizacion_model extends api_model
 {
-    public $api;
-
-    function __construct()
-    {
-        $this->api = new api;
-    }
-
     public function resumen()
     {
-        $tratos = $this->lista();
+        $criterio = "Contact_Name:equals:" .$_SESSION['usuario']['id'];
+        $tratos = $this->searchRecordsByCriteria("Deals", $criterio);
         $resultado['total'] = 0;
         $resultado['emisiones'] = 0;
         $resultado['vencimientos'] = 0;
@@ -52,9 +46,9 @@ class cotizaciones
         $trato["Chasis"] = $_POST['chasis'];
         $trato["Color"] = $_POST['color'];
         $trato["Email_del_asegurado"] = $_POST['email'];
-        $marca = $this->api->getRecord("Marcas", $_POST['marca']);
+        $marca = $this->getRecord("Marcas", $_POST['marca']);
         $trato["Marca"] = $marca->getFieldValue('Name');
-        $modelo = $this->api->getRecord("Modelos", $_POST['modelo']);
+        $modelo = $this->getRecord("Modelos", $_POST['modelo']);
         $trato["Modelo"] = $modelo->getFieldValue('Name');
         $trato["Tipo_de_vehiculo"] = $modelo->getFieldValue('Tipo');
         $trato["Nombre_del_asegurado"] = $_POST['nombre'];
@@ -72,7 +66,21 @@ class cotizaciones
         } else {
             $trato["Es_nuevo"] = false;
         }
-        return $resultado = $this->api->createRecord("Deals", $trato);
+        $resultado = $this->createRecord("Deals", $trato);
+        return $resultado;
+    }
+
+    public function detalles()
+    {
+        $resultado['trato'] = $this->getRecord("Deals", $_GET['id']);
+        $resultado['cotizacion'] = $this->getRecord("Quotes", $resultado['trato']->getFieldValue('Cotizaci_n')->getEntityId());
+        return $resultado;
+    }
+
+    public function lista()
+    {
+        $criterio = "Contact_Name:equals:" . $_SESSION['usuario']['id'];
+        return $tratos = $this->searchRecordsByCriteria("Deals", $criterio);
     }
 
     public function buscar()
@@ -85,27 +93,14 @@ class cotizaciones
                 $criterio = "((Contact_Name:equals:" . $_SESSION['usuario']['id'] . ") and (No_de_cotizaci_n:equals:" . $_POST['buscar'] . "))";
                 break;
         }
-        return $tratos = $this->api->searchRecordsByCriteria("Deals", $criterio);
-    }
-
-    public function lista()
-    {
-        $criterio = "Contact_Name:equals:" . $_SESSION['usuario']['id'];
-        return $tratos = $this->api->searchRecordsByCriteria("Deals", $criterio);
-    }
-
-    public function detalles()
-    {
-        $resultado['trato'] = $this->api->getRecord("Deals", $_GET['id']);
-        $resultado['cotizacion'] = $this->api->getRecord("Quotes", $resultado['trato']->getFieldValue('Cotizaci_n')->getEntityId());
-        return $resultado;
+        return $tratos = $this->searchRecordsByCriteria("Deals", $criterio);
     }
 
     public function imagen_asegradora($plan_id)
     {
-        $plan_detalles = $this->api->getRecord("Products", $plan_id);
+        $plan_detalles = $this->getRecord("Products", $plan_id);
         if ($plan_detalles->getFieldValue('Vendor_Name') != null) {
-            $ruta_imagen = $this->api->downloadRecordPhoto(
+            $ruta_imagen = $this->downloadRecordPhoto(
                 "Vendors",
                 $plan_detalles->getFieldValue('Vendor_Name')->getEntityId(),
                 "img/Aseguradoras/"
@@ -118,10 +113,10 @@ class cotizaciones
 
     public function coberturas($plan_id, $cuenta_id)
     {
-        $plan_detalles = $this->api->getRecord("Products", $plan_id);
+        $plan_detalles = $this->getRecord("Products", $plan_id);
         if ($plan_detalles->getFieldValue('Vendor_Name') != null) {
             $criterio = "((Aseguradora:equals:" . $plan_detalles->getFieldValue('Vendor_Name')->getEntityId() . ") and (Socio_IT:equals:" . $cuenta_id . "))";
-            $coberturas = $this->api->searchRecordsByCriteria("Coberturas", $criterio);
+            $coberturas = $this->searchRecordsByCriteria("Coberturas", $criterio);
         } else {
             $coberturas = null;
         }
@@ -196,14 +191,9 @@ class cotizaciones
 
     public function aseguradora($plan_id)
     {
-        $plan_detalles = $this->api->getRecord("Products", $plan_id);
+        $plan_detalles = $this->getRecord("Products", $plan_id);
         $resultado['nombre'] = $plan_detalles->getFieldValue('Vendor_Name')->getLookupLabel();
         $resultado['id'] = $plan_detalles->getFieldValue('Vendor_Name')->getEntityId();
         return $resultado;
-    }
-
-    public function marcas()
-    {
-        return $Marcas = $this->api->getRecords("Marcas");
     }
 }

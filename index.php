@@ -1,20 +1,19 @@
 <?php
 include "api/vendor/autoload.php";
-include "obj/instalador_api.php";
-include "lib/api.php";
-include "lib/autenticar.php";
-include "lib/cotizaciones.php";
-include "obj/portal.php";
-include "obj/iniciar_sesion.php";
+include "models/api_model.php";
+include "models/cotizacion_model.php";
+include "models/marcas_model.php";
+include "controllers/portal_controller.php";
+include "controllers/login_controller.php";
 
-//$api = new instalador_api;
-//$api->instalar();
+
+//header("Location: instalador_api.php");
 
 session_start();
 
 if (isset($_SESSION["usuario"])) {
 
-    $portal = new portal;
+    $portal = new portal_controller;
     $pagina  = (isset($_GET['pagina'])) ? $_GET['pagina'] : null;
 
     switch ($pagina) {
@@ -46,11 +45,11 @@ if (isset($_SESSION["usuario"])) {
             $portal->emitir_cotizacion();
             break;
         case 'cerrar_sesion':
-            $iniciar_sesion = new iniciar_sesion;
+            $iniciar_sesion = new login_controller;
             $iniciar_sesion->cerrar_sesion();
             break;
     }
 } else {
-    $iniciar_sesion = new iniciar_sesion;
-    $iniciar_sesion->verificar_usuario();
+    $iniciar_sesion = new login_controller;
+    $iniciar_sesion->autenticacion();
 }
