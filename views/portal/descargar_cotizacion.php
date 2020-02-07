@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-    <title>Cotización No. <?= $resultado['trato']->getFieldValue('No_de_cotizaci_n') ?></title>
+    <title>Cotización No. <?= $trato->getFieldValue('No_de_cotizaci_n') ?></title>
     <style>
         @media print {
             .saltoDePagina {
@@ -20,12 +20,12 @@
     <div class="container">
         <div class="row">
             <div class="col-2">
-                <?php if ($resultado['trato']->getFieldValue('Aseguradora') == null) : ?>
+                <?php if ($trato->getFieldValue('Aseguradora') == null) : ?>
                     <img src="img/portal/logo.png" width="120" height="140">
                 <?php else : ?>
-                    <?php $planes = $resultado['cotizacion']->getLineItems() ?>
+                    <?php $planes = $cotizacion->getLineItems() ?>
                     <?php foreach ($planes as $plan) : ?>
-                        <?php $ruta_imagen = $this->cotizaciones->imagen_asegradora($plan->getProduct()->getEntityId()) ?>
+                        <?php $ruta_imagen = $this->planes->generar_imagen_aseguradora($plan->getProduct()->getEntityId()) ?>
                         <?php if ($ruta_imagen != null) : ?>
                             <img height="100" width="120" src="<?= $ruta_imagen ?>">
                         <?php endif ?>
@@ -37,13 +37,13 @@
                     <h3>
                         COTIZACIÓN<br>
                         SEGURO VEHICULO DE MOTOR <br>
-                        PLAN <?= strtoupper($resultado['trato']->getFieldValue('Plan')) ?> <?= strtoupper($resultado['trato']->getFieldValue('Tipo_de_poliza')) ?>
+                        PLAN <?= strtoupper($trato->getFieldValue('Plan')) ?> <?= strtoupper($resultado['trato']->getFieldValue('Tipo_de_poliza')) ?>
                     </h3>
                 </center>
             </div>
             <div class="col-2">
                 <p>
-                    <b>No. de cotización</b> <?= $resultado['trato']->getFieldValue('No_de_cotizaci_n') ?><br>
+                    <b>No. de cotización</b> <?= $trato->getFieldValue('No_de_cotizaci_n') ?><br>
                     <b>Fecha</b> <br> <?= date('d/m/Y') ?>
                 </p>
             </div>
@@ -62,10 +62,10 @@
                     </div>
                     <div class="col">
                         <P>
-                            <?= $resultado['trato']->getFieldValue('Nombre_del_asegurado') . " " . $resultado['trato']->getFieldValue('Apellido_del_asegurado') ?><br>
-                            <?= $resultado['trato']->getFieldValue('RNC_Cedula_del_asegurado') ?><br>
-                            <?= $resultado['trato']->getFieldValue('Direcci_n_del_asegurado') ?><br>
-                            <?= $resultado['trato']->getFieldValue('Email_del_asegurado') ?>
+                            <?= $trato->getFieldValue('Nombre_del_asegurado') . " " . $trato->getFieldValue('Apellido_del_asegurado') ?><br>
+                            <?= $trato->getFieldValue('RNC_Cedula_del_asegurado') ?><br>
+                            <?= $trato->getFieldValue('Direcci_n_del_asegurado') ?><br>
+                            <?= $trato->getFieldValue('Email_del_asegurado') ?>
                         </P>
                     </div>
                 </div>
@@ -82,7 +82,7 @@
                     </div>
                     <div class="col">
                         <P>
-                            <?= $resultado['trato']->getFieldValue('Telefono_del_asegurado') ?>
+                            <?= $trato->getFieldValue('Telefono_del_asegurado') ?>
                         </P>
                     </div>
                 </div>
@@ -103,11 +103,11 @@
                     </div>
                     <div class="col">
                         <P>
-                            <?= $resultado['trato']->getFieldValue('Tipo_de_vehiculo') ?><br>
-                            <?= $resultado['trato']->getFieldValue('Marca') ?><br>
-                            <?= $resultado['trato']->getFieldValue('Modelo') ?><br>
-                            <?= $resultado['trato']->getFieldValue('A_o_de_Fabricacion') ?><br>
-                            RD$<?= number_format($resultado['trato']->getFieldValue('Valor_Asegurado'), 2) ?>
+                            <?= $trato->getFieldValue('Tipo_de_vehiculo') ?><br>
+                            <?= $trato->getFieldValue('Marca') ?><br>
+                            <?= $trato->getFieldValue('Modelo') ?><br>
+                            <?= $trato->getFieldValue('A_o_de_Fabricacion') ?><br>
+                            RD$<?= number_format($trato->getFieldValue('Valor_Asegurado'), 2) ?>
                         </P>
                     </div>
                 </div>
@@ -125,10 +125,10 @@
                     </div>
                     <div class="col">
                         <P>
-                            <?= $resultado['trato']->getFieldValue('Chasis') ?><br>
-                            <?= $resultado['trato']->getFieldValue('Placa') ?><br>
-                            <?= $resultado['trato']->getFieldValue('Color') ?><br>
-                            <?= $retVal = ($resultado['trato']->getFieldValue('Es_nuevo') == 1) ? "Nuevo" : "Usado"; ?>
+                            <?= $trato->getFieldValue('Chasis') ?><br>
+                            <?= $trato->getFieldValue('Placa') ?><br>
+                            <?= $trato->getFieldValue('Color') ?><br>
+                            <?= $retVal = ($trato->getFieldValue('Es_nuevo') == 1) ? "Nuevo" : "Usado"; ?>
                         </P>
                     </div>
                 </div>
@@ -141,10 +141,10 @@
                     <div class="col">
                         &nbsp;
                     </div>
-                    <?php if ($resultado['trato']->getFieldValue('Aseguradora') == null) : ?>
-                        <?php $planes = $resultado['cotizacion']->getLineItems() ?>
+                    <?php if ($trato->getFieldValue('Aseguradora') == null) : ?>
+                        <?php $planes = $cotizacion->getLineItems() ?>
                         <?php foreach ($planes as $plan) : ?>
-                            <?php $ruta_imagen = $this->cotizaciones->imagen_asegradora($plan->getProduct()->getEntityId()) ?>
+                            <?php $ruta_imagen = $this->planes->generar_imagen_aseguradora($plan->getProduct()->getEntityId()) ?>
                             <?php if ($ruta_imagen != null) : ?>
                                 <div class="col-2">
                                     <img height="80" width="100" src="<?= $ruta_imagen ?>">
@@ -181,11 +181,11 @@
                             <b>Prima Total</b>
                         </p>
                     </div>
-                    <?php $planes = $resultado['cotizacion']->getLineItems() ?>
+                    <?php $planes = $cotizacion->getLineItems() ?>
                     <?php foreach ($planes as $plan) : ?>
-                        <?php $coberturas = $this->cotizaciones->coberturas(
+                        <?php $coberturas = $this->planes->coberturas(
                             $plan->getProduct()->getEntityId(),
-                            $resultado['trato']->getFieldValue('Account_Name')->getEntityId()
+                            $trato->getFieldValue('Account_Name')->getEntityId()
                         ) ?>
                         <?php if ($coberturas != null) : ?>
                             <?php foreach ($coberturas as $cobertura) : ?>
@@ -220,33 +220,33 @@
                 </div>
             </div>
         </div>
-        <?php if ($resultado['trato']->getFieldValue('Aseguradora') != null) : ?>
+        <?php if ($trato->getFieldValue('Aseguradora') != null) : ?>
             <div class="saltoDePagina"></div>
             <div class="col-12">
                 <div class="card">
                     <div class="card-content">
                         <div class="row">
-                            <?php $coberturas = $this->cotizaciones->coberturas(
+                            <?php $coberturas = $this->planes->coberturas(
                                 $plan->getProduct()->getEntityId(),
-                                $resultado['trato']->getFieldValue('Account_Name')->getEntityId()
+                                $trato->getFieldValue('Account_Name')->getEntityId()
                             ) ?>
                             <?php foreach ($coberturas as $cobertura) : ?>
                                 <div class="col">
-                                    <?php $planes = $resultado['cotizacion']->getLineItems() ?>
+                                    <?php $planes = $cotizacion->getLineItems() ?>
                                     <?php foreach ($planes as $plan) : ?>
-                                        <?php $ruta_imagen = $this->cotizaciones->imagen_asegradora($plan->getProduct()->getEntityId()) ?>
+                                        <?php $ruta_imagen = $this->planes->generar_imagen_aseguradora($plan->getProduct()->getEntityId()) ?>
                                         <?php if ($ruta_imagen != null) : ?>
                                             <img height="100" width="160" src="<?= $ruta_imagen ?>">
                                         <?php endif ?>
                                     <?php endforeach ?>
                                     <P>
-                                        <b>PÓLIZA </b><?= $resultado['cotizacion']->getFieldValue('Poliza')->getLookupLabel() ?><br>
-                                        <b>MARCA </b><?= $resultado['trato']->getFieldValue('Marca') ?><br>
-                                        <b>MODELO </b><?= $resultado['trato']->getFieldValue('Modelo') ?><br>
-                                        <b>AÑO </b><?= $resultado['trato']->getFieldValue('A_o_de_Fabricacion') ?><br>
-                                        <b>CHASIS </b><?= $resultado['trato']->getFieldValue('Chasis') ?><br>
-                                        <b>PLACA </b><?= $resultado['trato']->getFieldValue('Placa') ?><br>
-                                        <b>VIGENTE HASTA </b><?= $resultado['trato']->getFieldValue('Closing_Date') ?>
+                                        <b>PÓLIZA </b><?= $cotizacion->getFieldValue('Poliza')->getLookupLabel() ?><br>
+                                        <b>MARCA </b><?= $trato->getFieldValue('Marca') ?><br>
+                                        <b>MODELO </b><?= $trato->getFieldValue('Modelo') ?><br>
+                                        <b>AÑO </b><?= $trato->getFieldValue('A_o_de_Fabricacion') ?><br>
+                                        <b>CHASIS </b><?= $trato->getFieldValue('Chasis') ?><br>
+                                        <b>PLACA </b><?= $trato->getFieldValue('Placa') ?><br>
+                                        <b>VIGENTE HASTA </b><?= $trato->getFieldValue('Closing_Date') ?>
                                     </P>
                                 </div>
                                 <div class="col">

@@ -10,15 +10,15 @@
                 <div class="col-md-6">
                     <div class="form-group">
                         <label class="small mb-1">Nombre del Cliente</label>
-                        <input class="form-control py-4" type="text" name="buscar" required />
+                        <input class="form-control py-4" type="text" name="busqueda" required />
                     </div>
                 </div>
                 <div class="col-md-6">
                     <div class="form-group">
                         <label class="small mb-1">Buscar por:</label>
-                        <select name="opcion" class="form-control">
-                            <option selected value="nombre">Nombre del cliente</option>
-                            <option value="numero">No. de cotización</option>
+                        <select name="parametro" class="form-control">
+                            <option selected value="numero">No. de cotización</option>
+                            <option value="nombre">Nombre del cliente</option>
                         </select>
                     </div>
                 </div>
@@ -60,8 +60,8 @@
                     </tr>
                 </tfoot>
                 <tbody>
-                    <?php if (!empty($resultados)) : ?>
-                        <?php foreach ($resultados as $trato) : ?>
+                    <?php if (!empty($tratos)) : ?>
+                        <?php foreach ($tratos as $trato) : ?>
                             <tr>
                                 <td><?= $trato->getFieldValue('No_de_cotizaci_n')  ?></td>
                                 <td><?= $trato->getFieldValue('Nombre_del_asegurado') . " " . $trato->getFieldValue('Apellido_del_asegurado') ?></td>

@@ -1,3 +1,19 @@
+<?php
+
+include "lib/autenticar.php";
+
+$mensaje = "";
+if ($_POST) {
+    $resultado = autenticar($_POST['usuario'], $_POST['clave']);
+    if ($resultado == true) {
+        header("Location: index.php");
+    } elseif ($resultado == false) {
+        $mensaje = "Usuario o contraseña incorrectos.";
+    } else {
+        $mensaje = $resultado;
+    }
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -23,10 +39,10 @@
                             <div class="card shadow-lg border-0 rounded-lg mt-5">
                                 <div class="card-header text-center font-weight-light my-4">
                                     <h3>IT - Insurance Tech</h3>
-                                    <p><?=$mensaje?></p>
+                                    <p><?= $mensaje ?></p>
                                 </div>
                                 <div class="card-body">
-                                    <form method="POST" action="index.php">
+                                    <form method="POST" action="login.php">
                                         <div class="form-group">
                                             <label class="small mb-1">Usuario</label>
                                             <input class="form-control py-4" type="text" name="usuario" />

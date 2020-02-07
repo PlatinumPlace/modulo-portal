@@ -3,18 +3,21 @@
 class portal_controller
 {
     public $tratos;
+    public $cotizaciones;
     public $marcas;
-
+    public $planes;
 
     function __construct()
     {
-        $this->cotizaciones = new cotizacion_model;
+        $this->tratos = new deals_model;
+        $this->cotizaciones = new quotes_model;
         $this->marcas = new marcas_model;
+        $this->planes = new products_model;
     }
 
     public function pagina_principal()
     {
-        $cotizaciones = $this->cotizaciones->resumen();
+        $tratos = $this->tratos->resumen($_SESSION['usuario']['id']);
         require("views/template/header.php");
         require("views/portal/pagina_principal.php");
         require("views/template/footer.php");
@@ -22,9 +25,9 @@ class portal_controller
 
     public function crear_cotizacion()
     {
-        $marcas = $this->marcas->obtener_marcas();
+        $marcas = $this->marcas->lista();
         if ($_POST) {
-            $resultado = $this->cotizaciones->crear();
+            $resultado = $this->tratos->crear();
             if (!empty($resultado)) {
                 $mensaje = "Cotización realizada exitosamente";
             } else {
@@ -57,7 +60,8 @@ class portal_controller
 
     public function ver_cotizacion()
     {
-        $resultado = $this->cotizaciones->detalles();
+        $trato = $this->tratos->detalles($_GET['id']);
+        $cotizacion = $this->cotizaciones->detalles($trato->getFieldValue('Cotizaci_n')->getEntityId());
         require("views/template/header.php");
         require("views/portal/ver_cotizacion.php");
         require("views/template/footer.php");
@@ -66,9 +70,9 @@ class portal_controller
     public function buscar_cotizacion()
     {
         if ($_POST) {
-            $resultados = $this->cotizaciones->buscar();
+            $tratos = $this->tratos->buscar($_SESSION['usuario']['id'], $_POST['busqueda'], $_POST['parametro']);
         } else {
-            $resultados = $this->cotizaciones->lista();
+            $tratos = $this->tratos->lista($_SESSION['usuario']['id']);
         }
         require("views/template/header.php");
         require("views/portal/buscar_cotizacion.php");
@@ -78,7 +82,7 @@ class portal_controller
     public function lista_cotizaciones()
     {
         $filtro = (isset($_GET['filtro'])) ? $_GET['filtro'] : "";
-        $resultados = $this->cotizaciones->lista();
+        $tratos = $this->tratos->lista($_SESSION['usuario']['id']);
         require("views/template/header.php");
         require("views/portal/buscar_cotizacion.php");
         require("views/template/footer.php");
@@ -86,55 +90,71 @@ class portal_controller
 
     public function descargar_cotizacion()
     {
-        $resultado = $this->cotizaciones->detalles();
+        $trato = $this->tratos->detalles($_GET['id']);
+        $cotizacion = $this->cotizaciones->detalles($trato->getFieldValue('Cotizaci_n')->getEntityId());
         require("views/portal/descargar_cotizacion.php");
     }
 
     public function editar_cotizacion()
     {
-        $resultado = $this->cotizaciones->detalles();
+        $trato = $this->tratos->detalles($_GET['id']);
         if ($_POST) {
-            $mensaje = $this->cotizaciones->editar();
+            $resultado = $this->tratos->editar($_GET['id']);
+            if (!empty($resultado)) {
+                $mensaje = "Cambios realizados exitosamente";
+            } else {
+                $mensaje = "Ha ocurrido un error,intentelo mas tarde";
+            }
         }
         require("views/template/header.php");
         require("views/portal/editar_cotizacion.php");
         require("views/template/footer.php");
+        echo '<script>
+            function obtener_modelos(val) {
+                {
+                    $.ajax({
+                        url: "lib/obtener_modelos.php",
+                        type: "POST",
+                        data: {
+                            marcas_id: val.value
+                        },
+                        success: function(response) {
+                            document.getElementById("modelo").innerHTML = response;
+                        }
+                    });
+                }
+            }    
+        </script>';
         if ($_POST) {
-            echo '
-            <script>
-            $(document).ready(function(){
-                $("#modal").modal();
-                $("#modal").modal("open"); 
-             });
-            </script>
-            ';
+            echo '<script>$("#modal").modal("show")</script>';
         }
     }
 
     public function eliminar_cotizacion()
     {
-        $resultado = $this->cotizaciones->eliminar();
+        $trato = $this->tratos->detalles($_GET['id']);
+        $mensaje = "Cotización No. " . $trato->getFieldValue('No_de_cotizaci_n') . " ha sido cancelada";
+        $this->tratos->eliminar($_GET['id']);
         $this->buscar_cotizacion();
     }
 
     public function emitir_cotizacion()
     {
-        $resultado = $this->cotizaciones->detalles();
+        $trato = $this->tratos->detalles($_GET['id']);
+        $cotizacion = $this->cotizaciones->detalles($trato->getFieldValue('Cotizaci_n')->getEntityId());
         if ($_POST) {
-            $mensaje = $this->cotizaciones->emitir();
+            $resultado = $this->tratos->emitir($_GET['id']);
+            if (!empty($resultado)) {
+                $mensaje = "Póliza emitida,descarga la cotización para obtener el carnet provisional";
+            }else {
+                $mensaje = "Ha ocurrido un error,intentelo mas tarde";
+            }
         }
         require("views/template/header.php");
         require("views/portal/emitir_cotizacion.php");
         require("views/template/footer.php");
         if ($_POST) {
-            echo '
-            <script>
-            $(document).ready(function(){
-                $("#modal").modal();
-                $("#modal").modal("open"); 
-             });
-            </script>
-            ';
+            echo '<script>$("#modal").modal("show")</script>';
         }
     }
 }

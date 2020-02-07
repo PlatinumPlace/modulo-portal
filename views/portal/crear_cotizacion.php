@@ -76,8 +76,8 @@
                                 <label class="small mb-1">Marca del Vehículo</label>
                                 <select name="marca" id="marca" class="form-control" onchange="obtener_modelos(this)">
                                     <option selected disabled>Selecciona una marca</option>
-                                    <?php foreach ($marcas as $posicion => $marca) : ?>
-                                        <option value="<?= $marca['id'] ?>"><?= $marca['nombre'] ?></option>
+                                    <?php foreach ($marcas as $marca) : ?>
+                                        <option value="<?= $marca->getEntityId() ?>"><?= $marca->getFieldValue('Name') ?></option>
                                     <?php endforeach ?>
                                 </select>
                             </div>

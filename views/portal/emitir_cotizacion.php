@@ -1,70 +1,60 @@
-<div class="section no-pad-bot" id="index-banner">
-  <div class="container">
-    <h1 class="header center orange-text">Emitir con:</h1>
-  </div>
-</div>
-
-<div class="container">
-  <div class="section">
-
-    <div class="row">
-      <form class="col s12" action="?pagina=emitir&id=<?= $resultado['trato']->getEntityId() ?>" method="post" enctype="multipart/form-data">
-        <?php if ($resultado['trato']->getFieldValue('Aseguradora') == null) : ?>
-          <div class="row">
-            <div class="input-field col s12">
-              <select name="aseguradora">
-                <?php $planes = $resultado['cotizacion']->getLineItems() ?>
-                <?php foreach ($planes as $plan) : ?>
-                  <?php $aseguradora = $this->cotizaciones->aseguradora($plan->getProduct()->getEntityId()) ?>
-                  <option value="<?= $aseguradora['id'] ?>"><?= $aseguradora['nombre'] ?></option>
-                <?php endforeach ?>
-              </select>
-              <label>Selecciona unau aseguradora</label>
-            </div>
-          </div>
-          <div class="row">
-            <div class="file-field input-field">
-              <div class="btn">
-                <span>Cargar Cotización Firmada</span>
-                <input type="file" name="cotizacion_firmada" required>
+<h1 class="mt-4">Emitir con:</h1>
+<div class="row justify-content-center">
+  <div class="col-lg-10">
+    <div class="card shadow-lg border-0 rounded-lg mt-5">
+      <div class="card-body">
+        <form method="POST" action="?pagina=emitir&id=<?= $_GET['id'] ?>">
+          <?php if ($trato->getFieldValue('Aseguradora') == null) : ?>
+            <div class="form-row">
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label class="small mb-1">Nombre del Cliente</label>
+                  <select name="aseguradora" class="form-control">
+                    <?php $planes = $cotizacion->getLineItems() ?>
+                    <?php foreach ($planes as $plan) : ?>
+                      <?php $aseguradora = $this->planes->detalles_aseguradora($plan->getProduct()->getEntityId()) ?>
+                      <option value="<?= $aseguradora['id'] ?>"><?= $aseguradora['nombre'] ?></option>
+                    <?php endforeach ?>
+                  </select>
+                </div>
               </div>
-              <div class="file-path-wrapper">
-                <input class="file-path validate" type="text">
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label class="small mb-1">Cargar Cotización Firmada</label>
+                  <input type="file" name="cotizacion_firmada" class="form-control py-4" required>
+                </div>
               </div>
             </div>
-          </div>
-        <?php endif ?>
-        <div class="row">
-          <div class="file-field input-field">
-            <div class="btn">
-              <span>Cargar Expedientes</span>
-              <input type="file" name="expedientes[]" multiple>
-            </div>
-            <div class="file-path-wrapper">
-              <input class="file-path validate" type="text">
+          <?php endif ?>
+          <div class="form-row">
+            <div class="col-md-6">
+              <div class="form-group">
+                <label class="small mb-1">Cargar Expedientes</label>
+                <input type="file" name="expedientes[]" class="form-control py-4" multiple>
+              </div>
             </div>
           </div>
-        </div>
-        <div class="col s12 center">
-          <a href="?pagina=detalles&id=<?= $resultado['trato']->getEntityId() ?>" class="btn modal-trigger waves-effect waves-light green">Cancelar
-            <i class="material-icons right">arrow_back</i>
-          </a>
-          <button class="btn waves-effect waves-light" type="submit" name="action">Guardar Cambios
-            <i class="material-icons right">send</i>
-          </button>
-        </div>
-      </form>
+          <div class="form-group mt-4 mb-0">
+            <button type="submit" class="btn btn-primary btn-block">Emitir</button>
+          </div>
+        </form>
+      </div>
     </div>
-
   </div>
-  <br><br>
 </div>
-<!-- Modal Structure -->
-<div id="modal" class="modal">
-  <div class="modal-content">
-    <h4><?= $mensaje ?></h4>
-  </div>
-  <div class="modal-footer">
-    <a href="?pagina=detalles&id=<?= $resultado['trato']->getEntityId() ?>" class="modal-close waves-effect waves-green btn-flat">Aceptar</a>
+<!-- Alerta -->
+<div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modal"><?= $mensaje ?></h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-footer">
+        <a href="?pagina=detalles&id=<?= $resultado['id'] ?>" class="btn btn-primary">Aceptar</a>
+      </div>
+    </div>
   </div>
 </div>

@@ -25,8 +25,8 @@
                     </tr>
                 </tfoot>
                 <tbody>
-                    <?php if (!empty($resultados)) : ?>
-                        <?php foreach ($resultados as $trato) : ?>
+                    <?php if (!empty($tratos)) : ?>
+                        <?php foreach ($tratos as $trato) : ?>
                             <?php if ($trato->getFieldValue("Stage") == $filtro or date("Y-m", strtotime($trato->getFieldValue("Closing_Date"))) == date("Y-m")) : ?>
                                 <tr>
                                     <td><?= $trato->getFieldValue('No_de_cotizaci_n')  ?></td>
