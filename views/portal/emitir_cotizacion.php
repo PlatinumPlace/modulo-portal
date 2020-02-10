@@ -1,9 +1,14 @@
 <h1 class="mt-4">Emitir con:</h1>
+<ol class="breadcrumb mb-4">
+    <li class="breadcrumb-item active">Dashboard</li>
+    <li class="breadcrumb-item active">Cotizaciones</li>
+    <li class="breadcrumb-item active">No. <?= $trato->getFieldValue('No_de_cotizaci_n') ?></li>
+</ol>
 <div class="row justify-content-center">
   <div class="col-lg-10">
     <div class="card shadow-lg border-0 rounded-lg mt-5">
       <div class="card-body">
-        <form method="POST" action="?pagina=emitir&id=<?= $_GET['id'] ?>">
+        <form method="POST" action="?pagina=emitir&id=<?= $trato->getEntityId() ?>">
           <?php if ($trato->getFieldValue('Aseguradora') == null) : ?>
             <div class="form-row">
               <div class="col-md-6">
@@ -21,7 +26,7 @@
               <div class="col-md-6">
                 <div class="form-group">
                   <label class="small mb-1">Cargar Cotización Firmada</label>
-                  <input type="file" name="cotizacion_firmada" class="form-control py-4" required>
+                  <input type="file" name="cotizacion_firmada" class="form-control" required>
                 </div>
               </div>
             </div>
@@ -30,12 +35,13 @@
             <div class="col-md-6">
               <div class="form-group">
                 <label class="small mb-1">Cargar Expedientes</label>
-                <input type="file" name="expedientes[]" class="form-control py-4" multiple>
+                <input type="file" name="expedientes[]" class="form-control" multiple>
               </div>
             </div>
           </div>
           <div class="form-group mt-4 mb-0">
-            <button type="submit" class="btn btn-primary btn-block">Emitir</button>
+            <button type="submit" class="btn btn-success btn-block">Emitir</button>
+            <a href="?pagina=detalles&id=<?= $trato->getEntityId() ?>" class="btn btn-primary btn-block">Cancelar</a>
           </div>
         </form>
       </div>
@@ -43,7 +49,7 @@
   </div>
 </div>
 <!-- Alerta -->
-<div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">

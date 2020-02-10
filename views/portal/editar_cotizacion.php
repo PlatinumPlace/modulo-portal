@@ -1,9 +1,14 @@
 <h1 class="mt-4">Editar Cotización No. <?= $trato->getFieldValue('No_de_cotizaci_n') ?></h1>
+<ol class="breadcrumb mb-4">
+    <li class="breadcrumb-item active">Dashboard</li>
+    <li class="breadcrumb-item active">Cotizaciones</li>
+    <li class="breadcrumb-item active">No. <?= $trato->getFieldValue('No_de_cotizaci_n') ?></li>
+</ol>
 <div class="row justify-content-center">
     <div class="col-lg-10">
         <div class="card shadow-lg border-0 rounded-lg mt-5">
             <div class="card-body">
-                <form method="POST" action="?pagina=editar&id=<?= $_GET['id'] ?>">
+                <form method="POST" action="?pagina=editar&id=<?= $trato->getEntityId() ?>">
                     <div class="form-row">
                         <div class="col-md-6">
                             <div class="form-group">
@@ -91,15 +96,17 @@
                         </div>
                     </div>
                     <div class="form-group mt-4 mb-0">
-                        <button type="submit" class="btn btn-primary btn-block">Guardar Cambios</button>
+                        <button type="submit" class="btn btn-success btn-block">Guardar Cambios</button>
+                        <button type="button" class="btn btn-danger btn-block" data-toggle="modal" data-target="#modal2">Eliminar</button>
+                        <a href="?pagina=detalles&id=<?= $trato->getEntityId() ?>" class="btn btn-primary btn-block">Cancelar</a>
                     </div>
                 </form>
             </div>
         </div>
     </div>
 </div>
-<!-- Alerta -->
-<div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<!-- Alerta 1 -->
+<div class="modal fade" id="modal1" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -110,6 +117,23 @@
             </div>
             <div class="modal-footer">
                 <a href="?pagina=detalles&id=<?= $resultado['id'] ?>" class="btn btn-primary">Aceptar</a>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Alerta 2 -->
+<div class="modal fade" id="modal2" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="">¿Estas seguros de continuar</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+                <a href="?pagina=eliminar&id=<?= $trato->getEntityId() ?>" class="btn btn-primary">Si</a>
             </div>
         </div>
     </div>

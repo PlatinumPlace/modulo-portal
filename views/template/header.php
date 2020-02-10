@@ -40,15 +40,15 @@
                     <div class="nav">
                         <div class="sb-sidenav-menu-heading">menu</div>
                         <a class="nav-link" href="index.php">
-                            <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
+                            <div class="sb-nav-link-icon"><i class="fas fa-chart-line"></i></div>
                             Dashboard
                         </a>
                         <div class="sb-sidenav-menu-heading">cotizaciones</div>
                         <a class="nav-link" href="?pagina=buscar">
-                            <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
+                            <div class="sb-nav-link-icon"><i class="fas fa-search"></i></div>
                             Buscar Cotización
                         </a><a class="nav-link" href="?pagina=crear">
-                            <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
+                            <div class="sb-nav-link-icon"><i class="fas fa-address-book"></i></div>
                             Crear Cotización
                         </a>
                     </div>

@@ -95,30 +95,30 @@ class deals_model extends api_model
 
     public function editar($trato_id)
     {
-        $cambios["A_o_de_Fabricacion"] = $_POST['A_o_de_Fabricacion'];
-        $cambios["Chasis"] = $_POST['chasis'];
-        $cambios["Color"] = $_POST['color'];
+        $trato["A_o_de_Fabricacion"] = $_POST['A_o_de_Fabricacion'];
+        $trato["Chasis"] = $_POST['chasis'];
+        $trato["Color"] = $_POST['color'];
         $marca = $this->getRecord("Marcas", $_POST['marca']);
-        $cambios["Marca"] = $marca->getFieldValue('Name');
+        $trato["Marca"] = $marca->getFieldValue('Name');
         $modelo = $this->getRecord("Modelos", $_POST['modelo']);
-        $cambios["Modelo"] = $modelo->getFieldValue('Name');
-        $cambios["Tipo_de_vehiculo"] = $modelo->getFieldValue('Tipo');
-        $cambios["Placa"] = $_POST['placa'];
-        $cambios["Plan"] = $_POST['plan'];
-        $cambios["Tipo_de_poliza"] = $_POST['poliza'];
-        $cambios["Valor_Asegurado"] = $_POST['Valor_Asegurado'];
+        $trato["Modelo"] = $modelo->getFieldValue('Name');
+        $trato["Tipo_de_vehiculo"] = $modelo->getFieldValue('Tipo');
+        $trato["Placa"] = $_POST['placa'];
+        $trato["Plan"] = $_POST['plan'];
+        $trato["Tipo_de_poliza"] = $_POST['poliza'];
+        $trato["Valor_Asegurado"] = $_POST['Valor_Asegurado'];
         if (isset($_POST['estado'])) {
-            $cambios["Es_nuevo"] = true;
+            $trato["Es_nuevo"] = true;
         } else {
-            $cambios["Es_nuevo"] = false;
+            $trato["Es_nuevo"] = false;
         }
-        return $this->api->updateRecord("Deals", $cambios, $trato_id);
+        return $this->updateRecord("Deals", $trato, $trato_id);
     }
 
     public function eliminar($trato_id)
     {
-        $cambios["Activo"] = false;
-        return $this->api->updateRecord("Deals", $cambios, $trato_id);
+        $trato["Activo"] = false;
+        return $this->updateRecord("Deals", $trato, $trato_id);
     }
 
     public function emitir($trato_id)
@@ -130,7 +130,7 @@ class deals_model extends api_model
         }
         if ($_POST['aseguradora']) {
             $cambios["Aseguradora"] = $_POST["aseguradora"];
-            $resultado = $this->api->updateRecord("Deals", $cambios, $trato_id);
+            $resultado = $this->updateRecord("Deals", $cambios, $trato_id);
         } else {
             $resultado = null;
         }
@@ -151,6 +151,7 @@ class deals_model extends api_model
                     move_uploaded_file($_FILES["expedientes"]["tmp_name"][$key], $nuevaUbicacion);
                 }
             }
+            $resultado = null;
         }
         return $resultado;
     }

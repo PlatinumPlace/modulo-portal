@@ -9,12 +9,12 @@ include "controllers/portal_controller.php";
 
 
 //Instalador de la api
-header("Location: api.php");
+//header("Location: api.php");
 
 
 //Autenticacion
 session_start();
-if (isset($_SESSION["usuario"])) {
+if (!isset($_SESSION["usuario"])) {
     header("Location: login.php");
 }
 

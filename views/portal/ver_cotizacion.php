@@ -4,21 +4,33 @@
     <li class="breadcrumb-item active">Cotizaciones</li>
     <li class="breadcrumb-item active">No. <?= $trato->getFieldValue('No_de_cotizaci_n') ?></li>
 </ol>
-<a href="?pagina=emitir&id=<?= $trato->getEntityId() ?>" class="btn-large waves-effect waves-light">Emitir</a>
-<?php if ($trato->getFieldValue('Activo') == true and $trato->getFieldValue('Aseguradora') == null) : ?>
-    <a href="?pagina=editar&id=<?= $trato->getEntityId() ?>" class="btn-large waves-effect waves-light yellow">Editar</a>
-    <button data-target="modal" class="btn modal-trigger btn-large waves-effect waves-light red">Eliminar</button>
+<?php if ($trato->getFieldValue('Activo') == true) : ?>
+    <a class="btn btn-success" href="?pagina=emitir&id=<?= $trato->getEntityId() ?>" title="Emitir"><i class="fas fa-file-upload"></i> Emitir</a>
+    <?php if ($trato->getFieldValue('Aseguradora') == null) : ?>
+        <a class="btn btn-warning" href="?pagina=editar&id=<?= $trato->getEntityId() ?>" title="Editar"><i class="far fa-edit"></i> Editar</a>
+    <?php endif ?>
+    <a class="btn btn-secondary" href="?pagina=descargar&id=<?= $trato->getEntityId() ?>" title="Descargar"><i class="fas fa-file-download"></i> Descargar</a>
 <?php endif ?>
-<a href="?pagina=descargar&id=<?= $trato->getEntityId() ?>" class="btn-large waves-effect waves-light green">Descargar</a>
-
+<hr>
 <div class="container">
     <div class="row">
+        <div class="col-2">
+            <?php if ($trato->getFieldValue('Aseguradora') != null) : ?>
+                <?php $planes = $cotizacion->getLineItems() ?>
+                <?php foreach ($planes as $plan) : ?>
+                    <?php $ruta_imagen = $this->planes->generar_imagen_aseguradora($plan->getProduct()->getEntityId()) ?>
+                    <?php if ($ruta_imagen != null) : ?>
+                        <img height="100" width="120" src="<?= $ruta_imagen ?>">
+                    <?php endif ?>
+                <?php endforeach ?>
+            <?php endif ?>
+        </div>
         <div class="col-8">
             <center>
                 <h3>
                     COTIZACIÓN<br>
                     SEGURO VEHICULO DE MOTOR <br>
-                    PLAN <?= strtoupper($trato->getFieldValue('Plan')) ?> <?= strtoupper($resultado['trato']->getFieldValue('Tipo_de_poliza')) ?>
+                    PLAN <?= strtoupper($trato->getFieldValue('Plan')) ?> <?= strtoupper($trato->getFieldValue('Tipo_de_poliza')) ?>
                 </h3>
             </center>
         </div>

@@ -37,7 +37,7 @@
                     <h3>
                         COTIZACIÓN<br>
                         SEGURO VEHICULO DE MOTOR <br>
-                        PLAN <?= strtoupper($trato->getFieldValue('Plan')) ?> <?= strtoupper($resultado['trato']->getFieldValue('Tipo_de_poliza')) ?>
+                        PLAN <?= strtoupper($trato->getFieldValue('Plan')) ?> <?= strtoupper($trato->getFieldValue('Tipo_de_poliza')) ?>
                     </h3>
                 </center>
             </div>

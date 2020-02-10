@@ -1,16 +1,30 @@
 <?php
 
-include "lib/autenticar.php";
+include "models/api_model.php";
+include "api/vendor/autoload.php";
+
+use zcrmsdk\crm\setup\restclient\ZCRMRestClient;
+
 
 $mensaje = "";
 if ($_POST) {
-    $resultado = autenticar($_POST['usuario'], $_POST['clave']);
-    if ($resultado == true) {
-        header("Location: index.php");
-    } elseif ($resultado == false) {
-        $mensaje = "Usuario o contraseña incorrectos.";
+    $api = new api_model;
+    ZCRMRestClient::initialize($api->configuration);
+    $criterio = "((Usuario:equals:" . $_POST['usuario'] . ") and (Contrase_a:equals:" . $_POST['clave'] . "))";
+    $contactos = $api->searchRecordsByCriteria("Contacts", $criterio);
+    if (!empty($contactos)) {
+        foreach ($contactos as $contacto) {
+            if ($contacto->getFieldValue("Estado") == true) {
+                session_start();
+                $_SESSION["usuario"]["nombre"] = $contacto->getFieldValue("First_Name");
+                $_SESSION["usuario"]["id"] = $contacto->getEntityId();
+                header("Location: index.php");
+            } else {
+                $mensaje = "El usuario no esta activado.";
+            }
+        }
     } else {
-        $mensaje = $resultado;
+        $mensaje = "Usuario o contraseña incorrectos.";
     }
 }
 ?>

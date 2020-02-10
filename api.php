@@ -1,10 +1,17 @@
 <?php
+include "api/vendor/autoload.php";
+include "models/api_model.php";
 
-include "lib/generar_token.php";
+use zcrmsdk\oauth\ZohoOAuth;
+use zcrmsdk\crm\setup\restclient\ZCRMRestClient;
 
 $mensaje = "";
 if ($_POST) {
-    generar_token($_POST['grant_token']);
+    $api = new api_model;
+    ZCRMRestClient::initialize($api->configuration);
+    $oAuthClient = ZohoOAuth::getClientInstance();
+    $grantToken = $_POST['grant_token'];
+    $oAuthTokens = $oAuthClient->generateAccessToken($grantToken);
     $mensaje = "Token generado.";
 }
 ?>

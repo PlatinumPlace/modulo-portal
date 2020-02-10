@@ -9,9 +9,9 @@ class api_model
     public $configuration = array(
         "client_id" => "",
         "client_secret" => "",
-        "redirect_uri" => "http://localhost/portal/api.php",
+        "redirect_uri" => "",
         "currentUserEmail" => "",
-        "token_persistence_path" => "api/token"
+        "token_persistence_path" => "api"
     );
 
     public function __construct()

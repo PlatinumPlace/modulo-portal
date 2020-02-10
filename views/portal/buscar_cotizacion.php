@@ -9,7 +9,7 @@
             <div class="form-row">
                 <div class="col-md-6">
                     <div class="form-group">
-                        <label class="small mb-1">Nombre del Cliente</label>
+                        <label class="small mb-1">Busqueda</label>
                         <input class="form-control py-4" type="text" name="busqueda" required />
                     </div>
                 </div>
@@ -48,17 +48,6 @@
                         <th>Opciones</th>
                     </tr>
                 </thead>
-                <tfoot>
-                    <tr>
-                        <th>No. de cotización</th>
-                        <th>Nombre del cliente</th>
-                        <th>Bien Asegurado</th>
-                        <th>Suma Asegurada</th>
-                        <th>Estado</th>
-                        <th>Fecha de cierre</th>
-                        <th>Opciones</th>
-                    </tr>
-                </tfoot>
                 <tbody>
                     <?php if (!empty($tratos)) : ?>
                         <?php foreach ($tratos as $trato) : ?>
@@ -70,12 +59,14 @@
                                 <td><?= $trato->getFieldValue("Stage") ?></td>
                                 <td><?= $trato->getFieldValue("Closing_Date") ?></td>
                                 <td>
-                                    <a href="?pagina=detalles&id=<?= $trato->getEntityId() ?>" class="btn-floating btn-small waves-effect waves-light blue tooltipped" data-position="bottom" data-tooltip="Detalles"><i class="material-icons">details</i></a>
-                                    <?php if ($trato->getFieldValue('Activo') == true and $trato->getFieldValue('Aseguradora') == null) : ?>
-                                        <a href="?pagina=emitir&id=<?= $trato->getEntityId() ?>" class="btn-floating btn-small waves-effect waves-light tooltipped" data-position="bottom" data-tooltip="Emitir"><i class="material-icons">recent_actors</i></a>
-                                        <a href="?pagina=editar&id=<?= $trato->getEntityId() ?>" class="btn-floating btn-small waves-effect waves-light yellow tooltipped" data-position="bottom" data-tooltip="Editar"><i class="material-icons">edit</i></a>
+                                    <?php if ($trato->getFieldValue('Activo') == true) : ?>
+                                        <a href="?pagina=detalles&id=<?= $trato->getEntityId() ?>" title="Detalles"><i class="fas fa-info"></i></a>
+                                        <a href="?pagina=emitir&id=<?= $trato->getEntityId() ?>" title="Emitir"><i class="fas fa-file-upload"></i></a>
+                                        <?php if ($trato->getFieldValue('Aseguradora') == null) : ?>
+                                            <a href="?pagina=editar&id=<?= $trato->getEntityId() ?>" title="Editar"><i class="far fa-edit"></i></a>
+                                        <?php endif ?>
+                                        <a href="?pagina=descargar&id=<?= $trato->getEntityId() ?>" title="Descargar"><i class="fas fa-file-download"></i></a>
                                     <?php endif ?>
-                                    <a class="btn-floating btn-small waves-effect waves-light green tooltipped" data-position="bottom" data-tooltip="Descargar" href="?page=download&id=<?= $trato->getEntityId() ?>"><i class="material-icons">cloud_download</i></a>
                                 </td>
                             </tr>
                         <?php endforeach ?>

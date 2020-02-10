@@ -23,6 +23,18 @@ class portal_controller
         require("views/template/footer.php");
     }
 
+    public function buscar_cotizacion()
+    {
+        if ($_POST) {
+            $tratos = $this->tratos->buscar($_SESSION['usuario']['id'], $_POST['busqueda'], $_POST['parametro']);
+        } else {
+            $tratos = $this->tratos->lista($_SESSION['usuario']['id']);
+        }
+        require("views/template/header.php");
+        require("views/portal/buscar_cotizacion.php");
+        require("views/template/footer.php");
+    }
+
     public function crear_cotizacion()
     {
         $marcas = $this->marcas->lista();
@@ -38,21 +50,21 @@ class portal_controller
         require("views/portal/crear_cotizacion.php");
         require("views/template/footer.php");
         echo '<script>
-            function obtener_modelos(val) {
-                {
-                    $.ajax({
-                        url: "lib/obtener_modelos.php",
-                        type: "POST",
-                        data: {
-                            marcas_id: val.value
-                        },
-                        success: function(response) {
-                            document.getElementById("modelo").innerHTML = response;
-                        }
-                    });
-                }
-            }    
-        </script>';
+                function obtener_modelos(val) {
+                    {
+                        $.ajax({
+                            url: "lib/obtener_modelos.php",
+                            type: "POST",
+                            data: {
+                                marcas_id: val.value
+                            },
+                            success: function(response) {
+                                document.getElementById("modelo").innerHTML = response;
+                            }
+                        });
+                    }
+                }    
+            </script>';
         if ($_POST) {
             echo '<script>$("#modal").modal("show")</script>';
         }
@@ -67,36 +79,9 @@ class portal_controller
         require("views/template/footer.php");
     }
 
-    public function buscar_cotizacion()
-    {
-        if ($_POST) {
-            $tratos = $this->tratos->buscar($_SESSION['usuario']['id'], $_POST['busqueda'], $_POST['parametro']);
-        } else {
-            $tratos = $this->tratos->lista($_SESSION['usuario']['id']);
-        }
-        require("views/template/header.php");
-        require("views/portal/buscar_cotizacion.php");
-        require("views/template/footer.php");
-    }
-
-    public function lista_cotizaciones()
-    {
-        $filtro = (isset($_GET['filtro'])) ? $_GET['filtro'] : "";
-        $tratos = $this->tratos->lista($_SESSION['usuario']['id']);
-        require("views/template/header.php");
-        require("views/portal/buscar_cotizacion.php");
-        require("views/template/footer.php");
-    }
-
-    public function descargar_cotizacion()
-    {
-        $trato = $this->tratos->detalles($_GET['id']);
-        $cotizacion = $this->cotizaciones->detalles($trato->getFieldValue('Cotizaci_n')->getEntityId());
-        require("views/portal/descargar_cotizacion.php");
-    }
-
     public function editar_cotizacion()
     {
+        $marcas = $this->marcas->lista();
         $trato = $this->tratos->detalles($_GET['id']);
         if ($_POST) {
             $resultado = $this->tratos->editar($_GET['id']);
@@ -110,24 +95,40 @@ class portal_controller
         require("views/portal/editar_cotizacion.php");
         require("views/template/footer.php");
         echo '<script>
-            function obtener_modelos(val) {
-                {
-                    $.ajax({
-                        url: "lib/obtener_modelos.php",
-                        type: "POST",
-                        data: {
-                            marcas_id: val.value
-                        },
-                        success: function(response) {
-                            document.getElementById("modelo").innerHTML = response;
-                        }
-                    });
-                }
-            }    
-        </script>';
+                function obtener_modelos(val) {
+                    {
+                        $.ajax({
+                            url: "lib/obtener_modelos.php",
+                            type: "POST",
+                            data: {
+                                marcas_id: val.value
+                            },
+                            success: function(response) {
+                                document.getElementById("modelo").innerHTML = response;
+                            }
+                        });
+                    }
+                }    
+            </script>';
         if ($_POST) {
-            echo '<script>$("#modal").modal("show")</script>';
+            echo '<script>$("#modal1").modal("show")</script>';
         }
+    }
+
+    public function lista_cotizaciones()
+    {
+        $filtro = $_GET['filtro'];
+        $tratos = $this->tratos->lista($_SESSION['usuario']['id']);
+        require("views/template/header.php");
+        require("views/portal/lista_cotizaciones.php");
+        require("views/template/footer.php");
+    }
+
+    public function descargar_cotizacion()
+    {
+        $trato = $this->tratos->detalles($_GET['id']);
+        $cotizacion = $this->cotizaciones->detalles($trato->getFieldValue('Cotizaci_n')->getEntityId());
+        require("views/portal/descargar_cotizacion.php");
     }
 
     public function eliminar_cotizacion()
@@ -144,10 +145,10 @@ class portal_controller
         $cotizacion = $this->cotizaciones->detalles($trato->getFieldValue('Cotizaci_n')->getEntityId());
         if ($_POST) {
             $resultado = $this->tratos->emitir($_GET['id']);
-            if (!empty($resultado)) {
-                $mensaje = "Póliza emitida,descarga la cotización para obtener el carnet provisional";
-            }else {
-                $mensaje = "Ha ocurrido un error,intentelo mas tarde";
+            if ($resultado != null) {
+                $mensaje = "Póliza emitida,descargue la cotización para obtener el carnet provisional";
+            } elseif ($resultado == null) {
+                $mensaje = "Documentos cargados exitosamente";
             }
         }
         require("views/template/header.php");
