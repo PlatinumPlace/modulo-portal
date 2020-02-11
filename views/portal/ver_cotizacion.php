@@ -8,6 +8,7 @@
     <a class="btn btn-success" href="?pagina=emitir&id=<?= $trato->getEntityId() ?>" title="Emitir"><i class="fas fa-file-upload"></i> Emitir</a>
     <?php if ($trato->getFieldValue('Aseguradora') == null) : ?>
         <a class="btn btn-warning" href="?pagina=editar&id=<?= $trato->getEntityId() ?>" title="Editar"><i class="far fa-edit"></i> Editar</a>
+        <button type="button" data-toggle="modal" data-target="#modal" class="btn btn-danger" href="?pagina=eliminar&id=<?= $trato->getEntityId() ?>" title="Eliminar"><i class="fas fa-trash"></i> Eliminar</button>
     <?php endif ?>
     <a class="btn btn-secondary" href="?pagina=descargar&id=<?= $trato->getEntityId() ?>" title="Descargar"><i class="fas fa-file-download"></i> Descargar</a>
 <?php endif ?>
@@ -129,6 +130,17 @@
         <div class="col-12 d-flex justify-content-center p-3 mb-2 bg-primary text-white" style="width: 200px;">
             <h4>COBERTURAS</h4>
         </div>
+        <?php if ($trato->getFieldValue('Aseguradora') == null) : ?>
+            <?php $planes = $cotizacion->getLineItems() ?>
+            <?php foreach ($planes as $plan) : ?>
+                <?php if ($plan->getListPrice() == 0) : ?>
+                    <div class="alert alert-info" role="alert">
+                        El tipo o año de fabricación del bien asegurado no estan estipulados en el contrato de una o mas aseguradoras.
+                    </div>
+                    <?php break ?>
+                <?php endif ?>
+            <?php endforeach ?>
+        <?php endif ?>
         <div class="col-12">
             <div class="row">
                 <div class="col">
@@ -137,11 +149,13 @@
                 <?php if ($trato->getFieldValue('Aseguradora') == null) : ?>
                     <?php $planes = $cotizacion->getLineItems() ?>
                     <?php foreach ($planes as $plan) : ?>
-                        <?php $ruta_imagen = $this->planes->generar_imagen_aseguradora($plan->getProduct()->getEntityId()) ?>
-                        <?php if ($ruta_imagen != null) : ?>
-                            <div class="col-2">
-                                <img height="80" width="100" src="<?= $ruta_imagen ?>">
-                            </div>
+                        <?php if ($plan->getListPrice() > 0) : ?>
+                            <?php $ruta_imagen = $this->planes->generar_imagen_aseguradora($plan->getProduct()->getEntityId()) ?>
+                            <?php if ($ruta_imagen != null) : ?>
+                                <div class="col-2">
+                                    <img height="80" width="100" src="<?= $ruta_imagen ?>">
+                                </div>
+                            <?php endif ?>
                         <?php endif ?>
                     <?php endforeach ?>
                 <?php endif ?>
@@ -210,6 +224,23 @@
                         <?php endforeach ?>
                     <?php endif ?>
                 <?php endforeach ?>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Alerta -->
+<div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="">¿Estas seguros de continuar</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+                <a href="?pagina=eliminar&id=<?= $trato->getEntityId() ?>" class="btn btn-primary">Si</a>
             </div>
         </div>
     </div>

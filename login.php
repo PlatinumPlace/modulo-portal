@@ -5,8 +5,6 @@ include "api/vendor/autoload.php";
 
 use zcrmsdk\crm\setup\restclient\ZCRMRestClient;
 
-
-$mensaje = "";
 if ($_POST) {
     $api = new api_model;
     ZCRMRestClient::initialize($api->configuration);
@@ -53,7 +51,11 @@ if ($_POST) {
                             <div class="card shadow-lg border-0 rounded-lg mt-5">
                                 <div class="card-header text-center font-weight-light my-4">
                                     <h3>IT - Insurance Tech</h3>
-                                    <p><?= $mensaje ?></p>
+                                    <?php if (isset($mensaje)) : ?>
+                                        <div class="alert alert-danger" role="alert">
+                                            <?= $mensaje ?>
+                                        </div>
+                                    <?php endif ?>
                                 </div>
                                 <div class="card-body">
                                     <form method="POST" action="login.php">
@@ -65,7 +67,7 @@ if ($_POST) {
                                             <label class="small mb-1" for="inputPassword">Contraseña</label>
                                             <input class="form-control py-4" type="password" name="clave" />
                                         </div>
-                                        <div class="form-group d-flex align-items-center justify-content-between mt-4 mb-0">
+                                        <div class="form-group d-flex align-items-center justify-content-between mt-4 mb-0 center">
                                             <button class="btn btn-primary" type="submit">Ingresar</button>
                                         </div>
                                     </form>

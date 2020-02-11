@@ -1,8 +1,8 @@
 <h1 class="mt-4">Emitir con:</h1>
 <ol class="breadcrumb mb-4">
-    <li class="breadcrumb-item active">Dashboard</li>
-    <li class="breadcrumb-item active">Cotizaciones</li>
-    <li class="breadcrumb-item active">No. <?= $trato->getFieldValue('No_de_cotizaci_n') ?></li>
+  <li class="breadcrumb-item active">Dashboard</li>
+  <li class="breadcrumb-item active">Cotizaciones</li>
+  <li class="breadcrumb-item active">No. <?= $trato->getFieldValue('No_de_cotizaci_n') ?></li>
 </ol>
 <div class="row justify-content-center">
   <div class="col-lg-10">
@@ -13,12 +13,14 @@
             <div class="form-row">
               <div class="col-md-6">
                 <div class="form-group">
-                  <label class="small mb-1">Nombre del Cliente</label>
+                  <label class="small mb-1">Aseguradoras</label>
                   <select name="aseguradora" class="form-control">
                     <?php $planes = $cotizacion->getLineItems() ?>
                     <?php foreach ($planes as $plan) : ?>
-                      <?php $aseguradora = $this->planes->detalles_aseguradora($plan->getProduct()->getEntityId()) ?>
-                      <option value="<?= $aseguradora['id'] ?>"><?= $aseguradora['nombre'] ?></option>
+                      <?php if ($plan->getListPrice() > 0) : ?>
+                        <?php $aseguradora = $this->planes->detalles_aseguradora($plan->getProduct()->getEntityId()) ?>
+                        <option value="<?= $aseguradora['id'] ?>"><?= $aseguradora['nombre'] ?></option>
+                      <?php endif ?>
                     <?php endforeach ?>
                   </select>
                 </div>
@@ -59,7 +61,7 @@
         </button>
       </div>
       <div class="modal-footer">
-        <a href="?pagina=detalles&id=<?= $resultado['id'] ?>" class="btn btn-primary">Aceptar</a>
+        <a href="?pagina=detalles&id=<?= $trato->getEntityId() ?>" class="btn btn-primary">Aceptar</a>
       </div>
     </div>
   </div>

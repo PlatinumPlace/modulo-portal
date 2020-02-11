@@ -23,7 +23,7 @@ class portal_controller
         require("views/template/footer.php");
     }
 
-    public function buscar_cotizacion()
+    public function buscar_cotizacion($mensaje = null)
     {
         if ($_POST) {
             $tratos = $this->tratos->buscar($_SESSION['usuario']['id'], $_POST['busqueda'], $_POST['parametro']);
@@ -134,9 +134,9 @@ class portal_controller
     public function eliminar_cotizacion()
     {
         $trato = $this->tratos->detalles($_GET['id']);
-        $mensaje = "Cotización No. " . $trato->getFieldValue('No_de_cotizaci_n') . " ha sido cancelada";
+        $mensaje = "Cotización No. " . $trato->getFieldValue('No_de_cotizaci_n') . " ha sido Abandonado";
         $this->tratos->eliminar($_GET['id']);
-        $this->buscar_cotizacion();
+        $this->buscar_cotizacion($mensaje);
     }
 
     public function emitir_cotizacion()

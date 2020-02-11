@@ -10,7 +10,7 @@
                 <div class="col-md-6">
                     <div class="form-group">
                         <label class="small mb-1">Busqueda</label>
-                        <input class="form-control py-4" type="text" name="busqueda" required />
+                        <input class="form-control" type="text" name="busqueda" required />
                     </div>
                 </div>
                 <div class="col-md-6">
@@ -33,6 +33,16 @@
         </form>
     </div>
 </div>
+<?php if ($_POST and empty($tratos)) : ?>
+    <div class="alert alert-info" role="alert">
+        No se encontraron registros
+    </div>
+<?php endif ?>
+<?php if (isset($_GET['id'])) : ?>
+    <div class="alert alert-info" role="alert">
+        <?= $mensaje ?>
+    </div>
+<?php endif ?>
 <div class="card mb-4">
     <div class="card-body">
         <div class="table-responsive">

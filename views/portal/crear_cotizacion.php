@@ -74,8 +74,8 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label class="small mb-1">Marca del Vehículo</label>
-                                <select name="marca" id="marca" class="form-control" onchange="obtener_modelos(this)">
-                                    <option selected disabled>Selecciona una marca</option>
+                                <select name="marca" id="marca" class="form-control" onchange="obtener_modelos(this)" required>
+                                    <option value="" selected disabled>Selecciona una marca</option>
                                     <?php foreach ($marcas as $marca) : ?>
                                         <option value="<?= $marca->getEntityId() ?>"><?= $marca->getFieldValue('Name') ?></option>
                                     <?php endforeach ?>
@@ -85,8 +85,8 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label class="small mb-1">Modelo del Vehículo</label>
-                                <select name="modelo" id="modelo" class="form-control">
-                                    <option selected disabled>Selecciona un modelo</option>
+                                <select name="modelo" id="modelo" class="form-control" required>
+                                    <option value="" selected disabled>Selecciona un modelo</option>
                                     <div id="modelo"></div>
                                 </select>
                             </div>
