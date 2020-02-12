@@ -27,12 +27,12 @@
                                     <td><?= $trato->getFieldValue("Closing_Date") ?></td>
                                     <td>
                                         <?php if ($trato->getFieldValue('Activo') == true) : ?>
-                                            <a href="?pagina=detalles&id=<?= $trato->getEntityId() ?>" title="Detalles"><i class="fas fa-info"></i></a>
-                                            <a href="?pagina=emitir&id=<?= $trato->getEntityId() ?>" title="Emitir"><i class="fas fa-file-upload"></i></a>
+                                            <a href="index.php?pagina=detalles&id=<?= $trato->getEntityId() ?>" title="Detalles"><i class="fas fa-info"></i></a>
+                                            <a href="index.php?pagina=emitir&id=<?= $trato->getEntityId() ?>" title="Emitir"><i class="fas fa-file-upload"></i></a>
                                             <?php if ($trato->getFieldValue('Aseguradora') == null) : ?>
-                                                <a href="?pagina=editar&id=<?= $trato->getEntityId() ?>" title="Editar"><i class="far fa-edit"></i></a>
+                                                <a href="index.php?pagina=editar&id=<?= $trato->getEntityId() ?>" title="Editar"><i class="far fa-edit"></i></a>
                                             <?php endif ?>
-                                            <a href="?pagina=descargar&id=<?= $trato->getEntityId() ?>" title="Descargar"><i class="fas fa-file-download"></i></a>
+                                            <a href="index.php?pagina=descargar&id=<?= $trato->getEntityId() ?>" title="Descargar"><i class="fas fa-file-download"></i></a>
                                         <?php endif ?>
                                     </td>
                                 </tr>

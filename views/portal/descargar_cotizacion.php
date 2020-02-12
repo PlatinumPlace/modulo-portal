@@ -314,7 +314,7 @@
         var id = document.getElementById('id').value;
         setTimeout(function() {
             window.print();
-            window.location = "?pagina=detalles&id=" + id;
+            window.location = "index.php?pagina=detalles&id=" + id;
         }, time);
     </script>
 </body>

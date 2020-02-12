@@ -1,18 +1,16 @@
-<h1 class="mt-4">Detalles de la Cotización</h1>
-<ol class="breadcrumb mb-4">
-    <li class="breadcrumb-item active">Dashboard</li>
-    <li class="breadcrumb-item active">Cotizaciones</li>
-    <li class="breadcrumb-item active">No. <?= $trato->getFieldValue('No_de_cotizaci_n') ?></li>
-</ol>
-<?php if ($trato->getFieldValue('Activo') == true) : ?>
-    <a class="btn btn-success" href="?pagina=emitir&id=<?= $trato->getEntityId() ?>" title="Emitir"><i class="fas fa-file-upload"></i> Emitir</a>
-    <?php if ($trato->getFieldValue('Aseguradora') == null) : ?>
-        <a class="btn btn-warning" href="?pagina=editar&id=<?= $trato->getEntityId() ?>" title="Editar"><i class="far fa-edit"></i> Editar</a>
-        <button type="button" data-toggle="modal" data-target="#modal" class="btn btn-danger" href="?pagina=eliminar&id=<?= $trato->getEntityId() ?>" title="Eliminar"><i class="fas fa-trash"></i> Eliminar</button>
-    <?php endif ?>
-    <a class="btn btn-secondary" href="?pagina=descargar&id=<?= $trato->getEntityId() ?>" title="Descargar"><i class="fas fa-file-download"></i> Descargar</a>
-<?php endif ?>
-<hr>
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2">Crear Cotización</h1>
+    <div class="btn-toolbar mb-2 mb-md-0">
+        <div class="btn-group mr-2">
+            <a class="btn btn-success" href="index.php?pagina=emitir&id=<?= $trato->getEntityId() ?>" title="Emitir"><i class="fas fa-file-upload"></i> Emitir</a>
+            <?php if ($trato->getFieldValue('Aseguradora') == null) : ?>
+                <a class="btn btn-warning" href="index.php?pagina=editar&id=<?= $trato->getEntityId() ?>" title="Editar"><i class="far fa-edit"></i> Editar</a>
+                <button type="button" data-toggle="modal" data-target="#modal" class="btn btn-danger" href="?pagina=eliminar&id=<?= $trato->getEntityId() ?>" title="Eliminar"><i class="fas fa-trash"></i> Eliminar</button>
+            <?php endif ?>
+            <a class="btn btn-secondary" href="index.php?pagina=descargar&id=<?= $trato->getEntityId() ?>" title="Descargar"><i class="fas fa-file-download"></i> Descargar</a>
+        </div>
+    </div>
+</div>
 <div class="container">
     <div class="row">
         <div class="col-2">
@@ -134,10 +132,10 @@
             <?php $planes = $cotizacion->getLineItems() ?>
             <?php foreach ($planes as $plan) : ?>
                 <?php if ($plan->getListPrice() == 0) : ?>
+                    <?php $aseguradora = $this->planes->detalles_aseguradora($plan->getProduct()->getEntityId()) ?>
                     <div class="alert alert-info" role="alert">
-                        El tipo o año de fabricación del bien asegurado no estan estipulados en el contrato de una o mas aseguradoras.
+                        La Aseguradora <b><?= $aseguradora['nombre'] ?></b> no esta disponible para cotizar.
                     </div>
-                    <?php break ?>
                 <?php endif ?>
             <?php endforeach ?>
         <?php endif ?>
@@ -190,38 +188,40 @@
                 </div>
                 <?php $planes = $cotizacion->getLineItems() ?>
                 <?php foreach ($planes as $plan) : ?>
-                    <?php $coberturas = $this->planes->coberturas(
-                        $plan->getProduct()->getEntityId(),
-                        $trato->getFieldValue('Account_Name')->getEntityId()
-                    ) ?>
-                    <?php if ($coberturas != null) : ?>
-                        <?php foreach ($coberturas as $cobertura) : ?>
-                            <div class="col-2">
-                                <p>
-                                    <b>&nbsp;</b><br>
-                                    <?= $cobertura->getFieldValue('Riesgos_comprensivos') ?>%<br>
-                                    <?= $cobertura->getFieldValue('Riesgos_comprensivos_Deducible') ?>%<br>
-                                    <?= $cobertura->getFieldValue('Rotura_de_Cristales_Deducible') ?>%<br>
-                                    <?= $cobertura->getFieldValue('Colisi_n_y_vuelco') ?>%<br>
-                                    <?= $cobertura->getFieldValue('Incendio_y_robo') ?>% <br><br>
-                                    <b>&nbsp;</b><br>
-                                    RD$<?= number_format($cobertura->getFieldValue('Da_os_Propiedad_ajena'), 2) ?><br>
-                                    RD$<?= number_format($cobertura->getFieldValue('Lesiones_Muerte_1_Pers'), 2) ?><br>
-                                    RD$<?= number_format($cobertura->getFieldValue('Lesiones_Muerte_m_s_de_1_Pers'), 2) ?><br>
-                                    RD$<?= number_format($cobertura->getFieldValue('Lesiones_Muerte_1_pasajero'), 2) ?><br>
-                                    RD$<?= number_format($cobertura->getFieldValue('Lesiones_Muerte_m_s_de_1_pasajero'), 2) ?><br><br>
-                                    RD$<?= number_format($cobertura->getFieldValue('Riesgos_conductor'), 2) ?><br><br>
-                                    RD$<?= number_format($cobertura->getFieldValue('Fianza_judicial'), 2) ?><br><br>
-                                    <b>&nbsp;</b><br>
-                                    <?= $retVal = ($cobertura->getFieldValue('Asistencia_vial') == 1) ? "Aplica" : "No Aplica"; ?><br>
-                                    <?= $retVal = ($cobertura->getFieldValue('Renta_Veh_culo') == 1) ? "Aplica" : "No Aplica"; ?><br>
-                                    <?= $retVal = ($cobertura->getFieldValue('Casa_del_Conductor') == 1) ? "Aplica" : "No Aplica"; ?><br><br>
-                                    RD$<?= number_format($plan->getListPrice(), 2) ?><br>
-                                    RD$<?= number_format($plan->getTaxAmount(), 2) ?><br>
-                                    RD$<?= number_format($plan->getNetTotal(), 2) ?>
-                                </p>
-                            </div>
-                        <?php endforeach ?>
+                    <?php if ($plan->getListPrice() > 0) : ?>
+                        <?php $coberturas = $this->planes->coberturas(
+                            $plan->getProduct()->getEntityId(),
+                            $trato->getFieldValue('Account_Name')->getEntityId()
+                        ) ?>
+                        <?php if ($coberturas != null) : ?>
+                            <?php foreach ($coberturas as $cobertura) : ?>
+                                <div class="col-2">
+                                    <p>
+                                        <b>&nbsp;</b><br>
+                                        <?= $cobertura->getFieldValue('Riesgos_comprensivos') ?>%<br>
+                                        <?= $cobertura->getFieldValue('Riesgos_comprensivos_Deducible') ?>%<br>
+                                        <?= $cobertura->getFieldValue('Rotura_de_Cristales_Deducible') ?>%<br>
+                                        <?= $cobertura->getFieldValue('Colisi_n_y_vuelco') ?>%<br>
+                                        <?= $cobertura->getFieldValue('Incendio_y_robo') ?>% <br><br>
+                                        <b>&nbsp;</b><br>
+                                        RD$<?= number_format($cobertura->getFieldValue('Da_os_Propiedad_ajena'), 2) ?><br>
+                                        RD$<?= number_format($cobertura->getFieldValue('Lesiones_Muerte_1_Pers'), 2) ?><br>
+                                        RD$<?= number_format($cobertura->getFieldValue('Lesiones_Muerte_m_s_de_1_Pers'), 2) ?><br>
+                                        RD$<?= number_format($cobertura->getFieldValue('Lesiones_Muerte_1_pasajero'), 2) ?><br>
+                                        RD$<?= number_format($cobertura->getFieldValue('Lesiones_Muerte_m_s_de_1_pasajero'), 2) ?><br><br>
+                                        RD$<?= number_format($cobertura->getFieldValue('Riesgos_conductor'), 2) ?><br><br>
+                                        RD$<?= number_format($cobertura->getFieldValue('Fianza_judicial'), 2) ?><br><br>
+                                        <b>&nbsp;</b><br>
+                                        <?= $retVal = ($cobertura->getFieldValue('Asistencia_vial') == 1) ? "Aplica" : "No Aplica"; ?><br>
+                                        <?= $retVal = ($cobertura->getFieldValue('Renta_Veh_culo') == 1) ? "Aplica" : "No Aplica"; ?><br>
+                                        <?= $retVal = ($cobertura->getFieldValue('Casa_del_Conductor') == 1) ? "Aplica" : "No Aplica"; ?><br><br>
+                                        RD$<?= number_format($plan->getListPrice(), 2) ?><br>
+                                        RD$<?= number_format($plan->getTaxAmount(), 2) ?><br>
+                                        RD$<?= number_format($plan->getNetTotal(), 2) ?>
+                                    </p>
+                                </div>
+                            <?php endforeach ?>
+                        <?php endif ?>
                     <?php endif ?>
                 <?php endforeach ?>
             </div>
@@ -240,7 +240,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
-                <a href="?pagina=eliminar&id=<?= $trato->getEntityId() ?>" class="btn btn-primary">Si</a>
+                <a href="index.php?pagina=eliminar&id=<?= $trato->getEntityId() ?>" class="btn btn-primary">Si</a>
             </div>
         </div>
     </div>

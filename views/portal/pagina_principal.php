@@ -1,7 +1,11 @@
-<h1 class="mt-4">Dashboard</h1>
-<ol class="breadcrumb mb-4">
-  <li class="breadcrumb-item active">Dashboard</li>
-</ol>
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+  <h1 class="h2">Dashboard</h1>
+  <div class="btn-toolbar mb-2 mb-md-0">
+    <div class="btn-group mr-2">
+      <button type="button" class="btn btn-sm btn-outline-secondary">Tarjetas</button>
+    </div>
+  </div>
+</div>
 <div class="row">
   <div class="col-xl-3 col-md-6">
     <div class="card bg-primary text-white mb-4">
@@ -10,7 +14,7 @@
         <p><?= $tratos['total'] ?></p>
       </div>
       <div class="card-footer d-flex align-items-center justify-content-between">
-        <a class="small text-white stretched-link" href="?pagina=buscar">Ver mas</a>
+        <a class="small text-white stretched-link" href="index.php?pagina=buscar">Ver mas</a>
         <div class="small text-white"><i class="fas fa-angle-right"></i></div>
       </div>
     </div>
@@ -22,7 +26,7 @@
         <p><?= $tratos['emisiones'] ?></p>
       </div>
       <div class="card-footer d-flex align-items-center justify-content-between">
-        <a class="small text-white stretched-link" href="?pagina=lista&filtro=<?= $tratos['filtro_emisiones'] ?>">Ver mas</a>
+        <a class="small text-white stretched-link" href="index.php?pagina=lista&filtro=<?= $tratos['filtro_emisiones'] ?>">Ver mas</a>
         <div class="small text-white"><i class="fas fa-angle-right"></i></div>
       </div>
     </div>
@@ -34,7 +38,7 @@
         <p><?= $tratos['vencimientos'] ?></p>
       </div>
       <div class="card-footer d-flex align-items-center justify-content-between">
-        <a class="small text-white stretched-link" href="?pagina=lista&filtro=<?= $tratos['filtro_vencimientos'] ?>">Ver mas</a>
+        <a class="small text-white stretched-link" href="index.php?pagina=lista&filtro=<?= $tratos['filtro_vencimientos'] ?>">Ver mas</a>
         <div class="small text-white"><i class="fas fa-angle-right"></i></div>
       </div>
     </div>

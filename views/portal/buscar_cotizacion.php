@@ -1,11 +1,9 @@
-<h1 class="mt-4">Buscar Cotización</h1>
-<ol class="breadcrumb mb-4">
-    <li class="breadcrumb-item active">Dashboard</li>
-    <li class="breadcrumb-item active">Busca Cotización</li>
-</ol>
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2">Buscar Cotización</h1>
+</div>
 <div class="card mb-4">
     <div class="card-body">
-        <form method="POST" action="?pagina=buscar">
+        <form method="POST" action="index.php?pagina=buscar">
             <div class="form-row">
                 <div class="col-md-6">
                     <div class="form-group">
@@ -70,12 +68,12 @@
                                 <td><?= $trato->getFieldValue("Closing_Date") ?></td>
                                 <td>
                                     <?php if ($trato->getFieldValue('Activo') == true) : ?>
-                                        <a href="?pagina=detalles&id=<?= $trato->getEntityId() ?>" title="Detalles"><i class="fas fa-info"></i></a>
-                                        <a href="?pagina=emitir&id=<?= $trato->getEntityId() ?>" title="Emitir"><i class="fas fa-file-upload"></i></a>
+                                        <a href="index.php?pagina=detalles&id=<?= $trato->getEntityId() ?>" title="Detalles"><i class="fas fa-info"></i></a>
+                                        <a href="index.php?pagina=emitir&id=<?= $trato->getEntityId() ?>" title="Emitir"><i class="fas fa-file-upload"></i></a>
                                         <?php if ($trato->getFieldValue('Aseguradora') == null) : ?>
-                                            <a href="?pagina=editar&id=<?= $trato->getEntityId() ?>" title="Editar"><i class="far fa-edit"></i></a>
+                                            <a href="index.php?pagina=editar&id=<?= $trato->getEntityId() ?>" title="Editar"><i class="far fa-edit"></i></a>
                                         <?php endif ?>
-                                        <a href="?pagina=descargar&id=<?= $trato->getEntityId() ?>" title="Descargar"><i class="fas fa-file-download"></i></a>
+                                        <a href="index.php?pagina=descargar&id=<?= $trato->getEntityId() ?>" title="Descargar"><i class="fas fa-file-download"></i></a>
                                     <?php endif ?>
                                 </td>
                             </tr>

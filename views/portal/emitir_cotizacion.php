@@ -8,7 +8,7 @@
   <div class="col-lg-10">
     <div class="card shadow-lg border-0 rounded-lg mt-5">
       <div class="card-body">
-        <form method="POST" action="?pagina=emitir&id=<?= $trato->getEntityId() ?>">
+        <form method="POST" action="index.php?pagina=emitir&id=<?= $trato->getEntityId() ?>">
           <?php if ($trato->getFieldValue('Aseguradora') == null) : ?>
             <div class="form-row">
               <div class="col-md-6">
@@ -61,7 +61,7 @@
         </button>
       </div>
       <div class="modal-footer">
-        <a href="?pagina=detalles&id=<?= $trato->getEntityId() ?>" class="btn btn-primary">Aceptar</a>
+        <a href="index.php?pagina=detalles&id=<?= $trato->getEntityId() ?>" class="btn btn-primary">Aceptar</a>
       </div>
     </div>
   </div>
