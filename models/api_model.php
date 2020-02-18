@@ -7,10 +7,10 @@ use zcrmsdk\crm\exception\ZCRMException;
 class api_model
 {
     public $configuration = array(
-        "client_id" => "1000.6SM53DOWIRAR3JKMCHVGZZG4108SPH",
-        "client_secret" => "66ae479d5cc7b5f7bb6794572b05798f705844264e",
+        "client_id" => "",
+        "client_secret" => "",
         "redirect_uri" => "http://localhost/portal/api.php",
-        "currentUserEmail" => "tecnologia@gruponobe.com",
+        "currentUserEmail" => "",
         "token_persistence_path" => "api"
     );
 
