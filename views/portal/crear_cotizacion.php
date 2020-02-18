@@ -39,7 +39,7 @@
                     <div class="col-md-6">
                         <div class="form-group">
                             <label class="small mb-1">Telefono</label>
-                            <input class="form-control" type="text" name="telefono" required />
+                            <input class="form-control" type="text" name="telefono" />
                         </div>
                     </div>
                 </div>
@@ -162,6 +162,9 @@
     </div>
     <div class="mx-auto" style="width: 200px;">
         <button type="submit" class="btn btn-primary btn-block">Cotizar</button>
+    </div>
+    <div class="col-12">
+        &nbsp;
     </div>
 </form>
 <!-- Alerta -->

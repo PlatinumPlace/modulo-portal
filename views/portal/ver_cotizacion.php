@@ -1,5 +1,5 @@
 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-    <h1 class="h2">Crear Cotización</h1>
+    <h1 class="h2">&nbsp;</h1>
     <div class="btn-toolbar mb-2 mb-md-0">
         <div class="btn-group mr-2">
             <a class="btn btn-success" href="index.php?pagina=emitir&id=<?= $trato->getEntityId() ?>" title="Emitir"><i class="fas fa-file-upload"></i> Emitir</a>
@@ -128,35 +128,31 @@
         <div class="col-12 d-flex justify-content-center p-3 mb-2 bg-primary text-white" style="width: 200px;">
             <h4>COBERTURAS</h4>
         </div>
-        <?php if ($trato->getFieldValue('Aseguradora') == null) : ?>
-            <?php $planes = $cotizacion->getLineItems() ?>
-            <?php foreach ($planes as $plan) : ?>
-                <?php if ($plan->getListPrice() == 0) : ?>
-                    <?php $aseguradora = $this->planes->detalles_aseguradora($plan->getProduct()->getEntityId()) ?>
-                    <div class="alert alert-info" role="alert">
-                        La Aseguradora <b><?= $aseguradora['nombre'] ?></b> no esta disponible para cotizar.
-                    </div>
-                <?php endif ?>
-            <?php endforeach ?>
-        <?php endif ?>
+        <?php $planes = $cotizacion->getLineItems() ?>
+        <?php foreach ($planes as $plan) : ?>
+            <?php if ($plan->getListPrice() == 0) : ?>
+                <?php $aseguradora = $this->planes->detalles_aseguradora($plan->getProduct()->getEntityId()) ?>
+                <div class="alert alert-info" role="alert">
+                    La aseguradora <b><?= $aseguradora['nombre'] ?></b> no esta disponible para cotizar.
+                </div>
+            <?php endif ?>
+        <?php endforeach ?>
         <div class="col-12">
             <div class="row">
                 <div class="col">
                     &nbsp;
                 </div>
-                <?php if ($trato->getFieldValue('Aseguradora') == null) : ?>
-                    <?php $planes = $cotizacion->getLineItems() ?>
-                    <?php foreach ($planes as $plan) : ?>
-                        <?php if ($plan->getListPrice() > 0) : ?>
-                            <?php $ruta_imagen = $this->planes->generar_imagen_aseguradora($plan->getProduct()->getEntityId()) ?>
-                            <?php if ($ruta_imagen != null) : ?>
-                                <div class="col-2">
-                                    <img height="80" width="100" src="<?= $ruta_imagen ?>">
-                                </div>
-                            <?php endif ?>
+                <?php $planes = $cotizacion->getLineItems() ?>
+                <?php foreach ($planes as $plan) : ?>
+                    <?php if ($plan->getListPrice() > 0) : ?>
+                        <?php $ruta_imagen = $this->planes->generar_imagen_aseguradora($plan->getProduct()->getEntityId()) ?>
+                        <?php if ($ruta_imagen != null) : ?>
+                            <div class="col-2">
+                                <img height="80" width="100" src="<?= $ruta_imagen ?>">
+                            </div>
                         <?php endif ?>
-                    <?php endforeach ?>
-                <?php endif ?>
+                    <?php endif ?>
+                <?php endforeach ?>
             </div>
         </div>
         <div class="col-12 border">
@@ -225,6 +221,9 @@
                     <?php endif ?>
                 <?php endforeach ?>
             </div>
+        </div>
+        <div class="col-12">
+            &nbsp;
         </div>
     </div>
 </div>

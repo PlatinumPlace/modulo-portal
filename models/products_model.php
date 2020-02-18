@@ -34,4 +34,5 @@ class products_model extends api_model
         $resultado['id'] = $plan_detalles->getFieldValue('Vendor_Name')->getEntityId();
         return $resultado;
     }
+
 }

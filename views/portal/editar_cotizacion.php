@@ -69,7 +69,7 @@
                     <div class="col-md-6">
                         <div class="form-group">
                             <label class="small mb-1">Valor Asegurado</label>
-                            <input class="form-control" type="number" name="Valor_Asegurado" value="<?=$trato->getFieldValue('Valor_Asegurado')?>" />
+                            <input class="form-control" type="number" name="Valor_Asegurado" value="<?= $trato->getFieldValue('Valor_Asegurado') ?>" />
                         </div>
                     </div>
                     <div class="col-md-6">
@@ -113,8 +113,23 @@
     <div class="col-12">
         &nbsp;
     </div>
-    <div class="mx-auto" style="width: 200px;">
-        <button type="submit" class="btn btn-primary btn-block">Cotizar</button>
+    <div class="col-6">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Opciones</h5>
+                <div class="form-row">
+                    <div class="col-md-6">
+                        <a href="index.php?pagina=detalles&id=<?= $trato->getEntityId() ?>" class="btn btn-primary btn-block">Volver a detalles</a>
+                    </div>
+                    <div class="col-md-6">
+                        <button type="submit" class="btn btn-success btn-block">Cotizar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-12">
+        &nbsp;
     </div>
 </form>
 <!-- Alerta 1 -->
