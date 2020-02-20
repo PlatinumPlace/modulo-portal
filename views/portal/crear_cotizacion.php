@@ -62,7 +62,7 @@
                     <div class="col-md-6">
                         <div class="form-group">
                             <label class="small mb-1">Tipo</label>
-                            <select name="poliza" class="form-control">
+                            <select name="poliza" class="custom-select">
                                 <option selected value="Declarativa">Declarativa</option>
                                 <option value="Individual">Individual</option>
                             </select>
@@ -71,7 +71,7 @@
                     <div class="col-md-6">
                         <div class="form-group">
                             <label class="small mb-1">Plan</label>
-                            <select name="plan" class="form-control">
+                            <select name="plan" class="custom-select">
                                 <option selected value="Mensual Full">Mensual Full</option>
                                 <option value="Anual Full">Anual Full</option>
                                 <option value="Mensual Ley">Mensual Ley</option>
@@ -94,7 +94,7 @@
                     <div class="col-md-6">
                         <div class="form-group">
                             <label class="small mb-1">Marca</label>
-                            <select name="marca" id="marca" class="form-control" onchange="obtener_modelos(this)" required>
+                            <select name="marca" id="marca" class="custom-select" onchange="obtener_modelos(this)" required>
                                 <option value="" selected disabled>Selecciona una marca</option>
                                 <?php foreach ($marcas as $marca) : ?>
                                     <option value="<?= $marca->getEntityId() ?>"><?= $marca->getFieldValue('Name') ?></option>
@@ -105,7 +105,7 @@
                     <div class="col-md-6">
                         <div class="form-group">
                             <label class="small mb-1">Modelo</label>
-                            <select name="modelo" id="modelo" class="form-control" required>
+                            <select name="modelo" id="modelo" class="custom-select" required>
                                 <option value="" selected disabled>Selecciona un modelo</option>
                                 <div id="modelo"></div>
                             </select>
@@ -149,8 +149,11 @@
                     </div>
                     <div class="col-md-6">
                         <div class="form-group">
-                            <label class="small mb-1">¿Es nuevo?</label>
-                            <input class="form-control" type="checkbox" name="estado" />
+                        <label class="small mb-1">&nbsp;</label>
+                            <div class="custom-control custom-checkbox">
+                                <input type="checkbox" class="custom-control-input" id="estado" name="estado">
+                                <label class="custom-control-label" for="estado">¿Es nuevo?</label>
+                            </div>
                         </div>
                     </div>
                 </div>

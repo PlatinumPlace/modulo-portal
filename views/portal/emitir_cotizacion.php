@@ -1,9 +1,6 @@
-<h1 class="mt-4">Emitir con:</h1>
-<ol class="breadcrumb mb-4">
-  <li class="breadcrumb-item active">Dashboard</li>
-  <li class="breadcrumb-item active">Cotizaciones</li>
-  <li class="breadcrumb-item active">No. <?= $trato->getFieldValue('No_de_cotizaci_n') ?></li>
-</ol>
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+  <h1 class="h2">Emitir con:</h1>
+</div>
 <form method="POST" action="index.php?pagina=emitir&id=<?= $trato->getEntityId() ?>">
   <?php if ($trato->getFieldValue('Aseguradora') == null) : ?>
     <div class="col-12">
@@ -13,7 +10,7 @@
             <div class="col-md-6">
               <div class="form-group">
                 <label class="small mb-1">Aseguradoras</label>
-                <select name="aseguradora" class="form-control" required>
+                <select name="aseguradora" class="custom-select" required>
                   <?php $planes = $cotizacion->getLineItems() ?>
                   <?php foreach ($planes as $plan) : ?>
                     <?php if ($plan->getListPrice() > 0) : ?>
@@ -28,8 +25,11 @@
             </div>
             <div class="col-md-6">
               <div class="form-group">
-                <label class="small mb-1">Cargar Cotización Firmada</label>
-                <input type="file" name="cotizacion_firmada" class="form-control" required>
+                <label class="small mb-1">&nbsp;</label>
+                <div class="custom-file">
+                  <input type="file" class="custom-file-input" id="cotizacion_firmada" name="cotizacion_firmada" required>
+                  <label class="custom-file-label" for="cotizacion_firmada">Cargar Cotización Firmada</label>
+                </div>
               </div>
             </div>
           </div>
@@ -46,8 +46,11 @@
         <div class="form-row">
           <div class="col-md-6">
             <div class="form-group">
-              <label class="small mb-1">Cargar Expedientes</label>
-              <input type="file" name="expedientes[]" class="form-control" multiple>
+              <label class="small mb-1">&nbsp;</label>
+              <div class="custom-file">
+                <input type="file" class="custom-file-input" id="expedientes" name="expedientes[]" multiple>
+                <label class="custom-file-label" for="expedientes">Cargar Expedientes</label>
+              </div>
             </div>
           </div>
         </div>

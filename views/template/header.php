@@ -11,7 +11,6 @@
 
     <!-- Custom styles for this template -->
     <link href="css/simple-sidebar.css" rel="stylesheet">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/js/all.min.js" crossorigin="anonymous"></script>
 
     <title>IT - Insurance Tech</title>
     <link rel="icon" type="image/png" href="img/portal/logo.png">
@@ -25,9 +24,9 @@
         <div class="bg-primary border-right" id="sidebar-wrapper">
             <div class="sidebar-heading text-white">IT - Insurance Tech</div>
             <div class="list-group list-group-flush">
-                <a href="index.php" class="list-group-item list-group-item-action bg-primary text-white"><i class="fas fa-chart-line"></i> Dashboard</a>
-                <a href="index.php?pagina=buscar" class="list-group-item list-group-item-action bg-primary text-white"><i class="fas fa-search"></i> Buscar Cotización</a>
-                <a href="index.php?pagina=crear" class="list-group-item list-group-item-action bg-primary text-white"><i class="fas fa-address-book"></i> Crear Cotización</a>
+                <a href="index.php" class="list-group-item list-group-item-action bg-primary text-white">Dashboard</a>
+                <a href="index.php?pagina=buscar" class="list-group-item list-group-item-action bg-primary text-white">Buscar Cotización</a>
+                <a href="index.php?pagina=crear" class="list-group-item list-group-item-action bg-primary text-white">Crear Cotización</a>
             </div>
         </div>
         <!-- /#sidebar-wrapper -->
@@ -41,12 +40,7 @@
                     <ul class="navbar-nav ml-auto mt-2 mt-lg-0">
                         <li class="nav-item dropdown">
                             <div class="btn-group dropleft">
-                                <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    <i class="fas fa-user fa-fw"></i>
-                                </button>
-                                <div class="dropdown-menu">
-                                    <button type="button" class="dropdown-item" data-toggle="modal" data-target="#cerrar_sesion">Cerrar Sesión</button>
-                                </div>
+                                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#cerrar_sesion">Cerrar Sesión</button>
                             </div>
                         </li>
                     </ul>
@@ -54,4 +48,3 @@
             </nav>
 
             <div class="container-fluid">
-                

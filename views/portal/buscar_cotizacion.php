@@ -67,14 +67,14 @@
                                 <td><?= $trato->getFieldValue("Stage") ?></td>
                                 <td><?= $trato->getFieldValue("Closing_Date") ?></td>
                                 <td>
-                                    <?php if ($trato->getFieldValue('Activo') == true) : ?>
-                                        <a href="index.php?pagina=detalles&id=<?= $trato->getEntityId() ?>" title="Detalles"><i class="fas fa-info"></i></a>
-                                        <a href="index.php?pagina=emitir&id=<?= $trato->getEntityId() ?>" title="Emitir"><i class="fas fa-file-upload"></i></a>
-                                        <?php if ($trato->getFieldValue('Aseguradora') == null) : ?>
-                                            <a href="index.php?pagina=editar&id=<?= $trato->getEntityId() ?>" title="Editar"><i class="far fa-edit"></i></a>
+                                    <div class="btn-group btn-group-sm" role="group">
+                                        <a href="index.php?pagina=detalles&id=<?= $trato->getEntityId() ?>" class="btn btn-info">Detalles</a>
+                                        <a href="index.php?pagina=emitir&id=<?= $trato->getEntityId() ?>" class="btn btn-success">Emitir</a>
+                                        <?php if ($trato->getFieldValue('Aseguradora') == null and $trato->getFieldValue('Stage') != "Abandonado") : ?>
+                                            <a href="index.php?pagina=editar&id=<?= $trato->getEntityId() ?>" class="btn btn-warning">Editar</a>
                                         <?php endif ?>
-                                        <a href="index.php?pagina=descargar&id=<?= $trato->getEntityId() ?>" title="Descargar"><i class="fas fa-file-download"></i></a>
-                                    <?php endif ?>
+                                        <a href="index.php?pagina=descargar&id=<?= $trato->getEntityId() ?>" class="btn btn-secondary">Descargar</a>
+                                    </div>
                                 </td>
                             </tr>
                         <?php endforeach ?>

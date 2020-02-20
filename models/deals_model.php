@@ -61,6 +61,7 @@ class deals_model extends api_model
         $trato["Telefono_del_asegurado"] = $_POST['telefono'];
         $trato["Tipo_de_poliza"] = $_POST['poliza'];
         $trato["Valor_Asegurado"] = $_POST['Valor_Asegurado'];
+        $trato["Stage"] = "Cotizando";
         if (isset($_POST['estado'])) {
             $trato["Es_nuevo"] = true;
         } else {
@@ -117,8 +118,8 @@ class deals_model extends api_model
 
     public function eliminar($trato_id)
     {
-        $trato["Activo"] = false;
-        return $this->updateRecord("Deals", $trato, $trato_id);
+        $cambios["Stage"] = "Abandonado";
+        return $this->updateRecord("Deals", $cambios, $trato_id);
     }
 
     public function emitir($trato_id)
@@ -128,8 +129,9 @@ class deals_model extends api_model
         if (!is_dir($ruta_cotizacion)) {
             mkdir($ruta_cotizacion, 0755, true);
         }
-        if ($_POST['aseguradora']) {
+        if (isset($_POST['aseguradora'])) {
             $cambios["Aseguradora"] = $_POST["aseguradora"];
+            $cambios["Stage"] = "En trámite";
             $resultado = $this->updateRecord("Deals", $cambios, $trato_id);
         } else {
             $resultado = null;

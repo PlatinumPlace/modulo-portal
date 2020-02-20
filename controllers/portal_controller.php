@@ -73,7 +73,9 @@ class portal_controller
     public function ver_cotizacion()
     {
         $trato = $this->tratos->detalles($_GET['id']);
-        $cotizacion = $this->cotizaciones->detalles($trato->getFieldValue('Cotizaci_n')->getEntityId());
+        if ($trato->getFieldValue('Cotizaci_n') != null) {
+            $cotizacion = $this->cotizaciones->detalles($trato->getFieldValue('Cotizaci_n')->getEntityId());
+        }
         require("views/template/header.php");
         require("views/portal/ver_cotizacion.php");
         require("views/template/footer.php");

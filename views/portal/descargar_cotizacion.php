@@ -5,7 +5,14 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-    <title>Cotización No. <?= $trato->getFieldValue('No_de_cotizaci_n') ?></title>
+    <title>
+        <?php if ($trato->getFieldValue('Aseguradora') == null) : ?>
+            Cotización No.
+        <?php else : ?>
+            Póliza No.
+        <?php endif ?>
+        <?= $trato->getFieldValue('No_de_cotizaci_n') ?>
+    </title>
     <style>
         @media print {
             .saltoDePagina {
@@ -35,7 +42,12 @@
             <div class="col-8">
                 <center>
                     <h3>
-                        COTIZACIÓN<br>
+                        <?php if ($trato->getFieldValue('Aseguradora') == null) : ?>
+                            COTIZACIÓN
+                        <?php else : ?>
+                            RESUMEN COBERTURAS
+                        <?php endif ?>
+                        <br>
                         SEGURO VEHICULO DE MOTOR <br>
                         PLAN <?= strtoupper($trato->getFieldValue('Plan')) ?> <?= strtoupper($trato->getFieldValue('Tipo_de_poliza')) ?>
                     </h3>
@@ -43,8 +55,15 @@
             </div>
             <div class="col-2">
                 <p>
-                    <b>No. de cotización</b> <?= $trato->getFieldValue('No_de_cotizaci_n') ?><br>
-                    <b>Fecha</b> <br> <?= date('d/m/Y') ?>
+                    <b>
+                        <?php if ($trato->getFieldValue('Aseguradora') == null) : ?>
+                            Cotización No.
+                        <?php else : ?>
+                            Póliza No.
+                        <?php endif ?>
+                    </b> <?= $trato->getFieldValue('No_de_cotizaci_n') ?>
+                    <br>
+                    <b>Fecha</b> <?= date('d/m/Y') ?>
                 </p>
             </div>
             <div class="col-12 d-flex justify-content-center p-3 mb-2 bg-primary text-white">
@@ -225,7 +244,7 @@
             </div>
         </div>
         <?php if ($trato->getFieldValue('Aseguradora') != null) : ?>
-            <div class="saltoDePagina"></div>
+            <!-- <div class="saltoDePagina"></div> -->
             <div class="col-12">
                 <div class="card">
                     <div class="card-content">
