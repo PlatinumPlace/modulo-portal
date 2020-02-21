@@ -146,12 +146,7 @@ class portal_controller
         $trato = $this->tratos->detalles($_GET['id']);
         $cotizacion = $this->cotizaciones->detalles($trato->getFieldValue('Cotizaci_n')->getEntityId());
         if ($_POST) {
-            $resultado = $this->tratos->emitir($_GET['id']);
-            if ($resultado != null) {
-                $mensaje = "Póliza emitida,descargue la cotización para obtener el carnet provisional";
-            } elseif ($resultado == null) {
-                $mensaje = "Documentos cargados exitosamente";
-            }
+            $mensaje = $this->tratos->emitir($_GET['id']);
         }
         require("views/template/header.php");
         require("views/portal/emitir_cotizacion.php");

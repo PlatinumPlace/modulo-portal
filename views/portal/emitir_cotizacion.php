@@ -1,7 +1,7 @@
 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
   <h1 class="h2">Emitir con:</h1>
 </div>
-<form method="POST" action="index.php?pagina=emitir&id=<?= $trato->getEntityId() ?>">
+<form method="POST" enctype="multipart/form-data" action="index.php?pagina=emitir&id=<?= $trato->getEntityId() ?>">
   <?php if ($trato->getFieldValue('Aseguradora') == null) : ?>
     <div class="col-12">
       <div class="card">
@@ -61,7 +61,7 @@
     &nbsp;
   </div>
   <div class="mx-auto" style="width: 200px;">
-    <button type="submit" class="btn btn-success btn-block">Emitir</button>
+    <input type="submit" class="btn btn-success btn-block" value="Emitir">
     <a href="?pagina=detalles&id=<?= $trato->getEntityId() ?>" class="btn btn-primary btn-block">Cancelar</a>
   </div>
   <div class="col-12">

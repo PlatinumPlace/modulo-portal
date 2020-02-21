@@ -124,26 +124,26 @@ class deals_model extends api_model
 
     public function emitir($trato_id)
     {
-        $trato = $this->detalles($trato_id);
         $ruta_cotizacion = "file/cotizaciones/" . $trato_id;
         if (!is_dir($ruta_cotizacion)) {
             mkdir($ruta_cotizacion, 0755, true);
         }
-        if (isset($_POST['aseguradora'])) {
-            $cambios["Aseguradora"] = $_POST["aseguradora"];
-            $cambios["Stage"] = "En trámite";
-            $resultado = $this->updateRecord("Deals", $cambios, $trato_id);
-        } else {
-            $resultado = null;
-        }
-        if (isset($_FILES["cotizacion_firmada"])) {
-            $extension = pathinfo($_FILES["cotizacion_firmada"]["name"], PATHINFO_EXTENSION);
-            $archivonombre = "Cotización No. " . $trato->getFieldValue('No_de_cotizaci_n');
-            $nombreArchivo = $archivonombre . "." . $extension;
-            $nuevaUbicacion = $ruta_cotizacion . "/" . $nombreArchivo;
-            move_uploaded_file($_FILES["cotizacion_firmada"]["tmp_name"], $nuevaUbicacion);
-        }
-        if (isset($_FILES["expedientes"])) {
+        if (isset($_POST['aseguradora']) and isset($_FILES["cotizacion_firmada"])) {
+            $tipo_archivo = pathinfo($_FILES["cotizacion_firmada"]["name"], PATHINFO_EXTENSION);
+            if ($tipo_archivo == "pdf" or $tipo_archivo == "docx") {
+                $ruta_cotizacion  =  $ruta_cotizacion . "/"  . $trato_id;
+                if (move_uploaded_file($_FILES['cotizacion_firmada']['tmp_name'], $ruta_cotizacion)) {
+                    $cambios["Aseguradora"] = $_POST["aseguradora"];
+                    $cambios["Stage"] = "En trámite";
+                    $this->updateRecord("Deals", $cambios, $trato_id);
+                    return "Póliza emitida,descargue la cotización para obtener el carnet";
+                } else {
+                    return "No se pudo subir el documento,intentelo mas tarde";
+                }
+            } else {
+                return "Error al cargar documentos,formatos adminitos: PDF,DOCX";
+            }
+        } elseif (isset($_FILES["expedientes"])) {
             foreach ($_FILES["expedientes"]['tmp_name'] as $key => $tmp_name) {
                 if ($_FILES["expedientes"]["name"][$key]) {
                     $extension = pathinfo($_FILES["expedientes"]["name"][$key], PATHINFO_EXTENSION);
@@ -153,8 +153,6 @@ class deals_model extends api_model
                     move_uploaded_file($_FILES["expedientes"]["tmp_name"][$key], $nuevaUbicacion);
                 }
             }
-            $resultado = null;
         }
-        return $resultado;
     }
 }
