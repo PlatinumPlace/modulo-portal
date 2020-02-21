@@ -39,12 +39,8 @@ class portal_controller
     {
         $marcas = $this->marcas->lista();
         if ($_POST) {
-            $resultado = $this->tratos->crear();
-            if (!empty($resultado)) {
-                $mensaje = "Cotización realizada exitosamente";
-            } else {
-                $mensaje = "Ha ocurrido un error,intentelo mas tarde";
-            }
+            $this->tratos->crear();
+            $mensaje = "Cotización realizada exitosamente";
         }
         require("views/template/header.php");
         require("views/portal/crear_cotizacion.php");
@@ -86,12 +82,8 @@ class portal_controller
         $marcas = $this->marcas->lista();
         $trato = $this->tratos->detalles($_GET['id']);
         if ($_POST) {
-            $resultado = $this->tratos->editar($_GET['id']);
-            if (!empty($resultado)) {
-                $mensaje = "Cambios realizados exitosamente";
-            } else {
-                $mensaje = "Ha ocurrido un error,intentelo mas tarde";
-            }
+            $this->tratos->editar($_GET['id']);
+            $mensaje = "Cambios realizados exitosamente";
         }
         require("views/template/header.php");
         require("views/portal/editar_cotizacion.php");

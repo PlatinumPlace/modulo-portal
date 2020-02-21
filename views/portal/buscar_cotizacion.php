@@ -65,7 +65,7 @@
                                 <td><?= $trato->getFieldValue('Type')  ?></td>
                                 <td>RD$<?= number_format($trato->getFieldValue('Valor_Asegurado'), 2) ?></td>
                                 <td><?= $trato->getFieldValue("Stage") ?></td>
-                                <td><?= $trato->getFieldValue("Closing_Date") ?></td>
+                                <td><?= date("d/m/Y", strtotime($trato->getFieldValue("Closing_Date"))) ?></td>
                                 <td>
                                     <div class="btn-group btn-group-sm" role="group">
                                         <a href="index.php?pagina=detalles&id=<?= $trato->getEntityId() ?>" class="btn btn-info">Detalles</a>

@@ -181,7 +181,7 @@
                 </button>
             </div>
             <div class="modal-footer">
-                <a href="?pagina=detalles&id=<?= $resultado['id'] ?>" class="btn btn-primary">Aceptar</a>
+                <a href="?pagina=buscar" class="btn btn-primary">Aceptar</a>
             </div>
         </div>
     </div>

@@ -40,7 +40,7 @@
                     <?php endif ?>
                 </b> <?= $trato->getFieldValue('No_de_cotizaci_n') ?>
                 <br>
-                <b>Fecha</b> <?= date('d/m/Y') ?>
+                <b>Fecha</b> <?= date("d/m/Y",strtotime($trato->getFieldValue("Closing_Date"))) ?>
             </p>
         </div>
         <div class="col-12 d-flex justify-content-center p-3 mb-2 bg-primary text-white">

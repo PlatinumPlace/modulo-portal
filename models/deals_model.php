@@ -67,7 +67,7 @@ class deals_model extends api_model
         } else {
             $trato["Es_nuevo"] = false;
         }
-        return $this->createRecord("Deals", $trato);
+        $this->createRecord("Deals", $trato);
     }
 
     public function detalles($trato_id)
@@ -113,13 +113,13 @@ class deals_model extends api_model
         } else {
             $trato["Es_nuevo"] = false;
         }
-        return $this->updateRecord("Deals", $trato, $trato_id);
+        $this->updateRecord("Deals", $trato, $trato_id);
     }
 
     public function eliminar($trato_id)
     {
         $cambios["Stage"] = "Abandonado";
-        return $this->updateRecord("Deals", $cambios, $trato_id);
+        $this->updateRecord("Deals", $cambios, $trato_id);
     }
 
     public function emitir($trato_id)
@@ -129,10 +129,11 @@ class deals_model extends api_model
             mkdir($ruta_cotizacion, 0755, true);
         }
         if (isset($_POST['aseguradora']) and isset($_FILES["cotizacion_firmada"])) {
-            $tipo_archivo = pathinfo($_FILES["cotizacion_firmada"]["name"], PATHINFO_EXTENSION);
-            if ($tipo_archivo == "pdf" or $tipo_archivo == "docx") {
-                $ruta_cotizacion  =  $ruta_cotizacion . "/"  . $trato_id;
-                if (move_uploaded_file($_FILES['cotizacion_firmada']['tmp_name'], $ruta_cotizacion)) {
+            $extension = pathinfo($_FILES["cotizacion_firmada"]["name"], PATHINFO_EXTENSION);
+            if ($extension == "pdf" or $extension == "docx") {
+                $nombreArchivo = $trato_id . "." . $extension;
+                $nuevaUbicacion = $ruta_cotizacion . "/" . $nombreArchivo;
+                if (move_uploaded_file($_FILES['cotizacion_firmada']['tmp_name'], $nuevaUbicacion)) {
                     $cambios["Aseguradora"] = $_POST["aseguradora"];
                     $cambios["Stage"] = "En trámite";
                     $this->updateRecord("Deals", $cambios, $trato_id);
@@ -143,7 +144,9 @@ class deals_model extends api_model
             } else {
                 return "Error al cargar documentos,formatos adminitos: PDF,DOCX";
             }
-        } elseif (isset($_FILES["expedientes"])) {
+        } 
+        /*
+        elseif (isset($_FILES["expedientes"])) {
             foreach ($_FILES["expedientes"]['tmp_name'] as $key => $tmp_name) {
                 if ($_FILES["expedientes"]["name"][$key]) {
                     $extension = pathinfo($_FILES["expedientes"]["name"][$key], PATHINFO_EXTENSION);
@@ -154,5 +157,6 @@ class deals_model extends api_model
                 }
             }
         }
+        */
     }
 }

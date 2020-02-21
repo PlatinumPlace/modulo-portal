@@ -135,7 +135,7 @@
                 </button>
             </div>
             <div class="modal-footer">
-                <a href="index.php?pagina=detalles&id=<?= $resultado['id'] ?>" class="btn btn-primary">Aceptar</a>
+                <a href="index.php?pagina=detalles&id=<?= $trato->getEntityId() ?>" class="btn btn-primary">Aceptar</a>
             </div>
         </div>
     </div>
