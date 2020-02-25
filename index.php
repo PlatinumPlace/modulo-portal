@@ -14,7 +14,6 @@ if (!isset($_SESSION["usuario"])) {
 } else {
     
     include "core/models/tratos.php";
-    include "core/models/productos.php";
     include "core/controllers/portal.php";
 
     //Navegacion del portal

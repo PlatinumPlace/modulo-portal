@@ -38,7 +38,7 @@
                     <img src="public/img/portal/logo.png" width="120" height="140">
                 <?php else : ?>
                     <?php foreach ($cotizaciones as $cotizacion) : ?>
-                        <?php $ruta_imagen = $this->planes->generar_imagen_aseguradora($cotizacion["Plan"]["id"]) ?>
+                        <?php $ruta_imagen = $this->tratos->generar_imagen_aseguradora($cotizacion["Plan"]["id"]) ?>
                         <img height="100" width="120" src="<?= $ruta_imagen ?>">
                     <?php endforeach ?>
                 <?php endif ?>
@@ -167,7 +167,7 @@
                     <?php if ($trato->getFieldValue('Stage') == "Cotizando") : ?>
                         <?php foreach ($cotizaciones as $cotizacion) : ?>
                             <?php if ($cotizacion["Prima_Total"] > 0) : ?>
-                                <?php $ruta_imagen = $this->planes->generar_imagen_aseguradora(
+                                <?php $ruta_imagen = $this->tratos->generar_imagen_aseguradora(
                                     $cotizacion["Plan"]["id"]
                                 ) ?>
                                 <?php if ($ruta_imagen != null) : ?>
@@ -209,7 +209,7 @@
                     </div>
                     <?php foreach ($cotizaciones as $cotizacion) : ?>
                         <?php if ($cotizacion["Prima_Total"] > 0) : ?>
-                            <?php $coberturas = $this->planes->coberturas(
+                            <?php $coberturas = $this->tratos->ver_coberturas(
                                 $cotizacion["Plan"]["id"],
                                 $trato->getFieldValue('Account_Name')->getEntityId()
                             ) ?>
@@ -250,7 +250,7 @@
         <?php if ($trato->getFieldValue('Stage') != "Cotizando") : ?>
             <!-- <div class="saltoDePagina"></div> -->
             <?php foreach ($cotizaciones as $cotizacion) : ?>
-                <?php $coberturas = $this->planes->coberturas(
+                <?php $coberturas = $this->tratos->ver_coberturas(
                     $cotizacion["Plan"]["id"],
                     $trato->getFieldValue('Account_Name')->getEntityId()
                 ) ?>
@@ -258,7 +258,7 @@
                     <div class="row">
                         <div class="col-6 border">
                             <?php foreach ($cotizaciones as $cotizacion) : ?>
-                                <?php $ruta_imagen = $this->planes->generar_imagen_aseguradora(
+                                <?php $ruta_imagen = $this->tratos->generar_imagen_aseguradora(
                                     $cotizacion["Plan"]["id"]
                                 ) ?> <?php if ($ruta_imagen != null) : ?>
                                     <img height="100" width="160" src="<?= $ruta_imagen ?>">
@@ -279,7 +279,7 @@
                                 </div>
                                 <div class="col">
                                     <P>
-                                        <?= $cotizacion->getFieldValue('Poliza')->getLookupLabel() ?><br>
+                                        <?= $trato->getFieldValue('P_liza')->getLookupLabel() ?><br>
                                         <?= $trato->getFieldValue('Marca') ?><br>
                                         <?= $trato->getFieldValue('Modelo') ?><br>
                                         <?= $trato->getFieldValue('A_o_de_Fabricacion') ?><br>
@@ -347,8 +347,8 @@
         var time = 500;
         var id = document.getElementById('id').value;
         setTimeout(function() {
-            //window.print();
-            //window.location = "index.php?pagina=detalles&id=" + id;
+            window.print();
+            window.location = "index.php?pagina=detalles&id=" + id;
         }, time);
     </script>
 </body>

@@ -3,12 +3,10 @@
 class portal_controller
 {
     public $tratos;
-    public $planes;
 
     function __construct()
     {
         $this->tratos = new tratos;
-        $this->planes = new productos;
     }
 
     public function pagina_principal()
@@ -129,14 +127,14 @@ class portal_controller
     {
         $trato = $this->tratos->detalles($_GET['id']);
         $cotizaciones = $trato->getFieldValue('Aseguradoras_Disponibles');
-        if ($_POST) {
+        if ($_POST or $_FILES) {
             $mensaje = $this->tratos->emitir($_GET['id']);
         }
         require("core/views/portal/template/header.php");
         require("core/views/portal/cotizaciones/emitir.php");
         require("core/views/portal/template/footer.php");
         if ($_POST) {
-            echo '<script>$("#modal").modal("show")</script>';
+            echo '<script>$("#emitir").modal("show")</script>';
         }
     }
 }

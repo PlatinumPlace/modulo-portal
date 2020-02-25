@@ -146,7 +146,7 @@
                 </div>
                 <?php foreach ($cotizaciones as $cotizacion) : ?>
                     <?php if ($cotizacion["Prima_Total"] > 0) : ?>
-                        <?php $ruta_imagen = $this->planes->generar_imagen_aseguradora($cotizacion["Plan"]["id"]) ?>
+                        <?php $ruta_imagen = $this->tratos->generar_imagen_aseguradora($cotizacion["Plan"]["id"]) ?>
                         <?php if ($ruta_imagen != null) : ?>
                             <div class="col-2">
                                 <img height="80" width="100" src="<?= $ruta_imagen ?>">
@@ -185,7 +185,7 @@
                 </div>
                 <?php foreach ($cotizaciones as $cotizacion) : ?>
                     <?php if ($cotizacion["Prima_Total"] > 0) : ?>
-                        <?php $coberturas = $this->planes->coberturas(
+                        <?php $coberturas = $this->tratos->ver_coberturas(
                             $cotizacion["Plan"]["id"],
                             $trato->getFieldValue('Account_Name')->getEntityId()
                         ) ?>

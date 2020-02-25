@@ -96,7 +96,7 @@ class api
         echo "Details:" . json_encode($responseIns->getDetails());
     }
 
-    public function downloadRecordPhoto($module_name, $record_id, $filePath)
+    public function downloadPhoto($module_name, $record_id, $filePath)
     {
         $record = ZCRMRestClient::getInstance()->getRecordInstance($module_name, $record_id);
         $fileResponseIns = $record->downloadPhoto();
@@ -123,5 +123,20 @@ class api
             echo $ex->getFile();
         }
         return $records;
+    }
+
+    public function uploadAttachment($module_name,$record_id,$filePath)
+    {
+        $record = ZCRMRestClient::getInstance()->getRecordInstance($module_name,$record_id);
+        $responseIns = $record->uploadAttachment($filePath);
+        echo "HTTP Status Code:" . $responseIns->getHttpStatusCode();
+        echo "<br/>";
+        echo "Status:" . $responseIns->getStatus();
+        echo "<br/>";
+        echo "Message:" . $responseIns->getMessage();
+        echo "<br/>";
+        echo "Code:" . $responseIns->getCode();
+        echo "<br/>";
+        echo "Details:" . $responseIns->getDetails()['id'];
     }
 }

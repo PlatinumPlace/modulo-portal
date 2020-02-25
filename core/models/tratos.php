@@ -119,16 +119,19 @@ class tratos extends api
 
     public function emitir($trato_id)
     {
-        $ruta_cotizacion = "file/cotizaciones/" . $trato_id;
+        $ruta_cotizacion = "tmp";
         if (!is_dir($ruta_cotizacion)) {
             mkdir($ruta_cotizacion, 0755, true);
         }
-        if (isset($_POST['aseguradora']) and isset($_FILES["cotizacion_firmada"])) {
+        if (isset($_FILES["cotizacion_firmada"])) {
             $extension = pathinfo($_FILES["cotizacion_firmada"]["name"], PATHINFO_EXTENSION);
-            if ($extension == "pdf" or $extension == "docx") {
-                $nombreArchivo = $trato_id . "." . $extension;
+            $permitido = array("pdf");
+            if (in_array($extension, $permitido)) {
+                $nombreArchivo = "Cotización" . "." . $extension;
                 $nuevaUbicacion = $ruta_cotizacion . "/" . $nombreArchivo;
                 if (move_uploaded_file($_FILES['cotizacion_firmada']['tmp_name'], $nuevaUbicacion)) {
+                    $this->uploadAttachment("Deals", $trato_id, $nuevaUbicacion);
+                    unlink($nuevaUbicacion);
                     $cambios["Aseguradora"] = $_POST["aseguradora"];
                     $cambios["Stage"] = "En trámite";
                     $this->updateRecord("Deals", $cambios, $trato_id);
@@ -140,18 +143,42 @@ class tratos extends api
                 return "Error al cargar documentos,formatos adminitos: PDF,DOCX";
             }
         }
-        /*
-        elseif (isset($_FILES["expedientes"])) {
-            foreach ($_FILES["expedientes"]['tmp_name'] as $key => $tmp_name) {
-                if ($_FILES["expedientes"]["name"][$key]) {
-                    $extension = pathinfo($_FILES["expedientes"]["name"][$key], PATHINFO_EXTENSION);
-                    $archivonombre = $_FILES["expedientes"]["name"][$key];
-                    $nombreArchivo = $archivonombre . "." . $extension;
-                    $nuevaUbicacion = $ruta_cotizacion . "/" . $nombreArchivo;
-                    move_uploaded_file($_FILES["expedientes"]["tmp_name"][$key], $nuevaUbicacion);
+        if (isset($_FILES["documentos"])) {
+            foreach ($_FILES["documentos"]["error"] as $key => $error) {
+                if ($error == UPLOAD_ERR_OK) {
+                    $tmp_name = $_FILES["documentos"]["tmp_name"][$key];
+                    $name = basename($_FILES["documentos"]["name"][$key]);
+                    move_uploaded_file($tmp_name, "$ruta_cotizacion/$name");
+                    $this->uploadAttachment("Deals", $trato_id, "$ruta_cotizacion/$name");
+                    unlink("$ruta_cotizacion/$name");
                 }
             }
+            return "Archivos subidos";
         }
-        */
+    }
+
+    public function ver_coberturas($plan_id, $cuenta_id)
+    {
+        $plan_detalles = $this->getRecord("Products", $plan_id);
+        if ($plan_detalles->getFieldValue('Vendor_Name') != null) {
+            $criterio = "((Aseguradora:equals:" . $plan_detalles->getFieldValue('Vendor_Name')->getEntityId() . ") and (Socio_IT:equals:" . $cuenta_id . "))";
+            return $this->searchRecordsByCriteria("Coberturas", $criterio);
+        } else {
+            return null;
+        }
+    }
+
+    public function generar_imagen_aseguradora($plan_id)
+    {
+        $plan_detalles = $this->getRecord("Products", $plan_id);
+        if ($plan_detalles->getFieldValue('Vendor_Name') != null) {
+            return $this->downloadPhoto(
+                "Vendors",
+                $plan_detalles->getFieldValue('Vendor_Name')->getEntityId(),
+                "public/img/Aseguradoras/"
+            );
+        } else {
+            return null;
+        }
     }
 }

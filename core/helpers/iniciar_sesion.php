@@ -1,8 +1,6 @@
 <?php
 
-//use zcrmsdk\crm\setup\restclient\ZCRMRestClient;
 $api = new api;
-//ZCRMRestClient::initialize($api->configuration);
 $criterio = "((Usuario:equals:" . $_POST['usuario'] . ") and (Contrase_a:equals:" . $_POST['clave'] . "))";
 $contactos = $api->searchRecordsByCriteria("Contacts", $criterio);
 if (!empty($contactos)) {
