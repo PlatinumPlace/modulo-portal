@@ -1,12 +1,19 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 
 <head>
+    <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+
+    <!-- Bootstrap core CSS -->
+    <link href="public/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="public/css/simple-sidebar.css" rel="stylesheet">
+
     <title>
-        <?php if ($trato->getFieldValue('Aseguradora') == null) : ?>
+        <?php if ($trato->getFieldValue('Stage') == "Cotizando") : ?>
             Cotización No.
         <?php else : ?>
             Póliza No.
@@ -27,22 +34,19 @@
     <div class="container">
         <div class="row">
             <div class="col-2">
-                <?php if ($trato->getFieldValue('Aseguradora') == null) : ?>
-                    <img src="img/portal/logo.png" width="120" height="140">
+                <?php if ($trato->getFieldValue('Stage') == "Cotizando") : ?>
+                    <img src="public/img/portal/logo.png" width="120" height="140">
                 <?php else : ?>
-                    <?php $planes = $cotizacion->getLineItems() ?>
-                    <?php foreach ($planes as $plan) : ?>
-                        <?php $ruta_imagen = $this->planes->generar_imagen_aseguradora($plan->getProduct()->getEntityId()) ?>
-                        <?php if ($ruta_imagen != null) : ?>
-                            <img height="100" width="120" src="<?= $ruta_imagen ?>">
-                        <?php endif ?>
+                    <?php foreach ($cotizaciones as $cotizacion) : ?>
+                        <?php $ruta_imagen = $this->planes->generar_imagen_aseguradora($cotizacion["Plan"]["id"]) ?>
+                        <img height="100" width="120" src="<?= $ruta_imagen ?>">
                     <?php endforeach ?>
                 <?php endif ?>
             </div>
             <div class="col-8">
                 <center>
                     <h3>
-                        <?php if ($trato->getFieldValue('Aseguradora') == null) : ?>
+                        <?php if ($trato->getFieldValue('Stage') == "Cotizando") : ?>
                             COTIZACIÓN
                         <?php else : ?>
                             RESUMEN COBERTURAS
@@ -56,7 +60,7 @@
             <div class="col-2">
                 <p>
                     <b>
-                        <?php if ($trato->getFieldValue('Aseguradora') == null) : ?>
+                        <?php if ($trato->getFieldValue('Stage') == "Cotizando") : ?>
                             Cotización No.
                         <?php else : ?>
                             Póliza No.
@@ -160,11 +164,12 @@
                     <div class="col">
                         &nbsp;
                     </div>
-                    <?php if ($trato->getFieldValue('Aseguradora') == null) : ?>
-                        <?php $planes = $cotizacion->getLineItems() ?>
-                        <?php foreach ($planes as $plan) : ?>
-                            <?php if ($plan->getListPrice() > 0) : ?>
-                                <?php $ruta_imagen = $this->planes->generar_imagen_aseguradora($plan->getProduct()->getEntityId()) ?>
+                    <?php if ($trato->getFieldValue('Stage') == "Cotizando") : ?>
+                        <?php foreach ($cotizaciones as $cotizacion) : ?>
+                            <?php if ($cotizacion["Prima_Total"] > 0) : ?>
+                                <?php $ruta_imagen = $this->planes->generar_imagen_aseguradora(
+                                    $cotizacion["Plan"]["id"]
+                                ) ?>
                                 <?php if ($ruta_imagen != null) : ?>
                                     <div class="col-2">
                                         <img height="80" width="100" src="<?= $ruta_imagen ?>">
@@ -202,11 +207,10 @@
                             <b>Prima Total</b>
                         </p>
                     </div>
-                    <?php $planes = $cotizacion->getLineItems() ?>
-                    <?php foreach ($planes as $plan) : ?>
-                        <?php if ($plan->getListPrice() > 0) : ?>
+                    <?php foreach ($cotizaciones as $cotizacion) : ?>
+                        <?php if ($cotizacion["Prima_Total"] > 0) : ?>
                             <?php $coberturas = $this->planes->coberturas(
-                                $plan->getProduct()->getEntityId(),
+                                $cotizacion["Plan"]["id"],
                                 $trato->getFieldValue('Account_Name')->getEntityId()
                             ) ?>
                             <?php if ($coberturas != null) : ?>
@@ -231,9 +235,9 @@
                                             <?= $retVal = ($cobertura->getFieldValue('Asistencia_vial') == 1) ? "Aplica" : "No Aplica"; ?><br>
                                             <?= $retVal = ($cobertura->getFieldValue('Renta_Veh_culo') == 1) ? "Aplica" : "No Aplica"; ?><br>
                                             <?= $retVal = ($cobertura->getFieldValue('Casa_del_Conductor') == 1) ? "Aplica" : "No Aplica"; ?><br><br>
-                                            RD$<?= number_format($plan->getListPrice(), 2) ?><br>
-                                            RD$<?= number_format($plan->getTaxAmount(), 2) ?><br>
-                                            RD$<?= number_format($plan->getNetTotal(), 2) ?>
+                                            RD$<?= number_format($cotizacion["Prima_Neta"], 2) ?><br>
+                                            RD$<?= number_format($cotizacion["ISC"], 2) ?><br>
+                                            RD$<?= number_format($cotizacion["Prima_Total"], 2) ?>
                                         </p>
                                     </div>
                                 <?php endforeach ?>
@@ -243,63 +247,75 @@
                 </div>
             </div>
         </div>
-        <?php if ($trato->getFieldValue('Aseguradora') != null) : ?>
+        <?php if ($trato->getFieldValue('Stage') != "Cotizando") : ?>
             <!-- <div class="saltoDePagina"></div> -->
-            <div class="col-12">
-                <div class="card">
-                    <div class="card-content">
-                        <div class="row">
-                            <?php $coberturas = $this->planes->coberturas(
-                                $plan->getProduct()->getEntityId(),
-                                $trato->getFieldValue('Account_Name')->getEntityId()
-                            ) ?>
-                            <?php foreach ($coberturas as $cobertura) : ?>
+            <?php foreach ($cotizaciones as $cotizacion) : ?>
+                <?php $coberturas = $this->planes->coberturas(
+                    $cotizacion["Plan"]["id"],
+                    $trato->getFieldValue('Account_Name')->getEntityId()
+                ) ?>
+                <?php foreach ($coberturas as $cobertura) : ?>
+                    <div class="row">
+                        <div class="col-6 border">
+                            <?php foreach ($cotizaciones as $cotizacion) : ?>
+                                <?php $ruta_imagen = $this->planes->generar_imagen_aseguradora(
+                                    $cotizacion["Plan"]["id"]
+                                ) ?> <?php if ($ruta_imagen != null) : ?>
+                                    <img height="100" width="160" src="<?= $ruta_imagen ?>">
+                                <?php endif ?>
+                            <?php endforeach ?>
+                            <br><br>
+                            <div class="row">
                                 <div class="col">
-                                    <?php $planes = $cotizacion->getLineItems() ?>
-                                    <?php foreach ($planes as $plan) : ?>
-                                        <?php $ruta_imagen = $this->planes->generar_imagen_aseguradora($plan->getProduct()->getEntityId()) ?>
-                                        <?php if ($ruta_imagen != null) : ?>
-                                            <img height="100" width="160" src="<?= $ruta_imagen ?>">
-                                        <?php endif ?>
-                                    <?php endforeach ?>
                                     <P>
-                                        <b>PÓLIZA </b><?= $cotizacion->getFieldValue('Poliza')->getLookupLabel() ?><br>
-                                        <b>MARCA </b><?= $trato->getFieldValue('Marca') ?><br>
-                                        <b>MODELO </b><?= $trato->getFieldValue('Modelo') ?><br>
-                                        <b>AÑO </b><?= $trato->getFieldValue('A_o_de_Fabricacion') ?><br>
-                                        <b>CHASIS </b><?= $trato->getFieldValue('Chasis') ?><br>
-                                        <b>PLACA </b><?= $trato->getFieldValue('Placa') ?><br>
-                                        <b>VIGENTE HASTA </b><?= $trato->getFieldValue('Closing_Date') ?>
+                                        <b>PÓLIZA </b><br>
+                                        <b>MARCA </b><br>
+                                        <b>MODELO </b><br>
+                                        <b>AÑO </b><br>
+                                        <b>CHASIS </b><br>
+                                        <b>PLACA </b><br>
+                                        <b>VIGENTE HASTA </b>
                                     </P>
                                 </div>
                                 <div class="col">
-                                    <FONT SIZE=2>
-                                        <P>
-                                            <b>RECOMENDACIONES EN CASO DE ACCIDENTE</b><br>
-                                            <ul>
-                                                <li>EN CASO DE EXISTIR LESIONADOS ATENDER AL HERIDO.</li>
-                                                <li>NO ACEPTAR RESPONSABILIDAD EN EL MOMENTO DEL ACCIDENTE.</li>
-                                                <li>EN CASO DE ROBO NOTIFIQUE INMEDIATAMENTE A LA POLICIA Y ASEGURADORA.</li>
-                                            </ul>
-                                            <?php if ($cobertura->getFieldValue('Casa_del_Conductor') == 1) : ?>
-                                                <b>CENTRO DE ASISTENCIA AL AUTOMOVILISTA</b><br>
-                                                SANTO DOMINGO: (809) 565-8222 <br>
-                                                SANTIAGO: (809) 583-6222<br>
-                                            <?php endif ?>
-                                            <?php if ($cobertura->getFieldValue('Asistencia_vial') == 1) : ?>
-                                                <b>ASISTENCIA VIAL 24 HORAS</b><br>
-                                                (829) 378-8888<br>
-                                            <?php endif ?>
-                                        </P>
-                                    </FONT>
+                                    <P>
+                                        <?= $cotizacion->getFieldValue('Poliza')->getLookupLabel() ?><br>
+                                        <?= $trato->getFieldValue('Marca') ?><br>
+                                        <?= $trato->getFieldValue('Modelo') ?><br>
+                                        <?= $trato->getFieldValue('A_o_de_Fabricacion') ?><br>
+                                        <?= $trato->getFieldValue('Chasis') ?><br>
+                                        <?= $trato->getFieldValue('Placa') ?><br>
+                                        <?= $trato->getFieldValue('Closing_Date') ?>
+                                    </P>
                                 </div>
-                            <?php endforeach ?>
+                            </div>
+                        </div>
+                        <div class="col-6 border">
+                            <FONT SIZE=2>
+                                <P>
+                                    <b>RECOMENDACIONES EN CASO DE ACCIDENTE</b><br>
+                                    <ul>
+                                        <li>EN CASO DE EXISTIR LESIONADOS ATENDER AL HERIDO.</li>
+                                        <li>NO ACEPTAR RESPONSABILIDAD EN EL MOMENTO DEL ACCIDENTE.</li>
+                                        <li>EN CASO DE ROBO NOTIFIQUE INMEDIATAMENTE A LA POLICIA Y ASEGURADORA.</li>
+                                    </ul>
+                                    <?php if ($cobertura->getFieldValue('Casa_del_Conductor') == 1) : ?>
+                                        <b>CENTRO DE ASISTENCIA AL AUTOMOVILISTA</b><br>
+                                        SANTO DOMINGO: (809) 565-8222 <br>
+                                        SANTIAGO: (809) 583-6222<br>
+                                    <?php endif ?>
+                                    <?php if ($cobertura->getFieldValue('Asistencia_vial') == 1) : ?>
+                                        <b>ASISTENCIA VIAL 24 HORAS</b><br>
+                                        (829) 378-8888<br>
+                                    <?php endif ?>
+                                </P>
+                            </FONT>
                         </div>
                     </div>
-                </div>
-            </div>
+                <?php endforeach ?>
+            <?php endforeach ?>
         <?php else : ?>
-            <br><br><br>
+            <br><br>
             <div class="row">
                 <div class="col">
                     <p>
@@ -327,17 +343,12 @@
     </div>
 
     <input type="text" value="<?= $_GET['id'] ?>" id="id" hidden>
-    <!-- Optional JavaScript -->
-    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
     <script>
         var time = 500;
         var id = document.getElementById('id').value;
         setTimeout(function() {
-            window.print();
-            window.location = "index.php?pagina=detalles&id=" + id;
+            //window.print();
+            //window.location = "index.php?pagina=detalles&id=" + id;
         }, time);
     </script>
 </body>

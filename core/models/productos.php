@@ -1,6 +1,6 @@
 <?php
 
-class products_model extends api_model
+class productos extends api
 {
     public function generar_imagen_aseguradora($plan_id)
     {
@@ -9,7 +9,7 @@ class products_model extends api_model
             return $this->downloadRecordPhoto(
                 "Vendors",
                 $plan_detalles->getFieldValue('Vendor_Name')->getEntityId(),
-                "img/Aseguradoras/"
+                "public/img/Aseguradoras/"
             );
         } else {
             return null;
@@ -25,14 +25,6 @@ class products_model extends api_model
         } else {
             return null;
         }
-    }
-
-    public function detalles_aseguradora($plan_id)
-    {
-        $plan_detalles = $this->getRecord("Products", $plan_id);
-        $resultado['nombre'] = $plan_detalles->getFieldValue('Vendor_Name')->getLookupLabel();
-        $resultado['id'] = $plan_detalles->getFieldValue('Vendor_Name')->getEntityId();
-        return $resultado;
     }
 
 }

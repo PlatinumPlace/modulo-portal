@@ -4,7 +4,7 @@ use zcrmsdk\crm\crud\ZCRMRecord;
 use zcrmsdk\crm\setup\restclient\ZCRMRestClient;
 use zcrmsdk\crm\exception\ZCRMException;
 
-class api_model
+class api
 {
     public $configuration = array(
         "client_id" => "",
@@ -32,7 +32,6 @@ class api_model
             echo $ex->getExceptionCode();
             echo "<br/>";
             echo $ex->getFile();
-            echo "<br/>";
         }
         return $records;
     }
@@ -57,7 +56,6 @@ class api_model
             echo "Code:" . $responseIns->getCode();
             echo "<br/>";
             echo "Details:" . json_encode($responseIns->getDetails());
-            echo "<br/>";
             $result = json_decode(json_encode($responseIns->getDetails()), true);
         }
         return $result;
@@ -76,7 +74,6 @@ class api_model
             echo $ex->getExceptionCode();
             echo "<br/>";
             echo $ex->getFile();
-            echo "<br/>";
         }
         return $record;
     }
@@ -97,8 +94,6 @@ class api_model
         echo "Code:" . $responseIns->getCode();
         echo "<br/>";
         echo "Details:" . json_encode($responseIns->getDetails());
-        $result = json_decode(json_encode($responseIns->getDetails()), true);
-        return $result;
     }
 
     public function downloadRecordPhoto($module_name, $record_id, $filePath)
@@ -126,7 +121,6 @@ class api_model
             echo $ex->getExceptionCode();
             echo "<br/>";
             echo $ex->getFile();
-            echo "<br/>";
         }
         return $records;
     }

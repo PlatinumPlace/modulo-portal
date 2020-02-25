@@ -1,6 +1,6 @@
 <?php
 
-class deals_model extends api_model
+class tratos extends api
 {
     public function resumen($contacto_id)
     {
@@ -13,8 +13,6 @@ class deals_model extends api_model
             foreach ($tratos as $trato) {
                 $resultado['total'] += 1;
                 if (
-                    $trato->getFieldValue("Aseguradora") != null
-                    and
                     date(
                         "Y-m",
                         strtotime($trato->getFieldValue("Closing_Date") . "- 1 year")
@@ -24,8 +22,6 @@ class deals_model extends api_model
                     $resultado['filtro_emisiones'] = $trato->getFieldValue("Stage");
                 }
                 if (
-                    $trato->getFieldValue("Aseguradora") != null
-                    and
                     date("Y-m", strtotime($trato->getFieldValue("Closing_Date"))) == date('Y-m')
                 ) {
                     $resultado['vencimientos'] += 1;
@@ -56,7 +52,6 @@ class deals_model extends api_model
         $trato["Placa"] = $_POST['placa'];
         $trato["Plan"] = $_POST['plan'];
         $trato["Type"] = "Vehículo";
-        $trato["Activo"] = true;
         $trato["RNC_Cedula_del_asegurado"] = $_POST['cedula'];
         $trato["Telefono_del_asegurado"] = $_POST['telefono'];
         $trato["Tipo_de_poliza"] = $_POST['poliza'];
@@ -67,7 +62,7 @@ class deals_model extends api_model
         } else {
             $trato["Es_nuevo"] = false;
         }
-        $this->createRecord("Deals", $trato);
+        return $this->createRecord("Deals", $trato);
     }
 
     public function detalles($trato_id)
@@ -144,7 +139,7 @@ class deals_model extends api_model
             } else {
                 return "Error al cargar documentos,formatos adminitos: PDF,DOCX";
             }
-        } 
+        }
         /*
         elseif (isset($_FILES["expedientes"])) {
             foreach ($_FILES["expedientes"]['tmp_name'] as $key => $tmp_name) {

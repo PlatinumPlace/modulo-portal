@@ -1,13 +1,13 @@
 <?php
-include "api/vendor/autoload.php";
-include "models/api_model.php";
+include "vendor/autoload.php";
+include dirname(__FILE__, 2) . '/core/models/api.php';
 
 use zcrmsdk\oauth\ZohoOAuth;
 use zcrmsdk\crm\setup\restclient\ZCRMRestClient;
 
 $mensaje = "";
 if ($_POST) {
-    $api = new api_model;
+    $api = new api;
     ZCRMRestClient::initialize($api->configuration);
     $oAuthClient = ZohoOAuth::getClientInstance();
     $grantToken = $_POST['grant_token'];
@@ -30,7 +30,7 @@ if ($_POST) {
         Generar token con clave de <a href="https://accounts.zoho.com/developerconsole" target="_blank">client propio</a>.
     </h1>
     <p>Ambito: <br> ZohoCRM.modules.ALL,ZohoCRM.settings.ALL,aaaserver.profile.READ</p>
-    <form action="api.php" method="post">
+    <form action="install.php" method="post">
         <label>Codigo</label>
         <input type="text" name="grant_token">
         <br>

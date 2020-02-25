@@ -1,29 +1,6 @@
 <?php
-
-include "models/api_model.php";
-include "api/vendor/autoload.php";
-
-use zcrmsdk\crm\setup\restclient\ZCRMRestClient;
-
 if ($_POST) {
-    $api = new api_model;
-    ZCRMRestClient::initialize($api->configuration);
-    $criterio = "((Usuario:equals:" . $_POST['usuario'] . ") and (Contrase_a:equals:" . $_POST['clave'] . "))";
-    $contactos = $api->searchRecordsByCriteria("Contacts", $criterio);
-    if (!empty($contactos)) {
-        foreach ($contactos as $contacto) {
-            if ($contacto->getFieldValue("Estado") == true) {
-                session_start();
-                $_SESSION["usuario"]["nombre"] = $contacto->getFieldValue("First_Name");
-                $_SESSION["usuario"]["id"] = $contacto->getEntityId();
-                header("Location: index.php");
-            } else {
-                $mensaje = "El usuario no esta activado.";
-            }
-        }
-    } else {
-        $mensaje = "Usuario o contraseña incorrectos.";
-    }
+    require_once('core/helpers/iniciar_sesion.php');
 }
 ?>
 <!doctype html>
@@ -35,13 +12,13 @@ if ($_POST) {
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
     <!-- Bootstrap core CSS -->
-    <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="public/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
 
     <!-- Custom styles for this template -->
-    <link href="css/simple-sidebar.css" rel="stylesheet">
+    <link href="public/css/simple-sidebar.css" rel="stylesheet">
 
     <title>IT - Insurance Tech</title>
-    <link rel="icon" type="image/png" href="img/portal/logo.png">
+    <link rel="icon" type="image/png" href="public/img/portal/logo.png">
 </head>
 
 <body class="bg-primary">
@@ -59,7 +36,7 @@ if ($_POST) {
                             <?php endif ?>
                         </div>
                         <div class="card-body">
-                            <form method="POST" action="login.php">
+                            <form method="POST" action="index.php">
                                 <div class="form-group">
                                     <label class="small mb-1">Usuario</label>
                                     <input class="form-control py-4" type="text" name="usuario" />
@@ -86,8 +63,8 @@ if ($_POST) {
         </div>
     </footer>
     <!-- Bootstrap core JavaScript -->
-    <script src="vendor/jquery/jquery.min.js"></script>
-    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="public/vendor/jquery/jquery.min.js"></script>
+    <script src="public/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 
 </body>
 

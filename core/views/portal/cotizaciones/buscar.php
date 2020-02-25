@@ -69,8 +69,12 @@
                                 <td>
                                     <div class="btn-group btn-group-sm" role="group">
                                         <a href="index.php?pagina=detalles&id=<?= $trato->getEntityId() ?>" class="btn btn-info">Detalles</a>
-                                        <a href="index.php?pagina=emitir&id=<?= $trato->getEntityId() ?>" class="btn btn-success">Emitir</a>
-                                        <?php if ($trato->getFieldValue('Aseguradora') == null and $trato->getFieldValue('Stage') != "Abandonado") : ?>
+                                        <?php if (
+                                            $trato->getFieldValue('Stage') == "Cotizando"
+                                            or
+                                            $trato->getFieldValue('Stage') != "Abandonado"
+                                        ) : ?>
+                                            <a href="index.php?pagina=emitir&id=<?= $trato->getEntityId() ?>" class="btn btn-success">Emitir</a>
                                             <a href="index.php?pagina=editar&id=<?= $trato->getEntityId() ?>" class="btn btn-warning">Editar</a>
                                         <?php endif ?>
                                         <a href="index.php?pagina=descargar&id=<?= $trato->getEntityId() ?>" class="btn btn-secondary">Descargar</a>

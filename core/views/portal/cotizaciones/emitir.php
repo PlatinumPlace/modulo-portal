@@ -2,20 +2,18 @@
   <h1 class="h2">Emitir con:</h1>
 </div>
 <form method="POST" enctype="multipart/form-data" action="index.php?pagina=emitir&id=<?= $trato->getEntityId() ?>">
-  <?php if ($trato->getFieldValue('Aseguradora') == null) : ?>
-    <div class="col-12">
-      <div class="card">
-        <div class="card-body">
-          <div class="form-row">
+  <div class="col-12">
+    <div class="card">
+      <div class="card-body">
+        <div class="form-row">
+          <?php if ($trato->getFieldValue('Stage') == "Cotizando") : ?>
             <div class="col-md-6">
               <div class="form-group">
                 <label class="small mb-1">Aseguradoras</label>
                 <select name="aseguradora" class="custom-select" required>
-                  <?php $planes = $cotizacion->getLineItems() ?>
-                  <?php foreach ($planes as $plan) : ?>
-                    <?php if ($plan->getListPrice() > 0) : ?>
-                      <?php $aseguradora = $this->planes->detalles_aseguradora($plan->getProduct()->getEntityId()) ?>
-                      <option value="<?= $aseguradora['id'] ?>"><?= $aseguradora['nombre'] ?></option>
+                  <?php foreach ($cotizaciones as $cotizacion) : ?>
+                    <?php if ($cotizacion["Prima_Total"] > 0) : ?>
+                      <option value="<?= $cotizacion["Aseguradora"]["id"] ?>"><?= $cotizacion["Aseguradora"]["name"] ?></option>
                     <?php else : ?>
                       <option value="" disabled selected>Aseguradora no disponible</option>
                     <?php endif ?>
@@ -23,20 +21,20 @@
                 </select>
               </div>
             </div>
-            <div class="col-md-6">
-              <div class="form-group">
-                <label class="small mb-1">&nbsp;</label>
-                <div class="custom-file">
-                  <input type="file" class="custom-file-input" id="cotizacion_firmada" name="cotizacion_firmada" required>
-                  <label class="custom-file-label" for="cotizacion_firmada">Cargar Cotización Firmada</label>
-                </div>
+          <div class="col-md-6">
+            <div class="form-group">
+              <label class="small mb-1">&nbsp;</label>
+              <div class="custom-file">
+                <input type="file" class="custom-file-input" id="cotizacion_firmada" name="cotizacion_firmada" required>
+                <label class="custom-file-label" for="cotizacion_firmada">Cargar Cotización Firmada</label>
               </div>
             </div>
           </div>
+          <?php endif ?>
         </div>
       </div>
     </div>
-  <?php endif ?>
+  </div>
   <div class="col-12">
     &nbsp;
   </div>
