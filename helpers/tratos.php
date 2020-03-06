@@ -41,7 +41,7 @@ class tratos extends api
     {
         $trato["Contact_Name"] = $_SESSION['usuario']['id'];
         $trato["Lead_Source"] = "Portal GNB";
-        $trato["Deal_Name"] = "Trato creado desde el portal";
+        $trato["Deal_Name"] = "Cotización";
         $trato["Direcci_n_del_asegurado"] = $_POST['direccion'];
         $trato["A_o_de_Fabricacion"] = $_POST['A_o_de_Fabricacion'];
         $trato["Chasis"] = $_POST['chasis'];
@@ -57,6 +57,7 @@ class tratos extends api
         $trato["Placa"] = $_POST['placa'];
         $trato["Plan"] = $_POST['plan'];
         $trato["Type"] = $_POST['cotizacion'];
+        $trato["Per_odo"] = $_POST['periodo'];
         $trato["Uso"] = $_POST['uso'];
         $trato["RNC_Cedula_del_asegurado"] = $_POST['cedula'];
         $trato["Telefono_del_asegurado"] = $_POST['telefono'];
@@ -109,9 +110,8 @@ class tratos extends api
         $trato["Plan"] = $_POST['plan'];
         $trato["Tipo_de_poliza"] = $_POST['poliza'];
         $trato["Valor_Asegurado"] = $_POST['Valor_Asegurado'];
-        if ($_POST['cotizacion'] == "Auto") {
-            $trato["Type"] = "Auto";
-        }
+        $trato["Type"] = $_POST['cotizacion'];
+        $trato["Per_odo"] = $_POST['periodo'];
         $trato["Uso"] = $_POST['uso'];
         if (isset($_POST['estado'])) {
             $trato["Es_nuevo"] = true;
@@ -137,19 +137,16 @@ class tratos extends api
             $extension = pathinfo($_FILES["cotizacion_firmada"]["name"], PATHINFO_EXTENSION);
             $permitido = array("pdf");
             if (in_array($extension, $permitido)) {
-                $nombreArchivo = "Cotización" . "." . $extension;
-                $nuevaUbicacion = $ruta_cotizacion . "/" . $nombreArchivo;
-                if (move_uploaded_file($_FILES['cotizacion_firmada']['tmp_name'], $nuevaUbicacion)) {
-                    $this->uploadAttachment("Deals", $trato_id, $nuevaUbicacion);
-                    unlink($nuevaUbicacion);
-                    $cambios["Aseguradora"] = $_POST["aseguradora"];
-                    $cambios["Stage"] = "En trámite";
-                    return $this->updateRecord("Deals", $cambios, $trato_id);
-                } else {
-                    return "No se pudo subir el documento,intentelo mas tarde";
-                }
+                $tmp_name = $_FILES["cotizacion_firmada"]["tmp_name"];
+                $name = basename($_FILES["cotizacion_firmada"]["name"]);
+                move_uploaded_file($tmp_name, "$ruta_cotizacion/$name");
+                $this->uploadAttachment("Deals", $trato_id, "$ruta_cotizacion/$name");
+                unlink("$ruta_cotizacion/$name");
+                $cambios["Aseguradora"] = $_POST["aseguradora"];
+                $cambios["Stage"] = "En trámite";
+                return $this->updateRecord("Deals", $cambios, $trato_id);
             } else {
-                return "Error al cargar documentos,formatos adminitos: PDF,DOCX";
+                return "Error al cargar documentos,formatos adminitos: PDF";
             }
         }
         if (isset($_FILES["documentos"])) {

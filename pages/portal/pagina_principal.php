@@ -52,7 +52,7 @@ $resumen = $tratos->resumen($_SESSION['usuario']['id']);
   </div>
   <div class="col mb-4">
     <div class="card">
-      <div class="card-header text-white bg-primary">
+      <div class="card-header text-white bg-warning">
         <div class="row">
           <div class="col">
             <h1><?= $resumen['vencimientos'] ?></h1>

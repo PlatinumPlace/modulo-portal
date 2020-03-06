@@ -13,6 +13,24 @@ $cotizaciones = $trato->getFieldValue('Aseguradoras_Disponibles');
         <?php endif ?>
         <?= $trato->getFieldValue('No_de_cotizaci_n') ?>
     </title>
+
+    <link href="css/styles.css" rel="stylesheet" />
+
+
+    <style>
+        @media all {
+            div.saltopagina {
+                display: none;
+            }
+        }
+
+        @media print {
+            div.saltopagina {
+                display: block;
+                page-break-before: always;
+            }
+        }
+    </style>
 </head>
 
 <body>
@@ -39,7 +57,7 @@ $cotizaciones = $trato->getFieldValue('Aseguradoras_Disponibles');
                         <?php endif ?>
                         <br>
                         SEGURO VEHICULO DE MOTOR <br>
-                        PLAN <?= strtoupper($trato->getFieldValue('Plan')) ?> <?= strtoupper($trato->getFieldValue('Tipo_de_poliza')) ?>
+                        PLAN <?= strtoupper($trato->getFieldValue('Tipo_de_poliza')) . " " . strtoupper($trato->getFieldValue('Plan')) ?>
                     </h3>
                 </center>
             </div>
@@ -234,7 +252,7 @@ $cotizaciones = $trato->getFieldValue('Aseguradoras_Disponibles');
             </div>
         </div>
         <?php if ($trato->getFieldValue('Stage') != "Cotizando") : ?>
-            <div class="saltoDePagina"></div>
+            <div class="saltopagina"></div>
             <?php foreach ($cotizaciones as $cotizacion) : ?>
                 <?php $coberturas = $tratos->ver_coberturas(
                     $cotizacion["Plan"]["id"],

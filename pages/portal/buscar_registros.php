@@ -5,6 +5,10 @@ if ($_POST) {
 } else {
     $resultado = $tratos->lista($_SESSION['usuario']['id']);
 }
+if (isset($_GET['action']) and $_GET['action'] == "delete") {
+    $tratos->eliminar($_GET['id']);
+    header("Location: index.php?page=details&id=" . $_GET['id']);
+}
 ?>
 <h1 class="mt-4">Buscar Registros</h1>
 <ol class="breadcrumb mb-4">
@@ -75,6 +79,7 @@ if ($_POST) {
                         <?php endif ?>
                         <?php if ($trato->getFieldValue('Stage') == "Cotizando") : ?>
                             <a href="index.php?page=edit&id=<?= $trato->getEntityId() ?>" title="Editar"><i class="fas fa-edit"></i></a>
+                            <a href="index.php?page=search&action=delete&id=<?= $trato->getEntityId() ?>" onclick="return confirm('¿Estas seguro?');"><i class="fas fa-trash"></i></a>
                         <?php endif ?>
                     </td>
                 </tr>

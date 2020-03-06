@@ -2,12 +2,12 @@
 $tratos = new tratos();
 $trato = $tratos->detalles($_GET['id']);
 $cotizaciones = $trato->getFieldValue('Aseguradoras_Disponibles');
-if (isset($_POST['eliminar'])) {
+if (isset($_GET['action']) and $_GET['action'] == "delete") {
     $tratos->eliminar($_GET['id']);
     header("Location: index.php?page=details&id=" . $_GET['id']);
 }
 ?>
-<h1 class="mt-4">Crear Cotización</h1>
+<h1 class="mt-4">Detalles Cotizaciones</h1>
 <ol class="breadcrumb mb-4">
     <li class="breadcrumb-item">Cotizaciones</li>
     <li class="breadcrumb-item">Detalles</li>
@@ -16,7 +16,7 @@ if (isset($_POST['eliminar'])) {
 
 <div class="row">
 
-    <div class="col-8">
+    <div class="col-6">
         <h3>
             <?php if ($trato->getFieldValue('Stage') == "Cotizando") : ?>
                 COTIZACIÓN
@@ -25,21 +25,33 @@ if (isset($_POST['eliminar'])) {
             <?php endif ?>
             <br>
             SEGURO VEHICULO DE MOTOR <br>
-            PLAN <?= strtoupper($trato->getFieldValue('Plan')) ?> <?= strtoupper($trato->getFieldValue('Tipo_de_poliza')) ?>
+            PLAN <?= strtoupper($trato->getFieldValue('Tipo_de_poliza')) . " " . strtoupper($trato->getFieldValue('Plan')) ?>
         </h3>
     </div>
-    <div class="col-4">
-        <a href="index.php?page=search" class="btn btn-secondary"><i class="fas fa-arrow-left"></i> Ir a la lista</a>
-        <?php if ($trato->getFieldValue('Stage') != "Abandonado") : ?>
-            <a href="index.php?page=emit&id=<?= $trato->getEntityId() ?>" class="btn btn-success"><i class="fas fa-portrait"></i> Emitir</a>
-            <a href="index.php?page=edit&id=<?= $trato->getEntityId() ?>" class="btn btn-warning"><i class="fas fa-edit"></i> Editar</a>
-            <br><br>
-            <a href="index.php?page=download&id=<?= $trato->getEntityId() ?>" class="btn btn-primary"><i class="fas fa-download"></i>Descargar</a>
-        <?php endif ?>
+    <div class="col-6">
+        <div class="row">
+            <div class="col">
+                <a href="index.php?page=search" class="btn btn-secondary"><i class="fas fa-list"></i> Lista</a>
+            </div>
+            <?php if ($trato->getFieldValue('Stage') != "Abandonado") : ?>
+                <div class="col">
+                    <a href="index.php?page=emit&id=<?= $trato->getEntityId() ?>" class="btn btn-success"><i class="fas fa-portrait"></i> Emitir</a>
+                </div>
+                <div class="col">
+                    <a href="index.php?page=edit&id=<?= $trato->getEntityId() ?>" class="btn btn-warning"><i class="fas fa-edit"></i> Editar</a>
+                </div>
+                <div class="col">
+                    <a href="index.php?page=download&id=<?= $trato->getEntityId() ?>" class="btn btn-primary"><i class="fas fa-download"></i> Descargar</a>
+                </div>
+                <div class="col">
+                    <a href="index.php?page=details&action=delete&id=<?= $trato->getEntityId() ?>" onclick="return confirm('¿Estas seguro?');" class="btn btn-danger"><i class="fas fa-trash"></i>Eliminar</a>
+                </div>
+            <?php endif ?>
+        </div>
     </div>
 
     <?php if ($trato->getFieldValue('Stage') == "Abandonado") : ?>
-        <div class="col-12 alert alert-danger" role="alert">
+        <div class="alert alert-danger" role="alert">
             Cotización Abandonada
         </div>
     <?php endif ?>
@@ -134,16 +146,14 @@ if (isset($_POST['eliminar'])) {
         <h4>COBERTURAS</h4>
     </div>
 
-    <div class="row">
-        <?php foreach ($cotizaciones as $cotizacion) : ?>
-            <?php if ($cotizacion["Prima_Total"] == 0) : ?>
-                <div class="col alert alert-info" role="alert">
-                    La aseguradora <strong><?= $cotizacion["Aseguradora"]["name"] ?></strong> no esta disponible para cotizar.
-                    </span>
-                </div>
-            <?php endif ?>
-        <?php endforeach ?>
-    </div>
+    <?php foreach ($cotizaciones as $cotizacion) : ?>
+        <?php if ($cotizacion["Prima_Total"] == 0) : ?>
+            <div class="alert alert-info" role="alert">
+                La aseguradora <strong><?= $cotizacion["Aseguradora"]["name"] ?></strong> no esta disponible para cotizar.
+                </span>
+            </div>
+        <?php endif ?>
+    <?php endforeach ?>
 
     <div class="col-12">
         <div class="row">
@@ -201,31 +211,33 @@ if (isset($_POST['eliminar'])) {
                     ) ?>
                     <?php if ($coberturas != null) : ?>
                         <?php foreach ($coberturas as $cobertura) : ?>
-                            <div class="col-2">
-                                <p>
-                                    <b>&nbsp;</b><br>
-                                    <?= $cobertura->getFieldValue('Riesgos_comprensivos') ?>%<br>
-                                    <?= $cobertura->getFieldValue('Riesgos_comprensivos_Deducible') ?>%<br>
-                                    <?= $cobertura->getFieldValue('Rotura_de_Cristales_Deducible') ?>%<br>
-                                    <?= $cobertura->getFieldValue('Colisi_n_y_vuelco') ?>%<br>
-                                    <?= $cobertura->getFieldValue('Incendio_y_robo') ?>% <br><br>
-                                    <b>&nbsp;</b><br>
-                                    RD$<?= number_format($cobertura->getFieldValue('Da_os_Propiedad_ajena'), 2) ?><br>
-                                    RD$<?= number_format($cobertura->getFieldValue('Lesiones_Muerte_1_Pers'), 2) ?><br>
-                                    RD$<?= number_format($cobertura->getFieldValue('Lesiones_Muerte_m_s_de_1_Pers'), 2) ?><br>
-                                    RD$<?= number_format($cobertura->getFieldValue('Lesiones_Muerte_1_pasajero'), 2) ?><br>
-                                    RD$<?= number_format($cobertura->getFieldValue('Lesiones_Muerte_m_s_de_1_pasajero'), 2) ?><br><br>
-                                    RD$<?= number_format($cobertura->getFieldValue('Riesgos_conductor'), 2) ?><br><br>
-                                    RD$<?= number_format($cobertura->getFieldValue('Fianza_judicial'), 2) ?><br><br>
-                                    <b>&nbsp;</b><br>
-                                    <?= $retVal = ($cobertura->getFieldValue('Asistencia_vial') == 1) ? "Aplica" : "No Aplica"; ?><br>
-                                    <?= $retVal = ($cobertura->getFieldValue('Renta_Veh_culo') == 1) ? "Aplica" : "No Aplica"; ?><br>
-                                    <?= $retVal = ($cobertura->getFieldValue('Casa_del_Conductor') == 1) ? "Aplica" : "No Aplica"; ?><br><br>
-                                    RD$<?= number_format($cotizacion["Prima_Neta"], 2) ?><br>
-                                    RD$<?= number_format($cotizacion["ISC"], 2) ?><br>
-                                    RD$<?= number_format($cotizacion["Prima_Total"], 2) ?>
-                                </p>
-                            </div>
+                            <?php if ($cobertura->getFieldValue('Tipo_de_Plan') == $trato->getFieldValue('Plan')) : ?>
+                                <div class="col-2">
+                                    <p>
+                                        <b>&nbsp;</b><br>
+                                        <?= $cobertura->getFieldValue('Riesgos_comprensivos') ?>%<br>
+                                        <?= $cobertura->getFieldValue('Riesgos_comprensivos_Deducible') ?>%<br>
+                                        <?= $cobertura->getFieldValue('Rotura_de_Cristales_Deducible') ?>%<br>
+                                        <?= $cobertura->getFieldValue('Colisi_n_y_vuelco') ?>%<br>
+                                        <?= $cobertura->getFieldValue('Incendio_y_robo') ?>% <br><br>
+                                        <b>&nbsp;</b><br>
+                                        RD$<?= number_format($cobertura->getFieldValue('Da_os_Propiedad_ajena'), 2) ?><br>
+                                        RD$<?= number_format($cobertura->getFieldValue('Lesiones_Muerte_1_Pers'), 2) ?><br>
+                                        RD$<?= number_format($cobertura->getFieldValue('Lesiones_Muerte_m_s_de_1_Pers'), 2) ?><br>
+                                        RD$<?= number_format($cobertura->getFieldValue('Lesiones_Muerte_1_pasajero'), 2) ?><br>
+                                        RD$<?= number_format($cobertura->getFieldValue('Lesiones_Muerte_m_s_de_1_pasajero'), 2) ?><br><br>
+                                        RD$<?= number_format($cobertura->getFieldValue('Riesgos_conductor'), 2) ?><br><br>
+                                        RD$<?= number_format($cobertura->getFieldValue('Fianza_judicial'), 2) ?><br><br>
+                                        <b>&nbsp;</b><br>
+                                        <?= $retVal = ($cobertura->getFieldValue('Asistencia_vial') == 1) ? "Aplica" : "No Aplica"; ?><br>
+                                        <?= $retVal = ($cobertura->getFieldValue('Renta_Veh_culo') == 1) ? "Aplica" : "No Aplica"; ?><br>
+                                        <?= $retVal = ($cobertura->getFieldValue('Casa_del_Conductor') == 1) ? "Aplica" : "No Aplica"; ?><br><br>
+                                        RD$<?= number_format($cotizacion["Prima_Neta"], 2) ?><br>
+                                        RD$<?= number_format($cotizacion["ISC"], 2) ?><br>
+                                        RD$<?= number_format($cotizacion["Prima_Total"], 2) ?>
+                                    </p>
+                                </div>
+                            <?php endif ?>
                         <?php endforeach ?>
                     <?php endif ?>
                 <?php endif ?>

@@ -82,10 +82,16 @@ if ($_POST) {
         <label class="col-sm-2 col-form-label">Plan</label>
         <div class="col-sm-4">
             <select name="plan" class="form-control">
-                <option selected value="Mensual Full">Mensual Full</option>
-                <option value="Anual Full">Anual Full</option>
+                <option selected value="Full">Full</option>
                 <option value="Ley">Ley</option>
-                <option value="Ley">Simple</option>
+                <option value="Simple">Simple</option>
+            </select>
+        </div>
+        <label class="col-sm-2 col-form-label">Período de pago</label>
+        <div class="col-sm-4">
+            <select name="periodo" class="form-control">
+                <option selected value="Mensual">Mensual</option>
+                <option value="Anual">Anual</option>
             </select>
         </div>
     </div>

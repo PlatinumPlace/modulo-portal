@@ -26,7 +26,4 @@ switch ($pagina) {
     case 'emit':
         require_once("pages/portal/emitir_cotizacion.php");
         break;
-    case 'download':
-        require_once("pages/portal/descargar_cotizacion.php");
-        break;
 }
