@@ -1,68 +1,80 @@
-<?php session_start() ?>
+<?php
+include "api/vendor/autoload.php";
+include "helpers/api.php";
+include "helpers/tratos.php";
+//header("Location: api/install.php");
+session_start();
+if (!$_SESSION["usuario"]) {
+    header("Location: login.php");
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0" />
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-    <!-- CSS  -->
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <link href="css/materialize.css" type="text/css" rel="stylesheet" media="all" />
-    <link href="css/style.css" type="text/css" rel="stylesheet" media="all" />
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/js/all.min.js" crossorigin="anonymous"></script>
+    <link href="css/styles.css" rel="stylesheet" />
 
     <title>IT - Insurance Tech</title>
     <link rel="icon" type="image/png" href="img/portal/logo.png">
 </head>
 
-<body>
-    <header>
-        <nav class="oculto-impresion">
-            <div class="nav-wrapper blue">
-                <a href="index.php" class="brand-logo center">IT - Insurance Tech</a>
-                <?php if (isset($_SESSION["usuario"])) : ?>
-                    <ul id="nav-mobile" class="left hide-on-med-and-down">
-                        <li><a href="?page=add" class="tooltipped" data-position="bottom" data-tooltip="Crear Cotización"><i class="material-icons">add</i></a></li>
-                        <li><a href="?page=search" class="tooltipped" data-position="bottom" data-tooltip="Buscar Cotización"><i class="material-icons">search</i></a></li>
-                    </ul>
-                    <ul id="nav-mobile" class="right hide-on-med-and-down">
-                        <li><a href="#cerrar_sesion" class="modal-trigger tooltipped" data-position="bottom" data-tooltip="Cerrar Sesión"><i class="material-icons">exit_to_app</i></a></li>
-                    </ul>
-                <?php endif ?>
-            </div>
-        </nav>
-    </header>
-
-    <main>
-        <div class="container">
-            <?php require_once("pages/router.php") ?>
+<body class="sb-nav-fixed">
+    <nav class="sb-topnav navbar navbar-expand navbar-dark bg-primary oculto-impresion">
+        <a title="Panel de Control" class="navbar-brand" href="index.php">IT - Insurance Tech</a>
+        <div class="d-none d-md-inline-block form-inline ml-auto mr-0 mr-md-3 my-2 my-md-0">
+            &nbsp;
         </div>
-    </main>
-
-    <footer class="page-footer blue oculto-impresion">
-        <div class="footer-copyright">
-            <div class="container">
-                Copyright &copy; Grupo Nobe <?= date('Y') ?>
-            </div>
+        <a title="Cerrar Sesión" onclick="confirm('¿Deseas cerrar la sesión?')" href="index.php?page=logout" class="btn btn-primary">
+            <i class="fas fa-sign-out-alt"></i>
+        </a>
+    </nav>
+    <div id="layoutSidenav">
+        <div id="layoutSidenav_nav">
+            <nav class="sb-sidenav accordion sb-sidenav-dark bg-primary" id="sidenavAccordion">
+                <div class="sb-sidenav-menu">
+                    <div class="nav">
+                        <div class="sb-sidenav-menu-heading">Menu</div>
+                        <a class="nav-link active" href="index.php">
+                            <div class="sb-nav-link-icon">
+                                <i class="fas fa-chart-line"></i>
+                            </div>
+                            Panel de Control
+                        </a>
+                        <a class="nav-link active" href="index.php?page=search">
+                            <div class="sb-nav-link-icon">
+                                <i class="fas fa-search"></i>
+                            </div>
+                            Buscar
+                        </a>
+                        <a class="nav-link active" href="index.php?page=add">
+                            <div class="sb-nav-link-icon">
+                                <i class="fas fa-book"></i>
+                            </div>
+                            Cotizaciones
+                        </a>
+                    </div>
+                </div>
+            </nav>
         </div>
-    </footer>
-
-    <div id="cerrar_sesion" class="modal">
-        <div class="modal-content">
-            <h4>Estas seguro de continuar?</h4>
-        </div>
-        <div class="modal-footer">
-            <a href="#!" class="modal-close waves-effect waves-green btn-flat">No</a>
-            <a href="?page=logout" class="modal-close waves-effect waves-green btn-flat">Si</a>
+        <div id="layoutSidenav_content">
+            <main>
+                <div class="container-fluid">
+                    <?php require_once("pages/router.php") ?>
+                </div>
+            </main>
         </div>
     </div>
-
-    <!--  Scripts-->
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
     <script src="js/jquery-2.1.1.min.js"></script>
-    <script src="js/materialize.js"></script>
-    <script src="js/init.js"></script>
-
 </body>
 
 </html>
-

@@ -3,13 +3,8 @@ $tratos = new tratos();
 $trato = $tratos->detalles($_GET['id']);
 $cotizaciones = $trato->getFieldValue('Aseguradoras_Disponibles');
 ?>
-<!doctype html>
-<html lang="en">
 
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
     <title>
         <?php if ($trato->getFieldValue('Stage') == "Cotizando") : ?>
             Cotización No.
@@ -61,8 +56,8 @@ $cotizaciones = $trato->getFieldValue('Aseguradoras_Disponibles');
                     <b>Fecha</b> <?= date('d/m/Y') ?>
                 </p>
             </div>
-            <div class="col-12 d-flex justify-content-center p-3 mb-2 bg-primary text-white">
-                <h4>DATOS DEL CLIENTE</h4>
+            <div class="col-12 d-flex justify-content-center bg-primary text-white">
+                <h5>DATOS DEL CLIENTE</h5>
             </div>
             <div class="col-6 border">
                 <div class="row">
@@ -101,8 +96,8 @@ $cotizaciones = $trato->getFieldValue('Aseguradoras_Disponibles');
                     </div>
                 </div>
             </div>
-            <div class="col-12 d-flex justify-content-center p-3 mb-2 bg-primary text-white" style="width: 200px;">
-                <h4>DATOS DEL VEHICULO</h4>
+            <div class="col-12 d-flex justify-content-center bg-primary text-white" style="width: 200px;">
+                <h5>DATOS DEL VEHICULO</h5>
             </div>
             <div class="col-6 border">
                 <div class="row">
@@ -147,8 +142,8 @@ $cotizaciones = $trato->getFieldValue('Aseguradoras_Disponibles');
                     </div>
                 </div>
             </div>
-            <div class="col-12 d-flex justify-content-center p-3 mb-2 bg-primary text-white" style="width: 200px;">
-                <h4>COBERTURAS</h4>
+            <div class="col-12 d-flex justify-content-center bg-primary text-white" style="width: 200px;">
+                <h5>COBERTURAS</h5>
             </div>
             <div class="col-12">
                 <div class="row">

@@ -10,6 +10,8 @@ function validar()
             if ($contacto->getFieldValue("Estado") == true) {
                 session_start();
                 $_SESSION["usuario"]["id"] = $contacto->getEntityId();
+                $_SESSION["usuario"]["nombre"] = $contacto->getFieldValue('First_Name')." ".$contacto->getFieldValue('Last_Name');
+                $_SESSION["usuario"]["cuenta"] = $contacto->getFieldValue('Account_Name')->getLookupLabel();
                 header("Location: index.php");
             } else {
                 return "El usuario no esta activado.";

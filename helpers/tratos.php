@@ -16,18 +16,21 @@ class tratos extends api
                 $resultado['total'] += 1;
                 if (
                     date(
-                        "Y-m",
-                        strtotime($trato->getFieldValue("Closing_Date") . "- 1 year")
-                    ) == date('Y-m')
+                        "m",
+                        strtotime($trato->getFieldValue("Closing_Date"))
+                    ) == date('m')
                 ) {
                     $resultado['emisiones'] += 1;
                     $resultado['filtro_emisiones'] = $trato->getFieldValue("Stage");
                 }
                 if (
-                    date("Y-m", strtotime($trato->getFieldValue("Closing_Date"))) == date('Y-m')
+                    date(
+                        "Y-m",
+                        strtotime($trato->getFieldValue("Closing_Date"))
+                    ) == date('Y-m')
                 ) {
                     $resultado['vencimientos'] += 1;
-                    $resultado['filtro_vencimientos'] = date("Y-m", strtotime($trato->getFieldValue("Closing_Date")));
+                    $resultado['filtro_vencimientos'] = $trato->getFieldValue("Stage");
                 }
             }
         }
@@ -53,7 +56,8 @@ class tratos extends api
         $trato["Apellido_del_asegurado"] = $_POST['apellido'];
         $trato["Placa"] = $_POST['placa'];
         $trato["Plan"] = $_POST['plan'];
-        $trato["Type"] = "Vehículo";
+        $trato["Type"] = $_POST['cotizacion'];
+        $trato["Uso"] = $_POST['uso'];
         $trato["RNC_Cedula_del_asegurado"] = $_POST['cedula'];
         $trato["Telefono_del_asegurado"] = $_POST['telefono'];
         $trato["Tipo_de_poliza"] = $_POST['poliza'];
@@ -105,6 +109,10 @@ class tratos extends api
         $trato["Plan"] = $_POST['plan'];
         $trato["Tipo_de_poliza"] = $_POST['poliza'];
         $trato["Valor_Asegurado"] = $_POST['Valor_Asegurado'];
+        if ($_POST['cotizacion'] == "Auto") {
+            $trato["Type"] = "Auto";
+        }
+        $trato["Uso"] = $_POST['uso'];
         if (isset($_POST['estado'])) {
             $trato["Es_nuevo"] = true;
         } else {
@@ -136,7 +144,7 @@ class tratos extends api
                     unlink($nuevaUbicacion);
                     $cambios["Aseguradora"] = $_POST["aseguradora"];
                     $cambios["Stage"] = "En trámite";
-                    return $this->updateRecord("Deals", $cambios, $trato_id);                
+                    return $this->updateRecord("Deals", $cambios, $trato_id);
                 } else {
                     return "No se pudo subir el documento,intentelo mas tarde";
                 }
