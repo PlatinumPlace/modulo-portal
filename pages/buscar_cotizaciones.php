@@ -1,16 +1,21 @@
 <?php
-$tratos = new tratos();
+$api = new api();
 if ($_POST) {
-    $resultado = $tratos->buscar($_SESSION['usuario']['id'], $_POST['busqueda'], $_POST['parametro']);
+    switch ($_POST['parametro']) {
+        case 'numero':
+            $criterio = "((Contact_Name:equals:" . $_SESSION['usuario']['id'] . ") and (No_de_cotizaci_n:equals:" . $_POST['busqueda'] . "))";
+            break;
+        case 'id':
+            $criterio = "((Contact_Name:equals:" . $_SESSION['usuario']['id'] . ") and (RNC_Cedula_del_asegurado:equals:" . $_POST['busqueda'] . "))";
+            break;
+    }
+    $resultado = $api->searchRecordsByCriteria("Deals", $criterio);
 } else {
-    $resultado = $tratos->lista($_SESSION['usuario']['id']);
-}
-if (isset($_GET['action']) and $_GET['action'] == "delete") {
-    $tratos->eliminar($_GET['id']);
-    header("Location: index.php?page=details&id=" . $_GET['id']);
+    $criterio = "Contact_Name:equals:" . $_SESSION['usuario']['id'];
+    $resultado = $api->searchRecordsByCriteria("Deals", $criterio);
 }
 ?>
-<h1 class="mt-4">Buscar Registros</h1>
+<h1 class="mt-4">Buscar Cotización</h1>
 <ol class="breadcrumb mb-4">
     <li class="breadcrumb-item active">Buscar</li>
 </ol>
@@ -19,10 +24,8 @@ if (isset($_GET['action']) and $_GET['action'] == "delete") {
 <form class="form-inline" method="POST" action="index.php?page=search">
     <div class="form-group mb-2">
         <select class="form-control" name="parametro" required>
-            <option value="" disabled selected>Buscar por:</option>
-            <option value="numero">No. de cotización</option>
+            <option value="numero" selected>No. de cotización</option>
             <option value="id">RNC/Cédula</option>
-            <option value="poliza">Póliza</option>
         </select>
     </div>
     <div class="form-group mx-sm-3 mb-2">
@@ -72,14 +75,13 @@ if (isset($_GET['action']) and $_GET['action'] == "delete") {
                     <td><?= $trato->getFieldValue("Stage") ?></td>
                     <td><?= date("d/m/Y", strtotime($trato->getFieldValue("Closing_Date"))) ?></td>
                     <td>
-                        <a href="index.php?page=details&id=<?= $trato->getEntityId() ?>" title="Detalles"><i class="fas fa-info"></i></a>
+                        <a href="?page=details&id=<?= $trato->getEntityId() ?>" title="Detalles"><i class="fas fa-info"></i></a>
                         <?php if ($trato->getFieldValue('Stage') != "Abandonado") : ?>
-                            <a href="index.php?page=emit&id=<?= $trato->getEntityId() ?>" title="Emitir"><i class="fas fa-portrait"></i></a>
-                            <a href="index.php?page=download&id=<?= $trato->getEntityId() ?>"  title="Descargar"><i class="fas fa-download"></i></a>
+                            <a href="?page=emit&id=<?= $trato->getEntityId() ?>" title="Emitir"><i class="fas fa-portrait"></i></a>
+                            <a href="?page=download&id=<?= $trato->getEntityId() ?>" title="Descargar"><i class="fas fa-download"></i></a>
                         <?php endif ?>
                         <?php if ($trato->getFieldValue('Stage') == "Cotizando") : ?>
-                            <a href="index.php?page=edit&id=<?= $trato->getEntityId() ?>" title="Editar"><i class="fas fa-edit"></i></a>
-                            <a href="index.php?page=search&action=delete&id=<?= $trato->getEntityId() ?>" onclick="return confirm('¿Estas seguro?');"><i class="fas fa-trash"></i></a>
+                            <a href="?page=edit&id=<?= $trato->getEntityId() ?>" title="Editar"><i class="fas fa-edit"></i></a>
                         <?php endif ?>
                     </td>
                 </tr>

@@ -19,7 +19,7 @@
         <div class="d-none d-md-inline-block form-inline ml-auto mr-0 mr-md-3 my-2 my-md-0">
             &nbsp;
         </div>
-        <a title="Cerrar Sesión" onclick="return confirm('¿Deseas cerrar la sesión?');" href="index.php?page=logout" class="btn btn-primary">
+        <a title="Cerrar Sesión" onclick="return confirm('¿Deseas cerrar la sesión?');" href="?page=logout" class="btn btn-primary">
             <i class="fas fa-sign-out-alt"></i>
         </a>
     </nav>
@@ -35,13 +35,13 @@
                             </div>
                             Panel de Control
                         </a>
-                        <a class="nav-link active" href="index.php?page=search">
+                        <a class="nav-link active" href="?page=search">
                             <div class="sb-nav-link-icon">
                                 <i class="fas fa-search"></i>
                             </div>
                             Buscar
                         </a>
-                        <a class="nav-link active" href="index.php?page=add">
+                        <a class="nav-link active" href="?page=add">
                             <div class="sb-nav-link-icon">
                                 <i class="fas fa-book"></i>
                             </div>

@@ -1,6 +1,21 @@
 <?php
 if ($_POST) {
-    $resultado = validar();
+    $api = new api;
+    $criterio = "((Usuario:equals:" . $_POST['usuario'] . ") and (Contrase_a:equals:" . $_POST['clave'] . "))";
+    $contactos = $api->searchRecordsByCriteria("Contacts", $criterio);
+    if (!empty($contactos)) {
+        foreach ($contactos as $contacto) {
+            if ($contacto->getFieldValue("Estado") == true) {
+                session_start();
+                $_SESSION["usuario"]["id"] = $contacto->getEntityId();
+                header("Location: index.php");
+            } else {
+                $resultado = "El usuario no esta activado.";
+            }
+        }
+    } else {
+        $resultado = "Usuario o contraseña incorrectos.";
+    }
     echo '<script>alert("' . $resultado . '")</script>';
 }
 ?>
@@ -26,7 +41,7 @@ if ($_POST) {
                             <h3 class="text-center font-weight-light my-4">IT - Insurance Tech</h3>
                         </div>
                         <div class="card-body">
-                            <form method="POST" action="login.php">
+                            <form method="POST" action="index.php">
                                 <div class="form-group">
                                     <label class="small mb-1">Usuario</label>
                                     <input class="form-control py-4" type="text" name="usuario" required />
@@ -52,9 +67,6 @@ if ($_POST) {
             </div>
         </div>
     </footer>
-
-    <script src="js/scripts.js"></script>
-    <script src="js/jquery-2.1.1.min.js"></script>
 </body>
 
 </html>

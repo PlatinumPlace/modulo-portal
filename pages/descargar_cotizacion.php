@@ -1,20 +1,30 @@
 <?php
-$tratos = new tratos();
-$trato = $tratos->detalles($_GET['id']);
+$api = new api();
+$trato = $api->getRecord("Deals", $_GET['id']);
 $cotizaciones = $trato->getFieldValue('Aseguradoras_Disponibles');
+function calcular($valor, $porciento)
+{
+    return $valor * ($porciento / 100);
+}
 ?>
+<!DOCTYPE html>
+<html lang="en">
 
 <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
     <title>
         <?php if ($trato->getFieldValue('Stage') == "Cotizando") : ?>
             Cotización No.
         <?php else : ?>
-            Póliza No.
+            Resumen No.
         <?php endif ?>
         <?= $trato->getFieldValue('No_de_cotizaci_n') ?>
     </title>
 
     <link href="css/styles.css" rel="stylesheet" />
+    <link rel="icon" type="image/png" href="img/portal/logo.png">
 
 
     <style>
@@ -42,7 +52,14 @@ $cotizaciones = $trato->getFieldValue('Aseguradoras_Disponibles');
                     <img src="img/portal/logo.png" width="120" height="140">
                 <?php else : ?>
                     <?php foreach ($cotizaciones as $cotizacion) : ?>
-                        <?php $ruta_imagen = $tratos->generar_imagen_aseguradora($cotizacion["Plan"]["id"]) ?>
+                        <?php
+                        $plan_detalles = $api->getRecord("Products", $cotizacion["Plan"]["id"]);
+                        if ($plan_detalles->getFieldValue('Vendor_Name') != null) {
+                            $ruta_imagen = $api->downloadPhoto("Vendors", $plan_detalles->getFieldValue('Vendor_Name')->getEntityId(), "img/Aseguradoras/");
+                        } else {
+                            $ruta_imagen = null;
+                        }
+                        ?>
                         <img height="100" width="120" src="<?= $ruta_imagen ?>">
                     <?php endforeach ?>
                 <?php endif ?>
@@ -57,7 +74,7 @@ $cotizaciones = $trato->getFieldValue('Aseguradoras_Disponibles');
                         <?php endif ?>
                         <br>
                         SEGURO VEHICULO DE MOTOR <br>
-                        PLAN <?= strtoupper($trato->getFieldValue('Tipo_de_poliza')) . " " . strtoupper($trato->getFieldValue('Plan')) ?>
+                        PLAN <?= strtoupper($trato->getFieldValue('Per_odo')) . " " . strtoupper($trato->getFieldValue('Plan')) ?>
                     </h3>
                 </center>
             </div>
@@ -67,7 +84,7 @@ $cotizaciones = $trato->getFieldValue('Aseguradoras_Disponibles');
                         <?php if ($trato->getFieldValue('Stage') == "Cotizando") : ?>
                             Cotización No.
                         <?php else : ?>
-                            Póliza No.
+                            Resumen No.
                         <?php endif ?>
                     </b> <?= $trato->getFieldValue('No_de_cotizaci_n') ?>
                     <br>
@@ -83,7 +100,7 @@ $cotizaciones = $trato->getFieldValue('Aseguradoras_Disponibles');
                         <P>
                             <b>Cliente:</b><br>
                             <b>Cédula/RNC:</b><br>
-                            <b>Direccion:</b><br>
+                            <b>Direccion:</b><br><br>
                             <b>Email: </b>
                         </P>
                     </div>
@@ -163,17 +180,22 @@ $cotizaciones = $trato->getFieldValue('Aseguradoras_Disponibles');
             <div class="col-12 d-flex justify-content-center bg-primary text-white" style="width: 200px;">
                 <h5>COBERTURAS</h5>
             </div>
-            <div class="col-12">
-                <div class="row">
-                    <div class="col">
-                        &nbsp;
-                    </div>
-                    <?php if ($trato->getFieldValue('Stage') == "Cotizando") : ?>
+            <?php if ($trato->getFieldValue('Stage') == "Cotizando") : ?>
+                <div class="col-12">
+                    <div class="row">
+                        <div class="col">
+                            &nbsp;
+                        </div>
                         <?php foreach ($cotizaciones as $cotizacion) : ?>
                             <?php if ($cotizacion["Prima_Total"] > 0) : ?>
-                                <?php $ruta_imagen = $tratos->generar_imagen_aseguradora(
-                                    $cotizacion["Plan"]["id"]
-                                ) ?>
+                                <?php
+                                $plan_detalles = $api->getRecord("Products", $cotizacion["Plan"]["id"]);
+                                if ($plan_detalles->getFieldValue('Vendor_Name') != null) {
+                                    $ruta_imagen = $api->downloadPhoto("Vendors", $plan_detalles->getFieldValue('Vendor_Name')->getEntityId(), "img/Aseguradoras/");
+                                } else {
+                                    $ruta_imagen = null;
+                                }
+                                ?>
                                 <?php if ($ruta_imagen != null) : ?>
                                     <div class="col-2">
                                         <img height="80" width="100" src="<?= $ruta_imagen ?>">
@@ -181,9 +203,9 @@ $cotizaciones = $trato->getFieldValue('Aseguradoras_Disponibles');
                                 <?php endif ?>
                             <?php endif ?>
                         <?php endforeach ?>
-                    <?php endif ?>
+                    </div>
                 </div>
-            </div>
+            <?php endif ?>
             <div class="col-12 border">
                 <div class="row">
                     <div class="col">
@@ -213,20 +235,21 @@ $cotizaciones = $trato->getFieldValue('Aseguradoras_Disponibles');
                     </div>
                     <?php foreach ($cotizaciones as $cotizacion) : ?>
                         <?php if ($cotizacion["Prima_Total"] > 0) : ?>
-                            <?php $coberturas = $tratos->ver_coberturas(
-                                $cotizacion["Plan"]["id"],
-                                $trato->getFieldValue('Account_Name')->getEntityId()
-                            ) ?>
-                            <?php if ($coberturas != null) : ?>
-                                <?php foreach ($coberturas as $cobertura) : ?>
+                            <?php
+                            $plan_detalles = $api->getRecord("Products", $cotizacion["Plan"]["id"]);
+                            $criterio = "((Aseguradora:equals:" . $plan_detalles->getFieldValue('Vendor_Name')->getEntityId() . ") and (Socio_IT:equals:" . $trato->getFieldValue('Account_Name')->getEntityId() . "))";
+                            $coberturas = $api->searchRecordsByCriteria("Coberturas", $criterio);
+                            ?>
+                            <?php foreach ($coberturas as $cobertura) : ?>
+                                <?php if ($cobertura->getFieldValue('Tipo_de_Plan') == $trato->getFieldValue('Plan')) : ?>
                                     <div class="col-2">
                                         <p>
                                             <b>&nbsp;</b><br>
-                                            <?= $cobertura->getFieldValue('Riesgos_comprensivos') ?>%<br>
-                                            <?= $cobertura->getFieldValue('Riesgos_comprensivos_Deducible') ?>%<br>
-                                            <?= $cobertura->getFieldValue('Rotura_de_Cristales_Deducible') ?>%<br>
-                                            <?= $cobertura->getFieldValue('Colisi_n_y_vuelco') ?>%<br>
-                                            <?= $cobertura->getFieldValue('Incendio_y_robo') ?>% <br><br>
+                                            RD$<?= number_format(calcular($trato->getFieldValue('Valor_Asegurado'), $cobertura->getFieldValue('Riesgos_comprensivos')), 2) ?><br>
+                                            RD$<?= number_format(calcular($trato->getFieldValue('Valor_Asegurado'), $cobertura->getFieldValue('Riesgos_comprensivos_Deducible')), 2) ?><br>
+                                            RD$<?= number_format(calcular($trato->getFieldValue('Valor_Asegurado'), $cobertura->getFieldValue('Rotura_de_Cristales_Deducible')), 2) ?><br>
+                                            RD$<?= number_format(calcular($trato->getFieldValue('Valor_Asegurado'), $cobertura->getFieldValue('Colisi_n_y_vuelco')), 2) ?><br>
+                                            RD$<?= number_format(calcular($trato->getFieldValue('Valor_Asegurado'), $cobertura->getFieldValue('Incendio_y_robo')), 2) ?><br>
                                             <b>&nbsp;</b><br>
                                             RD$<?= number_format($cobertura->getFieldValue('Da_os_Propiedad_ajena'), 2) ?><br>
                                             RD$<?= number_format($cobertura->getFieldValue('Lesiones_Muerte_1_Pers'), 2) ?><br>
@@ -244,8 +267,8 @@ $cotizaciones = $trato->getFieldValue('Aseguradoras_Disponibles');
                                             RD$<?= number_format($cotizacion["Prima_Total"], 2) ?>
                                         </p>
                                     </div>
-                                <?php endforeach ?>
-                            <?php endif ?>
+                                <?php endif ?>
+                            <?php endforeach ?>
                         <?php endif ?>
                     <?php endforeach ?>
                 </div>
@@ -254,68 +277,88 @@ $cotizaciones = $trato->getFieldValue('Aseguradoras_Disponibles');
         <?php if ($trato->getFieldValue('Stage') != "Cotizando") : ?>
             <div class="saltopagina"></div>
             <?php foreach ($cotizaciones as $cotizacion) : ?>
-                <?php $coberturas = $tratos->ver_coberturas(
-                    $cotizacion["Plan"]["id"],
-                    $trato->getFieldValue('Account_Name')->getEntityId()
-                ) ?>
+                <?php
+                $plan_detalles = $api->getRecord("Products", $cotizacion["Plan"]["id"]);
+                $criterio = "((Aseguradora:equals:" . $plan_detalles->getFieldValue('Vendor_Name')->getEntityId() . ") and (Socio_IT:equals:" . $trato->getFieldValue('Account_Name')->getEntityId() . "))";
+                $coberturas = $api->searchRecordsByCriteria("Coberturas", $criterio);
+                $plan_detalles = $api->getRecord("Products", $cotizacion["Plan"]["id"]);
+                if ($plan_detalles->getFieldValue('Vendor_Name') != null) {
+                    $ruta_imagen = $api->downloadPhoto("Vendors", $plan_detalles->getFieldValue('Vendor_Name')->getEntityId(), "img/Aseguradoras/");
+                } else {
+                    $ruta_imagen = null;
+                }
+                ?>
                 <?php foreach ($coberturas as $cobertura) : ?>
-                    <div class="row">
-                        <div class="col-6 border">
-                            <?php foreach ($cotizaciones as $cotizacion) : ?>
-                                <?php $ruta_imagen = $tratos->generar_imagen_aseguradora(
-                                    $cotizacion["Plan"]["id"]
-                                ) ?> <?php if ($ruta_imagen != null) : ?>
-                                    <img height="100" width="160" src="<?= $ruta_imagen ?>">
-                                <?php endif ?>
-                            <?php endforeach ?>
-                            <br><br>
-                            <div class="row">
-                                <div class="col">
-                                    <P>
-                                        <b>PÓLIZA </b><br>
-                                        <b>MARCA </b><br>
-                                        <b>MODELO </b><br>
-                                        <b>AÑO </b><br>
-                                        <b>CHASIS </b><br>
-                                        <b>PLACA </b><br>
-                                        <b>VIGENTE HASTA </b>
-                                    </P>
-                                </div>
-                                <div class="col">
-                                    <P>
-                                        <?= $trato->getFieldValue('P_liza')->getLookupLabel() ?><br>
-                                        <?= $trato->getFieldValue('Marca') ?><br>
-                                        <?= $trato->getFieldValue('Modelo') ?><br>
-                                        <?= $trato->getFieldValue('A_o_de_Fabricacion') ?><br>
-                                        <?= $trato->getFieldValue('Chasis') ?><br>
-                                        <?= $trato->getFieldValue('Placa') ?><br>
-                                        <?= $trato->getFieldValue('Closing_Date') ?>
-                                    </P>
+                    <?php if ($cobertura->getFieldValue('Tipo_de_Plan') == $trato->getFieldValue('Plan')) : ?>
+                        <div class="row">
+                            <div class="col-6 border">
+                                <br>
+                                <img height="100" width="160" src="<?= $ruta_imagen ?>">
+                                <br><br>
+                                <div class="row">
+                                    <div class="col">
+                                        <P>
+                                            <b>PÓLIZA </b><br>
+                                            <b>MARCA </b><br>
+                                            <b>MODELO </b><br>
+                                            <b>AÑO </b><br>
+                                            <b>CHASIS </b><br>
+                                            <b>PLACA </b><br>
+                                            <b>VIGENTE HASTA </b>
+                                        </P>
+                                    </div>
+                                    <div class="col">
+                                        <P>
+                                            <?= $trato->getFieldValue('P_liza')->getLookupLabel() ?><br>
+                                            <?= $trato->getFieldValue('Marca') ?><br>
+                                            <?= $trato->getFieldValue('Modelo') ?><br>
+                                            <?= $trato->getFieldValue('A_o_de_Fabricacion') ?><br>
+                                            <?= $trato->getFieldValue('Chasis') ?><br>
+                                            <?= $trato->getFieldValue('Placa') ?><br>
+                                            <?= $trato->getFieldValue('Closing_Date') ?>
+                                        </P>
+                                    </div>
                                 </div>
                             </div>
+                            <div class="col-6 border">
+                                <h6><b>RECOMENDACIONES EN CASO DE ACCIDENTE</b></h6>
+                                <ul>
+                                    <li>En caso de existir lesionados atender al herido.</li>
+                                    <li>No aceptar responsabilidad en el momento del accidente.</li>
+                                    <li>En caso de robo notifique inmediatamente a la policia y aseguradora.</li>
+                                </ul>
+                                <div class="row">
+                                    <div class="col-12">
+                                        <?php if ($cobertura->getFieldValue('Casa_del_Conductor') == 1) : ?>
+                                            <b>Reporte accidente</b><br>
+                                            Santo domingo: <?= $cobertura->getFieldValue('Tel_fono_casa_del_conductor') ?><br>
+                                            Santiago: <?= $cobertura->getFieldValue('Tel_fono_casa_del_conductor_1') ?><br>
+                                        <?php endif ?>
+                                    </div>
+                                    <div class="col-6">
+                                        <b>Aseguradora</b><br>
+                                        22222<br>
+                                    </div>
+                                    <div class="col-6">
+                                        <?php if ($cobertura->getFieldValue('Asistencia_vial') == 1) : ?>
+                                            <b>Asistencia vial 24 horas</b><br>
+                                            <?= $cobertura->getFieldValue('Tel_fono_asistencia_vial') ?><br>
+                                        <?php endif ?>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="saltopagina1"></div>
+                            <div class="col-3">
+                                <img height="100" width="160" src="<?= $ruta_imagen ?>">
+                            </div>
+                            <div class="col-9">
+                                <h3>
+                                    EXTRACTO DE LAS PRINCIPALES CONDICIONES
+                                    DE VEHICULOS DE MOTOR
+                                </h3>
+                            </div>
                         </div>
-                        <div class="col-6 border">
-                            <FONT SIZE=2>
-                                <P>
-                                    <b>RECOMENDACIONES EN CASO DE ACCIDENTE</b><br>
-                                    <ul>
-                                        <li>EN CASO DE EXISTIR LESIONADOS ATENDER AL HERIDO.</li>
-                                        <li>NO ACEPTAR RESPONSABILIDAD EN EL MOMENTO DEL ACCIDENTE.</li>
-                                        <li>EN CASO DE ROBO NOTIFIQUE INMEDIATAMENTE A LA POLICIA Y ASEGURADORA.</li>
-                                    </ul>
-                                    <?php if ($cobertura->getFieldValue('Casa_del_Conductor') == 1) : ?>
-                                        <b>CENTRO DE ASISTENCIA AL AUTOMOVILISTA</b><br>
-                                        SANTO DOMINGO: (809) 565-8222 <br>
-                                        SANTIAGO: (809) 583-6222<br>
-                                    <?php endif ?>
-                                    <?php if ($cobertura->getFieldValue('Asistencia_vial') == 1) : ?>
-                                        <b>ASISTENCIA VIAL 24 HORAS</b><br>
-                                        (829) 378-8888<br>
-                                    <?php endif ?>
-                                </P>
-                            </FONT>
-                        </div>
-                    </div>
+                    <?php endif ?>
                 <?php endforeach ?>
             <?php endforeach ?>
         <?php else : ?>
@@ -344,17 +387,16 @@ $cotizaciones = $trato->getFieldValue('Aseguradoras_Disponibles');
                 </div>
             </div>
         <?php endif ?>
-    </div>
 
-    <input value="<?= $_GET['id'] ?>" id="id" hidden>
-    <script>
-        var time = 500;
-        var id = document.getElementById('id').value;
-        setTimeout(function() {
-            window.print();
-            window.location = "index.php?page=details&id=" + id;
-        }, time);
-    </script>
+        <input value="<?= $_GET['id'] ?>" id="id" hidden>
+        <script>
+            var time = 500;
+            var id = document.getElementById('id').value;
+            setTimeout(function() {
+                window.print();
+                window.location = "index.php?page=details&id=" + id;
+            }, time);
+        </script>
 </body>
 
 </html>

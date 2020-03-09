@@ -1,10 +1,14 @@
 <?php
-$tratos = new tratos();
-$trato = $tratos->detalles($_GET['id']);
+$api = new api();
+$trato = $api->getRecord("Deals", $_GET['id']);
 $cotizaciones = $trato->getFieldValue('Aseguradoras_Disponibles');
-if (isset($_GET['action']) and $_GET['action'] == "delete") {
-    $tratos->eliminar($_GET['id']);
-    header("Location: index.php?page=details&id=" . $_GET['id']);
+function calcular($valor, $porciento)
+{
+    return $valor * ($porciento / 100);
+}
+if (isset($_POST['delete'])) {
+    $cambios["Stage"] = "Abandonado";
+    $api->updateRecord("Deals", $cambios, $_GET['id']);
 }
 ?>
 <h1 class="mt-4">Detalles Cotizaciones</h1>
@@ -25,32 +29,49 @@ if (isset($_GET['action']) and $_GET['action'] == "delete") {
             <?php endif ?>
             <br>
             SEGURO VEHICULO DE MOTOR <br>
-            PLAN <?= strtoupper($trato->getFieldValue('Tipo_de_poliza')) . " " . strtoupper($trato->getFieldValue('Plan')) ?>
+            PLAN <?= strtoupper($trato->getFieldValue('Per_odo')) . " " . strtoupper($trato->getFieldValue('Plan')) ?>
         </h3>
     </div>
     <div class="col-6">
-        <div class="row">
+        <form class="row" method="POST" action="?page=details&id=<?= $trato->getEntityId() ?>">
             <div class="col">
-                <a href="index.php?page=search" class="btn btn-secondary"><i class="fas fa-list"></i> Lista</a>
+                <a href="?page=search" class="btn btn-secondary"><i class="fas fa-list"></i> Lista</a>
             </div>
-            <?php if ($trato->getFieldValue('Stage') != "Abandonado") : ?>
+            <?php if ($trato->getFieldValue('Stage') != "Abandonado" or $_POST['delete']) : ?>
                 <div class="col">
-                    <a href="index.php?page=emit&id=<?= $trato->getEntityId() ?>" class="btn btn-success"><i class="fas fa-portrait"></i> Emitir</a>
+                    <a href="?page=emit&id=<?= $trato->getEntityId() ?>" class="btn btn-success"><i class="fas fa-portrait"></i> Emitir</a>
                 </div>
                 <div class="col">
-                    <a href="index.php?page=edit&id=<?= $trato->getEntityId() ?>" class="btn btn-warning"><i class="fas fa-edit"></i> Editar</a>
+                    <a href="?page=download&id=<?= $trato->getEntityId() ?>" class="btn btn-primary"><i class="fas fa-download"></i> Descargar</a>
                 </div>
-                <div class="col">
-                    <a href="index.php?page=download&id=<?= $trato->getEntityId() ?>" class="btn btn-primary"><i class="fas fa-download"></i> Descargar</a>
-                </div>
-                <div class="col">
-                    <a href="index.php?page=details&action=delete&id=<?= $trato->getEntityId() ?>" onclick="return confirm('¿Estas seguro?');" class="btn btn-danger"><i class="fas fa-trash"></i>Eliminar</a>
-                </div>
+                <?php if ($trato->getFieldValue('Stage') == "Cotizando") : ?>
+                    <div class="col">
+                        <a href="?page=edit&id=<?= $trato->getEntityId() ?>" class="btn btn-warning"><i class="fas fa-edit"></i> Editar</a>
+                    </div>
+                    <div class="col">
+                        <button type="submit" name="delete" onclick="return confirm('¿Estas seguro?');" class="btn btn-danger"><i class="fas fa-trash"></i>Eliminar</button>
+                    </div>
+                <?php else : ?>
+                    <br><br>
+                    <div class="col-12">
+                        <ul class="list-group">
+                            <li class="list-group-item">
+                                <a download="Condiciones del Vehículos" href="documents/vehiculo/condiciones.pdf" class="btn btn-link"><i class="fas fa-download"></i> Condiciones del Vehículos</a>
+                            </li>
+                            <li class="list-group-item">
+                                <a download="Formulario de conocimiento" href="documents/vehiculo/conocimiento.pdf" class="btn btn-link"><i class="fas fa-download"></i> Formulario de conocimiento</a>
+                            </li>
+                            <li class="list-group-item">
+                                <a download="Formulario de Inspección de Vehículos" href="documents/vehiculo/inspeccion.pdf" class="btn btn-link"><i class="fas fa-download"></i> Formulario de Inspección</a>
+                            </li>
+                        </ul>
+                    </div>
+                <?php endif ?>
             <?php endif ?>
-        </div>
+        </form>
     </div>
 
-    <?php if ($trato->getFieldValue('Stage') == "Abandonado") : ?>
+    <?php if ($trato->getFieldValue('Stage') == "Abandonado" or isset($_POST['delete'])) : ?>
         <div class="alert alert-danger" role="alert">
             Cotización Abandonada
         </div>
@@ -65,7 +86,7 @@ if (isset($_GET['action']) and $_GET['action'] == "delete") {
                 <P>
                     <b>Cliente:</b><br>
                     <b>Cédula/RNC:</b><br>
-                    <b>Direccion:</b><br>
+                    <b>Direccion:</b><br><br>
                     <b>Email: </b>
                 </P>
             </div>
@@ -163,9 +184,14 @@ if (isset($_GET['action']) and $_GET['action'] == "delete") {
             <?php if ($trato->getFieldValue('Stage') == "Cotizando") : ?>
                 <?php foreach ($cotizaciones as $cotizacion) : ?>
                     <?php if ($cotizacion["Prima_Total"] > 0) : ?>
-                        <?php $ruta_imagen = $tratos->generar_imagen_aseguradora(
-                            $cotizacion["Plan"]["id"]
-                        ) ?>
+                        <?php
+                        $plan_detalles = $api->getRecord("Products", $cotizacion["Plan"]["id"]);
+                        if ($plan_detalles->getFieldValue('Vendor_Name') != null) {
+                            $ruta_imagen = $api->downloadPhoto("Vendors", $plan_detalles->getFieldValue('Vendor_Name')->getEntityId(), "img/Aseguradoras/");
+                        } else {
+                            $ruta_imagen = null;
+                        }
+                        ?>
                         <?php if ($ruta_imagen != null) : ?>
                             <div class="col-2">
                                 <img height="80" width="100" src="<?= $ruta_imagen ?>">
@@ -205,41 +231,40 @@ if (isset($_GET['action']) and $_GET['action'] == "delete") {
             </div>
             <?php foreach ($cotizaciones as $cotizacion) : ?>
                 <?php if ($cotizacion["Prima_Total"] > 0) : ?>
-                    <?php $coberturas = $tratos->ver_coberturas(
-                        $cotizacion["Plan"]["id"],
-                        $trato->getFieldValue('Account_Name')->getEntityId()
-                    ) ?>
-                    <?php if ($coberturas != null) : ?>
-                        <?php foreach ($coberturas as $cobertura) : ?>
-                            <?php if ($cobertura->getFieldValue('Tipo_de_Plan') == $trato->getFieldValue('Plan')) : ?>
-                                <div class="col-2">
-                                    <p>
-                                        <b>&nbsp;</b><br>
-                                        <?= $cobertura->getFieldValue('Riesgos_comprensivos') ?>%<br>
-                                        <?= $cobertura->getFieldValue('Riesgos_comprensivos_Deducible') ?>%<br>
-                                        <?= $cobertura->getFieldValue('Rotura_de_Cristales_Deducible') ?>%<br>
-                                        <?= $cobertura->getFieldValue('Colisi_n_y_vuelco') ?>%<br>
-                                        <?= $cobertura->getFieldValue('Incendio_y_robo') ?>% <br><br>
-                                        <b>&nbsp;</b><br>
-                                        RD$<?= number_format($cobertura->getFieldValue('Da_os_Propiedad_ajena'), 2) ?><br>
-                                        RD$<?= number_format($cobertura->getFieldValue('Lesiones_Muerte_1_Pers'), 2) ?><br>
-                                        RD$<?= number_format($cobertura->getFieldValue('Lesiones_Muerte_m_s_de_1_Pers'), 2) ?><br>
-                                        RD$<?= number_format($cobertura->getFieldValue('Lesiones_Muerte_1_pasajero'), 2) ?><br>
-                                        RD$<?= number_format($cobertura->getFieldValue('Lesiones_Muerte_m_s_de_1_pasajero'), 2) ?><br><br>
-                                        RD$<?= number_format($cobertura->getFieldValue('Riesgos_conductor'), 2) ?><br><br>
-                                        RD$<?= number_format($cobertura->getFieldValue('Fianza_judicial'), 2) ?><br><br>
-                                        <b>&nbsp;</b><br>
-                                        <?= $retVal = ($cobertura->getFieldValue('Asistencia_vial') == 1) ? "Aplica" : "No Aplica"; ?><br>
-                                        <?= $retVal = ($cobertura->getFieldValue('Renta_Veh_culo') == 1) ? "Aplica" : "No Aplica"; ?><br>
-                                        <?= $retVal = ($cobertura->getFieldValue('Casa_del_Conductor') == 1) ? "Aplica" : "No Aplica"; ?><br><br>
-                                        RD$<?= number_format($cotizacion["Prima_Neta"], 2) ?><br>
-                                        RD$<?= number_format($cotizacion["ISC"], 2) ?><br>
-                                        RD$<?= number_format($cotizacion["Prima_Total"], 2) ?>
-                                    </p>
-                                </div>
-                            <?php endif ?>
-                        <?php endforeach ?>
-                    <?php endif ?>
+                    <?php
+                    $plan_detalles = $api->getRecord("Products", $cotizacion["Plan"]["id"]);
+                    $criterio = "((Aseguradora:equals:" . $plan_detalles->getFieldValue('Vendor_Name')->getEntityId() . ") and (Socio_IT:equals:" . $trato->getFieldValue('Account_Name')->getEntityId() . "))";
+                    $coberturas = $api->searchRecordsByCriteria("Coberturas", $criterio);
+                    ?>
+                    <?php foreach ($coberturas as $cobertura) : ?>
+                        <?php if ($cobertura->getFieldValue('Tipo_de_Plan') == $trato->getFieldValue('Plan')) : ?>
+                            <div class="col-2">
+                                <p>
+                                    <b>&nbsp;</b><br>
+                                    RD$<?= number_format(calcular($trato->getFieldValue('Valor_Asegurado'), $cobertura->getFieldValue('Riesgos_comprensivos')), 2) ?><br>
+                                    RD$<?= number_format(calcular($trato->getFieldValue('Valor_Asegurado'), $cobertura->getFieldValue('Riesgos_comprensivos_Deducible')), 2) ?><br>
+                                    RD$<?= number_format(calcular($trato->getFieldValue('Valor_Asegurado'), $cobertura->getFieldValue('Rotura_de_Cristales_Deducible')), 2) ?><br>
+                                    RD$<?= number_format(calcular($trato->getFieldValue('Valor_Asegurado'), $cobertura->getFieldValue('Colisi_n_y_vuelco')), 2) ?><br>
+                                    RD$<?= number_format(calcular($trato->getFieldValue('Valor_Asegurado'), $cobertura->getFieldValue('Incendio_y_robo')), 2) ?><br>
+                                    <b>&nbsp;</b><br>
+                                    RD$<?= number_format($cobertura->getFieldValue('Da_os_Propiedad_ajena'), 2) ?><br>
+                                    RD$<?= number_format($cobertura->getFieldValue('Lesiones_Muerte_1_Pers'), 2) ?><br>
+                                    RD$<?= number_format($cobertura->getFieldValue('Lesiones_Muerte_m_s_de_1_Pers'), 2) ?><br>
+                                    RD$<?= number_format($cobertura->getFieldValue('Lesiones_Muerte_1_pasajero'), 2) ?><br>
+                                    RD$<?= number_format($cobertura->getFieldValue('Lesiones_Muerte_m_s_de_1_pasajero'), 2) ?><br><br>
+                                    RD$<?= number_format($cobertura->getFieldValue('Riesgos_conductor'), 2) ?><br><br>
+                                    RD$<?= number_format($cobertura->getFieldValue('Fianza_judicial'), 2) ?><br><br>
+                                    <b>&nbsp;</b><br>
+                                    <?= $retVal = ($cobertura->getFieldValue('Asistencia_vial') == 1) ? "Aplica" : "No Aplica"; ?><br>
+                                    <?= $retVal = ($cobertura->getFieldValue('Renta_Veh_culo') == 1) ? "Aplica" : "No Aplica"; ?><br>
+                                    <?= $retVal = ($cobertura->getFieldValue('Casa_del_Conductor') == 1) ? "Aplica" : "No Aplica"; ?><br><br>
+                                    RD$<?= number_format($cotizacion["Prima_Neta"], 2) ?><br>
+                                    RD$<?= number_format($cotizacion["ISC"], 2) ?><br>
+                                    RD$<?= number_format($cotizacion["Prima_Total"], 2) ?>
+                                </p>
+                            </div>
+                        <?php endif ?>
+                    <?php endforeach ?>
                 <?php endif ?>
             <?php endforeach ?>
         </div>

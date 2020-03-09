@@ -1,8 +1,32 @@
 <?php
-$tratos = new tratos();
-$trato = $tratos->detalles($_GET['id']);
-if ($_POST) {
-    $resultado = $tratos->editar($_GET['id']);
+$api = new api();
+$trato = $api->getRecord("Deals", $_GET['id']);
+if (isset($_POST['submit'])) {
+    $cambios["A_o_de_Fabricacion"] = $_POST['A_o_de_Fabricacion'];
+    $cambios["Chasis"] = $_POST['chasis'];
+    $cambios["Color"] = $_POST['color'];
+    $marca = $api->getRecord("Marcas", $_POST['marca']);
+    $cambios["Marca"] = $marca->getFieldValue('Name');
+    $modelo = $api->getRecord("Modelos", $_POST['modelo']);
+    $cambios["Modelo"] = $modelo->getFieldValue('Name');
+    $cambios["Tipo_de_vehiculo"] = $modelo->getFieldValue('Tipo');
+    $cambios["Placa"] = $_POST['placa'];
+    $cambios["Plan"] = $_POST['plan'];
+    $cambios["Tipo_de_poliza"] = $_POST['poliza'];
+    $cambios["Valor_Asegurado"] = $_POST['Valor_Asegurado'];
+    $cambios["Type"] = $_POST['cotizacion'];
+    $cambios["Per_odo"] = $_POST['periodo'];
+    $cambios["Uso"] = $_POST['uso'];
+    if (isset($_POST['estado'])) {
+        $cambios["Es_nuevo"] = true;
+    } else {
+        $cambios["Es_nuevo"] = false;
+    }
+    $resultado = $api->updateRecord("Deals", $cambios, $_GET['id']);
+    echo '<script>
+            alert("Cambios aplicados")
+            window.location = "?page=details&id=" + ' . $_GET['id'] . ';
+        </script>;';
 }
 ?>
 <h1 class="mt-4">Editar Cotización</h1>
@@ -11,9 +35,29 @@ if ($_POST) {
     <li class="breadcrumb-item">Editar</li>
     <li class="breadcrumb-item active">Cotización No. <?= $trato->getFieldValue('No_de_cotizaci_n') ?></li>
 </ol>
-<form method="POST" action="index.php?page=edit&id=<?= $trato->getEntityId() ?>">
+<form method="POST" action="?page=edit&id=<?= $trato->getEntityId() ?>">
 
-    <input hidden value="<?= $resultado["id"] ?>" id="id">
+    <div class="row">
+        <div class="col-6">
+            &nbsp;
+        </div>
+        <div class="col-6">
+            <div class="row">
+                <div class="col">
+                    <a href="?page=search" class="btn btn-secondary"><i class="fas fa-list"></i> Lista</a>
+                </div>
+                <div class="col">
+                    <a href="?page=details&id=<?= $trato->getEntityId() ?>" class="btn btn-primary"><i class="fas fa-arrow-left"></i> Detalles</a>
+                </div>
+                <div class="col">
+                    <button type="submit" name="submit" class="btn btn-success"><i class="fas fa-search-dollar"></i> Cotizar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <hr>
+
 
     <h5>Tipo de Cotización</h5>
     <hr>
@@ -59,7 +103,12 @@ if ($_POST) {
         <div class="col-sm-4">
             <select class="form-control" name="marca" id="marca" onchange="obtener_modelos(this)" required>
                 <option value="" selected disabled>Selecciona una Marca</option>
-                <?php require("helpers/obtener_marcas.php") ?>
+                <?php
+                $marcas = $api->getRecords("Marcas");
+                foreach ($marcas as $marca) {
+                    echo '<option value="' . $marca->getEntityId() . '">' . $marca->getFieldValue("Name") . '</option>';
+                }
+                ?>
             </select>
         </div>
         <label class="col-sm-2 col-form-label">Modelo</label>
@@ -111,11 +160,6 @@ if ($_POST) {
             </div>
         </div>
     </div>
-    <div class="form-group row">
-        <div class="col-sm-10">
-            <button type="submit" class="btn btn-primary">Cotizar</button>
-        </div>
-    </div>
 </form>
 
 <script>
@@ -134,15 +178,3 @@ if ($_POST) {
         }
     }
 </script>
-
-<?php if ($_POST) : ?>
-    <script>
-        var id = document.getElementById("id").value;
-        if (id > 0) {
-            var mensaje = alert("Cambios aplicados");
-            window.location = "index.php?page=details&id=" + id;
-        } else {
-            alert("Ha ocurrido un error,intentalo nuevamente");
-        }
-    </script>;
-<?php endif ?>

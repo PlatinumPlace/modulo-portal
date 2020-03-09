@@ -1,7 +1,8 @@
 <?php
-$tratos = new tratos();
+$api = new api();
 $filtro = $_GET['filter'];
-$tratos = $tratos->lista($_SESSION['usuario']['id']);
+$criterio = "Contact_Name:equals:" . $_SESSION['usuario']['id'];
+$resultado = $api->searchRecordsByCriteria("Deals", $criterio);
 ?>
 <table class="table">
     <thead>
@@ -18,8 +19,8 @@ $tratos = $tratos->lista($_SESSION['usuario']['id']);
     </thead>
 
     <tbody>
-        <?php if (!empty($tratos)) : ?>
-            <?php foreach ($tratos as $trato) : ?>
+        <?php if (!empty($resultado)) : ?>
+            <?php foreach ($resultado as $trato) : ?>
                 <?php if (isset($filtro) and $trato->getFieldValue("Stage") == $filtro or date("Y-m", strtotime($trato->getFieldValue("Closing_Date"))) == date("Y-m")) : ?>
                     <tr>
                         <td><?= $trato->getFieldValue('No_de_cotizaci_n')  ?></td>
