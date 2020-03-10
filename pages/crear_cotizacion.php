@@ -32,11 +32,6 @@ if (isset($_POST['submit'])) {
         $trato["Es_nuevo"] = false;
     }
     $resultado = $api->createRecord("Deals", $trato);
-
-    echo '<script>
-            alert("Cotización creada");
-            window.location = "?page=details&id=" + ' . $resultado['id'] . ';
-        </script>;';
 }
 ?>
 <h1 class="mt-4">Crear Cotización</h1>
@@ -46,6 +41,9 @@ if (isset($_POST['submit'])) {
 </ol>
 
 <form method="POST" action="?page=add">
+
+    <input value="<?= $resultado['id']  ?>" id="id" hidden>
+
 
     <div class="row">
         <div class="col-6">
@@ -230,3 +228,10 @@ if (isset($_POST['submit'])) {
         }
     }
 </script>
+<?php if (isset($_POST['submit'])) : ?>
+    <script>
+        var id = document.getElementById('id').value;
+        alert("Cotización creada");
+        window.location = "?page=details&id=" + id;
+    </script>
+<?php endif ?>

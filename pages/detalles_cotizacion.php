@@ -10,6 +10,7 @@ if (isset($_POST['delete'])) {
     $cambios["Stage"] = "Abandonado";
     $api->updateRecord("Deals", $cambios, $_GET['id']);
 }
+$condicion_emision = array('En trámite', 'Emitido');
 ?>
 <h1 class="mt-4">Detalles Cotizaciones</h1>
 <ol class="breadcrumb mb-4">
@@ -22,10 +23,10 @@ if (isset($_POST['delete'])) {
 
     <div class="col-6">
         <h3>
-            <?php if ($trato->getFieldValue('Stage') == "Cotizando") : ?>
-                COTIZACIÓN
-            <?php else : ?>
+            <?php if (in_array($trato->getFieldValue('Stage'), $condicion_emision)) : ?>
                 RESUMEN COBERTURAS
+            <?php else : ?>
+                COTIZACIÓN
             <?php endif ?>
             <br>
             SEGURO VEHICULO DE MOTOR <br>
@@ -33,11 +34,11 @@ if (isset($_POST['delete'])) {
         </h3>
     </div>
     <div class="col-6">
-        <form class="row" method="POST" action="?page=details&id=<?= $trato->getEntityId() ?>">
+        <div class="row">
             <div class="col">
                 <a href="?page=search" class="btn btn-secondary"><i class="fas fa-list"></i> Lista</a>
             </div>
-            <?php if ($trato->getFieldValue('Stage') != "Abandonado" or $_POST['delete']) : ?>
+            <?php if (!isset($_POST['delete']) and $trato->getFieldValue('Stage') != "Abandonado") : ?>
                 <div class="col">
                     <a href="?page=emit&id=<?= $trato->getEntityId() ?>" class="btn btn-success"><i class="fas fa-portrait"></i> Emitir</a>
                 </div>
@@ -48,11 +49,12 @@ if (isset($_POST['delete'])) {
                     <div class="col">
                         <a href="?page=edit&id=<?= $trato->getEntityId() ?>" class="btn btn-warning"><i class="fas fa-edit"></i> Editar</a>
                     </div>
-                    <div class="col">
+                    <form class="col" method="POST" action="?page=details&id=<?= $trato->getEntityId() ?>">
                         <button type="submit" name="delete" onclick="return confirm('¿Estas seguro?');" class="btn btn-danger"><i class="fas fa-trash"></i>Eliminar</button>
-                    </div>
-                <?php else : ?>
-                    <br><br>
+                    </form>
+                <?php endif ?>
+                <?php if (in_array($trato->getFieldValue('Stage'), $condicion_emision)) : ?>
+                    <br><br><br><br>
                     <div class="col-12">
                         <ul class="list-group">
                             <li class="list-group-item">
@@ -68,10 +70,10 @@ if (isset($_POST['delete'])) {
                     </div>
                 <?php endif ?>
             <?php endif ?>
-        </form>
+        </div>
     </div>
 
-    <?php if ($trato->getFieldValue('Stage') == "Abandonado" or isset($_POST['delete'])) : ?>
+    <?php if (isset($_POST['delete']) or $trato->getFieldValue('Stage') == "Abandonado") : ?>
         <div class="alert alert-danger" role="alert">
             Cotización Abandonada
         </div>

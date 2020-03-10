@@ -2,6 +2,9 @@
 $api = new api();
 $trato = $api->getRecord("Deals", $_GET['id']);
 $cotizaciones = $trato->getFieldValue('Aseguradoras_Disponibles');
+if ($trato->getFieldValue('Stage') == "Abandonado") {
+    header("Location:index.php");
+}
 function calcular($valor, $porciento)
 {
     return $valor * ($porciento / 100);
@@ -28,14 +31,11 @@ function calcular($valor, $porciento)
 
 
     <style>
-        @media all {
-            div.saltopagina {
-                display: none;
-            }
-        }
-
+        /* cuando vayamos a imprimir ... */
         @media print {
-            div.saltopagina {
+
+            /* indicamos el salto de pagina */
+            .saltoDePagina {
                 display: block;
                 page-break-before: always;
             }
@@ -275,12 +275,11 @@ function calcular($valor, $porciento)
             </div>
         </div>
         <?php if ($trato->getFieldValue('Stage') != "Cotizando") : ?>
-            <div class="saltopagina"></div>
+            <?php $cobertura = $api->getRecord("Coberturas", $trato->getFieldValue('Cobertura')->getEntityId()) ?>
+            <div class="saltoDePagina"></div>
             <?php foreach ($cotizaciones as $cotizacion) : ?>
                 <?php
                 $plan_detalles = $api->getRecord("Products", $cotizacion["Plan"]["id"]);
-                $criterio = "((Aseguradora:equals:" . $plan_detalles->getFieldValue('Vendor_Name')->getEntityId() . ") and (Socio_IT:equals:" . $trato->getFieldValue('Account_Name')->getEntityId() . "))";
-                $coberturas = $api->searchRecordsByCriteria("Coberturas", $criterio);
                 $plan_detalles = $api->getRecord("Products", $cotizacion["Plan"]["id"]);
                 if ($plan_detalles->getFieldValue('Vendor_Name') != null) {
                     $ruta_imagen = $api->downloadPhoto("Vendors", $plan_detalles->getFieldValue('Vendor_Name')->getEntityId(), "img/Aseguradoras/");
@@ -288,98 +287,127 @@ function calcular($valor, $porciento)
                     $ruta_imagen = null;
                 }
                 ?>
-                <?php foreach ($coberturas as $cobertura) : ?>
-                    <?php if ($cobertura->getFieldValue('Tipo_de_Plan') == $trato->getFieldValue('Plan')) : ?>
+                <div class="row">
+                    <div class="col-6 border">
+                        <br>
+                        <img height="100" width="160" src="<?= $ruta_imagen ?>">
+                        <br><br>
                         <div class="row">
-                            <div class="col-6 border">
-                                <br>
-                                <img height="100" width="160" src="<?= $ruta_imagen ?>">
-                                <br><br>
-                                <div class="row">
-                                    <div class="col">
-                                        <P>
-                                            <b>PÓLIZA </b><br>
-                                            <b>MARCA </b><br>
-                                            <b>MODELO </b><br>
-                                            <b>AÑO </b><br>
-                                            <b>CHASIS </b><br>
-                                            <b>PLACA </b><br>
-                                            <b>VIGENTE HASTA </b>
-                                        </P>
-                                    </div>
-                                    <div class="col">
-                                        <P>
-                                            <?= $trato->getFieldValue('P_liza')->getLookupLabel() ?><br>
-                                            <?= $trato->getFieldValue('Marca') ?><br>
-                                            <?= $trato->getFieldValue('Modelo') ?><br>
-                                            <?= $trato->getFieldValue('A_o_de_Fabricacion') ?><br>
-                                            <?= $trato->getFieldValue('Chasis') ?><br>
-                                            <?= $trato->getFieldValue('Placa') ?><br>
-                                            <?= $trato->getFieldValue('Closing_Date') ?>
-                                        </P>
-                                    </div>
-                                </div>
+                            <div class="col">
+                                <P>
+                                    <b>PÓLIZA </b><br>
+                                    <b>MARCA </b><br>
+                                    <b>MODELO </b><br>
+                                    <b>AÑO </b><br>
+                                    <b>CHASIS </b><br>
+                                    <b>PLACA </b><br>
+                                    <b>VIGENTE HASTA </b>
+                                </P>
                             </div>
-                            <div class="col-6 border">
-                                <h6><b>RECOMENDACIONES EN CASO DE ACCIDENTE</b></h6>
-                                <ul>
-                                    <li>En caso de existir lesionados atender al herido.</li>
-                                    <li>No aceptar responsabilidad en el momento del accidente.</li>
-                                    <li>En caso de robo notifique inmediatamente a la policia y aseguradora.</li>
-                                </ul>
-                                <div class="row">
-                                    <div class="col-12">
-                                        <?php if ($cobertura->getFieldValue('Casa_del_Conductor') == 1) : ?>
-                                            <b>Reporte accidente</b><br>
-                                            Santo domingo: <?= $cobertura->getFieldValue('Tel_fono_casa_del_conductor') ?><br>
-                                            Santiago: <?= $cobertura->getFieldValue('Tel_fono_casa_del_conductor_1') ?><br>
-                                        <?php endif ?>
-                                    </div>
-                                    <div class="col-6">
-                                        <b>Aseguradora</b><br>
-                                        22222<br>
-                                    </div>
-                                    <div class="col-6">
-                                        <?php if ($cobertura->getFieldValue('Asistencia_vial') == 1) : ?>
-                                            <b>Asistencia vial 24 horas</b><br>
-                                            <?= $cobertura->getFieldValue('Tel_fono_asistencia_vial') ?><br>
-                                        <?php endif ?>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="saltopagina1"></div>
-                            <div class="col-3">
-                                <img height="100" width="160" src="<?= $ruta_imagen ?>">
-                            </div>
-                            <div class="col-9">
-                                <h3>
-                                    EXTRACTO DE LAS PRINCIPALES CONDICIONES
-                                    DE VEHICULOS DE MOTOR
-                                </h3>
+                            <div class="col">
+                                <P>
+                                    <?= $trato->getFieldValue('P_liza')->getLookupLabel() ?><br>
+                                    <?= $trato->getFieldValue('Marca') ?><br>
+                                    <?= $trato->getFieldValue('Modelo') ?><br>
+                                    <?= $trato->getFieldValue('A_o_de_Fabricacion') ?><br>
+                                    <?= $trato->getFieldValue('Chasis') ?><br>
+                                    <?= $trato->getFieldValue('Placa') ?><br>
+                                    <?= $trato->getFieldValue('Closing_Date') ?>
+                                </P>
                             </div>
                         </div>
-                    <?php endif ?>
-                <?php endforeach ?>
+                    </div>
+                    <div class="col-6 border">
+                        <h6><b>RECOMENDACIONES EN CASO DE ACCIDENTE</b></h6>
+                        <ul>
+                            <li>En caso de existir lesionados atender al herido.</li>
+                            <li>No aceptar responsabilidad en el momento del accidente.</li>
+                            <li>En caso de robo notifique inmediatamente a la policia y aseguradora.</li>
+                        </ul>
+                        <div class="row">
+                            <div class="col-12">
+                                <?php if ($cobertura->getFieldValue('Casa_del_Conductor') == 1) : ?>
+                                    <b>Reporte accidente</b><br>
+                                    Santo domingo: Tel. <?= $cobertura->getFieldValue('Tel_fono_casa_del_conductor') ?><br>
+                                    Santiago: Tel. <?= $cobertura->getFieldValue('Tel_fono_casa_del_conductor_1') ?><br>
+                                <?php endif ?>
+                            </div>
+                            <div class="col-6">
+                                <b>Aseguradora</b><br>
+                                Tel. <br>
+                            </div>
+                            <div class="col-6">
+                                <?php if ($cobertura->getFieldValue('Asistencia_vial') == 1) : ?>
+                                    <b>Asistencia vial 24 horas</b><br>
+                                    <?= $cobertura->getFieldValue('Tel_fono_asistencia_vial') ?><br>
+                                <?php endif ?>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             <?php endforeach ?>
+            <div class="saltoDePagina"></div>
+            <div class="row">
+                <div class="col-3">
+                    <img height="100" width="160" src="<?= $ruta_imagen ?>">
+                </div>
+                <div class="col-9">
+                    <h3>
+                        EXTRACTO DE LAS PRINCIPALES CONDICIONES
+                        DE VEHICULOS DE MOTOR
+                    </h3>
+                </div>
+                <div class="col-12">
+                    &nbsp;
+                </div>
+                <div class="col-12">
+                    &nbsp;
+                </div>
+                <div class="col-12">
+                    <ol>
+                        <?php $condiciones = $cobertura->getFieldValue('Condiciones_del_Veh_culo'); ?>
+                        <?php foreach ($condiciones as $condicion) : ?>
+                            <li><?= $condicion["Condici_n"] ?></li>
+                        <?php endforeach ?>
+                    </ol>
+                </div>
+                <div class="col-12">
+                    &nbsp;
+                </div>
+                <div class="col-6">
+                    <p class="text-center">
+                        _______________________________
+                        <br>
+                        Asegurado
+                    </p>
+                </div>
+                <div class="col-6">
+                    <p class="text-center">
+                        _______________________________
+                        <br>
+                        Fecha
+                    </p>
+                </div>
+            </div>
         <?php else : ?>
             <br><br>
             <div class="row">
                 <div class="col">
-                    <p>
+                    <p class="text-center">
                         _______________________________
                         <br>
                         Firma Cliente
                     </p>
                 </div>
                 <div class="col">
-                    <p>
+                    <p class="text-center">
                         _______________________________
                         <br>
                         Aseguradora Elegida
                     </p>
                 </div>
                 <div class="col">
-                    <p>
+                    <p class="text-center">
                         _______________________________
                         <br>
                         Fecha

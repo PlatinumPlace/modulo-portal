@@ -2,6 +2,9 @@
 $api = new api();
 $trato = $api->getRecord("Deals", $_GET['id']);
 $cotizaciones = $trato->getFieldValue('Aseguradoras_Disponibles');
+if ($trato->getFieldValue('Stage') == "Abandonado") {
+  header("Location:index.php");
+}
 if (isset($_POST['submit'])) {
   $ruta_cotizacion = "tmp";
   if (!is_dir($ruta_cotizacion)) {
@@ -13,6 +16,7 @@ if (isset($_POST['submit'])) {
     if (in_array($extension, $permitido)) {
       $cambios["Aseguradora"] = $_POST["aseguradora"];
       $cambios["Stage"] = "En trámite";
+      $cambios["Deal_Name"] = "Resumen";
       $resultado =  $api->updateRecord("Deals", $cambios, $_GET['id']);
       $tmp_name = $_FILES["cotizacion_firmada"]["tmp_name"];
       $name = basename($_FILES["cotizacion_firmada"]["name"]);

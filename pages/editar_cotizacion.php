@@ -1,6 +1,9 @@
 <?php
 $api = new api();
 $trato = $api->getRecord("Deals", $_GET['id']);
+if ($trato->getFieldValue('Stage') != "Cotizando") {
+    header("Location:index.php");
+}
 if (isset($_POST['submit'])) {
     $cambios["A_o_de_Fabricacion"] = $_POST['A_o_de_Fabricacion'];
     $cambios["Chasis"] = $_POST['chasis'];
@@ -23,10 +26,6 @@ if (isset($_POST['submit'])) {
         $cambios["Es_nuevo"] = false;
     }
     $resultado = $api->updateRecord("Deals", $cambios, $_GET['id']);
-    echo '<script>
-            alert("Cambios aplicados")
-            window.location = "?page=details&id=" + ' . $_GET['id'] . ';
-        </script>;';
 }
 ?>
 <h1 class="mt-4">Editar Cotización</h1>
@@ -36,6 +35,9 @@ if (isset($_POST['submit'])) {
     <li class="breadcrumb-item active">Cotización No. <?= $trato->getFieldValue('No_de_cotizaci_n') ?></li>
 </ol>
 <form method="POST" action="?page=edit&id=<?= $trato->getEntityId() ?>">
+
+    <input value="<?= $_GET['id'] ?>" id="id" hidden>
+
 
     <div class="row">
         <div class="col-6">
@@ -132,7 +134,7 @@ if (isset($_POST['submit'])) {
     <div class="form-group row">
         <label class="col-sm-2 col-form-label">Chasis</label>
         <div class="col-sm-4">
-            <input type="text" class="form-control" name="chasis">
+            <input type="text" class="form-control" name="chasis" required>
         </div>
         <label class="col-sm-2 col-form-label">Color</label>
         <div class="col-sm-4">
@@ -178,3 +180,10 @@ if (isset($_POST['submit'])) {
         }
     }
 </script>
+<?php if (isset($_POST['submit'])) : ?>
+    <script>
+        var id = document.getElementById('id').value;
+        alert("Cambios Aplicados");
+        window.location = "?page=details&id=" + id;
+    </script>
+<?php endif ?>
