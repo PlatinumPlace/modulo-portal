@@ -86,7 +86,6 @@ if (isset($_POST['submit'])) {
             <select name="plan" class="form-control">
                 <option selected value="Full">Full</option>
                 <option value="Ley">Ley</option>
-                <option value="Simple">Simple</option>
             </select>
         </div>
         <label class="col-sm-2 col-form-label">Período de pago</label>
@@ -124,7 +123,7 @@ if (isset($_POST['submit'])) {
     <div class="form-group row">
         <label class="col-sm-2 col-form-label">Valor Asegurado</label>
         <div class="col-sm-4">
-            <input type="number" class="form-control" name="Valor_Asegurado" required>
+            <input type="number" class="form-control" name="Valor_Asegurado" value="<?= $trato->getFieldValue('Valor_Asegurado') ?>">
         </div>
         <label class="col-sm-2 col-form-label">Año de fabricación</label>
         <div class="col-sm-4">

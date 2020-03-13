@@ -28,23 +28,9 @@ function calcular($valor, $porciento)
 
     <link href="css/styles.css" rel="stylesheet" />
     <link rel="icon" type="image/png" href="img/portal/logo.png">
-
-
-    <style>
-        /* cuando vayamos a imprimir ... */
-        @media print {
-
-            /* indicamos el salto de pagina */
-            .saltoDePagina {
-                display: block;
-                page-break-before: always;
-            }
-        }
-    </style>
 </head>
 
 <body>
-
     <div class="container">
         <div class="row">
             <div class="col-2">
@@ -52,36 +38,29 @@ function calcular($valor, $porciento)
                     <img src="img/portal/logo.png" width="120" height="140">
                 <?php else : ?>
                     <?php foreach ($cotizaciones as $cotizacion) : ?>
-                        <?php
-                        $plan_detalles = $api->getRecord("Products", $cotizacion["Plan"]["id"]);
-                        if ($plan_detalles->getFieldValue('Vendor_Name') != null) {
-                            $ruta_imagen = $api->downloadPhoto("Vendors", $plan_detalles->getFieldValue('Vendor_Name')->getEntityId(), "img/Aseguradoras/");
-                        } else {
-                            $ruta_imagen = null;
-                        }
-                        ?>
-                        <img height="100" width="120" src="<?= $ruta_imagen ?>">
+                        <?php $ruta_imagen = $api->downloadPhoto("Vendors", $cotizacion["Aseguradora"]["id"], "img/Aseguradoras/") ?>
+                        <?php if ($ruta_imagen != null) : ?>
+                            <img width="170" height="85" src="<?= $ruta_imagen ?>">
+                        <?php endif ?>
                     <?php endforeach ?>
                 <?php endif ?>
             </div>
             <div class="col-8">
-                <center>
-                    <h3>
-                        <?php if ($trato->getFieldValue('Stage') == "Cotizando") : ?>
-                            COTIZACIÓN
-                        <?php else : ?>
-                            RESUMEN COBERTURAS
-                        <?php endif ?>
-                        <br>
-                        SEGURO VEHICULO DE MOTOR <br>
-                        PLAN <?= strtoupper($trato->getFieldValue('Per_odo')) . " " . strtoupper($trato->getFieldValue('Plan')) ?>
-                    </h3>
-                </center>
+                <h3 class="text-uppercase text-center">
+                    <?php if ($trato->getFieldValue('P_liza') != null) : ?>
+                        resumen coberturas
+                    <?php else : ?>
+                        cotización
+                    <?php endif ?>
+                    <br>
+                    seguro vehículo de motor<br>
+                    plan <?= $trato->getFieldValue('Plan') ?>
+                </h3>
             </div>
             <div class="col-2">
                 <p>
                     <b>
-                        <?php if ($trato->getFieldValue('Stage') == "Cotizando") : ?>
+                        <?php if ($trato->getFieldValue('P_liza') != null) : ?>
                             Cotización No.
                         <?php else : ?>
                             Resumen No.
@@ -91,7 +70,7 @@ function calcular($valor, $porciento)
                     <b>Fecha</b> <?= date('d/m/Y') ?>
                 </p>
             </div>
-            <div class="col-12 d-flex justify-content-center bg-primary text-white">
+            <div class="col-12 d-flex justify-content-center p-3 mb-2 bg-primary text-white">
                 <h5>DATOS DEL CLIENTE</h5>
             </div>
             <div class="col-6 border">
@@ -121,17 +100,18 @@ function calcular($valor, $porciento)
                             <b>Tel. Residencia:</b><br>
                             <b>Tel. Celular:</b><br>
                             <b>Tel. Trabajo:</b><br>
-                            <b>Otro:</b>
                         </P>
                     </div>
                     <div class="col">
                         <P>
-                            <?= $trato->getFieldValue('Telefono_del_asegurado') ?>
+                            <?= $trato->getFieldValue('Tel_Residencia') ?><br>
+                            <?= $trato->getFieldValue('Telefono_del_asegurado') ?><br>
+                            <?= $trato->getFieldValue('Tel_Trabajo') ?><br>
                         </P>
                     </div>
                 </div>
             </div>
-            <div class="col-12 d-flex justify-content-center bg-primary text-white" style="width: 200px;">
+            <div class="col-12 d-flex justify-content-center p-3 mb-2 bg-primary text-white" style="width: 200px;">
                 <h5>DATOS DEL VEHICULO</h5>
             </div>
             <div class="col-6 border">
@@ -177,36 +157,27 @@ function calcular($valor, $porciento)
                     </div>
                 </div>
             </div>
-            <div class="col-12 d-flex justify-content-center bg-primary text-white" style="width: 200px;">
+            <div class="col-12 d-flex justify-content-center p-3 mb-2 bg-primary text-white" style="width: 200px;">
                 <h5>COBERTURAS</h5>
             </div>
-            <?php if ($trato->getFieldValue('Stage') == "Cotizando") : ?>
-                <div class="col-12">
+            <div class="col-12 border">
+                <?php if ($trato->getFieldValue('P_liza') == null) : ?>
                     <div class="row">
                         <div class="col">
-                            &nbsp;
+                            <p>&nbsp;</p>
                         </div>
                         <?php foreach ($cotizaciones as $cotizacion) : ?>
                             <?php if ($cotizacion["Prima_Total"] > 0) : ?>
-                                <?php
-                                $plan_detalles = $api->getRecord("Products", $cotizacion["Plan"]["id"]);
-                                if ($plan_detalles->getFieldValue('Vendor_Name') != null) {
-                                    $ruta_imagen = $api->downloadPhoto("Vendors", $plan_detalles->getFieldValue('Vendor_Name')->getEntityId(), "img/Aseguradoras/");
-                                } else {
-                                    $ruta_imagen = null;
-                                }
-                                ?>
+                                <?php $ruta_imagen = $api->downloadPhoto("Vendors", $cotizacion["Aseguradora"]["id"], "img/Aseguradoras/") ?>
                                 <?php if ($ruta_imagen != null) : ?>
                                     <div class="col-2">
-                                        <img height="80" width="100" src="<?= $ruta_imagen ?>">
+                                        <img height="50" width="110" src="<?= $ruta_imagen ?>">
                                     </div>
                                 <?php endif ?>
                             <?php endif ?>
                         <?php endforeach ?>
                     </div>
-                </div>
-            <?php endif ?>
-            <div class="col-12 border">
+                <?php endif ?>
                 <div class="row">
                     <div class="col">
                         <p>
@@ -235,63 +206,51 @@ function calcular($valor, $porciento)
                     </div>
                     <?php foreach ($cotizaciones as $cotizacion) : ?>
                         <?php if ($cotizacion["Prima_Total"] > 0) : ?>
-                            <?php
-                            $plan_detalles = $api->getRecord("Products", $cotizacion["Plan"]["id"]);
-                            $criterio = "((Aseguradora:equals:" . $plan_detalles->getFieldValue('Vendor_Name')->getEntityId() . ") and (Socio_IT:equals:" . $trato->getFieldValue('Account_Name')->getEntityId() . "))";
-                            $coberturas = $api->searchRecordsByCriteria("Coberturas", $criterio);
-                            ?>
-                            <?php foreach ($coberturas as $cobertura) : ?>
-                                <?php if ($cobertura->getFieldValue('Tipo_de_Plan') == $trato->getFieldValue('Plan')) : ?>
-                                    <div class="col-2">
-                                        <p>
-                                            <b>&nbsp;</b><br>
-                                            RD$<?= number_format(calcular($trato->getFieldValue('Valor_Asegurado'), $cobertura->getFieldValue('Riesgos_comprensivos')), 2) ?><br>
-                                            RD$<?= number_format(calcular($trato->getFieldValue('Valor_Asegurado'), $cobertura->getFieldValue('Riesgos_comprensivos_Deducible')), 2) ?><br>
-                                            RD$<?= number_format(calcular($trato->getFieldValue('Valor_Asegurado'), $cobertura->getFieldValue('Rotura_de_Cristales_Deducible')), 2) ?><br>
-                                            RD$<?= number_format(calcular($trato->getFieldValue('Valor_Asegurado'), $cobertura->getFieldValue('Colisi_n_y_vuelco')), 2) ?><br>
-                                            RD$<?= number_format(calcular($trato->getFieldValue('Valor_Asegurado'), $cobertura->getFieldValue('Incendio_y_robo')), 2) ?><br>
-                                            <b>&nbsp;</b><br>
-                                            RD$<?= number_format($cobertura->getFieldValue('Da_os_Propiedad_ajena'), 2) ?><br>
-                                            RD$<?= number_format($cobertura->getFieldValue('Lesiones_Muerte_1_Pers'), 2) ?><br>
-                                            RD$<?= number_format($cobertura->getFieldValue('Lesiones_Muerte_m_s_de_1_Pers'), 2) ?><br>
-                                            RD$<?= number_format($cobertura->getFieldValue('Lesiones_Muerte_1_pasajero'), 2) ?><br>
-                                            RD$<?= number_format($cobertura->getFieldValue('Lesiones_Muerte_m_s_de_1_pasajero'), 2) ?><br><br>
-                                            RD$<?= number_format($cobertura->getFieldValue('Riesgos_conductor'), 2) ?><br><br>
-                                            RD$<?= number_format($cobertura->getFieldValue('Fianza_judicial'), 2) ?><br><br>
-                                            <b>&nbsp;</b><br>
-                                            <?= $retVal = ($cobertura->getFieldValue('Asistencia_vial') == 1) ? "Aplica" : "No Aplica"; ?><br>
-                                            <?= $retVal = ($cobertura->getFieldValue('Renta_Veh_culo') == 1) ? "Aplica" : "No Aplica"; ?><br>
-                                            <?= $retVal = ($cobertura->getFieldValue('Casa_del_Conductor') == 1) ? "Aplica" : "No Aplica"; ?><br><br>
-                                            RD$<?= number_format($cotizacion["Prima_Neta"], 2) ?><br>
-                                            RD$<?= number_format($cotizacion["ISC"], 2) ?><br>
-                                            RD$<?= number_format($cotizacion["Prima_Total"], 2) ?>
-                                        </p>
-                                    </div>
-                                <?php endif ?>
-                            <?php endforeach ?>
+                            <?php $cobertura = $api->getRecord("Coberturas", $cotizacion["Cobertura"]["id"]) ?>
+                            <div class="col-2">
+                                <p>
+                                    <b>&nbsp;</b><br>
+                                    RD$<?= number_format(calcular($trato->getFieldValue('Valor_Asegurado'), $cobertura->getFieldValue('Riesgos_comprensivos'))) ?><br>
+                                    <?= $cobertura->getFieldValue('Riesgos_Comprensivos_Deducible') ?><br>
+                                    <?= $cobertura->getFieldValue('Rotura_de_cristales_Deducible') ?><br>
+                                    <?= $retVal = ($cobertura->getFieldValue('Colisi_n_y_vuelco') > 0) ? "RD$" . number_format(calcular($trato->getFieldValue('Valor_Asegurado'), $cobertura->getFieldValue('Colisi_n_y_vuelco'))) : "No Aplica"; ?><br>
+                                    <?= $retVal = ($cobertura->getFieldValue('Incendio_y_robo') > 0) ? "RD$" . number_format(calcular($trato->getFieldValue('Valor_Asegurado'), $cobertura->getFieldValue('Incendio_y_robo'))) : "No Aplica"; ?><br><br>
+                                    <b>&nbsp;</b><br>
+                                    RD$<?= number_format($cobertura->getFieldValue('Da_os_Propiedad_ajena')) ?><br>
+                                    RD$<?= number_format($cobertura->getFieldValue('Lesiones_Muerte_1_Pers')) ?><br>
+                                    RD$<?= number_format($cobertura->getFieldValue('Lesiones_Muerte_m_s_de_1_Pers')) ?><br>
+                                    RD$<?= number_format($cobertura->getFieldValue('Lesiones_Muerte_1_pasajero')) ?><br>
+                                    RD$<?= number_format($cobertura->getFieldValue('Lesiones_Muerte_m_s_de_1_pasajero')) ?><br>
+                                    <br>
+                                    <?= $retVal = ($cobertura->getFieldValue('Riesgos_conductor') > 0) ? "RD$" . number_format($cobertura->getFieldValue('Riesgos_conductor')) : "No Aplica"; ?><br>
+                                    <br>
+                                    <?= $retVal = ($cobertura->getFieldValue('Fianza_judicial') > 0) ? "RD$" . number_format($cobertura->getFieldValue('Fianza_judicial')) : "No Aplica"; ?><br>
+                                    <br>
+                                    <b>&nbsp;</b><br>
+                                    <?= $retVal = ($cobertura->getFieldValue('Asistencia_vial') == 1) ? "Aplica" : "No Aplica"; ?><br>
+                                    <?= $retVal = ($cobertura->getFieldValue('Renta_Veh_culo') == 1) ? "Aplica" : "No Aplica"; ?><br>
+                                    <?= $retVal = ($cobertura->getFieldValue('Casa_del_Conductor') == 1) ? "Aplica" : "No Aplica"; ?><br><br>
+                                    RD$<?= number_format($cotizacion["Prima_Neta"]) ?><br>
+                                    RD$<?= number_format($cotizacion["ISC"]) ?><br>
+                                    RD$<?= number_format($cotizacion["Prima_Total"]) ?>
+                                </p>
+                            </div>
                         <?php endif ?>
                     <?php endforeach ?>
                 </div>
             </div>
         </div>
-        <?php if ($trato->getFieldValue('Stage') != "Cotizando") : ?>
-            <?php $cobertura = $api->getRecord("Coberturas", $trato->getFieldValue('Cobertura')->getEntityId()) ?>
-            <div class="saltoDePagina"></div>
-            <?php foreach ($cotizaciones as $cotizacion) : ?>
-                <?php
-                $plan_detalles = $api->getRecord("Products", $cotizacion["Plan"]["id"]);
-                $plan_detalles = $api->getRecord("Products", $cotizacion["Plan"]["id"]);
-                if ($plan_detalles->getFieldValue('Vendor_Name') != null) {
-                    $ruta_imagen = $api->downloadPhoto("Vendors", $plan_detalles->getFieldValue('Vendor_Name')->getEntityId(), "img/Aseguradoras/");
-                } else {
-                    $ruta_imagen = null;
-                }
-                ?>
-                <div class="row">
+        <div class="row">
+            <?php if ($trato->getFieldValue('Stage') != "Cotizando") : ?>
+                <?php foreach ($cotizaciones as $cotizacion) : ?>
+                    <?php $ruta_imagen = $api->downloadPhoto("Vendors", $cotizacion["Aseguradora"]["id"], "img/Aseguradoras/") ?>
                     <div class="col-6 border">
+                        <?php if ($ruta_imagen != null) : ?>
+                            <div class="col-2">
+                                <img height="50" width="150" src="<?= $ruta_imagen ?>">
+                            </div>
+                        <?php endif ?>
                         <br>
-                        <img height="100" width="160" src="<?= $ruta_imagen ?>">
-                        <br><br>
                         <div class="row">
                             <div class="col">
                                 <P>
@@ -333,30 +292,20 @@ function calcular($valor, $porciento)
                                 <?php endif ?>
                             </div>
                             <div class="col-6">
+                                <?php $aseguradora = $api->getRecord("Vendors", $cotizacion["Aseguradora"]["id"]) ?>
                                 <b>Aseguradora</b><br>
-                                Tel. <br>
+                                Tel. <?= $aseguradora->getFieldValue('Phone') ?><br>
                             </div>
                             <div class="col-6">
                                 <?php if ($cobertura->getFieldValue('Asistencia_vial') == 1) : ?>
                                     <b>Asistencia vial 24 horas</b><br>
-                                    <?= $cobertura->getFieldValue('Tel_fono_asistencia_vial') ?><br>
+                                    Tel. <?= $cobertura->getFieldValue('Tel_fono_asistencia_vial') ?><br>
                                 <?php endif ?>
                             </div>
                         </div>
                     </div>
-                </div>
-            <?php endforeach ?>
-            <div class="saltoDePagina"></div>
-            <div class="row">
-                <div class="col-3">
-                    <img height="100" width="160" src="<?= $ruta_imagen ?>">
-                </div>
-                <div class="col-9">
-                    <h3>
-                        EXTRACTO DE LAS PRINCIPALES CONDICIONES
-                        DE VEHICULOS DE MOTOR
-                    </h3>
-                </div>
+                <?php endforeach ?>
+            <?php else : ?>
                 <div class="col-12">
                     &nbsp;
                 </div>
@@ -364,34 +313,8 @@ function calcular($valor, $porciento)
                     &nbsp;
                 </div>
                 <div class="col-12">
-                    <ol>
-                        <?php $condiciones = $cobertura->getFieldValue('Condiciones_del_Veh_culo'); ?>
-                        <?php foreach ($condiciones as $condicion) : ?>
-                            <li><?= $condicion["Condici_n"] ?></li>
-                        <?php endforeach ?>
-                    </ol>
-                </div>
-                <div class="col-12">
                     &nbsp;
                 </div>
-                <div class="col-6">
-                    <p class="text-center">
-                        _______________________________
-                        <br>
-                        Asegurado
-                    </p>
-                </div>
-                <div class="col-6">
-                    <p class="text-center">
-                        _______________________________
-                        <br>
-                        Fecha
-                    </p>
-                </div>
-            </div>
-        <?php else : ?>
-            <br><br>
-            <div class="row">
                 <div class="col">
                     <p class="text-center">
                         _______________________________
@@ -413,18 +336,18 @@ function calcular($valor, $porciento)
                         Fecha
                     </p>
                 </div>
-            </div>
-        <?php endif ?>
-
-        <input value="<?= $_GET['id'] ?>" id="id" hidden>
-        <script>
-            var time = 500;
-            var id = document.getElementById('id').value;
-            setTimeout(function() {
-                window.print();
-                window.location = "index.php?page=details&id=" + id;
-            }, time);
-        </script>
+            <?php endif ?>
+        </div>
+    </div>
+    <input value="<?= $_GET['id'] ?>" id="id" hidden>
+    <script>
+        var time = 500;
+        var id = document.getElementById('id').value;
+        setTimeout(function() {
+            window.print();
+            window.location = "index.php?page=details&id=" + id;
+        }, time);
+    </script>
 </body>
 
 </html>

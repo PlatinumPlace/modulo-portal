@@ -1,7 +1,7 @@
 <?php
 if ($_POST) {
     $api = new api;
-    $criterio = "((Usuario:equals:" . $_POST['usuario'] . ") and (Contrase_a:equals:" . $_POST['clave'] . "))";
+    $criterio = "((Email:equals:" . $_POST['usuario'] . ") and (Contrase_a:equals:" . $_POST['clave'] . "))";
     $contactos = $api->searchRecordsByCriteria("Contacts", $criterio);
     if (!empty($contactos)) {
         foreach ($contactos as $contacto) {
