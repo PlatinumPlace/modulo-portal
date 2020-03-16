@@ -6,10 +6,6 @@ function calcular($valor, $porciento)
 {
     return $valor * ($porciento / 100);
 }
-if (isset($_POST['delete'])) {
-    $cambios["Stage"] = "Abandonado";
-    $api->updateRecord("Deals", $cambios, $_GET['id']);
-}
 ?>
 <h1 class="mt-4">Detalles Cotizaciones</h1>
 <ol class="breadcrumb mb-4">
@@ -35,30 +31,25 @@ if (isset($_POST['delete'])) {
             <div class="col">
                 <a href="?page=search" class="btn btn-secondary"><i class="fas fa-list"></i> Lista</a>
             </div>
-            <?php if (!isset($_POST['delete']) and $trato->getFieldValue('Stage') != "Abandonado") : ?>
-                <div class="col">
-                    <a href="?page=emit&id=<?= $trato->getEntityId() ?>" class="btn btn-success"><i class="fas fa-portrait"></i> Emitir</a>
-                </div>
-                <div class="col">
-                    <a href="?page=download&id=<?= $trato->getEntityId() ?>" class="btn btn-primary"><i class="fas fa-download"></i> Descargar</a>
-                </div>
-                <?php if ($trato->getFieldValue('P_liza') == null) : ?>
+            <?php if ($trato->getFieldValue('Stage') != "Abandonado") : ?>
+                <?php if ($trato->getFieldValue('Nombre') == null) : ?>
                     <div class="col">
-                        <a href="?page=edit&id=<?= $trato->getEntityId() ?>" class="btn btn-warning"><i class="fas fa-edit"></i> Editar</a>
+                        <a href="?page=complete_auto&id=<?= $trato->getEntityId() ?>" class="btn btn-primary"><i class="fas fa-edit"></i> Siguente</a>
                     </div>
-                    <form class="col" method="POST" action="?page=details&id=<?= $trato->getEntityId() ?>">
-                        <button type="submit" name="delete" onclick="return confirm('¿Estas seguro?');" class="btn btn-danger"><i class="fas fa-trash"></i>Eliminar</button>
-                    </form>
+                <?php else : ?>
+                    <div class="col">
+                        <a href="?page=emit&id=<?= $trato->getEntityId() ?>" class="btn btn-success"><i class="fas fa-portrait"></i> Emitir</a>
+                    </div>
+                    <div class="col">
+                        <a href="?page=download_auto&id=<?= $trato->getEntityId() ?>" class="btn btn-info"><i class="fas fa-download"></i> Descargar</a>
+                    </div>
                 <?php endif ?>
+                <div class="col-12">
+                    &nbsp;
+                </div>
                 <?php if ($trato->getFieldValue('P_liza') != null) : ?>
-                    <br><br><br><br>
                     <div class="col-12">
                         <ul class="list-group">
-                            <li class="list-group-item">
-                                <?php foreach ($cotizaciones as $cotizacion) : ?>
-                                    <a download="Extracto de las principales condiciones de vehiculos de motor" href="documents/<?= $cotizacion["Aseguradora"]["name"] ?>/extracto de principales condiciones.pdf" class="btn btn-link"><i class="fas fa-download"></i> Extracto de las principales condiciones</a>
-                                <?php endforeach ?>
-                            </li>
                             <li class="list-group-item">
                                 <a download="Condiciones del Vehículos" href="documents/condiciones del vehiculo.pdf" class="btn btn-link"><i class="fas fa-download"></i> Condiciones del Vehículos</a>
                             </li>
@@ -74,52 +65,56 @@ if (isset($_POST['delete'])) {
             <?php endif ?>
         </div>
     </div>
-    <?php if (isset($_POST['delete']) or $trato->getFieldValue('Stage') == "Abandonado") : ?>
+    <?php if ($trato->getFieldValue('Stage') == "Abandonado") : ?>
         <div class="alert alert-danger" role="alert">
             Cotización Abandonada
         </div>
     <?php endif ?>
-    <div class="col-12 d-flex justify-content-center p-3 mb-2 bg-primary text-white">
-        <h4>DATOS DEL CLIENTE</h4>
-    </div>
-    <div class="col-6 border">
-        <div class="row">
-            <div class="col">
-                <P>
-                    <b>Cliente:</b><br>
-                    <b>Cédula/RNC:</b><br>
-                    <b>Direccion:</b><br><br>
-                    <b>Email: </b>
-                </P>
-            </div>
-            <div class="col">
-                <P>
-                    <?= $trato->getFieldValue('Nombre_del_asegurado') . " " . $trato->getFieldValue('Apellido_del_asegurado') ?><br>
-                    <?= $trato->getFieldValue('RNC_Cedula_del_asegurado') ?><br>
-                    <?= $trato->getFieldValue('Direcci_n_del_asegurado') ?><br>
-                    <?= $trato->getFieldValue('Email_del_asegurado') ?>
-                </P>
+    <?php if ($trato->getFieldValue('Nombre') != null) : ?>
+        <div class="col-12 d-flex justify-content-center p-3 mb-2 bg-primary text-white">
+            <h4>DATOS DEL CLIENTE</h4>
+        </div>
+        <div class="col-6 border">
+            <div class="row">
+                <div class="col">
+                    <P>
+                        <b>Cliente:</b><br>
+                        <b>Cédula/RNC:</b><br>
+                        <b>Direccion:</b><br>
+                        <br>
+                        <b>Email: </b>
+                    </P>
+                </div>
+                <div class="col">
+                    <P>
+                        <?= $trato->getFieldValue('Nombre') . " " . $trato->getFieldValue('Apellido') ?><br>
+                        <?= $trato->getFieldValue('RNC_Cedula') ?><br>
+                        <?= $trato->getFieldValue('Direcci_n') ?><br>
+                        <br>
+                        <?= $trato->getFieldValue('Email') ?>
+                    </P>
+                </div>
             </div>
         </div>
-    </div>
-    <div class="col-6 border">
-        <div class="row">
-            <div class="col">
-                <P>
-                    <b>Tel. Residencia:</b><br>
-                    <b>Tel. Celular:</b><br>
-                    <b>Tel. Trabajo:</b><br>
-                </P>
-            </div>
-            <div class="col">
-                <P>
-                    <?= $trato->getFieldValue('Tel_Residencia') ?><br>
-                    <?= $trato->getFieldValue('Telefono_del_asegurado') ?><br>
-                    <?= $trato->getFieldValue('Tel_Trabajo') ?><br>
-                </P>
+        <div class="col-6 border">
+            <div class="row">
+                <div class="col">
+                    <P>
+                        <b>Tel. Residencia:</b><br>
+                        <b>Tel. Celular:</b><br>
+                        <b>Tel. Trabajo:</b><br>
+                    </P>
+                </div>
+                <div class="col">
+                    <P>
+                        <?= $trato->getFieldValue('Tel_Residencia') ?><br>
+                        <?= $trato->getFieldValue('Telefono') ?><br>
+                        <?= $trato->getFieldValue('Tel_Trabajo') ?><br>
+                    </P>
+                </div>
             </div>
         </div>
-    </div>
+    <?php endif ?>
     <div class="col-12 d-flex justify-content-center p-3 mb-2 bg-primary text-white" style="width: 200px;">
         <h4>DATOS DEL VEHICULO</h4>
     </div>
@@ -152,6 +147,7 @@ if (isset($_POST['delete'])) {
                     <b>Chasis:</b><br>
                     <b>Placa:</b><br>
                     <b>Color:</b><br>
+                    <b>Uso:</b><br>
                     <b>Condiciones:</b><br>
                     &nbsp;
                 </P>
@@ -161,6 +157,7 @@ if (isset($_POST['delete'])) {
                     <?= $trato->getFieldValue('Chasis') ?><br>
                     <?= $trato->getFieldValue('Placa') ?><br>
                     <?= $trato->getFieldValue('Color') ?><br>
+                    <?= $trato->getFieldValue('Uso') ?><br>
                     <?= $retVal = ($trato->getFieldValue('Es_nuevo') == 1) ? "Nuevo" : "Usado"; ?>
                 </P>
             </div>
@@ -173,7 +170,6 @@ if (isset($_POST['delete'])) {
         <?php if ($cotizacion["Prima_Total"] == 0) : ?>
             <div class="alert alert-info" role="alert">
                 La aseguradora <strong><?= $cotizacion["Aseguradora"]["name"] ?></strong> no esta disponible para cotizar.
-                </span>
             </div>
         <?php endif ?>
     <?php endforeach ?>
@@ -230,8 +226,8 @@ if (isset($_POST['delete'])) {
                             RD$<?= number_format(calcular($trato->getFieldValue('Valor_Asegurado'), $cobertura->getFieldValue('Riesgos_comprensivos'))) ?><br>
                             <?= $cobertura->getFieldValue('Riesgos_Comprensivos_Deducible') ?><br>
                             <?= $cobertura->getFieldValue('Rotura_de_cristales_Deducible') ?><br>
-                            <?= $retVal = ($cobertura->getFieldValue('Colisi_n_y_vuelco') > 0) ? "RD$" . number_format(calcular($trato->getFieldValue('Valor_Asegurado'), $cobertura->getFieldValue('Colisi_n_y_vuelco'))) : "No Aplica"; ?><br>
-                            <?= $retVal = ($cobertura->getFieldValue('Incendio_y_robo') > 0) ? "RD$" . number_format(calcular($trato->getFieldValue('Valor_Asegurado'), $cobertura->getFieldValue('Incendio_y_robo'))) : "No Aplica"; ?><br><br>
+                            RD$<?= number_format(calcular($trato->getFieldValue('Valor_Asegurado'), $cobertura->getFieldValue('Colisi_n_y_vuelco'))) ?><br>
+                            RD$<?= number_format(calcular($trato->getFieldValue('Valor_Asegurado'), $cobertura->getFieldValue('Incendio_y_robo'))) ?><br><br>
                             <b>&nbsp;</b><br>
                             RD$<?= number_format($cobertura->getFieldValue('Da_os_Propiedad_ajena')) ?><br>
                             RD$<?= number_format($cobertura->getFieldValue('Lesiones_Muerte_1_Pers')) ?><br>
@@ -239,9 +235,9 @@ if (isset($_POST['delete'])) {
                             RD$<?= number_format($cobertura->getFieldValue('Lesiones_Muerte_1_pasajero')) ?><br>
                             RD$<?= number_format($cobertura->getFieldValue('Lesiones_Muerte_m_s_de_1_pasajero')) ?><br>
                             <br>
-                            <?= $retVal = ($cobertura->getFieldValue('Riesgos_conductor') > 0) ? "RD$" . number_format($cobertura->getFieldValue('Riesgos_conductor')) : "No Aplica"; ?><br>
+                            RD$<?= number_format($cobertura->getFieldValue('Riesgos_conductor')) ?><br>
                             <br>
-                            <?= $retVal = ($cobertura->getFieldValue('Fianza_judicial') > 0) ? "RD$" . number_format($cobertura->getFieldValue('Fianza_judicial')) : "No Aplica"; ?><br>
+                            RD$<?= number_format($cobertura->getFieldValue('Fianza_judicial')) ?><br>
                             <br>
                             <b>&nbsp;</b><br>
                             <?= $retVal = ($cobertura->getFieldValue('Asistencia_vial') == 1) ? "Aplica" : "No Aplica"; ?><br>

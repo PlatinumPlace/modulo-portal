@@ -3,15 +3,15 @@ $api = new api();
 if ($_POST) {
     switch ($_POST['parametro']) {
         case 'numero':
-            $criterio = "((Contact_Name:equals:" . $_SESSION['usuario']['id'] . ") and (No_de_cotizaci_n:equals:" . $_POST['busqueda'] . "))";
+            $criterio = "((Contact_Name:equals:" . $_COOKIE["usuario_id"] . ") and (No_de_cotizaci_n:equals:" . $_POST['busqueda'] . "))";
             break;
         case 'id':
-            $criterio = "((Contact_Name:equals:" . $_SESSION['usuario']['id'] . ") and (RNC_Cedula_del_asegurado:equals:" . $_POST['busqueda'] . "))";
+            $criterio = "((Contact_Name:equals:" . $_COOKIE["usuario_id"] . ") and (RNC_Cedula_del_asegurado:equals:" . $_POST['busqueda'] . "))";
             break;
     }
     $resultado = $api->searchRecordsByCriteria("Deals", $criterio);
 } else {
-    $criterio = "Contact_Name:equals:" . $_SESSION['usuario']['id'];
+    $criterio = "Contact_Name:equals:" . $_COOKIE["usuario_id"];
     $resultado = $api->searchRecordsByCriteria("Deals", $criterio);
 }
 ?>
@@ -60,7 +60,7 @@ if ($_POST) {
             <?php foreach ($resultado as $trato) : ?>
                 <tr>
                     <td><?= $trato->getFieldValue('No_de_cotizaci_n')  ?></td>
-                    <td><?= $trato->getFieldValue('RNC_Cedula_del_asegurado') ?></td>
+                    <td><?= $trato->getFieldValue('RNC_Cedula') ?></td>
                     <td>
                         <?php
                         if ($trato->getFieldValue('P_liza') == null) {
@@ -75,13 +75,10 @@ if ($_POST) {
                     <td><?= $trato->getFieldValue("Stage") ?></td>
                     <td><?= date("d/m/Y", strtotime($trato->getFieldValue("Closing_Date"))) ?></td>
                     <td>
-                        <a href="?page=details&id=<?= $trato->getEntityId() ?>" title="Detalles"><i class="fas fa-info"></i></a>
+                        <a href="?page=details_auto&id=<?= $trato->getEntityId() ?>" title="Detalles"><i class="fas fa-info"></i></a>
                         <?php if ($trato->getFieldValue('Stage') != "Abandonado") : ?>
                             <a href="?page=emit&id=<?= $trato->getEntityId() ?>" title="Emitir"><i class="fas fa-portrait"></i></a>
-                            <a href="?page=download&id=<?= $trato->getEntityId() ?>" title="Descargar"><i class="fas fa-download"></i></a>
-                        <?php endif ?>
-                        <?php if ($trato->getFieldValue('Stage') == "Cotizando") : ?>
-                            <a href="?page=edit&id=<?= $trato->getEntityId() ?>" title="Editar"><i class="fas fa-edit"></i></a>
+                            <a href="?page=download_auto&id=<?= $trato->getEntityId() ?>" title="Descargar"><i class="fas fa-download"></i></a>
                         <?php endif ?>
                     </td>
                 </tr>

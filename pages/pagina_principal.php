@@ -1,6 +1,6 @@
 <?php
 $api = new api();
-$criterio = "Contact_Name:equals:" . $_SESSION['usuario']['id'];
+$criterio = "Contact_Name:equals:" . $_COOKIE["usuario_id"];
 $tratos = $api->searchRecordsByCriteria("Deals", $criterio);
 $total = 0;
 $emisiones = 0;

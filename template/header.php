@@ -8,7 +8,6 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/js/all.min.js" crossorigin="anonymous"></script>
     <link href="css/styles.css" rel="stylesheet" />
 
-
     <title>IT - Insurance Tech</title>
     <link rel="icon" type="image/png" href="img/portal/logo.png">
 </head>
@@ -41,12 +40,25 @@
                             </div>
                             Buscar
                         </a>
-                        <a class="nav-link active" href="?page=add">
+                        <a class="nav-link collapsed active" href="#" data-toggle="collapse" data-target="#collapseLayouts" aria-expanded="false" aria-controls="collapseLayouts">
                             <div class="sb-nav-link-icon">
                                 <i class="fas fa-book"></i>
                             </div>
                             Cotizaciones
+                            <div class="sb-sidenav-collapse-arrow">
+                                <i class="fas fa-angle-down"></i>
+                            </div>
                         </a>
+                        <div class="collapse" id="collapseLayouts" aria-labelledby="headingOne" data-parent="#sidenavAccordion">
+                            <nav class="sb-sidenav-menu-nested nav">
+                                <a class="nav-link" href="?page=add_auto">
+                                    <div class="sb-nav-link-icon">
+                                        <i class="fas fa-car"></i>
+                                    </div>
+                                    Auto
+                                </a>
+                            </nav>
+                        </div>
                     </div>
                 </div>
             </nav>
@@ -54,15 +66,3 @@
         <div id="layoutSidenav_content">
             <main>
                 <div class="container-fluid">
-                    <?php require_once("pages/router.php") ?>
-                </div>
-            </main>
-        </div>
-    </div>
-    <!-- Optional JavaScript -->
-    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-    <script src="js/scripts.js"></script>
-    <script src="js/jquery-2.1.1.min.js"></script>
-</body>
-
-</html>

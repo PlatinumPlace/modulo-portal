@@ -6,8 +6,7 @@ if ($_POST) {
     if (!empty($contactos)) {
         foreach ($contactos as $contacto) {
             if ($contacto->getFieldValue("Estado") == true) {
-                session_start();
-                $_SESSION["usuario"]["id"] = $contacto->getEntityId();
+                setcookie("usuario_id",$contacto->getEntityId(), time() + 3600);
                 header("Location: index.php");
             } else {
                 $resultado = "El usuario no esta activado.";

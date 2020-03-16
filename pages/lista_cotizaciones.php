@@ -1,7 +1,7 @@
 <?php
 $api = new api();
 $filtro = $_GET['filter'];
-$criterio = "Contact_Name:equals:" . $_SESSION['usuario']['id'];
+$criterio = "Contact_Name:equals:" . $_COOKIE["usuario_id"];
 $resultado = $api->searchRecordsByCriteria("Deals", $criterio);
 ?>
 <table class="table">
@@ -21,10 +21,10 @@ $resultado = $api->searchRecordsByCriteria("Deals", $criterio);
     <tbody>
         <?php if (!empty($resultado)) : ?>
             <?php foreach ($resultado as $trato) : ?>
-                <?php if (isset($filtro) and $trato->getFieldValue("Stage") == $filtro or date("Y-m", strtotime($trato->getFieldValue("Closing_Date"))) == date("Y-m")) : ?>
+                <?php if ($trato->getFieldValue("Stage") == $filtro and date("m", strtotime($trato->getFieldValue("Closing_Date"))) == date("m")) : ?>
                     <tr>
                         <td><?= $trato->getFieldValue('No_de_cotizaci_n')  ?></td>
-                        <td><?= $trato->getFieldValue('RNC_Cedula_del_asegurado') ?></td>
+                        <td><?= $trato->getFieldValue('RNC_Cedula') ?></td>
                         <td>
                             <?php
                             if ($trato->getFieldValue('P_liza') == null) {
@@ -39,9 +39,9 @@ $resultado = $api->searchRecordsByCriteria("Deals", $criterio);
                         <td><?= $trato->getFieldValue("Stage") ?></td>
                         <td><?= date("d/m/Y", strtotime($trato->getFieldValue("Closing_Date"))) ?></td>
                         <td>
-                            <a href="index.php?page=details&id=<?= $trato->getEntityId() ?>" title="Detalles"><i class="fas fa-info"></i></a>
-                            <a href="index.php?page=emit&id=<?= $trato->getEntityId() ?>" title="Emitir"><i class="fas fa-portrait"></i></a>
-                            <a href="index.php?page=download&id=<?= $trato->getEntityId() ?>" title="Descargar"><i class="fas fa-download"></i></a>
+                            <a href="?page=details_auto&id=<?= $trato->getEntityId() ?>" title="Detalles"><i class="fas fa-info"></i></a>
+                            <a href="?page=emit&id=<?= $trato->getEntityId() ?>" title="Emitir"><i class="fas fa-portrait"></i></a>
+                            <a href="?page=download_auto&id=<?= $trato->getEntityId() ?>" title="Descargar"><i class="fas fa-download"></i></a>
                         </td>
                     </tr>
                 <?php endif ?>

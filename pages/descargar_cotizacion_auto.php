@@ -2,9 +2,6 @@
 $api = new api();
 $trato = $api->getRecord("Deals", $_GET['id']);
 $cotizaciones = $trato->getFieldValue('Aseguradoras_Disponibles');
-if ($trato->getFieldValue('Stage') == "Abandonado") {
-    header("Location:index.php");
-}
 function calcular($valor, $porciento)
 {
     return $valor * ($porciento / 100);
@@ -28,6 +25,22 @@ function calcular($valor, $porciento)
 
     <link href="css/styles.css" rel="stylesheet" />
     <link rel="icon" type="image/png" href="img/portal/logo.png">
+
+
+    <style>
+        @media all {
+            div.saltopagina {
+                display: none;
+            }
+        }
+
+        @media print {
+            div.saltopagina {
+                display: block;
+                page-break-before: always;
+            }
+        }
+    </style>
 </head>
 
 <body>
@@ -35,18 +48,18 @@ function calcular($valor, $porciento)
         <div class="row">
             <div class="col-2">
                 <?php if ($trato->getFieldValue('Stage') == "Cotizando") : ?>
-                    <img src="img/portal/logo.png" width="120" height="140">
+                    <img src="img/portal/logo.png" width="100" height="100">
                 <?php else : ?>
                     <?php foreach ($cotizaciones as $cotizacion) : ?>
                         <?php $ruta_imagen = $api->downloadPhoto("Vendors", $cotizacion["Aseguradora"]["id"], "img/Aseguradoras/") ?>
                         <?php if ($ruta_imagen != null) : ?>
-                            <img width="170" height="85" src="<?= $ruta_imagen ?>">
+                            <img width="170" height="75" src="<?= $ruta_imagen ?>">
                         <?php endif ?>
                     <?php endforeach ?>
                 <?php endif ?>
             </div>
             <div class="col-8">
-                <h3 class="text-uppercase text-center">
+                <h4 class="text-uppercase text-center">
                     <?php if ($trato->getFieldValue('P_liza') != null) : ?>
                         resumen coberturas
                     <?php else : ?>
@@ -55,12 +68,12 @@ function calcular($valor, $porciento)
                     <br>
                     seguro vehículo de motor<br>
                     plan <?= $trato->getFieldValue('Plan') ?>
-                </h3>
+                </h4>
             </div>
             <div class="col-2">
                 <p>
                     <b>
-                        <?php if ($trato->getFieldValue('P_liza') != null) : ?>
+                        <?php if ($trato->getFieldValue('P_liza') == null) : ?>
                             Cotización No.
                         <?php else : ?>
                             Resumen No.
@@ -70,8 +83,11 @@ function calcular($valor, $porciento)
                     <b>Fecha</b> <?= date('d/m/Y') ?>
                 </p>
             </div>
-            <div class="col-12 d-flex justify-content-center p-3 mb-2 bg-primary text-white">
-                <h5>DATOS DEL CLIENTE</h5>
+            <div class="col-12">
+                &nbsp;
+            </div>
+            <div class="col-12 d-flex justify-content-center bg-primary text-white">
+                <h6>DATOS DEL CLIENTE</h6>
             </div>
             <div class="col-6 border">
                 <div class="row">
@@ -79,16 +95,18 @@ function calcular($valor, $porciento)
                         <P>
                             <b>Cliente:</b><br>
                             <b>Cédula/RNC:</b><br>
-                            <b>Direccion:</b><br><br>
+                            <b>Direccion:</b><br>
+                            <br>
                             <b>Email: </b>
                         </P>
                     </div>
                     <div class="col">
                         <P>
-                            <?= $trato->getFieldValue('Nombre_del_asegurado') . " " . $trato->getFieldValue('Apellido_del_asegurado') ?><br>
-                            <?= $trato->getFieldValue('RNC_Cedula_del_asegurado') ?><br>
-                            <?= $trato->getFieldValue('Direcci_n_del_asegurado') ?><br>
-                            <?= $trato->getFieldValue('Email_del_asegurado') ?>
+                            <?= $trato->getFieldValue('Nombre') . " " . $trato->getFieldValue('Apellido') ?><br>
+                            <?= $trato->getFieldValue('RNC_Cedula') ?><br>
+                            <?= $trato->getFieldValue('Direcci_n') ?><br>
+                            <br>
+                            <?= $trato->getFieldValue('Email') ?>
                         </P>
                     </div>
                 </div>
@@ -105,14 +123,14 @@ function calcular($valor, $porciento)
                     <div class="col">
                         <P>
                             <?= $trato->getFieldValue('Tel_Residencia') ?><br>
-                            <?= $trato->getFieldValue('Telefono_del_asegurado') ?><br>
+                            <?= $trato->getFieldValue('Telefono') ?><br>
                             <?= $trato->getFieldValue('Tel_Trabajo') ?><br>
                         </P>
                     </div>
                 </div>
             </div>
-            <div class="col-12 d-flex justify-content-center p-3 mb-2 bg-primary text-white" style="width: 200px;">
-                <h5>DATOS DEL VEHICULO</h5>
+            <div class="col-12 d-flex justify-content-center bg-primary text-white">
+                <h6>DATOS DEL VEHICULO</h6>
             </div>
             <div class="col-6 border">
                 <div class="row">
@@ -143,6 +161,7 @@ function calcular($valor, $porciento)
                             <b>Chasis:</b><br>
                             <b>Placa:</b><br>
                             <b>Color:</b><br>
+                            <b>Uso:</b><br>
                             <b>Condiciones:</b><br>
                             &nbsp;
                         </P>
@@ -152,13 +171,14 @@ function calcular($valor, $porciento)
                             <?= $trato->getFieldValue('Chasis') ?><br>
                             <?= $trato->getFieldValue('Placa') ?><br>
                             <?= $trato->getFieldValue('Color') ?><br>
+                            <?= $trato->getFieldValue('Uso') ?><br>
                             <?= $retVal = ($trato->getFieldValue('Es_nuevo') == 1) ? "Nuevo" : "Usado"; ?>
                         </P>
                     </div>
                 </div>
             </div>
-            <div class="col-12 d-flex justify-content-center p-3 mb-2 bg-primary text-white" style="width: 200px;">
-                <h5>COBERTURAS</h5>
+            <div class="col-12 d-flex justify-content-center bg-primary text-white">
+                <h6>COBERTURAS</h6>
             </div>
             <div class="col-12 border">
                 <?php if ($trato->getFieldValue('P_liza') == null) : ?>
@@ -213,8 +233,8 @@ function calcular($valor, $porciento)
                                     RD$<?= number_format(calcular($trato->getFieldValue('Valor_Asegurado'), $cobertura->getFieldValue('Riesgos_comprensivos'))) ?><br>
                                     <?= $cobertura->getFieldValue('Riesgos_Comprensivos_Deducible') ?><br>
                                     <?= $cobertura->getFieldValue('Rotura_de_cristales_Deducible') ?><br>
-                                    <?= $retVal = ($cobertura->getFieldValue('Colisi_n_y_vuelco') > 0) ? "RD$" . number_format(calcular($trato->getFieldValue('Valor_Asegurado'), $cobertura->getFieldValue('Colisi_n_y_vuelco'))) : "No Aplica"; ?><br>
-                                    <?= $retVal = ($cobertura->getFieldValue('Incendio_y_robo') > 0) ? "RD$" . number_format(calcular($trato->getFieldValue('Valor_Asegurado'), $cobertura->getFieldValue('Incendio_y_robo'))) : "No Aplica"; ?><br><br>
+                                    RD$<?= number_format(calcular($trato->getFieldValue('Valor_Asegurado'), $cobertura->getFieldValue('Colisi_n_y_vuelco'))) ?><br>
+                                    RD$<?= number_format(calcular($trato->getFieldValue('Valor_Asegurado'), $cobertura->getFieldValue('Incendio_y_robo'))) ?><br><br>
                                     <b>&nbsp;</b><br>
                                     RD$<?= number_format($cobertura->getFieldValue('Da_os_Propiedad_ajena')) ?><br>
                                     RD$<?= number_format($cobertura->getFieldValue('Lesiones_Muerte_1_Pers')) ?><br>
@@ -222,9 +242,9 @@ function calcular($valor, $porciento)
                                     RD$<?= number_format($cobertura->getFieldValue('Lesiones_Muerte_1_pasajero')) ?><br>
                                     RD$<?= number_format($cobertura->getFieldValue('Lesiones_Muerte_m_s_de_1_pasajero')) ?><br>
                                     <br>
-                                    <?= $retVal = ($cobertura->getFieldValue('Riesgos_conductor') > 0) ? "RD$" . number_format($cobertura->getFieldValue('Riesgos_conductor')) : "No Aplica"; ?><br>
+                                    RD$<?= number_format($cobertura->getFieldValue('Riesgos_conductor')) ?><br>
                                     <br>
-                                    <?= $retVal = ($cobertura->getFieldValue('Fianza_judicial') > 0) ? "RD$" . number_format($cobertura->getFieldValue('Fianza_judicial')) : "No Aplica"; ?><br>
+                                    RD$<?= number_format($cobertura->getFieldValue('Fianza_judicial')) ?><br>
                                     <br>
                                     <b>&nbsp;</b><br>
                                     <?= $retVal = ($cobertura->getFieldValue('Asistencia_vial') == 1) ? "Aplica" : "No Aplica"; ?><br>
@@ -240,10 +260,10 @@ function calcular($valor, $porciento)
                 </div>
             </div>
         </div>
-        <div class="row">
-            <?php if ($trato->getFieldValue('Stage') != "Cotizando") : ?>
-                <?php foreach ($cotizaciones as $cotizacion) : ?>
-                    <?php $ruta_imagen = $api->downloadPhoto("Vendors", $cotizacion["Aseguradora"]["id"], "img/Aseguradoras/") ?>
+        <?php if ($trato->getFieldValue('Stage') != "Cotizando") : ?>
+            <?php foreach ($cotizaciones as $cotizacion) : ?>
+                <?php $ruta_imagen = $api->downloadPhoto("Vendors", $cotizacion["Aseguradora"]["id"], "img/Aseguradoras/") ?>
+                <div class="row">
                     <div class="col-6 border">
                         <?php if ($ruta_imagen != null) : ?>
                             <div class="col-2">
@@ -304,8 +324,95 @@ function calcular($valor, $porciento)
                             </div>
                         </div>
                     </div>
-                <?php endforeach ?>
-            <?php else : ?>
+                </div>
+                <div class="saltopagina"></div>
+                <div class="row">
+                    <div class="col-4">
+                        <img height="50" width="150" src="<?= $ruta_imagen ?>">
+                    </div>
+                    <div class="col-8">
+                        <h4>EXTRACTO DE LAS PRINCIPALES CONDICIONES DE
+                            VEHICULOS DE MOTOR
+                        </h4>
+                    </div>
+                </div>
+                <ol>
+                    <li>Este certificado es sólo un resumen de las condiciones principales contenidas en la póliza.</li>
+                    <li>Si al momento de un siniestro, la suma asegurada del vehículo es menor que su valor de mercado, la aseguradora reducirá de la
+                        reclamación presentada, el monto equivalente a la proporción dejada de asegurar. La compañía aseguradora sólo será
+                        responsable por aquella parte de la pérdida en la proporción en la que tenga el valor real como suma asegurada.</li>
+                    <li>Queda excluida de toda cobertura, los accesorios, equipos y aditamentos que no sean instalados de fábrica en el vehículo
+                        asegurado, a menos de que hayan sido declarados previamente en la póliza. Tampoco tienen cobertura mercancías o herramientas
+                        dejadas dentro del vehículo asegurado o que se transporten en el mismo.</li>
+                    <li>Quedan excluidas las pérdidas y/o daños sufridos y/o causados al vehículo asegurado si el mismo fuese conducido por personas
+                        sin licencia de conducir otorgada por las autoridades competentes. Se excluye también los daños sufridos u ocasionados en el
+                        vehículo asegurado si este fuese conducido en estado de embriaguez o bajo la influencia de cualquier droga. Tampoco tendrá
+                        cobertura si el vehículo asegurado no está siendo es utilizado con fines privados, es decir que se utilice como transporte comercial
+                        (taxi, carro público, etc.).</li>
+                    <li>En caso de realizarse alguna modificación o instalación de algún aditamento o accesorio a las especificaciones de fábrica al
+                        vehículo asegurado, (Ejemplo: cambio en el sistema de combustible, cambio de ubicación del volante, aros, equipos de música,
+                        luces, etc.), luego de haberse incluido en la póliza, obligatoriamente debe de notificarse a la compañía aseguradora para los fines
+                        de re-inspección del vehículo, aceptación y cobertura, mediante endoso, por la aseguradora.</li>
+                    <li>Si el vehículo asegurado se encontrase transitando fuera del territorio nacional o en caminos no declarados ni autorizados de
+                        tránsito público por las autoridades competentes, y sufre algún tipo de daño o siniestro, la cobertura queda excluida, a menos que
+                        fuera autorizado por la aseguradora.</li>
+                    <li>Queda excluida de toda cobertura daños ocasionados por la entrada de agua al motor o cualquier otra parte del vehículo
+                        asegurado, cuando dicha entrada es causada por el ingreso voluntario del vehículo a una vía, camino o terreno inundado.</li>
+                    <li>En caso de reclamación parcial para vehículos de más de 3 años de fabricación, se indemnizará utilizando repuestos usados y/o
+                        piezas de reemplazo.</li>
+                    <li>La aseguradora indemnizará pérdidas y/ o daños sufridos al vehículo asegurado, descontando el deducible aplicable a cada
+                        cobertura.</li>
+                    <li>La aseguradora está en su derecho de proceder a la cancelación de la póliza, o descontinuar la cobertura del vehículo, en cualquier
+                        momento previo aviso al asegurado con treinta (30) días de antelación a la efectividad de la misma. Si la cancelación es por falta de
+                        pago, aplica lo establecido en los artículos 73, 74 y 75 de ley 146-02 de seguros y fianzas de la República Dominicana.</li>
+                    <li>Para proceder a la inclusión del vehículo asegurado en la póliza, si el vehículo es usado debe de ser sometido a inspección y
+                        reportar su inclusión a la aseguradora en un plazo no mayor de 48 horas. Pasado este plazo, la cobertura quedará reducida a
+                        seguro de ley.En caso del vehículo ser nuevo (0 KMS) se puede proceder a la inclusión en la póliza con el conduce de salida,
+                        debidamente sellado, completado con los datos del mismo y firmado por el dealer o concesionario.</li>
+                    <li>La cobertura de este certificado está sujeta al pago de la prima.</li>
+                    <li>Esta póliza tendrá un período de duración igual a la vigencia del préstamo. Si el préstamo es saldado antes del fin de la vigencia, la
+                        cobertura cesará.</li>
+                    <li>La prima de este seguro puede ser revisable sin previo aviso y está sujeta a la siniestralidad de la póliza.</li>
+                    <li>Tarifa NO APLICA para Vehículos con Equipo de Gas instalado, solo se aceptarán si el Equipo es marca LOVATO o TARTARINI, los
+                        cuales deben ser inspeccionado por perito de la aseguradora y sujeto a que cliente suministre copia de factura instalación y
+                        garantía del mismo. En caso de aceptación aplica recargo a la tarifa.</li>
+                    <li>Los vehiculos Mitsubishi para los modelos, nativa, montero sport y L200, y los camiones Daihatsu deberán de tener un sistema de
+                        seguridad contra robo o restreo tipo GPS. En caso contrario solo se asegurará a un 50%.</li>
+                </ol>
+                <div class="row">
+                    <div class="col-12">
+                        &nbsp;
+                    </div>
+                    <div class="col-12">
+                        &nbsp;
+                    </div>
+                    <div class="col">
+                        <p class="text-center">
+                            _______________________________
+                            <br>
+                            Firma Cliente
+                        </p>
+                    </div>
+                    <div class="col">
+                        &nbsp;
+                    </div>
+                    <div class="col">
+                        <p class="text-center">
+                            _______________________________
+                            <br>
+                            Fecha
+                        </p>
+                    </div>
+                </div>
+            <?php endforeach ?>
+        <?php else : ?>
+            <div class="row">
+                <div class="col-12">
+                    &nbsp;
+                </div>
+                <div class="col-12">
+                    &nbsp;
+                </div>
                 <div class="col-12">
                     &nbsp;
                 </div>
@@ -336,8 +443,8 @@ function calcular($valor, $porciento)
                         Fecha
                     </p>
                 </div>
-            <?php endif ?>
-        </div>
+            </div>
+        <?php endif ?>
     </div>
     <input value="<?= $_GET['id'] ?>" id="id" hidden>
     <script>
@@ -345,7 +452,7 @@ function calcular($valor, $porciento)
         var id = document.getElementById('id').value;
         setTimeout(function() {
             window.print();
-            window.location = "index.php?page=details&id=" + id;
+            window.location = "index.php?page=details_auto&id=" + id;
         }, time);
     </script>
 </body>
