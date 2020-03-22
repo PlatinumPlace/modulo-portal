@@ -60,11 +60,19 @@ if ($_POST) {
             <?php foreach ($resultado as $trato) : ?>
                 <tr>
                     <td><?= $trato->getFieldValue('No_de_cotizaci_n')  ?></td>
-                    <td><?= $trato->getFieldValue('RNC_Cedula') ?></td>
+                    <td>
+                    <?php
+                        if ($trato->getFieldValue('RNC_Cedula') == null) {
+                            echo "N/A";
+                        } else {
+                            echo $trato->getFieldValue('RNC_Cedula');
+                        }
+                        ?>
+                    </td>
                     <td>
                         <?php
                         if ($trato->getFieldValue('P_liza') == null) {
-                            echo "No emitida";
+                            echo "N/A";
                         } else {
                             echo $trato->getFieldValue('P_liza')->getLookupLabel();
                         }
@@ -76,7 +84,7 @@ if ($_POST) {
                     <td><?= date("d/m/Y", strtotime($trato->getFieldValue("Closing_Date"))) ?></td>
                     <td>
                         <a href="?page=details_auto&id=<?= $trato->getEntityId() ?>" title="Detalles"><i class="fas fa-info"></i></a>
-                        <?php if ($trato->getFieldValue('Stage') != "Abandonado") : ?>
+                        <?php if ($trato->getFieldValue('Nombre') != null) : ?>
                             <a href="?page=emit&id=<?= $trato->getEntityId() ?>" title="Emitir"><i class="fas fa-portrait"></i></a>
                             <a href="?page=download_auto&id=<?= $trato->getEntityId() ?>" title="Descargar"><i class="fas fa-download"></i></a>
                         <?php endif ?>

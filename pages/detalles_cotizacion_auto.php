@@ -7,24 +7,45 @@ function calcular($valor, $porciento)
     return $valor * ($porciento / 100);
 }
 ?>
-<h1 class="mt-4">Detalles Cotizaciones</h1>
+<h2 class="mt-4 text-uppercase">
+    <?php if ($trato->getFieldValue('P_liza') != null) : ?>
+        resumen coberturas
+    <?php else : ?>
+        cotización
+    <?php endif ?>
+    <br>
+    seguro vehículo de motor<br>
+    plan <?= $trato->getFieldValue('Plan') ?>
+</h2>
 <ol class="breadcrumb mb-4">
     <li class="breadcrumb-item">Cotizaciones</li>
     <li class="breadcrumb-item">Detalles</li>
     <li class="breadcrumb-item active">Cotización No. <?= $trato->getFieldValue('No_de_cotizaci_n') ?></li>
 </ol>
+
 <div class="row">
+    <?php if ($trato->getFieldValue('Stage') == "Abandonado") : ?>
+        <div class="alert alert-danger" role="alert">
+            Cotización Abandonada
+        </div>
+    <?php endif ?>
+    <div class="col-12">
+        &nbsp;
+    </div>
     <div class="col-6">
-        <h3 class="text-uppercase">
-            <?php if ($trato->getFieldValue('P_liza') != null) : ?>
-                resumen coberturas
-            <?php else : ?>
-                cotización
-            <?php endif ?>
-            <br>
-            seguro vehículo de motor<br>
-            plan <?= $trato->getFieldValue('Plan') ?>
-        </h3>
+        <?php if ($trato->getFieldValue('P_liza') != null) : ?>
+            <ul class="list-group">
+                <li class="list-group-item">
+                    <a download="Condiciones del Vehículos" href="documents/condiciones del vehiculo.pdf" class="btn btn-link"><i class="fas fa-download"></i> Condiciones del Vehículos</a>
+                </li>
+                <li class="list-group-item">
+                    <a download="Formulario de conocimiento" href="documents/formulario de conocimiento.pdf" class="btn btn-link"><i class="fas fa-download"></i> Formulario de conocimiento</a>
+                </li>
+                <li class="list-group-item">
+                    <a download="Formulario de Inspección de Vehículos" href="documents/formulario de inspeccion.pdf" class="btn btn-link"><i class="fas fa-download"></i> Formulario de Inspección</a>
+                </li>
+            </ul>
+        <?php endif ?>
     </div>
     <div class="col-6">
         <div class="row">
@@ -38,38 +59,18 @@ function calcular($valor, $porciento)
                     </div>
                 <?php else : ?>
                     <div class="col">
-                        <a href="?page=emit&id=<?= $trato->getEntityId() ?>" class="btn btn-success"><i class="fas fa-portrait"></i> Emitir</a>
+                        <a href="?page=emit&id=<?= $trato->getEntityId() ?>" class="btn btn-success"><i class="fas fa-portrait"></i> <?= $retVal = ($trato->getFieldValue('P_liza') == null) ? "Emitir" : "Completar"; ?></a>
                     </div>
                     <div class="col">
                         <a href="?page=download_auto&id=<?= $trato->getEntityId() ?>" class="btn btn-info"><i class="fas fa-download"></i> Descargar</a>
                     </div>
                 <?php endif ?>
-                <div class="col-12">
-                    &nbsp;
-                </div>
-                <?php if ($trato->getFieldValue('P_liza') != null) : ?>
-                    <div class="col-12">
-                        <ul class="list-group">
-                            <li class="list-group-item">
-                                <a download="Condiciones del Vehículos" href="documents/condiciones del vehiculo.pdf" class="btn btn-link"><i class="fas fa-download"></i> Condiciones del Vehículos</a>
-                            </li>
-                            <li class="list-group-item">
-                                <a download="Formulario de conocimiento" href="documents/formulario de conocimiento.pdf" class="btn btn-link"><i class="fas fa-download"></i> Formulario de conocimiento</a>
-                            </li>
-                            <li class="list-group-item">
-                                <a download="Formulario de Inspección de Vehículos" href="documents/formulario de inspeccion.pdf" class="btn btn-link"><i class="fas fa-download"></i> Formulario de Inspección</a>
-                            </li>
-                        </ul>
-                    </div>
-                <?php endif ?>
             <?php endif ?>
         </div>
     </div>
-    <?php if ($trato->getFieldValue('Stage') == "Abandonado") : ?>
-        <div class="alert alert-danger" role="alert">
-            Cotización Abandonada
-        </div>
-    <?php endif ?>
+    <div class="col-12">
+        &nbsp;
+    </div>
     <?php if ($trato->getFieldValue('Nombre') != null) : ?>
         <div class="col-12 d-flex justify-content-center p-3 mb-2 bg-primary text-white">
             <h4>DATOS DEL CLIENTE</h4>
@@ -80,18 +81,16 @@ function calcular($valor, $porciento)
                     <P>
                         <b>Cliente:</b><br>
                         <b>Cédula/RNC:</b><br>
-                        <b>Direccion:</b><br>
-                        <br>
-                        <b>Email: </b>
+                        <b>Email:</b><br>
+                        <b>Direccion:</b>
                     </P>
                 </div>
                 <div class="col">
                     <P>
                         <?= $trato->getFieldValue('Nombre') . " " . $trato->getFieldValue('Apellido') ?><br>
                         <?= $trato->getFieldValue('RNC_Cedula') ?><br>
-                        <?= $trato->getFieldValue('Direcci_n') ?><br>
-                        <br>
-                        <?= $trato->getFieldValue('Email') ?>
+                        <?= $trato->getFieldValue('Email') ?><br>
+                        <?= $trato->getFieldValue('Direcci_n') ?>
                     </P>
                 </div>
             </div>
@@ -181,7 +180,7 @@ function calcular($valor, $porciento)
                 </div>
                 <?php foreach ($cotizaciones as $cotizacion) : ?>
                     <?php if ($cotizacion["Prima_Total"] > 0) : ?>
-                        <?php $ruta_imagen = $api->downloadPhoto("Vendors", $cotizacion["Aseguradora"]["id"], "img/Aseguradoras/") ?>
+                        <?php $ruta_imagen = $api->downloadPhoto("Vendors", $cotizacion["Aseguradora"]["id"], "img/") ?>
                         <?php if ($ruta_imagen != null) : ?>
                             <div class="col-2">
                                 <img height="50" width="110" src="<?= $ruta_imagen ?>">

@@ -24,7 +24,7 @@ function calcular($valor, $porciento)
     </title>
 
     <link href="css/styles.css" rel="stylesheet" />
-    <link rel="icon" type="image/png" href="img/portal/logo.png">
+    <link rel="icon" type="image/png" href="img/logo.png">
 
 
     <style>
@@ -47,11 +47,11 @@ function calcular($valor, $porciento)
     <div class="container">
         <div class="row">
             <div class="col-2">
-                <?php if ($trato->getFieldValue('Stage') == "Cotizando") : ?>
-                    <img src="img/portal/logo.png" width="100" height="100">
+                <?php if ($trato->getFieldValue('P_liza') == null) : ?>
+                    <img src="img/logo.png" width="100" height="100">
                 <?php else : ?>
                     <?php foreach ($cotizaciones as $cotizacion) : ?>
-                        <?php $ruta_imagen = $api->downloadPhoto("Vendors", $cotizacion["Aseguradora"]["id"], "img/Aseguradoras/") ?>
+                        <?php $ruta_imagen = $api->downloadPhoto("Vendors", $cotizacion["Aseguradora"]["id"], "img/") ?>
                         <?php if ($ruta_imagen != null) : ?>
                             <img width="170" height="75" src="<?= $ruta_imagen ?>">
                         <?php endif ?>
@@ -95,18 +95,16 @@ function calcular($valor, $porciento)
                         <P>
                             <b>Cliente:</b><br>
                             <b>Cédula/RNC:</b><br>
-                            <b>Direccion:</b><br>
-                            <br>
-                            <b>Email: </b>
+                            <b>Email:</b><br>
+                            <b>Direccion:</b>
                         </P>
                     </div>
                     <div class="col">
                         <P>
                             <?= $trato->getFieldValue('Nombre') . " " . $trato->getFieldValue('Apellido') ?><br>
                             <?= $trato->getFieldValue('RNC_Cedula') ?><br>
-                            <?= $trato->getFieldValue('Direcci_n') ?><br>
-                            <br>
-                            <?= $trato->getFieldValue('Email') ?>
+                            <?= $trato->getFieldValue('Email') ?><br>
+                            <?= $trato->getFieldValue('Direcci_n') ?>
                         </P>
                     </div>
                 </div>
@@ -188,7 +186,7 @@ function calcular($valor, $porciento)
                         </div>
                         <?php foreach ($cotizaciones as $cotizacion) : ?>
                             <?php if ($cotizacion["Prima_Total"] > 0) : ?>
-                                <?php $ruta_imagen = $api->downloadPhoto("Vendors", $cotizacion["Aseguradora"]["id"], "img/Aseguradoras/") ?>
+                                <?php $ruta_imagen = $api->downloadPhoto("Vendors", $cotizacion["Aseguradora"]["id"], "img/") ?>
                                 <?php if ($ruta_imagen != null) : ?>
                                     <div class="col-2">
                                         <img height="50" width="110" src="<?= $ruta_imagen ?>">
@@ -260,9 +258,9 @@ function calcular($valor, $porciento)
                 </div>
             </div>
         </div>
-        <?php if ($trato->getFieldValue('Stage') != "Cotizando") : ?>
+        <?php if ($trato->getFieldValue('P_liza') != null) : ?>
             <?php foreach ($cotizaciones as $cotizacion) : ?>
-                <?php $ruta_imagen = $api->downloadPhoto("Vendors", $cotizacion["Aseguradora"]["id"], "img/Aseguradoras/") ?>
+                <?php $ruta_imagen = $api->downloadPhoto("Vendors", $cotizacion["Aseguradora"]["id"], "img/") ?>
                 <div class="row">
                     <div class="col-6 border">
                         <?php if ($ruta_imagen != null) : ?>

@@ -9,7 +9,7 @@
     <link href="css/styles.css" rel="stylesheet" />
 
     <title>IT - Insurance Tech</title>
-    <link rel="icon" type="image/png" href="img/portal/logo.png">
+    <link rel="icon" type="image/png" href="img/logo.png">
 </head>
 
 <body class="sb-nav-fixed">

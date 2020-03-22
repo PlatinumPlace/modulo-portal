@@ -19,6 +19,7 @@ if (isset($_POST['submit'])) {
     $cambios["Telefono"] = $_POST['telefono'];
     $cambios["Tel_Residencia"] = $_POST['telefono_2'];
     $cambios["Tel_Trabajo"] = $_POST['telefono_1'];
+    $cambios["Fecha_de_Nacimiento"] = $_POST['Fecha_de_Nacimiento'];
     $resultado = $api->updateRecord("Deals", $cambios, $_GET['id']);
 }
 ?>
@@ -28,10 +29,9 @@ if (isset($_POST['submit'])) {
     <li class="breadcrumb-item">Detalles</li>
     <li class="breadcrumb-item active">Cotización No. <?= $trato->getFieldValue('No_de_cotizaci_n') ?></li>
 </ol>
+
 <form method="POST" class="row" action="?page=complete_auto&id=<?= $trato->getEntityId() ?>">
-
     <input value="<?= $_GET['id'] ?>" id="id" hidden>
-
     <div class="col-6">
         &nbsp;
     </div>
@@ -45,11 +45,9 @@ if (isset($_POST['submit'])) {
             </div>
         </div>
     </div>
-
     <div class="col-12">
         &nbsp;
     </div>
-
     <div class="col-12">
         <div class="card">
             <div class="card-header">
@@ -98,14 +96,18 @@ if (isset($_POST['submit'])) {
                         <input type="email" class="form-control" name="email">
                     </div>
                 </div>
+                <div class="form-group row">
+                    <label class="col-sm-2 col-form-label">Fecha de Nacimiento</label>
+                    <div class="col-sm-4">
+                        <input type="date" class="form-control" name="Fecha_de_Nacimiento">
+                    </div>
+                </div>
             </div>
         </div>
     </div>
-
     <div class="col-12">
         &nbsp;
     </div>
-
     <div class="col-12">
         <div class="card">
             <div class="card-header">
@@ -152,11 +154,7 @@ if (isset($_POST['submit'])) {
 <?php if (isset($_POST['submit'])) : ?>
     <script>
         var id = document.getElementById('id').value;
-        var opcion = confirm("Cotización completa,¿emitir ahora?");
-        if (opcion == true) {
-            window.location = "?page=emitir_auto&id=" + id;
-        } else {
-            window.location = "?page=details_auto&id=" + id;
-        }
+        alert("Cotización completada");
+        window.location = "?page=details_auto&id=" + id;
     </script>
 <?php endif ?>

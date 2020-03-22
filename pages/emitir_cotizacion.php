@@ -7,7 +7,7 @@ if (isset($_POST['submit'])) {
   if (!is_dir($ruta_cotizacion)) {
     mkdir($ruta_cotizacion, 0755, true);
   }
-  if ($_FILES["cotizacion_firmada"]["error"] == 0) {
+  if (!empty($_FILES["cotizacion_firmada"]["name"])) {
     $extension = pathinfo($_FILES["cotizacion_firmada"]["name"], PATHINFO_EXTENSION);
     $permitido = array("pdf");
     if (in_array($extension, $permitido)) {
@@ -20,13 +20,11 @@ if (isset($_POST['submit'])) {
       move_uploaded_file($tmp_name, "$ruta_cotizacion/$name");
       $api->uploadAttachment("Deals", $_GET['id'], "$ruta_cotizacion/$name");
       unlink("$ruta_cotizacion/$name");
-      echo '<script>alert("Póliza emitida,descargue la cotización para obtener el carnet");</script>';
-      header("Location: ?page=details_auto&id=" . $_GET['id']);
     } else {
       echo '<script>alert("Error al cargar documentos,formatos adminitos: PDF");</script>';
     }
   }
-  if ($_FILES["documentos"]["error"] == 0) {
+  if (!empty($_FILES["documentos"]['name'][0])) {
     foreach ($_FILES["documentos"]["error"] as $key => $error) {
       if ($error == UPLOAD_ERR_OK) {
         $tmp_name = $_FILES["documentos"]["tmp_name"][$key];
@@ -36,7 +34,7 @@ if (isset($_POST['submit'])) {
         unlink("$ruta_cotizacion/$name");
       }
     }
-    echo '<script>alert("Archivos subidos");</script>';
+    $resultado['id'] = $_GET['id'];
   }
 }
 ?>
@@ -47,7 +45,15 @@ if (isset($_POST['submit'])) {
   <li class="breadcrumb-item active">Cotización No. <?= $trato->getFieldValue('No_de_cotizaci_n') ?></li>
 </ol>
 
+<?php if (!empty($_FILES["documentos"]['name'][0])) : ?>
+  <div class="alert alert-primary" role="alert">
+    Archivos adjuntados
+  </div>
+<?php endif ?>
+
 <form enctype="multipart/form-data" method="POST" action="?page=emit&id=<?= $trato->getEntityId() ?>">
+
+  <input value="<?= $resultado['id']  ?>" id="id" hidden>
 
   <div class="row">
     <div class="col-6">
@@ -72,7 +78,7 @@ if (isset($_POST['submit'])) {
 
   <hr>
 
-  <?php if ($trato->getFieldValue('Stage') == "Cotizando") : ?>
+  <?php if ($trato->getFieldValue('P_liza') == null) : ?>
     <div class="form-group row">
       <label class="col-sm-2 col-form-label">Aseguradoras</label>
       <div class="col-sm-4">
@@ -80,8 +86,6 @@ if (isset($_POST['submit'])) {
           <?php foreach ($cotizaciones as $cotizacion) : ?>
             <?php if ($cotizacion["Prima_Total"] > 0) : ?>
               <option value="<?= $cotizacion["Aseguradora"]["id"] ?>"><?= $cotizacion["Aseguradora"]["name"] ?></option>
-            <?php else : ?>
-              <option value="" disabled selected>Aseguradora no disponible</option>
             <?php endif ?>
           <?php endforeach ?>
         </select>
@@ -107,10 +111,10 @@ if (isset($_POST['submit'])) {
   </div>
 
 </form>
-<?php if (isset($_FILES["cotizacion_firmada"]) and $_FILES["cotizacion_firmada"]["error"] == 0) : ?>
+<?php if (!empty($_FILES["cotizacion_firmada"]['name'])) : ?>
   <script>
     var id = document.getElementById('id').value;
     alert("Póliza emitida,descargue la cotización para obtener el carnet");
-    window.location = "?page=details&id=" + id;
+    window.location = "?page=load&id=" + id;
   </script>
 <?php endif ?>

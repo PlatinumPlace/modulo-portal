@@ -48,7 +48,48 @@ if (isset($_POST['submit'])) {
         &nbsp;
     </div>
 
-    <div class="col-6">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h5>Tipo de Cotización</h5>
+            </div>
+            <div class="card-body">
+                <div class="form-group row">
+                    <label class="col-sm-2 col-form-label">Póliza</label>
+                    <div class="col-sm-4">
+                        <select name="poliza" class="form-control">
+                            <option selected value="Declarativa">Declarativa</option>
+                            <option value="Individual">Individual</option>
+                        </select>
+                    </div>
+                    <label class="col-sm-2 col-form-label">Para</label>
+                    <div class="col-sm-4">
+                        <select name="cotizacion" class="form-control">
+                            <option value="Auto" selected>Auto</option>
+                            <option value="Vida">Vida</option>
+                            <option value="Incendio Hipotecario">Incendio Hipotecario</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-sm-2 col-form-label">Plan</label>
+                    <div class="col-sm-4">
+                        <select name="plan" class="form-control">
+                            <option selected value="Anual Full">Anual Full</option>
+                            <option value="Mensual Full">Mensual Full</option>
+                            <option value="Ley">Ley</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-12">
+        &nbsp;
+    </div>
+
+    <div class="col-12">
         <div class="card">
             <div class="card-header">
                 <h5>Datos de Vehículo</h5>
@@ -120,43 +161,6 @@ if (isset($_POST['submit'])) {
         </div>
     </div>
 
-    <div class="col-6">
-        <div class="card">
-            <div class="card-header">
-                <h5>Tipo de Cotización</h5>
-            </div>
-            <div class="card-body">
-                <div class="form-group row">
-                    <label class="col-sm-2 col-form-label">Póliza</label>
-                    <div class="col-sm-4">
-                        <select name="poliza" class="form-control">
-                            <option selected value="Declarativa">Declarativa</option>
-                            <option value="Individual">Individual</option>
-                        </select>
-                    </div>
-                    <label class="col-sm-2 col-form-label">Para</label>
-                    <div class="col-sm-4">
-                        <select name="cotizacion" class="form-control">
-                            <option value="Auto" selected>Auto</option>
-                            <option value="Vida">Vida</option>
-                            <option value="Incendio Hipotecario">Incendio Hipotecario</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="form-group row">
-                    <label class="col-sm-2 col-form-label">Plan</label>
-                    <div class="col-sm-4">
-                        <select name="plan" class="form-control">
-                            <option selected value="Anual Full">Anual Full</option>
-                            <option value="Mensual Full">Mensual Full</option>
-                            <option value="Ley">Ley</option>
-                        </select>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
 </form>
 
 
@@ -180,6 +184,6 @@ if (isset($_POST['submit'])) {
     <script>
         var id = document.getElementById('id').value;
         alert("Cotización creada");
-        window.location = "?page=details_auto&id=" + id;
+        window.location = "?page=load&id=" + id;
     </script>
 <?php endif ?>
