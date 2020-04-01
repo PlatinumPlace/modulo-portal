@@ -4,7 +4,7 @@ use zcrmsdk\crm\crud\ZCRMRecord;
 use zcrmsdk\crm\setup\restclient\ZCRMRestClient;
 use zcrmsdk\crm\exception\ZCRMException;
 
-class api
+class Api
 {
     public $configuration = array(
         "client_id" => "",

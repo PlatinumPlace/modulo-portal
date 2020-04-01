@@ -1,49 +1,16 @@
-<?php
-$api = new api();
-$trato = $api->getRecord("Deals", $_GET['id']);
-if (isset($_POST['submit'])) {
-    $cambios["Chasis"] = $_POST['chasis'];
-    $cambios["Color"] = $_POST['color'];
-    $cambios["Placa"] = $_POST['placa'];
-    $cambios["Uso"] = $_POST['uso'];
-    if (isset($_POST['estado'])) {
-        $cambios["Es_nuevo"] = true;
-    } else {
-        $cambios["Es_nuevo"] = false;
-    }
-    $cambios["Direcci_n"] = $_POST['direccion'];
-    $cambios["Email"] = $_POST['email'];
-    $cambios["Nombre"] = $_POST['nombre'];
-    $cambios["Apellido"] = $_POST['apellido'];
-    $cambios["RNC_Cedula"] = $_POST['cedula'];
-    $cambios["Telefono"] = $_POST['telefono'];
-    $cambios["Tel_Residencia"] = $_POST['telefono_2'];
-    $cambios["Tel_Trabajo"] = $_POST['telefono_1'];
-    $cambios["Fecha_de_Nacimiento"] = $_POST['Fecha_de_Nacimiento'];
-    $resultado = $api->updateRecord("Deals", $cambios, $_GET['id']);
-}
-?>
 <h1 class="mt-4">Completar Cotización</h1>
 <ol class="breadcrumb mb-4">
     <li class="breadcrumb-item">Cotizaciones</li>
     <li class="breadcrumb-item">Detalles</li>
-    <li class="breadcrumb-item active">Cotización No. <?= $trato->getFieldValue('No_de_cotizaci_n') ?></li>
+    <li class="breadcrumb-item active">Cotización No. <?= $this->trato->getFieldValue('No_de_cotizaci_n') ?></li>
 </ol>
-
-<form method="POST" class="row" action="?page=complete_auto&id=<?= $trato->getEntityId() ?>">
-    <input value="<?= $_GET['id'] ?>" id="id" hidden>
+<form method="POST" class="row" action="<?= constant('url') ?>cotizacion/completar/<?= $this->trato->getEntityId() ?>">
     <div class="col-6">
         &nbsp;
     </div>
     <div class="col-6">
-        <div class="row">
-            <div class="col">
-                <a href="?page=details_auto&id=<?= $trato->getEntityId() ?>" class="btn btn-primary"><i class="fas fa-arrow-left"></i> Detalles</a>
-            </div>
-            <div class="col">
-                <button type="submit" name="submit" class="btn btn-success"><i class="fas fa-paper-plane"></i> Completar</button>
-            </div>
-        </div>
+        <a href="<?= constant('url') ?>cotizacion/detalles/<?= $this->trato->getEntityId() ?>" class="btn btn-primary">Detalles</a>|
+        <button type="submit" name="submit" class="btn btn-success">Completar</button>
     </div>
     <div class="col-12">
         &nbsp;
@@ -117,11 +84,11 @@ if (isset($_POST['submit'])) {
                 <div class="form-group row">
                     <label class="col-sm-2 col-form-label">Chasis</label>
                     <div class="col-sm-4">
-                        <input type="text" class="form-control" name="chasis" required value="<?= $trato->getFieldValue('Chasis') ?>">
+                        <input type="text" class="form-control" name="chasis" required value="<?= $this->trato->getFieldValue('Chasis') ?>">
                     </div>
                     <label class="col-sm-2 col-form-label">Color</label>
                     <div class="col-sm-4">
-                        <input type="text" class="form-control" name="color" value="<?= $trato->getFieldValue('Color') ?>">
+                        <input type="text" class="form-control" name="color" value="<?= $this->trato->getFieldValue('Color') ?>">
                     </div>
                 </div>
                 <div class="form-group row">
@@ -134,27 +101,18 @@ if (isset($_POST['submit'])) {
                     </div>
                     <label class="col-sm-2 col-form-label">Placa</label>
                     <div class="col-sm-4">
-                        <input type="text" class="form-control" name="placa" value="<?= $trato->getFieldValue('Placa') ?>">
+                        <input type="text" class="form-control" name="placa" value="<?= $this->trato->getFieldValue('Placa') ?>">
                     </div>
                 </div>
                 <div class="form-group row">
                     <div class="col-sm-2">¿Es nuevo?</div>
                     <div class="col-sm-10">
                         <div class="form-check">
-                            <input class="form-check-input" type="checkbox" name="estado" <?php $retVal = ($trato->getFieldValue('Es_nuevo') == true) ? "checked" : ""; ?>>
+                            <input class="form-check-input" type="checkbox" name="estado" <?php $retVal = ($this->trato->getFieldValue('Es_nuevo') == true) ? "checked" : ""; ?>>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-
 </form>
-
-<?php if (isset($_POST['submit'])) : ?>
-    <script>
-        var id = document.getElementById('id').value;
-        alert("Cotización completada");
-        window.location = "?page=details_auto&id=" + id;
-    </script>
-<?php endif ?>

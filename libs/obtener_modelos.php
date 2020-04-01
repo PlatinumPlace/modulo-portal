@@ -1,6 +1,6 @@
 <?php
 include dirname(__FILE__, 2) . '/api/vendor/autoload.php';
-include dirname(__FILE__, 2) . '/helpers/api.php';
+include dirname(__FILE__, 2) . '/libs/api.php';
 
 use zcrmsdk\crm\setup\restclient\ZCRMRestClient;
 

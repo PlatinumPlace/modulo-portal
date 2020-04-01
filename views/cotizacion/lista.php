@@ -1,9 +1,3 @@
-<?php
-$api = new api();
-$filtro = $_GET['filter'];
-$criterio = "Contact_Name:equals:" . $_COOKIE["usuario_id"];
-$resultado = $api->searchRecordsByCriteria("Deals", $criterio);
-?>
 <table class="table">
     <thead>
         <tr>
@@ -19,9 +13,9 @@ $resultado = $api->searchRecordsByCriteria("Deals", $criterio);
     </thead>
 
     <tbody>
-        <?php if (!empty($resultado)) : ?>
-            <?php foreach ($resultado as $trato) : ?>
-                <?php if ($trato->getFieldValue("Stage") == $filtro and date("m", strtotime($trato->getFieldValue("Closing_Date"))) == date("m")) : ?>
+        <?php if (!empty($this->resultado)) : ?>
+            <?php foreach ($this->resultado as $trato) : ?>
+                <?php if ($trato->getFieldValue("Stage") == $this->filtro and date("Y-m", strtotime($trato->getFieldValue("Fecha_de_emisi_n"))) == date('Y-m')) : ?>
                     <tr>
                         <td><?= $trato->getFieldValue('No_de_cotizaci_n')  ?></td>
                         <td><?= $trato->getFieldValue('RNC_Cedula') ?></td>

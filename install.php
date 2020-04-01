@@ -1,6 +1,6 @@
 <?php
 include "vendor/autoload.php";
-include dirname(__FILE__,2) . '/helpers/api.php';
+include "libs/api.php";
 
 use zcrmsdk\oauth\ZohoOAuth;
 use zcrmsdk\crm\setup\restclient\ZCRMRestClient;

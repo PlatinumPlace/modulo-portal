@@ -1,53 +1,18 @@
-<?php
-$api = new api();
-if (isset($_POST['submit'])) {
-    $trato["Contact_Name"] = $_COOKIE["usuario_id"];
-    $trato["Lead_Source"] = "Portal GNB";
-    $trato["Deal_Name"] = "Cotización";
-    $trato["A_o_de_Fabricacion"] = $_POST['A_o_de_Fabricacion'];
-    $trato["Chasis"] = $_POST['chasis'];
-    $trato["Color"] = $_POST['color'];
-    $marca = $api->getRecord("Marcas", $_POST['marca']);
-    $trato["Marca"] = $marca->getFieldValue('Name');
-    $modelo = $api->getRecord("Modelos", $_POST['modelo']);
-    $trato["Modelo"] = $modelo->getFieldValue('Name');
-    $trato["Tipo_de_vehiculo"] = $modelo->getFieldValue('Tipo');
-    $trato["Placa"] = $_POST['placa'];
-    $trato["Plan"] = $_POST['plan'];
-    $trato["Type"] = $_POST['cotizacion'];
-    $trato["Uso"] = $_POST['uso'];
-    $trato["Tipo_de_poliza"] = $_POST['poliza'];
-    $trato["Valor_Asegurado"] = $_POST['Valor_Asegurado'];
-    $trato["Stage"] = "Cotizando";
-    if (isset($_POST['estado'])) {
-        $trato["Es_nuevo"] = true;
-    } else {
-        $trato["Es_nuevo"] = false;
-    }
-    $resultado = $api->createRecord("Deals", $trato);
-}
-?>
 <h1 class="mt-4">Crear Cotización</h1>
 <ol class="breadcrumb mb-4">
     <li class="breadcrumb-item">Cotizaciones</li>
     <li class="breadcrumb-item active">Crear</li>
 </ol>
-
-<form method="POST" action="?page=add_auto" class="row">
-
-    <input value="<?= $resultado['id']  ?>" id="id" hidden>
-
+<form method="POST" action="<?= constant('url') ?>cotizacion/crear" class="row">
     <div class="col-10">
         &nbsp;
     </div>
     <div class="col-2">
-        <button type="submit" name="submit" class="btn btn-success"><i class="fas fa-search-dollar"></i> Cotizar</button>
+        <button type="submit" name="submit" class="btn btn-success">Cotizar</button>
     </div>
-
     <div class="col-12">
         &nbsp;
     </div>
-
     <div class="col-12">
         <div class="card">
             <div class="card-header">
@@ -84,11 +49,9 @@ if (isset($_POST['submit'])) {
             </div>
         </div>
     </div>
-
     <div class="col-12">
         &nbsp;
     </div>
-
     <div class="col-12">
         <div class="card">
             <div class="card-header">
@@ -101,7 +64,7 @@ if (isset($_POST['submit'])) {
                         <select class="form-control" name="marca" id="marca" onchange="obtener_modelos(this)" required>
                             <option value="" selected disabled>Selecciona una Marca</option>
                             <?php
-                            $marcas = $api->getRecords("Marcas");
+                            $marcas = $this->api->getRecords("Marcas");
                             foreach ($marcas as $marca) {
                                 echo '<option value="' . $marca->getEntityId() . '">' . $marca->getFieldValue("Name") . '</option>';
                             }
@@ -160,15 +123,12 @@ if (isset($_POST['submit'])) {
             </div>
         </div>
     </div>
-
 </form>
-
-
 <script>
     function obtener_modelos(val) {
         {
             $.ajax({
-                url: "helpers/obtener_modelos.php",
+                url: "http://localhost/portal/libs/obtener_modelos.php",
                 type: "POST",
                 data: {
                     marcas_id: val.value
@@ -180,10 +140,3 @@ if (isset($_POST['submit'])) {
         }
     }
 </script>
-<?php if (isset($_POST['submit'])) : ?>
-    <script>
-        var id = document.getElementById('id').value;
-        alert("Cotización creada");
-        window.location = "?page=load&id=" + id;
-    </script>
-<?php endif ?>

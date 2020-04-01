@@ -1,33 +1,13 @@
-<?php
-if ($_POST) {
-    $api = new api;
-    $criterio = "((Email:equals:" . $_POST['usuario'] . ") and (Contrase_a:equals:" . $_POST['clave'] . "))";
-    $contactos = $api->searchRecordsByCriteria("Contacts", $criterio);
-    if (!empty($contactos)) {
-        foreach ($contactos as $contacto) {
-            if ($contacto->getFieldValue("Estado") == true) {
-                setcookie("usuario_id",$contacto->getEntityId(), time() + 3600);
-                header("Location: index.php");
-            } else {
-                $resultado = "El usuario no esta activado.";
-            }
-        }
-    } else {
-        $resultado = "Usuario o contraseña incorrectos.";
-    }
-    echo '<script>alert("' . $resultado . '")</script>';
-}
-?>
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <link href="css/styles.css" rel="stylesheet" />
+    <link href="<?= constant('url')?>public/css/styles.css" rel="stylesheet" />
 
     <title>IT - Insurance Tech</title>
-    <link rel="icon" type="image/png" href="img/portal/logo.png">
+    <link rel="icon" type="image/png" href="<?= constant('url')?>public/img/logo.png">
 </head>
 
 <body class="bg-primary">
@@ -40,7 +20,7 @@ if ($_POST) {
                             <h3 class="text-center font-weight-light my-4">IT - Insurance Tech</h3>
                         </div>
                         <div class="card-body">
-                            <form method="POST" action="index.php">
+                            <form method="POST" action="<?= constant('url')?>login">
                                 <div class="form-group">
                                     <label class="small mb-1">Usuario</label>
                                     <input class="form-control py-4" type="text" name="usuario" required />
