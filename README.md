@@ -1,2 +1,4 @@
-# portal
-WebApp en PHP MVC,usando el SDK de zoho para usar las API de zoho CRM.
+# COMO INSTALAR:
+1-Debes agregar tus credenciales en libs/app.php.
+2-Luego debes iniciar tusitio/instal.php y completar el formulario.
+Entonces habras generado el token en la carpeta api de la raiz.
