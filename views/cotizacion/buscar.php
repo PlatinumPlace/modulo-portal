@@ -12,10 +12,10 @@
     <div class="form-group mx-sm-3 mb-2">
         <input type="text" class="form-control" name="busqueda" required>
     </div>
-    <button type="submit" class="btn btn-primary mb-2">Buscar</button>|
+    <button type="submit" name="submit" class="btn btn-primary mb-2">Buscar</button>|
     <a href="<?= constant('url') ?>cotizacion/buscar" class="btn btn-info mb-2">Limpiar</a>
 </form>
-<?php if ($_POST and empty($this->resultado)) : ?>
+<?php if (empty($this->resultado)) : ?>
     <div class="alert alert-info" role="alert">
         No se encontraron registros
     </div>

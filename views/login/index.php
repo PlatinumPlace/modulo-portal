@@ -30,7 +30,7 @@
                                     <input class="form-control py-4" type="password" name="clave" required />
                                 </div>
                                 <div class="form-group d-flex align-items-center justify-content-between mt-4 mb-0">
-                                    <button class="btn btn-primary" type="submit">Verificar</button>
+                                    <button class="btn btn-primary" name="submit" type="submit">Verificar</button>
                                 </div>
                             </form>
                         </div>

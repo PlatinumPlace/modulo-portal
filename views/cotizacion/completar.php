@@ -46,11 +46,11 @@
                 <div class="form-group row">
                     <label class="col-sm-2 col-form-label">Tel. Celular</label>
                     <div class="col-sm-4">
-                        <input type="number" class="form-control" name="telefono">
+                        <input type="tel" class="form-control" name="telefono">
                     </div>
                     <label class="col-sm-2 col-form-label">Tel. Trabajo</label>
                     <div class="col-sm-4">
-                        <input type="number" class="form-control" name="telefono_1">
+                        <input type="tel" class="form-control" name="telefono_1">
                     </div>
                 </div>
                 <div class="form-group row">
@@ -66,7 +66,7 @@
                 <div class="form-group row">
                     <label class="col-sm-2 col-form-label">Fecha de Nacimiento</label>
                     <div class="col-sm-4">
-                        <input type="date" class="form-control" name="Fecha_de_Nacimiento">
+                        <input type="date" class="form-control" name="Fecha_de_Nacimiento" required>
                     </div>
                 </div>
             </div>
@@ -96,7 +96,7 @@
                     <div class="col-sm-4">
                         <select name="uso" class="form-control">
                             <option selected value="Privado">Privado</option>
-                            <option value="Publico">Publico</option>
+                            <option value="Publico">Público</option>
                         </select>
                     </div>
                     <label class="col-sm-2 col-form-label">Placa</label>

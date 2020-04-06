@@ -42,7 +42,7 @@
         <a href="<?= constant('url') ?>cotizacion/buscar/" class="btn btn-secondary">Lista</a>|
         <?php if ($this->trato->getFieldValue('Stage') != "Abandonado") : ?>
             <?php if ($this->trato->getFieldValue('Nombre') == null) : ?>
-                <a href="<?= constant('url') ?>cotizacion/completar/<?= $this->trato->getEntityId() ?>" class="btn btn-primary">Siguente</a>
+                <a href="<?= constant('url') ?>cotizacion/completar/<?= $this->trato->getEntityId() ?>" class="btn btn-primary">Siguiente</a>
             <?php else : ?>
                 <a href="<?= constant('url') ?>cotizacion/emitir/<?= $this->trato->getEntityId() ?>" class="btn btn-success"><?= $retVal = ($this->trato->getFieldValue('P_liza') == null) ? "Emitir" : "Completar"; ?></a>|
                 <a href="<?= constant('url') ?>cotizacion/descargar/<?= $this->trato->getEntityId() ?>" class="btn btn-info">Descargar</a>
@@ -65,7 +65,7 @@
                         <b>Cliente:</b><br>
                         <b>Cédula/RNC:</b><br>
                         <b>Email:</b><br>
-                        <b>Direccion:</b>
+                        <b>Dirección:</b>
                     </P>
                 </div>
                 <div class="col">
@@ -98,7 +98,7 @@
         </div>
     <?php endif ?>
     <div class="col-12 d-flex justify-content-center p-3 mb-2 bg-primary text-white" style="width: 200px;">
-        <h4>DATOS DEL VEHICULO</h4>
+        <h4>DATOS DEL VEHÍCULO</h4>
     </div>
     <div class="col-6 border">
         <div class="row">
@@ -148,6 +148,14 @@
     <div class="col-12 d-flex justify-content-center p-3 mb-2 bg-primary text-white" style="width: 200px;">
         <h4>COBERTURAS</h4>
     </div>
+    <?php foreach ($this->cotizaciones as $cotizacion) : ?>
+        <?php if ($cotizacion["Prima_Total"] == 0) : ?>
+            <?php $contrato = $this->api->getRecord("Contratos", $cotizacion["Contrato"]["id"]) ?>
+            <div class="alert alert-info" role="alert">
+                <b><?= $contrato->getFieldValue('Aseguradora')->getLookupLabel() ?></b> no esta disponible.
+            </div>
+        <?php endif ?>
+    <?php endforeach ?>
     <div class="col-12 border">
         <div class="row">
             <div class="col">

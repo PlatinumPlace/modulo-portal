@@ -124,11 +124,17 @@
         </div>
     </div>
 </form>
-<script>
+<?php
+// tomamos el valor id del select con las marcas de los vehiculos,
+// llamamos una funcion de js que se activa al momento de selecionar algo del select,
+// enviamos el id a un archivo php donde buscara y devolvera los modelos relacionados y
+// monstrar los resuldatos como option dentro del select por medio del id del div
+echo '
+    <script>
     function obtener_modelos(val) {
         {
             $.ajax({
-                url: "http://localhost/portal/libs/obtener_modelos.php",
+                url: "' . constant('url') . 'libs/obtener_modelos.php",
                 type: "POST",
                 data: {
                     marcas_id: val.value
@@ -139,4 +145,5 @@
             });
         }
     }
-</script>
+     </script>';
+?>

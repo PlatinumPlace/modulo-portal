@@ -239,9 +239,9 @@
         </div>
         <?php if ($this->trato->getFieldValue('P_liza') != null) : ?>
             <?php foreach ($this->cotizaciones as $cotizacion) : ?>
-                <?php $ruta_imagen = $this->api->downloadPhoto("Vendors", $cotizacion["Aseguradora"]["id"], "public/img/") ?>
-                <?php $aseguradora = $this->api->getRecord("Vendors", $cotizacion["Aseguradora"]["id"]) ?>
                 <?php $contrato = $this->api->getRecord("Contratos", $cotizacion["Contrato"]["id"]) ?>
+                <?php $ruta_imagen = $this->api->downloadPhoto("Vendors", $contrato->getFieldValue('Aseguradora')->getEntityId(), "public/img/") ?>
+                <?php $aseguradora = $this->api->getRecord("Vendors", $contrato->getFieldValue('Aseguradora')->getEntityId()) ?>
                 <div class="row">
                     <div class="col-6 border">
                         <?php if ($ruta_imagen != null) : ?>
@@ -425,8 +425,7 @@
                 window.print();
                 window.location = "' . constant('url') . 'cotizacion/detalles/" + id;
             }, time);
-        </script>
-    ';
+        </script>';
     ?>
 </body>
 
