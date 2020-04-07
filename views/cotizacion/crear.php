@@ -65,8 +65,9 @@
                             <option value="" selected disabled>Selecciona una Marca</option>
                             <?php
                             $marcas = $this->api->getRecords("Marcas");
+                            sort($marcas);
                             foreach ($marcas as $marca) {
-                                echo '<option value="' . $marca->getEntityId() . '">' . $marca->getFieldValue("Name") . '</option>';
+                                echo '<option value="' . $marca->getEntityId() . '">' . strtoupper($marca->getFieldValue("Name")) . '</option>';
                             }
                             ?>
                         </select>

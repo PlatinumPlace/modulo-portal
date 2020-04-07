@@ -56,7 +56,7 @@
                 <div class="form-group row">
                     <label class="col-sm-2 col-form-label">Tel. Residencial</label>
                     <div class="col-sm-4">
-                        <input type="number" class="form-control" name="telefono_2">
+                        <input type="tel" class="form-control" name="telefono_2">
                     </div>
                     <label class="col-sm-2 col-form-label">Correo Electrónico</label>
                     <div class="col-sm-4">

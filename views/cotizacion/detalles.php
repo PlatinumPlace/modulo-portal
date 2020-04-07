@@ -214,9 +214,9 @@
                             <?= $Asistencia_vial = ($contrato->getFieldValue('Asistencia_vial') == 1) ? "Aplica" : "No Aplica"; ?><br>
                             <?= $Renta_Veh_culo = ($contrato->getFieldValue('Renta_Veh_culo') == 1) ? "Aplica" : "No Aplica"; ?><br>
                             <?= $Casa_del_Conductor_CAA = ($contrato->getFieldValue('Casa_del_Conductor_CAA') == 1) ? "Aplica" : "No Aplica"; ?><br><br>
-                            RD$<?= number_format($cotizacion["Prima_Neta"]) ?><br>
-                            RD$<?= number_format($cotizacion["ISC"]) ?><br>
-                            RD$<?= number_format($cotizacion["Prima_Total"]) ?>
+                            RD$<?= number_format($cotizacion["Prima_Neta"], 2) ?><br>
+                            RD$<?= number_format($cotizacion["ISC"], 2) ?><br>
+                            RD$<?= number_format($cotizacion["Prima_Total"], 2) ?>
                         </p>
                     </div>
                 <?php endif ?>

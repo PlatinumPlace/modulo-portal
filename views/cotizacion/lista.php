@@ -33,9 +33,9 @@
                         <td><?= $trato->getFieldValue("Stage") ?></td>
                         <td><?= date("d/m/Y", strtotime($trato->getFieldValue("Closing_Date"))) ?></td>
                         <td>
-                            <a href="?page=details_auto&id=<?= $trato->getEntityId() ?>" title="Detalles"><i class="fas fa-info"></i></a>
-                            <a href="?page=emit&id=<?= $trato->getEntityId() ?>" title="Emitir"><i class="fas fa-portrait"></i></a>
-                            <a href="?page=download_auto&id=<?= $trato->getEntityId() ?>" title="Descargar"><i class="fas fa-download"></i></a>
+                            <a href="<?= constant('url') ?>cotizacion/detalles/<?= $trato->getEntityId() ?>" title="Detalles"><i class="fas fa-info"></i></a>
+                            <a href="<?= constant('url') ?>cotizacion/emitir/<?= $trato->getEntityId() ?>" title="Emitir"><i class="fas fa-portrait"></i></a>
+                            <a href="<?= constant('url') ?>cotizacion/descargar/<?= $trato->getEntityId() ?>" title="Descargar"><i class="fas fa-download"></i></a>
                         </td>
                     </tr>
                 <?php endif ?>

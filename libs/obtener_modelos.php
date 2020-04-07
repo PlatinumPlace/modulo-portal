@@ -18,7 +18,8 @@ ZCRMRestClient::initialize($api->configuration);
 // buscamos en los registros del modulo segun el id
 $criterio = "Marca:equals:" . $_POST["marcas_id"];
 $modelos = $api->searchRecordsByCriteria("Modelos", $criterio);
+sort($modelos);
 // imprimimos en bucle elementos de un select html
 foreach ($modelos as $modelo) {
-    echo '<option value="' . $modelo->getEntityId() . '">' . $modelo->getFieldValue("Name") . '</option>';
+    echo '<option value="' . $modelo->getEntityId() . '">' . strtoupper($modelo->getFieldValue("Name")) . '</option>';
 }

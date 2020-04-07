@@ -37,8 +37,9 @@
                 <?php if ($this->trato->getFieldValue('P_liza') == null) : ?>
                     <img src="<?= constant('url') ?>public/img/logo.png" width="100" height="100">
                 <?php else : ?>
-                    <?php foreach ($cotizaciones as $cotizacion) : ?>
-                        <?php $ruta_imagen = $this->api->downloadPhoto("Vendors", $cotizacion["Aseguradora"]["id"], "public/img/") ?>
+                    <?php foreach ($this->cotizaciones as $cotizacion) : ?>
+                        <?php $contrato = $this->api->getRecord("Contratos", $cotizacion["Contrato"]["id"]) ?>
+                        <?php $ruta_imagen = $this->api->downloadPhoto("Vendors", $contrato->getFieldValue('Aseguradora')->getEntityId(), "public/img/") ?>
                         <?php if ($ruta_imagen != null) : ?>
                             <img width="170" height="75" src="<?= constant('url') . $ruta_imagen ?>">
                         <?php endif ?>
@@ -227,9 +228,9 @@
                                     <?= $Asistencia_vial = ($contrato->getFieldValue('Asistencia_vial') == 1) ? "Aplica" : "No Aplica"; ?><br>
                                     <?= $Renta_Veh_culo = ($contrato->getFieldValue('Renta_Veh_culo') == 1) ? "Aplica" : "No Aplica"; ?><br>
                                     <?= $Casa_del_Conductor_CAA = ($contrato->getFieldValue('Casa_del_Conductor_CAA') == 1) ? "Aplica" : "No Aplica"; ?><br><br>
-                                    RD$<?= number_format($cotizacion["Prima_Neta"]) ?><br>
-                                    RD$<?= number_format($cotizacion["ISC"]) ?><br>
-                                    RD$<?= number_format($cotizacion["Prima_Total"]) ?>
+                                    RD$<?= number_format($cotizacion["Prima_Neta"], 2) ?><br>
+                                    RD$<?= number_format($cotizacion["ISC"], 2) ?><br>
+                                    RD$<?= number_format($cotizacion["Prima_Total"], 2) ?>
                                 </p>
                             </div>
                         <?php endif ?>
