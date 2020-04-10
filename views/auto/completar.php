@@ -1,20 +1,4 @@
-<h1 class="mt-4">Completar Cotización</h1>
-<ol class="breadcrumb mb-4">
-    <li class="breadcrumb-item">Cotizaciones</li>
-    <li class="breadcrumb-item">Detalles</li>
-    <li class="breadcrumb-item active">Cotización No. <?= $this->trato->getFieldValue('No_de_cotizaci_n') ?></li>
-</ol>
-<form method="POST" class="row" action="<?= constant('url') ?>cotizacion/completar/<?= $this->trato->getEntityId() ?>">
-    <div class="col-6">
-        &nbsp;
-    </div>
-    <div class="col-6">
-        <a href="<?= constant('url') ?>cotizacion/detalles/<?= $this->trato->getEntityId() ?>" class="btn btn-primary">Detalles</a>|
-        <button type="submit" name="submit" class="btn btn-success">Completar</button>
-    </div>
-    <div class="col-12">
-        &nbsp;
-    </div>
+<form method="POST" class="row" action="<?= constant('url') ?>auto/completar/<?= $this->trato->getEntityId() ?>">
     <div class="col-12">
         <div class="card">
             <div class="card-header">
@@ -114,5 +98,17 @@
                 </div>
             </div>
         </div>
+    </div>
+    <div class="col-12">
+        &nbsp;
+    </div>
+    <div class="col-10">
+        &nbsp;
+    </div>
+    <div class="col-2">
+        <button type="submit" name="submit" class="btn btn-success">Completar</button>
+    </div>
+    <div class="col-12">
+        &nbsp;
     </div>
 </form>

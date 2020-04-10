@@ -1,18 +1,4 @@
-<h1 class="mt-4">Crear Cotización</h1>
-<ol class="breadcrumb mb-4">
-    <li class="breadcrumb-item">Cotizaciones</li>
-    <li class="breadcrumb-item active">Crear</li>
-</ol>
-<form method="POST" action="<?= constant('url') ?>cotizacion/crear" class="row">
-    <div class="col-10">
-        &nbsp;
-    </div>
-    <div class="col-2">
-        <button type="submit" name="submit" class="btn btn-success">Cotizar</button>
-    </div>
-    <div class="col-12">
-        &nbsp;
-    </div>
+<form method="POST" action="<?= constant('url') ?>auto/crear" class="row">
     <div class="col-12">
         <div class="card">
             <div class="card-header">
@@ -63,6 +49,10 @@
                     <div class="col-sm-4">
                         <select class="form-control" name="marca" id="marca" onchange="obtener_modelos(this)" required>
                             <option value="" selected disabled>Selecciona una Marca</option>
+                            <!-- 
+                                usando la variable enviada desde el controlador,
+                                recorre todos los registros del modulo marcas,de donde se toma el nombre y id
+                            -->
                             <?php
                             $marcas = $this->api->getRecords("Marcas");
                             sort($marcas);
@@ -124,12 +114,25 @@
             </div>
         </div>
     </div>
+    <div class="col-12">
+        &nbsp;
+    </div>
+    <div class="col-10">
+        &nbsp;
+    </div>
+    <div class="col-2">
+        <button type="submit" name="submit" class="btn btn-success">Cotizar</button>
+    </div>
+    <div class="col-12">
+        &nbsp;
+    </div>
 </form>
 <?php
 // tomamos el valor id del select con las marcas de los vehiculos,
 // llamamos una funcion de js que se activa al momento de selecionar algo del select,
-// enviamos el id a un archivo php donde buscara y devolvera los modelos relacionados y
-// monstrar los resuldatos como option dentro del select por medio del id del div
+// enviamos el id a un archivo php usando ajax para que ejecute el codigo sin recargar la pagina
+// para buscar y devolvera los modelos relacionados
+// mostrando los resuldatos como etiquetas option dentro del select por medio del id del div
 echo '
     <script>
     function obtener_modelos(val) {

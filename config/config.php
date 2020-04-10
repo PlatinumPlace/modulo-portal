@@ -1,4 +1,4 @@
 <?php
 
-// url global del portal
+// url global de la pagina
 define('url','http://localhost/portal/');

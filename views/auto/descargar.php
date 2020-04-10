@@ -39,7 +39,7 @@
                 <?php else : ?>
                     <?php foreach ($this->cotizaciones as $cotizacion) : ?>
                         <?php $contrato = $this->api->getRecord("Contratos", $cotizacion["Contrato"]["id"]) ?>
-                        <?php $ruta_imagen = $this->api->downloadPhoto("Vendors", $contrato->getFieldValue('Aseguradora')->getEntityId(), "public/img/") ?>
+                        <?php $ruta_imagen = $this->api->downloadPhoto("Vendors", $contrato->getFieldValue('Aseguradora')->getEntityId(),"public/img/") ?>
                         <?php if ($ruta_imagen != null) : ?>
                             <img width="170" height="75" src="<?= constant('url') . $ruta_imagen ?>">
                         <?php endif ?>
@@ -132,8 +132,8 @@
                     <div class="col">
                         <P>
                             <?= $this->trato->getFieldValue('Tipo_de_vehiculo') ?><br>
-                            <?= $this->trato->getFieldValue('Marca') ?><br>
-                            <?= $this->trato->getFieldValue('Modelo') ?><br>
+                            <?= strtoupper($this->trato->getFieldValue('Marca')) ?><br>
+                            <?= strtoupper($this->trato->getFieldValue('Modelo')) ?><br>
                             <?= $this->trato->getFieldValue('A_o_de_Fabricacion') ?><br>
                             RD$<?= number_format($this->trato->getFieldValue('Valor_Asegurado'), 2) ?>
                         </P>
@@ -365,6 +365,9 @@
                     <div class="col-12">
                         &nbsp;
                     </div>
+                    <div class="col-12">
+                        &nbsp;
+                    </div>
                     <div class="col">
                         <p class="text-center">
                             _______________________________
@@ -416,7 +419,7 @@
             </div>
         <?php endif ?>
     </div>
-    <input value="<?= $this->id ?>" id="id" hidden>
+    <input value="<?= $this->trato->getEntityId() ?>" id="id" hidden>
     <?php
     echo '
         <script>
@@ -424,7 +427,7 @@
             var id = document.getElementById("id").value;
             setTimeout(function() {
                 window.print();
-                window.location = "' . constant('url') . 'cotizacion/detalles/" + id;
+                window.location = "' . constant('url') . 'auto/detalles/" + id;
             }, time);
         </script>';
     ?>

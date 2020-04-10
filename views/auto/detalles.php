@@ -1,62 +1,54 @@
-<h2 class="mt-4 text-uppercase">
-    <?php if ($this->trato->getFieldValue('P_liza') != null) : ?>
-        resumen coberturas
-    <?php else : ?>
-        cotización
-    <?php endif ?>
-    <br>
-    seguro vehículo de motor<br>
-    plan <?= $this->trato->getFieldValue('Plan') ?>
-</h2>
-<ol class="breadcrumb mb-4">
-    <li class="breadcrumb-item">Cotizaciones</li>
-    <li class="breadcrumb-item">Detalles</li>
-    <li class="breadcrumb-item active">Cotización No. <?= $this->trato->getFieldValue('No_de_cotizaci_n') ?></li>
-</ol>
 <div class="row">
+    <div class="col-2">
+        <?php if ($this->trato->getFieldValue('P_liza') == null) : ?>
+            <img src="<?= constant('url') ?>public/img/logo.png" width="100" height="100">
+        <?php else : ?>
+            <?php foreach ($this->cotizaciones as $cotizacion) : ?>
+                <?php $contrato = $this->api->getRecord("Contratos", $cotizacion["Contrato"]["id"]) ?>
+                <?php $ruta_imagen = $this->api->downloadPhoto("Vendors", $contrato->getFieldValue('Aseguradora')->getEntityId(), "public/img/") ?>
+                <?php if ($ruta_imagen != null) : ?>
+                    <img width="170" height="75" src="<?= constant('url') . $ruta_imagen ?>">
+                <?php endif ?>
+            <?php endforeach ?>
+        <?php endif ?>
+    </div>
+    <div class="col-8">
+        <h4 class="text-uppercase text-center">
+            <?php if ($this->trato->getFieldValue('P_liza') != null) : ?>
+                resumen coberturas
+            <?php else : ?>
+                cotización
+            <?php endif ?>
+            <br>
+            seguro vehículo de motor<br>
+            plan <?= $this->trato->getFieldValue('Plan') ?>
+        </h4>
+    </div>
+    <div class="col-2">
+        <p>
+            <b>
+                <?php if ($this->trato->getFieldValue('P_liza') == null) : ?>
+                    Cotización No.
+                <?php else : ?>
+                    Resumen No.
+                <?php endif ?>
+            </b> <?= $this->trato->getFieldValue('No_de_cotizaci_n') ?>
+            <br>
+            <b>Fecha</b> <?= date('d/m/Y') ?>
+        </p>
+    </div>
+    <div class="col-12">
+        &nbsp;
+    </div>
     <?php if ($this->trato->getFieldValue('Stage') == "Abandonado") : ?>
         <div class="alert alert-danger" role="alert">
             Cotización Abandonada
         </div>
     <?php endif ?>
-    <div class="col-12">
-        &nbsp;
-    </div>
-    <div class="col-6">
-        <?php if ($this->trato->getFieldValue('P_liza') != null) : ?>
-            <h6>Descargar :</h6>
-            <ul class="list-group">
-                <li class="list-group-item">
-                    <a download="Condiciones del Vehículos" href="<?= constant('url') ?>public/documents/condiciones del vehiculo.pdf" class="btn btn-link">Condiciones del Vehículos</a>
-                </li>
-                <li class="list-group-item">
-                    <a download="Formulario de conocimiento" href="<?= constant('url') ?>public/documents/formulario de conocimiento.pdf" class="btn btn-link">Formulario de conocimiento</a>
-                </li>
-                <li class="list-group-item">
-                    <a download="Formulario de Inspección de Vehículos" href="<?= constant('url') ?>public/documents/formulario de inspeccion.pdf" class="btn btn-link">Formulario de Inspección</a>
-                </li>
-            </ul>
-        <?php endif ?>
-    </div>
-    <div class="col-6">
-        <a href="<?= constant('url') ?>cotizacion/buscar/" class="btn btn-secondary">Lista</a>|
-        <?php if ($this->trato->getFieldValue('Stage') != "Abandonado") : ?>
-            <?php if ($this->trato->getFieldValue('Nombre') == null) : ?>
-                <a href="<?= constant('url') ?>cotizacion/completar/<?= $this->trato->getEntityId() ?>" class="btn btn-primary">Siguiente</a>
-            <?php else : ?>
-                <a href="<?= constant('url') ?>cotizacion/emitir/<?= $this->trato->getEntityId() ?>" class="btn btn-success"><?= $retVal = ($this->trato->getFieldValue('P_liza') == null) ? "Emitir" : "Completar"; ?></a>|
-                <a href="<?= constant('url') ?>cotizacion/descargar/<?= $this->trato->getEntityId() ?>" class="btn btn-info">Descargar</a>
-            <?php endif ?>
-        <?php endif ?>
-    </div>
-</div>
-<div class="row">
-    <div class="col-12">
-        &nbsp;
-    </div>
+    <br>
     <?php if ($this->trato->getFieldValue('Nombre') != null) : ?>
-        <div class="col-12 d-flex justify-content-center p-3 mb-2 bg-primary text-white">
-            <h4>DATOS DEL CLIENTE</h4>
+        <div class="col-12 d-flex justify-content-center bg-primary text-white">
+            <h6>DATOS DEL CLIENTE</h6>
         </div>
         <div class="col-6 border">
             <div class="row">
@@ -97,8 +89,8 @@
             </div>
         </div>
     <?php endif ?>
-    <div class="col-12 d-flex justify-content-center p-3 mb-2 bg-primary text-white" style="width: 200px;">
-        <h4>DATOS DEL VEHÍCULO</h4>
+    <div class="col-12 d-flex justify-content-center bg-primary text-white">
+        <h6>DATOS DEL VEHÍCULO</h6>
     </div>
     <div class="col-6 border">
         <div class="row">
@@ -114,8 +106,8 @@
             <div class="col">
                 <P>
                     <?= $this->trato->getFieldValue('Tipo_de_vehiculo') ?><br>
-                    <?= $this->trato->getFieldValue('Marca') ?><br>
-                    <?= $this->trato->getFieldValue('Modelo') ?><br>
+                    <?= strtoupper($this->trato->getFieldValue('Marca')) ?><br>
+                    <?= strtoupper($this->trato->getFieldValue('Modelo')) ?><br>
                     <?= $this->trato->getFieldValue('A_o_de_Fabricacion') ?><br>
                     RD$<?= number_format($this->trato->getFieldValue('Valor_Asegurado'), 2) ?>
                 </P>
@@ -145,8 +137,8 @@
             </div>
         </div>
     </div>
-    <div class="col-12 d-flex justify-content-center p-3 mb-2 bg-primary text-white" style="width: 200px;">
-        <h4>COBERTURAS</h4>
+    <div class="col-12 d-flex justify-content-center bg-primary text-white">
+        <h6>COBERTURAS</h6>
     </div>
     <?php foreach ($this->cotizaciones as $cotizacion) : ?>
         <?php if ($cotizacion["Prima_Total"] == 0) : ?>
@@ -222,5 +214,40 @@
                 <?php endif ?>
             <?php endforeach ?>
         </div>
+    </div>
+    <div class="col-12">
+        &nbsp;
+    </div>
+    <div class="col-6">
+        <?php if ($this->trato->getFieldValue('P_liza') != null) : ?>
+            <h6>Descargar :</h6>
+            <ul class="list-group">
+                <li class="list-group-item">
+                    <a download="Condiciones del Vehículos" href="<?= constant('url') ?>public/documents/condiciones del vehiculo.pdf" class="btn btn-link">Condiciones del Vehículos</a>
+                </li>
+                <li class="list-group-item">
+                    <a download="Formulario de conocimiento" href="<?= constant('url') ?>public/documents/formulario de conocimiento.pdf" class="btn btn-link">Formulario de conocimiento</a>
+                </li>
+                <li class="list-group-item">
+                    <a download="Formulario de Inspección de Vehículos" href="<?= constant('url') ?>public/documents/formulario de inspeccion.pdf" class="btn btn-link">Formulario de Inspección</a>
+                </li>
+            </ul>
+        <?php endif ?>
+    </div>
+    <div class="col-2">
+        &nbsp;
+    </div>
+    <div class="col-4">
+        <?php if ($this->trato->getFieldValue('Stage') != "Abandonado") : ?>
+            <?php if ($this->trato->getFieldValue('Nombre') == null) : ?>
+                <a href="<?= constant('url') ?>auto/completar/<?= $this->trato->getEntityId() ?>" class="btn btn-primary">Siguiente</a>
+            <?php else : ?>
+                <a href="<?= constant('url') ?>auto/emitir/<?= $this->trato->getEntityId() ?>" class="btn btn-success"><?= $retVal = ($this->trato->getFieldValue('P_liza') == null) ? "Emitir" : "Completar"; ?></a>|
+                <a href="<?= constant('url') ?>auto/descargar/<?= $this->trato->getEntityId() ?>" class="btn btn-info">Descargar</a>
+            <?php endif ?>
+        <?php endif ?>
+    </div>
+    <div class="col-12">
+        &nbsp;
     </div>
 </div>

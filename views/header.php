@@ -14,7 +14,7 @@
 
 <body class="sb-nav-fixed">
     <nav class="sb-topnav navbar navbar-expand navbar-dark bg-primary oculto-impresion">
-        <a title="Panel de Control" class="navbar-brand" href="<?= constant('url') ?>index.php">IT - Insurance Tech</a>
+        <a title="Panel de Control" class="navbar-brand" href="<?= constant('url') ?>">IT - Insurance Tech</a>
         <div class="d-none d-md-inline-block form-inline ml-auto mr-0 mr-md-3 my-2 my-md-0">
             &nbsp;
         </div>
@@ -28,13 +28,13 @@
                 <div class="sb-sidenav-menu">
                     <div class="nav">
                         <div class="sb-sidenav-menu-heading">Menu</div>
-                        <a class="nav-link active" href="<?= constant('url') ?>index.php">
+                        <a class="nav-link active" href="<?= constant('url') ?>">
                             <div class="sb-nav-link-icon">
                                 <i class="fas fa-chart-line"></i>
                             </div>
                             Panel de Control
                         </a>
-                        <a class="nav-link active" href="<?= constant('url') ?>cotizacion/buscar">
+                        <a class="nav-link active" href="<?= constant('url') ?>home/buscar">
                             <div class="sb-nav-link-icon">
                                 <i class="fas fa-search"></i>
                             </div>
@@ -51,7 +51,7 @@
                         </a>
                         <div class="collapse" id="collapseLayouts" aria-labelledby="headingOne" data-parent="#sidenavAccordion">
                             <nav class="sb-sidenav-menu-nested nav">
-                                <a class="nav-link" href="<?= constant('url') ?>cotizacion/crear">
+                                <a class="nav-link" href="<?= constant('url') ?>auto/crear">
                                     <div class="sb-nav-link-icon">
                                         <i class="fas fa-car"></i>
                                     </div>
@@ -66,3 +66,4 @@
         <div id="layoutSidenav_content">
             <main>
                 <div class="container-fluid">
+                    <br>

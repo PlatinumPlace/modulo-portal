@@ -16,9 +16,6 @@
             <div class="row justify-content-center">
                 <div class="col-lg-5">
                     <div class="card shadow-lg border-0 rounded-lg mt-5">
-                        <div class="card-header">
-                            <h3 class="text-center font-weight-light my-4">IT - Insurance Tech</h3>
-                        </div>
                         <div class="card-body">
                             <form method="POST" action="<?= constant('url')?>login">
                                 <div class="form-group">

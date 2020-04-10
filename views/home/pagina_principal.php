@@ -1,7 +1,3 @@
-<h1 class="mt-4">Panel de Control</h1>
-<ol class="breadcrumb mb-4">
-  <li class="breadcrumb-item active">Panel de Control</li>
-</ol>
 <div class="alert alert-success" role="alert">
   <h4 class="alert-heading">¡Bienvenido al Insurance Tech de Grupo Nobe!</h4>
   <p>Desde su panel de control podrá ver la infomación necesaria manejar sus pólizas y cotizaciones.</p>
@@ -22,7 +18,7 @@
         </div>
       </div>
       <div class="card-body">
-        <a href="<?= constant('url') ?>cotizacion/buscar" class="card-link">Ver más</a>
+        <a href="<?= constant('url') ?>home/buscar" class="card-link">Ver más</a>
       </div>
     </div>
   </div>
@@ -41,7 +37,7 @@
         </div>
       </div>
       <div class="card-body">
-        <a href="<?= constant('url') ?>cotizacion/lista/<?= $this->filtro_emisiones ?>" class="card-link">Ver más</a>
+        <a href="<?= ($this->emisiones > 0) ? constant('url') . "home/lista/" . $this->filtro_emisiones : "#"; ?>" class="card-link">Ver más</a>
       </div>
     </div>
   </div>
@@ -60,7 +56,7 @@
         </div>
       </div>
       <div class="card-body">
-        <a href="<?= constant('url') ?>cotizacion/lista/<?= $this->filtro_vencimientos ?>" class="card-link">Ver más</a>
+        <a href="<?= $retVal = ($this->vencimientos > 0) ? constant('url') . "home/lista/" . $this->filtro_vencimientos : "#"; ?>" class="card-link">Ver más</a>
       </div>
     </div>
   </div>

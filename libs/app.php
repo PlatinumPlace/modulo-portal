@@ -35,6 +35,7 @@ class App
         if (empty($url[0])) {
             require_once "controllers/home.php";
             $controlador = new Home;
+            $controlador->pagina_principal();
             return false;
         }
         // si la url tiene una peticion
@@ -49,7 +50,7 @@ class App
             require_once $peticion;
             $controlador = new $url[0];
             if (isset($url[1]) and method_exists($url[0], $url[1])) {
-                if (isset($url[2])) {
+                if (!empty($url[2])) {
                     $controlador->{$url[1]}($url[2]);
                 } else {
                     $controlador->{$url[1]}();

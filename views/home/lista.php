@@ -11,7 +11,6 @@
             <th>Opciones</th>
         </tr>
     </thead>
-
     <tbody>
         <?php if (!empty($this->resultado)) : ?>
             <?php foreach ($this->resultado as $trato) : ?>
@@ -19,23 +18,15 @@
                     <tr>
                         <td><?= $trato->getFieldValue('No_de_cotizaci_n')  ?></td>
                         <td><?= $trato->getFieldValue('RNC_Cedula') ?></td>
-                        <td>
-                            <?php
-                            if ($trato->getFieldValue('P_liza') == null) {
-                                echo "No emitida";
-                            } else {
-                                echo $trato->getFieldValue('P_liza')->getLookupLabel();
-                            }
-                            ?>
-                        </td>
+                        <td><?= $trato->getFieldValue('P_liza')->getLookupLabel() ?></td>
                         <td><?= $trato->getFieldValue('Type')  ?></td>
                         <td>RD$<?= number_format($trato->getFieldValue('Valor_Asegurado'), 2) ?></td>
                         <td><?= $trato->getFieldValue("Stage") ?></td>
                         <td><?= date("d/m/Y", strtotime($trato->getFieldValue("Closing_Date"))) ?></td>
                         <td>
-                            <a href="<?= constant('url') ?>cotizacion/detalles/<?= $trato->getEntityId() ?>" title="Detalles"><i class="fas fa-info"></i></a>
-                            <a href="<?= constant('url') ?>cotizacion/emitir/<?= $trato->getEntityId() ?>" title="Emitir"><i class="fas fa-portrait"></i></a>
-                            <a href="<?= constant('url') ?>cotizacion/descargar/<?= $trato->getEntityId() ?>" title="Descargar"><i class="fas fa-download"></i></a>
+                            <a href="<?= constant('url') . $trato->getFieldValue('Type') ?>/detalles/<?= $trato->getEntityId() ?>" title="Detalles"><i class="fas fa-info"></i></a>
+                            <a href="<?= constant('url') . $trato->getFieldValue('Type') ?>/emitir/<?= $trato->getEntityId() ?>" title="Emitir"><i class="fas fa-portrait"></i></a>
+                            <a href="<?= constant('url') . $trato->getFieldValue('Type') ?>/descargar/<?= $trato->getEntityId() ?>" title="Descargar"><i class="fas fa-download"></i></a>
                         </td>
                     </tr>
                 <?php endif ?>
