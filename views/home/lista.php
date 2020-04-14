@@ -16,7 +16,7 @@
             <?php foreach ($this->resultado as $trato) : ?>
                 <?php if ($trato->getFieldValue("Stage") == $this->filtro and date("Y-m", strtotime($trato->getFieldValue("Fecha_de_emisi_n"))) == date('Y-m')) : ?>
                     <tr>
-                        <td><?= $trato->getFieldValue('No_de_cotizaci_n')  ?></td>
+                        <td><?= $trato->getFieldValue('No_Cotizaci_n')  ?></td>
                         <td><?= $trato->getFieldValue('RNC_Cedula') ?></td>
                         <td><?= $trato->getFieldValue('P_liza')->getLookupLabel() ?></td>
                         <td><?= $trato->getFieldValue('Type')  ?></td>

@@ -13,8 +13,8 @@
                         <div class="col-sm-4">
                             <select name="aseguradora" class="form-control" required>
                                 <?php foreach ($this->cotizaciones as $cotizacion) : ?>
-                                    <?php if ($cotizacion["Prima_Total"] > 0) : ?>
-                                        <?php $contrato = $this->api->getRecord("Contratos", $cotizacion["Contrato"]["id"]) ?>
+                                    <?php if ($cotizacion->getFieldValue('Grand_Total') > 0) : ?>
+                                        <?php $contrato = $this->api->getRecord("Contratos", $cotizacion->getFieldValue('Contrato')->getEntityId()) ?>
                                         <option value="<?= $contrato->getFieldValue('Aseguradora')->getEntityId() ?>"><?= $contrato->getFieldValue('Aseguradora')->getLookupLabel() ?></option>
                                     <?php endif ?>
                                 <?php endforeach ?>

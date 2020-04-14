@@ -64,12 +64,9 @@ class Auto extends Controller
             $controlador = new Desvio;
             return false;
         }
-        // variable para usar en la vista con las propiedades subformulario que se asignan como un array
-        $this->view->cotizaciones = $this->view->trato->getFieldValue('Aseguradoras_Disponibles');
-        function calcular($valor, $porciento)
-        {
-            return $valor * ($porciento / 100);
-        }
+        // variable para usar en la vista con las propiedades subformulario que se asignan usando un foreach
+        $criterio = "Deal_Name:equals:" . $id;
+        $this->view->cotizaciones = $this->api->searchRecordsByCriteria("Quotes", $criterio);
         // llama a la vista
         $this->view->render("header");
         $this->view->render("auto/detalles");
@@ -129,12 +126,9 @@ class Auto extends Controller
             $controlador = new Desvio;
             return false;
         }
-        // variable para usar en la vista con las propiedades subformulario que se asignan como un array
-        $this->view->cotizaciones = $this->view->trato->getFieldValue('Aseguradoras_Disponibles');
-        function calcular_1($valor, $porciento)
-        {
-            return $valor * ($porciento / 100);
-        }
+        // variable para usar en la vista con las propiedades subformulario que se asignan en un foreach
+        $criterio = "Deal_Name:equals:" . $id;
+        $this->view->cotizaciones = $this->api->searchRecordsByCriteria("Quotes", $criterio);
         // llama a la vista
         $this->view->render("auto/descargar");
     }
@@ -150,8 +144,9 @@ class Auto extends Controller
             $controlador = new Desvio;
             return false;
         }
-        // variable para usar en la vista con las propiedades subformulario que se asignan como un array
-        $this->view->cotizaciones = $this->view->trato->getFieldValue('Aseguradoras_Disponibles');
+        // variable para usar en la vista con las propiedades subformulario que se asignan  en un foreach
+        $criterio = "Deal_Name:equals:" . $id;
+        $this->view->cotizaciones = $this->api->searchRecordsByCriteria("Quotes", $criterio);
         if (isset($_POST['submit'])) {
             // ubicacion donde estaran los archivcos temporalmenten antes de subirlos al crm
             $ruta_cotizacion = "public/tmp";

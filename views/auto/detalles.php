@@ -1,17 +1,4 @@
 <div class="row">
-    <div class="col-2">
-        <?php if ($this->trato->getFieldValue('P_liza') == null) : ?>
-            <img src="<?= constant('url') ?>public/img/logo.png" width="100" height="100">
-        <?php else : ?>
-            <?php foreach ($this->cotizaciones as $cotizacion) : ?>
-                <?php $contrato = $this->api->getRecord("Contratos", $cotizacion["Contrato"]["id"]) ?>
-                <?php $ruta_imagen = $this->api->downloadPhoto("Vendors", $contrato->getFieldValue('Aseguradora')->getEntityId(), "public/img/") ?>
-                <?php if ($ruta_imagen != null) : ?>
-                    <img width="170" height="75" src="<?= constant('url') . $ruta_imagen ?>">
-                <?php endif ?>
-            <?php endforeach ?>
-        <?php endif ?>
-    </div>
     <div class="col-8">
         <h4 class="text-uppercase text-center">
             <?php if ($this->trato->getFieldValue('P_liza') != null) : ?>
@@ -24,18 +11,16 @@
             plan <?= $this->trato->getFieldValue('Plan') ?>
         </h4>
     </div>
-    <div class="col-2">
-        <p>
-            <b>
-                <?php if ($this->trato->getFieldValue('P_liza') == null) : ?>
-                    Cotización No.
-                <?php else : ?>
-                    Resumen No.
-                <?php endif ?>
-            </b> <?= $this->trato->getFieldValue('No_de_cotizaci_n') ?>
-            <br>
-            <b>Fecha</b> <?= date('d/m/Y') ?>
-        </p>
+    <div class="col-4">
+        <b>
+            <?php if ($this->trato->getFieldValue('P_liza') == null) : ?>
+                Cotización No.
+            <?php else : ?>
+                Resumen No.
+            <?php endif ?>
+        </b> <?= $this->trato->getFieldValue('No_Cotizaci_n') ?>
+        <br>
+        <b>Fecha</b> <?= $this->trato->getFieldValue('Fecha_de_emisi_n') ?>
     </div>
     <div class="col-12">
         &nbsp;
@@ -141,8 +126,8 @@
         <h6>COBERTURAS</h6>
     </div>
     <?php foreach ($this->cotizaciones as $cotizacion) : ?>
-        <?php if ($cotizacion["Prima_Total"] == 0) : ?>
-            <?php $contrato = $this->api->getRecord("Contratos", $cotizacion["Contrato"]["id"]) ?>
+        <?php if ($cotizacion->getFieldValue('Grand_Total') == 0) : ?>
+            <?php $contrato = $this->api->getRecord("Contratos", $cotizacion->getFieldValue('Contrato')->getEntityId()) ?>
             <div class="alert alert-info" role="alert">
                 <b><?= $contrato->getFieldValue('Aseguradora')->getLookupLabel() ?></b> no esta disponible.
             </div>
@@ -177,8 +162,8 @@
                 </p>
             </div>
             <?php foreach ($this->cotizaciones as $cotizacion) : ?>
-                <?php if ($cotizacion["Prima_Total"] > 0) : ?>
-                    <?php $contrato = $this->api->getRecord("Contratos", $cotizacion["Contrato"]["id"]) ?>
+                <?php if ($cotizacion->getFieldValue('Grand_Total') > 0) : ?>
+                    <?php $contrato = $this->api->getRecord("Contratos", $cotizacion->getFieldValue('Contrato')->getEntityId()) ?>
                     <div class="col-2">
                         <p>
                             <?php $ruta_imagen = $this->api->downloadPhoto("Vendors", $contrato->getFieldValue('Aseguradora')->getEntityId(), "public/img/") ?>
@@ -186,11 +171,20 @@
                         </p>
                         <p>
                             <b>&nbsp;</b><br>
-                            RD$<?= number_format(calcular($this->trato->getFieldValue('Valor_Asegurado'), $contrato->getFieldValue('Riesgos_comprensivos'))) ?><br>
+                            <?php
+                            $resultado = $this->trato->getFieldValue('Valor_Asegurado') * ($contrato->getFieldValue('Riesgos_comprensivos') / 100);
+                            echo "RD$" . number_format($resultado);
+                            ?><br>
                             <?= $contrato->getFieldValue('Riesgos_Comprensivos_Deducible') ?><br>
                             <?= $contrato->getFieldValue('Rotura_de_cristales_Deducible') ?><br>
-                            RD$<?= number_format(calcular($this->trato->getFieldValue('Valor_Asegurado'), $contrato->getFieldValue('Colisi_n_y_vuelco'))) ?><br>
-                            RD$<?= number_format(calcular($this->trato->getFieldValue('Valor_Asegurado'), $contrato->getFieldValue('Incendio_y_robo'))) ?><br><br>
+                            <?php
+                            $resultado = $this->trato->getFieldValue('Valor_Asegurado') * ($contrato->getFieldValue('Colisi_n_y_vuelco') / 100);
+                            echo "RD$" . number_format($resultado);
+                            ?><br>
+                            <?php
+                            $resultado = $this->trato->getFieldValue('Valor_Asegurado') * ($contrato->getFieldValue('Incendio_y_robo') / 100);
+                            echo "RD$" . number_format($resultado);
+                            ?><br><br>
                             <b>&nbsp;</b><br>
                             RD$<?= number_format($contrato->getFieldValue('Da_os_Propiedad_ajena')) ?><br>
                             RD$<?= number_format($contrato->getFieldValue('Lesiones_Muerte_1_Pers')) ?><br>
@@ -206,9 +200,16 @@
                             <?= $Asistencia_vial = ($contrato->getFieldValue('Asistencia_vial') == 1) ? "Aplica" : "No Aplica"; ?><br>
                             <?= $Renta_Veh_culo = ($contrato->getFieldValue('Renta_Veh_culo') == 1) ? "Aplica" : "No Aplica"; ?><br>
                             <?= $Casa_del_Conductor_CAA = ($contrato->getFieldValue('Casa_del_Conductor_CAA') == 1) ? "Aplica" : "No Aplica"; ?><br><br>
-                            RD$<?= number_format($cotizacion["Prima_Neta"], 2) ?><br>
-                            RD$<?= number_format($cotizacion["ISC"], 2) ?><br>
-                            RD$<?= number_format($cotizacion["Prima_Total"], 2) ?>
+                            <?php
+                            $planes = $cotizacion->getLineItems();
+                            foreach ($planes as $plan) {
+                                echo "RD$" . number_format($plan->getTotalAfterDiscount(), 2);
+                                echo "<br>";
+                                echo "RD$" . number_format($plan->getTaxAmount(), 2);
+                                echo "<br>";
+                                echo "RD$" . number_format($plan->getNetTotal(), 2);
+                            }
+                            ?>
                         </p>
                     </div>
                 <?php endif ?>

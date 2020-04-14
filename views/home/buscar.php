@@ -33,7 +33,7 @@
         <?php if (!empty($this->resultado)) : ?>
             <?php foreach ($this->resultado as $trato) : ?>
                 <tr>
-                    <td><?= $trato->getFieldValue('No_de_cotizaci_n')  ?></td>
+                    <td><?= $trato->getFieldValue('No_Cotizaci_n')  ?></td>
                     <td>
                         <?php
                         if ($trato->getFieldValue('RNC_Cedula') == null) {
