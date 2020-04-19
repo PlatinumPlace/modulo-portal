@@ -8,7 +8,7 @@
       <div class="card-header text-white bg-primary">
         <div class="row">
           <div class="col">
-            <h1><?= $this->total ?></h1>
+            <h1><?= $total ?></h1>
           </div>
           <div class="col">
             <h5>
@@ -27,7 +27,7 @@
       <div class="card-header text-white bg-primary">
         <div class="row">
           <div class="col">
-            <h1><?= $this->emisiones ?></h1>
+            <h1><?= $emisiones ?></h1>
           </div>
           <div class="col">
             <h5>
@@ -37,7 +37,7 @@
         </div>
       </div>
       <div class="card-body">
-        <a href="<?= ($this->emisiones > 0) ? constant('url') . "home/lista/" . $this->filtro_emisiones : "#"; ?>" class="card-link">Ver más</a>
+        <a href="<?= ($emisiones > 0) ? constant('url') . "home/lista/" . $filtro_emisiones : "#"; ?>" class="card-link">Ver más</a>
       </div>
     </div>
   </div>
@@ -46,7 +46,7 @@
       <div class="card-header text-white bg-warning">
         <div class="row">
           <div class="col">
-            <h1><?= $this->vencimientos ?></h1>
+            <h1><?= $vencimientos ?></h1>
           </div>
           <div class="col">
             <h5>
@@ -56,7 +56,7 @@
         </div>
       </div>
       <div class="card-body">
-        <a href="<?= $retVal = ($this->vencimientos > 0) ? constant('url') . "home/lista/" . $this->filtro_vencimientos : "#"; ?>" class="card-link">Ver más</a>
+        <a href="<?= $retVal = ($vencimientos > 0) ? constant('url') . "home/lista/" . $filtro_vencimientos : "#"; ?>" class="card-link">Ver más</a>
       </div>
     </div>
   </div>

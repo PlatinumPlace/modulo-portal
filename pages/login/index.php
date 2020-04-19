@@ -2,12 +2,15 @@
 <html lang="en">
 
 <head>
+    <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <link href="<?= constant('url')?>public/css/styles.css" rel="stylesheet" />
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
 
     <title>IT - Insurance Tech</title>
-    <link rel="icon" type="image/png" href="<?= constant('url')?>public/img/logo.png">
+    <link rel="icon" type="image/png" href="<?= constant('url') ?>public/img/logo.png">
 </head>
 
 <body class="bg-primary">
@@ -15,9 +18,15 @@
         <div class="container">
             <div class="row justify-content-center">
                 <div class="col-lg-5">
+                    <br>
+                    <?php if (isset($_POST['submit'])) : ?>
+                        <div class="alert alert-primary" role="alert">
+                            <?= $alerta ?>
+                        </div>
+                    <?php endif ?>
                     <div class="card shadow-lg border-0 rounded-lg mt-5">
                         <div class="card-body">
-                            <form method="POST" action="<?= constant('url')?>login">
+                            <form method="POST" action="<?= constant('url') ?>login">
                                 <div class="form-group">
                                     <label class="small mb-1">Usuario</label>
                                     <input class="form-control py-4" type="text" name="usuario" required />

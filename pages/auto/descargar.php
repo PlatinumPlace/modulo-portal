@@ -3,16 +3,17 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>
-        <?php if ($this->trato->getFieldValue('Stage') == "Cotizando") : ?>
+        <?php if ($trato->getFieldValue('Stage') == "Cotizando") : ?>
             Cotización No.
         <?php else : ?>
             Resumen No.
         <?php endif ?>
-        <?= $this->trato->getFieldValue('No_Cotizaci_n') ?>
+        <?= $trato->getFieldValue('No_Cotizaci_n') ?>
     </title>
-    <link href="<?= constant('url') ?>public/css/styles.css" rel="stylesheet" />
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
     <link rel="icon" type="image/png" href="<?= constant('url') ?>public/img/logo.png">
     <style>
         @media all {
@@ -34,40 +35,38 @@
     <div class="container">
         <div class="row">
             <div class="col-2">
-                <?php if ($this->trato->getFieldValue('P_liza') == null) : ?>
+                <?php if ($trato->getFieldValue('P_liza') == null) : ?>
                     <img src="<?= constant('url') ?>public/img/logo.png" width="100" height="100">
                 <?php else : ?>
-                    <?php foreach ($this->cotizaciones as $cotizacion) : ?>
-                        <?php $contrato = $this->api->getRecord("Contratos", $cotizacion->getFieldValue('Contrato')->getEntityId()) ?>
-                        <?php $ruta_imagen = $this->api->downloadPhoto("Vendors", $contrato->getFieldValue('Aseguradora')->getEntityId(), "public/img/") ?>
-                        <?php if ($ruta_imagen != null) : ?>
-                            <img width="170" height="75" src="<?= constant('url') . $ruta_imagen ?>">
-                        <?php endif ?>
+                    <?php foreach ($cotizaciones as $cotizacion) : ?>
+                        <?php $contrato = $this->getRecord("Contratos", $cotizacion->getFieldValue('Contrato')->getEntityId()) ?>
+                        <?php $ruta_imagen = $this->downloadPhoto("Vendors", $contrato->getFieldValue('Aseguradora')->getEntityId(), "public/img/") ?>
+                        <img width="170" height="75" src="<?= constant('url') . $ruta_imagen ?>">
                     <?php endforeach ?>
                 <?php endif ?>
             </div>
             <div class="col-8">
                 <h4 class="text-uppercase text-center">
-                    <?php if ($this->trato->getFieldValue('P_liza') != null) : ?>
+                    <?php if ($trato->getFieldValue('P_liza') != null) : ?>
                         resumen coberturas
                     <?php else : ?>
                         cotización
                     <?php endif ?>
                     <br>
                     seguro vehículo de motor<br>
-                    plan <?= $this->trato->getFieldValue('Plan') ?>
+                    plan <?= $trato->getFieldValue('Plan') ?>
                 </h4>
             </div>
             <div class="col-2">
                 <b>
-                    <?php if ($this->trato->getFieldValue('P_liza') == null) : ?>
+                    <?php if ($trato->getFieldValue('P_liza') == null) : ?>
                         Cotización No.
                     <?php else : ?>
                         Resumen No.
                     <?php endif ?>
-                </b> <?= $this->trato->getFieldValue('No_Cotizaci_n') ?>
+                </b> <?= $trato->getFieldValue('No_Cotizaci_n') ?>
                 <br>
-                <b>Fecha</b> <?= $this->trato->getFieldValue('Fecha_de_emisi_n') ?>
+                <b>Fecha</b> <?= $trato->getFieldValue('Fecha_de_emisi_n') ?>
             </div>
             <div class="col-12">
                 &nbsp;
@@ -87,10 +86,10 @@
                     </div>
                     <div class="col">
                         <P>
-                            <?= $this->trato->getFieldValue('Nombre') . " " . $this->trato->getFieldValue('Apellido') ?><br>
-                            <?= $this->trato->getFieldValue('RNC_Cedula') ?><br>
-                            <?= $this->trato->getFieldValue('Email') ?><br>
-                            <?= $this->trato->getFieldValue('Direcci_n') ?>
+                            <?= $trato->getFieldValue('Nombre') . " " . $trato->getFieldValue('Apellido') ?><br>
+                            <?= $trato->getFieldValue('RNC_Cedula') ?><br>
+                            <?= $trato->getFieldValue('Email') ?><br>
+                            <?= $trato->getFieldValue('Direcci_n') ?>
                         </P>
                     </div>
                 </div>
@@ -106,9 +105,9 @@
                     </div>
                     <div class="col">
                         <P>
-                            <?= $this->trato->getFieldValue('Tel_Residencia') ?><br>
-                            <?= $this->trato->getFieldValue('Telefono') ?><br>
-                            <?= $this->trato->getFieldValue('Tel_Trabajo') ?><br>
+                            <?= $trato->getFieldValue('Tel_Residencia') ?><br>
+                            <?= $trato->getFieldValue('Telefono') ?><br>
+                            <?= $trato->getFieldValue('Tel_Trabajo') ?><br>
                         </P>
                     </div>
                 </div>
@@ -129,11 +128,11 @@
                     </div>
                     <div class="col">
                         <P>
-                            <?= $this->trato->getFieldValue('Tipo_de_vehiculo') ?><br>
-                            <?= strtoupper($this->trato->getFieldValue('Marca')) ?><br>
-                            <?= strtoupper($this->trato->getFieldValue('Modelo')) ?><br>
-                            <?= $this->trato->getFieldValue('A_o_de_Fabricacion') ?><br>
-                            RD$<?= number_format($this->trato->getFieldValue('Valor_Asegurado'), 2) ?>
+                            <?= $trato->getFieldValue('Tipo_de_vehiculo') ?><br>
+                            <?= strtoupper($trato->getFieldValue('Marca')) ?><br>
+                            <?= strtoupper($trato->getFieldValue('Modelo')) ?><br>
+                            <?= $trato->getFieldValue('A_o_de_Fabricacion') ?><br>
+                            RD$<?= number_format($trato->getFieldValue('Valor_Asegurado'), 2) ?>
                         </P>
                     </div>
                 </div>
@@ -152,11 +151,11 @@
                     </div>
                     <div class="col">
                         <P>
-                            <?= $this->trato->getFieldValue('Chasis') ?><br>
-                            <?= $this->trato->getFieldValue('Placa') ?><br>
-                            <?= $this->trato->getFieldValue('Color') ?><br>
-                            <?= $this->trato->getFieldValue('Uso') ?><br>
-                            <?= $retVal = ($this->trato->getFieldValue('Es_nuevo') == 1) ? "Nuevo" : "Usado"; ?>
+                            <?= $trato->getFieldValue('Chasis') ?><br>
+                            <?= $trato->getFieldValue('Placa') ?><br>
+                            <?= $trato->getFieldValue('Color') ?><br>
+                            <?= $trato->getFieldValue('Uso') ?><br>
+                            <?= $retVal = ($trato->getFieldValue('Es_nuevo') == 1) ? "Nuevo" : "Usado"; ?>
                         </P>
                     </div>
                 </div>
@@ -192,13 +191,13 @@
                             <b>Prima Total</b>
                         </p>
                     </div>
-                    <?php foreach ($this->cotizaciones as $cotizacion) : ?>
+                    <?php foreach ($cotizaciones as $cotizacion) : ?>
                         <?php if ($cotizacion->getFieldValue('Grand_Total') > 0) : ?>
-                            <?php $contrato = $this->api->getRecord("Contratos", $cotizacion->getFieldValue('Contrato')->getEntityId()) ?>
+                            <?php $contrato = $this->getRecord("Contratos", $cotizacion->getFieldValue('Contrato')->getEntityId()) ?>
                             <div class="col-2">
                                 <p>
-                                    <?php if ($this->trato->getFieldValue('P_liza') == null) : ?>
-                                        <?php $ruta_imagen = $this->api->downloadPhoto("Vendors", $contrato->getFieldValue('Aseguradora')->getEntityId(), "public/img/") ?>
+                                    <?php if ($trato->getFieldValue('P_liza') == null) : ?>
+                                        <?php $ruta_imagen = $this->downloadPhoto("Vendors", $contrato->getFieldValue('Aseguradora')->getEntityId(), "public/img/") ?>
                                         <img height="50" width="110" src="<?= constant('url') . $ruta_imagen ?>">
                                     <?php else : ?>
                                         &nbsp;
@@ -207,17 +206,17 @@
                                 <p>
                                     <b>&nbsp;</b><br>
                                     <?php
-                                    $resultado = $this->trato->getFieldValue('Valor_Asegurado') * ($contrato->getFieldValue('Riesgos_comprensivos') / 100);
+                                    $resultado = $trato->getFieldValue('Valor_Asegurado') * ($contrato->getFieldValue('Riesgos_comprensivos') / 100);
                                     echo "RD$" . number_format($resultado);
                                     ?><br>
                                     <?= $contrato->getFieldValue('Riesgos_Comprensivos_Deducible') ?><br>
                                     <?= $contrato->getFieldValue('Rotura_de_cristales_Deducible') ?><br>
                                     <?php
-                                    $resultado = $this->trato->getFieldValue('Valor_Asegurado') * ($contrato->getFieldValue('Colisi_n_y_vuelco') / 100);
+                                    $resultado = $trato->getFieldValue('Valor_Asegurado') * ($contrato->getFieldValue('Colisi_n_y_vuelco') / 100);
                                     echo "RD$" . number_format($resultado);
                                     ?><br>
                                     <?php
-                                    $resultado = $this->trato->getFieldValue('Valor_Asegurado') * ($contrato->getFieldValue('Incendio_y_robo') / 100);
+                                    $resultado = $trato->getFieldValue('Valor_Asegurado') * ($contrato->getFieldValue('Incendio_y_robo') / 100);
                                     echo "RD$" . number_format($resultado);
                                     ?><br><br>
                                     <b>&nbsp;</b><br>
@@ -252,9 +251,9 @@
                 </div>
             </div>
         </div>
-        <?php if ($this->trato->getFieldValue('P_liza') != null) : ?>
-            <?php $aseguradora = $this->api->getRecord("Vendors", $this->trato->getFieldValue('Aseguradora')->getEntityId()) ?>
-            <?php $ruta_imagen = $this->api->downloadPhoto("Vendors", $contrato->getFieldValue('Aseguradora')->getEntityId(), "public/img/") ?>
+        <?php if ($trato->getFieldValue('P_liza') != null) : ?>
+            <?php $aseguradora = $this->getRecord("Vendors", $trato->getFieldValue('Aseguradora')->getEntityId()) ?>
+            <?php $ruta_imagen = $this->downloadPhoto("Vendors", $contrato->getFieldValue('Aseguradora')->getEntityId(), "public/img/") ?>
             <div class="row">
                 <div class="col-6 border">
                     <?php if ($ruta_imagen != null) : ?>
@@ -277,13 +276,13 @@
                         </div>
                         <div class="col">
                             <P>
-                                <?= $this->trato->getFieldValue('P_liza')->getLookupLabel() ?><br>
-                                <?= $this->trato->getFieldValue('Marca') ?><br>
-                                <?= $this->trato->getFieldValue('Modelo') ?><br>
-                                <?= $this->trato->getFieldValue('A_o_de_Fabricacion') ?><br>
-                                <?= $this->trato->getFieldValue('Chasis') ?><br>
-                                <?= $this->trato->getFieldValue('Placa') ?><br>
-                                <?= $this->trato->getFieldValue('Closing_Date') ?>
+                                <?= $trato->getFieldValue('P_liza')->getLookupLabel() ?><br>
+                                <?= $trato->getFieldValue('Marca') ?><br>
+                                <?= $trato->getFieldValue('Modelo') ?><br>
+                                <?= $trato->getFieldValue('A_o_de_Fabricacion') ?><br>
+                                <?= $trato->getFieldValue('Chasis') ?><br>
+                                <?= $trato->getFieldValue('Placa') ?><br>
+                                <?= $trato->getFieldValue('Closing_Date') ?>
                             </P>
                         </div>
                     </div>
@@ -430,9 +429,8 @@
             </div>
         <?php endif ?>
     </div>
-    <input value="<?= $this->trato->getEntityId() ?>" id="id" hidden>
+    <input value="<?= $trato->getEntityId() ?>" id="id" hidden>
     <?php
-    /*
     echo '
         <script>
             var time = 500;
@@ -442,7 +440,6 @@
                 window.location = "' . constant('url') . 'auto/detalles/" + id;
             }, time);
         </script>';
-        */
     ?>
 </body>
 

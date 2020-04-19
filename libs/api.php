@@ -6,6 +6,7 @@ use zcrmsdk\crm\exception\ZCRMException;
 
 class Api
 {
+    // array con los parametros de zoho app
     public $configuration = array(
         "client_id" => "",
         "client_secret" => "",
@@ -13,12 +14,14 @@ class Api
         "currentUserEmail" => "",
         "token_persistence_path" => "api"
     );
-
+    // inicializa las clases del api
     public function __construct()
     {
         ZCRMRestClient::initialize($this->configuration);
     }
-
+    // buscar los registros segun un criterio y el nombre del modulo en el crm
+    // retorna varios registros con las propiedades de la clase del api .....
+    // que se recorren con un foreach
     public function searchRecordsByCriteria($module_name, $criteria)
     {
         $moduleIns = ZCRMRestClient::getInstance()->getModuleInstance($module_name);
@@ -35,7 +38,10 @@ class Api
         }
         return $records;
     }
-
+    // crea un nuevo registro en el crm usando el nombre del modulo y un array
+    // recorre el array en un foreach con las propiedades del array,para esto debe tener 
+    // los mismos nombres que los campos del modulo
+    // retorna el id del nuevo registro
     public function createRecord($module_name, array $record_model)
     {
         $moduleIns = ZCRMRestClient::getInstance()->getModuleInstance($module_name);
@@ -58,9 +64,9 @@ class Api
             echo "Details:" . json_encode($responseIns->getDetails());
             $result = json_decode(json_encode($responseIns->getDetails()), true);
         }
-        return $result;
+        return $result['id'];
     }
-
+    // retorna un objeto , segun el nombre del modulo y el id
     public function getRecord($module_name, $record_id)
     {
         $moduleIns = ZCRMRestClient::getInstance()->getModuleInstance($module_name);
@@ -77,7 +83,8 @@ class Api
         }
         return $record;
     }
-
+    // modifica un registro existente,usando el nombre del modulo,el id y un array con los valores
+    // asignados en espacios con el nombre de los campos del modulo en el crm
     public function updateRecord($module_name, array $record_model, $record_id)
     {
         $record = ZCRMRestClient::getInstance()->getRecordInstance($module_name, $record_id);
@@ -94,9 +101,10 @@ class Api
         echo "Code:" . $responseIns->getCode();
         echo "<br/>";
         echo "Details:" . json_encode($responseIns->getDetails());
-        return json_decode(json_encode($responseIns->getDetails()), true);
     }
-
+    // descarga la imagen de perfil de un registro del crm, tomando el nombre del modulo,
+    // el id y la ubicacion donde se guardan las imagenes
+    // retornando la ubicacion de la imagen y su nombre con la extension
     public function downloadPhoto($module_name, $record_id, $filePath)
     {
         $record = ZCRMRestClient::getInstance()->getRecordInstance($module_name, $record_id);
@@ -108,7 +116,7 @@ class Api
         $result = $filePath . $fileResponseIns->getFileName();
         return $result;
     }
-
+    // retorna todos los registros de un modulo, tomando el nombre del modulo
     public function getRecords($module_name)
     {
         $moduleIns = ZCRMRestClient::getInstance()->getModuleInstance($module_name);
@@ -125,7 +133,8 @@ class Api
         }
         return $records;
     }
-
+    // adjunta un archivo a un registro del crm,tomando el nombre del modulo,el id del registro y la ubicacion
+    // temporal en el servidor
     public function uploadAttachment($module_name, $record_id, $filePath)
     {
         $record = ZCRMRestClient::getInstance()->getRecordInstance($module_name, $record_id);

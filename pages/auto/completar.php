@@ -1,5 +1,5 @@
-<form method="POST" class="row" action="<?= constant('url') ?>auto/completar/<?= $this->trato->getEntityId() ?>">
-    <div class="col-12">
+<form method="POST" class="row" action="<?= constant('url') ?>auto/completar/<?= $trato->getEntityId() ?>">
+    <div class="col-md-9">
         <div class="card">
             <div class="card-header">
                 <h5>Datos del Cliente</h5>
@@ -55,11 +55,7 @@
                 </div>
             </div>
         </div>
-    </div>
-    <div class="col-12">
-        &nbsp;
-    </div>
-    <div class="col-12">
+        <br>
         <div class="card">
             <div class="card-header">
                 <h5>Datos de Vehículo</h5>
@@ -68,47 +64,48 @@
                 <div class="form-group row">
                     <label class="col-sm-2 col-form-label">Chasis</label>
                     <div class="col-sm-4">
-                        <input type="text" class="form-control" name="chasis" required value="<?= $this->trato->getFieldValue('Chasis') ?>">
+                        <input type="text" class="form-control" name="chasis" required value="<?= $trato->getFieldValue('Chasis') ?>">
                     </div>
                     <label class="col-sm-2 col-form-label">Color</label>
                     <div class="col-sm-4">
-                        <input type="text" class="form-control" name="color" value="<?= $this->trato->getFieldValue('Color') ?>">
+                        <input type="text" class="form-control" name="color" value="<?= $trato->getFieldValue('Color') ?>">
                     </div>
                 </div>
                 <div class="form-group row">
                     <label class="col-sm-2 col-form-label">Uso</label>
                     <div class="col-sm-4">
                         <select name="uso" class="form-control">
-                            <option selected value="Privado">Privado</option>
+                            <option selected disabled value=""><strong><?= $trato->getFieldValue('Uso') ?></strong></option>
+                            <option value="Privado">Privado</option>
                             <option value="Publico">Público</option>
                         </select>
                     </div>
                     <label class="col-sm-2 col-form-label">Placa</label>
                     <div class="col-sm-4">
-                        <input type="text" class="form-control" name="placa" value="<?= $this->trato->getFieldValue('Placa') ?>">
+                        <input type="text" class="form-control" name="placa" value="<?= $trato->getFieldValue('Placa') ?>">
                     </div>
                 </div>
                 <div class="form-group row">
                     <div class="col-sm-2">¿Es nuevo?</div>
                     <div class="col-sm-10">
                         <div class="form-check">
-                            <input class="form-check-input" type="checkbox" name="estado" <?php $retVal = ($this->trato->getFieldValue('Es_nuevo') == true) ? "checked" : ""; ?>>
+                            <input class="form-check-input" type="checkbox" name="estado" <?= $retVal = ($trato->getFieldValue('Es_nuevo') == true) ? "checked" : ""; ?>>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <div class="col-12">
-        &nbsp;
-    </div>
-    <div class="col-10">
-        &nbsp;
-    </div>
-    <div class="col-2">
-        <button type="submit" name="submit" class="btn btn-success">Completar</button>
-    </div>
-    <div class="col-12">
-        &nbsp;
+    <div class="col-md-3">
+        <div class="card">
+            <div class="card-header">
+                <h5>Opciones</h5>
+            </div>
+            <div class="card-body">
+                <div class="form-group row justify-content-md-center">
+                    <button type="submit" name="submit" class="btn btn-success">Completar</button>
+                </div>
+            </div>
+        </div>
     </div>
 </form>

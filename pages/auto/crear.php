@@ -1,5 +1,5 @@
 <form method="POST" action="<?= constant('url') ?>auto/crear" class="row">
-    <div class="col-12">
+    <div class="col-md-9">
         <div class="card">
             <div class="card-header">
                 <h5>Tipo de Cotización</h5>
@@ -34,11 +34,7 @@
                 </div>
             </div>
         </div>
-    </div>
-    <div class="col-12">
-        &nbsp;
-    </div>
-    <div class="col-12">
+        <br>
         <div class="card">
             <div class="card-header">
                 <h5>Datos de Vehículo</h5>
@@ -54,7 +50,7 @@
                                 recorre todos los registros del modulo marcas,de donde se toma el nombre y id
                             -->
                             <?php
-                            $marcas = $this->api->getRecords("Marcas");
+                            $marcas = $this->getRecords("Marcas");
                             sort($marcas);
                             foreach ($marcas as $marca) {
                                 echo '<option value="' . $marca->getEntityId() . '">' . strtoupper($marca->getFieldValue("Name")) . '</option>';
@@ -114,17 +110,17 @@
             </div>
         </div>
     </div>
-    <div class="col-12">
-        &nbsp;
-    </div>
-    <div class="col-10">
-        &nbsp;
-    </div>
-    <div class="col-2">
-        <button type="submit" name="submit" class="btn btn-success">Cotizar</button>
-    </div>
-    <div class="col-12">
-        &nbsp;
+    <div class="col-md-3">
+        <div class="card">
+            <div class="card-header">
+                <h5>Opciones</h5>
+            </div>
+            <div class="card-body">
+                <div class="form-group row justify-content-md-center">
+                    <button type="submit" name="submit" class="btn btn-success">Cotizar</button>
+                </div>
+            </div>
+        </div>
     </div>
 </form>
 <?php
