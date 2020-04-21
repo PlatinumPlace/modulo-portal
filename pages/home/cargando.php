@@ -9,7 +9,7 @@
 // redirige a la vista de detalles pasado un tiempo (en seg)
 echo '
     <script>
-        var time = 2500;
+        var time = 3000;
         var id = document.getElementById("id").value;
         var origen = document.getElementById("origen").value;
         setTimeout(function() {

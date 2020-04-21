@@ -3,6 +3,9 @@
         <select class="form-control" name="parametro" required>
             <option value="numero" selected>No. de cotización</option>
             <option value="id">RNC/Cédula</option>
+            <option value="nombre">Nombre</option>
+            <option value="apellido">Apellido</option>
+            <option value="chasis">Chasis</option>
         </select>
     </div>
     <div class="form-group mx-sm-3 mb-2">

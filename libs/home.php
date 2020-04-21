@@ -60,6 +60,18 @@ class Home extends Api
                     // el numero cedula/rnc del registro
                     $criterio = "((Contact_Name:equals:" . $_SESSION['usuario'] . ") and (RNC_Cedula:equals:" . $_POST['busqueda'] . "))";
                     break;
+                case 'nombre':
+                    // el numero cedula/rnc del registro
+                    $criterio = "((Contact_Name:equals:" . $_SESSION['usuario'] . ") and (Nombre:equals:" . $_POST['busqueda'] . "))";
+                    break;
+                case 'apellido':
+                    // el numero cedula/rnc del registro
+                    $criterio = "((Contact_Name:equals:" . $_SESSION['usuario'] . ") and (Apellido:equals:" . $_POST['busqueda'] . "))";
+                    break;
+                case 'chasis':
+                    // el numero cedula/rnc del registro
+                    $criterio = "((Contact_Name:equals:" . $_SESSION['usuario'] . ") and (Chasis:equals:" . $_POST['busqueda'] . "))";
+                    break;
             }
         }
         // almacena los resultados en una variable de la clase view
@@ -81,7 +93,7 @@ class Home extends Api
     }
     public function cargando($datos)
     {
-        $informacion = explode("-",$datos);
+        $informacion = explode("-", $datos);
         // variable con el id del registro para usarla en la vista
         $id = $informacion[0];
         // tipo del registro para redirigir al controlador correspondiente

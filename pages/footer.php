@@ -1,6 +1,7 @@
 </div>
 </main>
 </body>
+<br><br>
 <footer class="py-4 bg-light mt-auto fixed-bottom">
     <div class="container-fluid">
         <div class="d-flex align-items-center justify-content-between small">
