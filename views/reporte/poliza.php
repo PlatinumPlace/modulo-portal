@@ -13,6 +13,12 @@
                             ?>
                         </select>
                     </div>
+                    <label class="col-sm-2 col-form-label">Tipo</label>
+                    <div class="col-sm-4">
+                        <select name="tipo" class="form-control" required>
+                            <option value="Auto" selected>Auto</option>
+                        </select>
+                    </div>
                 </div>
                 <div class="form-group row">
                     <label class="col-sm-2 col-form-label">Fecha de inicio</label>

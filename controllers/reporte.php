@@ -1,14 +1,15 @@
 <?php
-class Reporte extends Api
+
+class ReporteController extends Api
 {
-    function __construct()
+
+    public function __construct()
     {
-        // inicializamos la clase api
         parent::__construct();
     }
-    public function exportarCSV()
+    public function poliza()
     {
-        $contacto = $this->getRecord("Contacts", $_SESSION['usuario']);
+        $contacto = $this->getRecord("Contacts", $_SESSION['usuario_id']);
         $criterio = "Socio:equals:" . $contacto->getFieldValue("Account_Name")->getEntityId();
         $contratos = $this->searchRecordsByCriteria("Contratos", $criterio);
         if (isset($_POST["submit"])) {
@@ -22,6 +23,8 @@ class Reporte extends Api
                         if (
                             $trato->getFieldValue("P_liza") != null
                             and
+                            $trato->getFieldValue("Type") == $_POST['tipo']
+                            and
                             date("Y-m-d", strtotime($trato->getFieldValue("Fecha_de_emisi_n")))  > $_POST['inicio']
                             and
                             date("Y-m-d", strtotime($trato->getFieldValue("Fecha_de_emisi_n"))) < $_POST['fin']
@@ -30,16 +33,16 @@ class Reporte extends Api
                         }
                     }
                     fclose($csv);
-                    header("Location:" . constant("url")."public/tmp/reporte.csv");
-                    unlink(constant("url")."public/tmp/reporte.csv");
+                    //header("Location:" . constant("url")."public/tmp/reporte.csv");
+                    //unlink(constant("url")."public/tmp/reporte.csv");
                 } else {
 
                     echo "El archivo no existe o no se pudo crear";
                 }
             }
         }
-        require("pages/header.php");
-        require("pages/reporte/index.php");
-        require("pages/footer.php");
+        require_once("views/header.php");
+        require_once("views/reporte/poliza.php");
+        require_once("views/footer.php");
     }
 }

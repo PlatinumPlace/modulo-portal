@@ -12,8 +12,9 @@
         <?php endif ?>
         <?= $trato->getFieldValue('No_Cotizaci_n') ?>
     </title>
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <!-- Bootstrap core CSS -->
+    <link href="<?= constant('url') ?>public/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
     <link rel="icon" type="image/png" href="<?= constant('url') ?>public/img/logo.png">
     <style>
         @media all {
@@ -233,17 +234,27 @@
                                     <b>&nbsp;</b><br>
                                     <?= $Asistencia_vial = ($contrato->getFieldValue('Asistencia_vial') == 1) ? "Aplica" : "No Aplica"; ?><br>
                                     <?= $Renta_Veh_culo = ($contrato->getFieldValue('Renta_Veh_culo') == 1) ? "Aplica" : "No Aplica"; ?><br>
-                                    <?= $Casa_del_Conductor_CAA = ($contrato->getFieldValue('Casa_del_Conductor_CAA') == 1) ? "Aplica" : "No Aplica"; ?><br><br>
-                                    <?php
-                                    $planes = $cotizacion->getLineItems();
-                                    foreach ($planes as $plan) {
-                                        echo "RD$" . number_format($plan->getTotalAfterDiscount(), 2);
-                                        echo "<br>";
-                                        echo "RD$" . number_format($plan->getTaxAmount(), 2);
-                                        echo "<br>";
-                                        echo "RD$" . number_format($plan->getNetTotal(), 2);
-                                    }
-                                    ?>
+                                    <?= $Casa_del_Conductor_CAA = ($contrato->getFieldValue('Asistencia_Accidente') == 1) ? "Aplica" : "No Aplica"; ?>
+                                    <br><br>
+                                    <?php $planes = $cotizacion->getLineItems() ?>
+                                    <?php foreach ($planes as $plan) : ?>
+                                        <div class="row">
+                                            <div class="col-6">
+                                                RD$
+                                                <br>
+                                                RD$
+                                                <br>
+                                                RD$
+                                            </div>
+                                            <div class="col-6 text-right">
+                                                <?= number_format($plan->getTotalAfterDiscount(), 2) ?>
+                                                <br>
+                                                <?= number_format($plan->getTaxAmount(), 2) ?>
+                                                <br>
+                                                <?= number_format($plan->getNetTotal(), 2) ?>
+                                            </div>
+                                        </div>
+                                    <?php endforeach ?>
                                 </p>
                             </div>
                         <?php endif ?>
@@ -263,56 +274,71 @@
                     <?php endif ?>
                     <br>
                     <div class="row">
-                        <div class="col">
-                            <P>
-                                <b>PÓLIZA </b><br>
-                                <b>MARCA </b><br>
-                                <b>MODELO </b><br>
-                                <b>AÑO </b><br>
-                                <b>CHASIS </b><br>
-                                <b>PLACA </b><br>
-                                <b>VIGENTE HASTA </b>
-                            </P>
+                        <div class="col-md-2">
+                            <b>Póliza </b><br>
+                            <b>Tipo </b><br>
+                            <b>Año </b><br>
+                            <b>Marca </b><br>
+                            <b>Modelo </b>
                         </div>
-                        <div class="col">
-                            <P>
-                                <?= $trato->getFieldValue('P_liza')->getLookupLabel() ?><br>
-                                <?= $trato->getFieldValue('Marca') ?><br>
-                                <?= $trato->getFieldValue('Modelo') ?><br>
-                                <?= $trato->getFieldValue('A_o_de_Fabricacion') ?><br>
-                                <?= $trato->getFieldValue('Chasis') ?><br>
-                                <?= $trato->getFieldValue('Placa') ?><br>
-                                <?= $trato->getFieldValue('Closing_Date') ?>
-                            </P>
+                        <div class="col-4">
+                            <?= $trato->getFieldValue('P_liza')->getLookupLabel() ?><br>
+                            <?= $trato->getFieldValue('Tipo_de_vehiculo') ?><br>
+                            <?= $trato->getFieldValue('A_o_de_Fabricacion') ?><br>
+                            <?= $trato->getFieldValue('Marca') ?><br>
+                            <?= $trato->getFieldValue('Modelo') ?>
+                        </div>
+                        <div class="col-md-2">
+                            <b>Chasis </b>
+                            <br>
+                            <b>Placa </b>
+                            <br>
+                            <b>Vigencia </b>
+                        </div>
+                        <div class="col-4">
+                            <?= $trato->getFieldValue('Chasis') ?>
+                            <br>
+                            <?= $trato->getFieldValue('Placa') ?>
+                            <br>
+                            <?= $trato->getFieldValue('Fecha_de_emisi_n') ?>
+                            <br>
+                            Hasta
+                            <br>
+                            <?= $trato->getFieldValue('Closing_Date') ?>
                         </div>
                     </div>
                 </div>
                 <div class="col-6 border">
-                    <h6><b>RECOMENDACIONES EN CASO DE ACCIDENTE</b></h6>
-                    <ul>
-                        <li>En caso de existir lesionados atender al herido.</li>
-                        <li>No aceptar responsabilidad en el momento del accidente.</li>
-                        <li>En caso de robo notifique inmediatamente a la policia y aseguradora.</li>
-                    </ul>
-                    <div class="row">
-                        <div class="col-12">
-                            <?php if ($contrato->getFieldValue('Casa_del_Conductor_CAA') == 1) : ?>
-                                <b>Reporte accidente</b><br>
-                                Santo domingo: Tel. <?= $aseguradora->getFieldValue('Tel_fono_Casa_del_Conductor_CAA_Santo_domingo') ?><br>
-                                Santiago: Tel. <?= $aseguradora->getFieldValue('Tel_fono_Casa_del_Conductor_CAA_Santiago') ?><br>
+                    <small>
+                        <b>EN CASO DE ACCIDENTE</b>
+                        <br>
+                        Realiza el levantamiento del acta policial y obtén la siguente información:
+                        <li>Nombre,dirección y teléfonos del conductor,los lesionados,del propietario y de los testigos.</li>
+                        <li>Número de placa y póliza del vehículo involucrado, y nombre de la aseguradora</li>
+                        <b>EN CASO DE ROBO: </b>Notifica de inmediato a la Policía y a la Aseguradora.
+                        <br>
+                        <div class="text-center"><b>RESERVE SU DERECHO</b></div>
+                        <div class="row">
+                            <div class="col-12">
+                                <b>Aseguradora</b><br>
+                                Tel. <?= $aseguradora->getFieldValue('Phone') ?><br>
+                            </div>
+                            <?php if ($contrato->getFieldValue('Asistencia_Accidente') == 1) : ?>
+                                <div class="col-6">
+                                    <b>Reporte accidente</b><br>
+                                    Tel. Sto. Dgo <?= $aseguradora->getFieldValue('Tel_fono_Asistencia_Accidente_Sto_Dgo') ?>
+                                    <br>
+                                    Tel. Santiago <?= $aseguradora->getFieldValue('Tel_fono_Asistencia_Accidente_Santiago') ?>
+                                </div>
                             <?php endif ?>
-                        </div>
-                        <div class="col-6">
-                            <b>Aseguradora</b><br>
-                            Tel. <?= $aseguradora->getFieldValue('Phone') ?><br>
-                        </div>
-                        <div class="col-6">
                             <?php if ($contrato->getFieldValue('Asistencia_vial') == 1) : ?>
-                                <b>Asistencia vial 24 horas</b><br>
-                                Tel. <?= $aseguradora->getFieldValue('Tel_fono_Asistencia_vial') ?><br>
+                                <div class="col-6">
+                                    <b>Asistencia vial 24 horas</b><br>
+                                    Tel. <?= $aseguradora->getFieldValue('Tel_fono_Asistencia_vial') ?><br>
+                                </div>
                             <?php endif ?>
                         </div>
-                    </div>
+                    </small>
                 </div>
             </div>
             <div class="saltopagina"></div>
@@ -429,18 +455,17 @@
             </div>
         <?php endif ?>
     </div>
-    <input value="<?= $trato->getEntityId() ?>" id="id" hidden>
-    <?php
-    echo '
-        <script>
-            var time = 500;
-            var id = document.getElementById("id").value;
-            setTimeout(function() {
-                window.print();
-                window.location = "' . constant('url') . 'auto/detalles/" + id;
-            }, time);
-        </script>';
-    ?>
+    <input value="<?= $id ?>" id="id" hidden>
+    <input value="<?= constant('url') ?>" id="url" hidden>
+    <script>
+        var url = document.getElementById("url").value;
+        var time = 500;
+        var id = document.getElementById("id").value;
+        setTimeout(function() {
+            window.print();
+            window.location = url + "auto/detalles/" + id;
+        }, time);
+    </script>
 </body>
 
 </html>

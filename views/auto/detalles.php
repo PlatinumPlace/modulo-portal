@@ -1,5 +1,6 @@
 <div class="row">
-    <div class="col-md-9">
+
+    <div class="col-lg-8">
         <h4 class="text-uppercase">
             <?php if ($trato->getFieldValue('P_liza') != null) : ?>
                 resumen coberturas
@@ -109,8 +110,9 @@
             </div>
         </div>
     </div>
-    <div class="col-md-3">
-        <div class="card">
+
+    <div class="col-md-4">
+        <div class="card my-4">
             <div class="card-header">
                 <h5>Opciones</h5>
             </div>
@@ -147,6 +149,9 @@
             </div>
         </div>
     </div>
+
+</div>
+<div class="row">
     <div class="col-md-12 d-flex justify-content-center bg-primary text-white">
         <h6>COBERTURAS</h6>
     </div>
@@ -233,32 +238,32 @@
                                 <b>&nbsp;</b><br>
                                 <?= $Asistencia_vial = ($contrato->getFieldValue('Asistencia_vial') == 1) ? "Aplica" : "No Aplica"; ?><br>
                                 <?= $Renta_Veh_culo = ($contrato->getFieldValue('Renta_Veh_culo') == 1) ? "Aplica" : "No Aplica"; ?><br>
-                                <?= $Casa_del_Conductor_CAA = ($contrato->getFieldValue('Casa_del_Conductor_CAA') == 1) ? "Aplica" : "No Aplica"; ?><br><br>
-                                <?php
-                                $planes = $cotizacion->getLineItems();
-                                foreach ($planes as $plan) {
-                                    $digitos = strlen(round($plan->getNetTotal(), 2)) - strlen(round($plan->getTotalAfterDiscount(), 2));
-                                    echo "RD$" . str_pad("", $digitos - 1, "0") . number_format($plan->getTotalAfterDiscount(), 2);
-                                    echo "<br>";
-                                    echo "RD$" . str_pad("", $digitos, "0") . number_format($plan->getTaxAmount(), 2);
-                                    echo "<br>";
-                                    echo "RD$" . number_format($plan->getNetTotal(), 2);
-                                }
-                                ?>
+                                <?= $Casa_del_Conductor_CAA = ($contrato->getFieldValue('Asistencia_Accidente') == 1) ? "Aplica" : "No Aplica"; ?>
+                                <br>
+                                <?php $planes = $cotizacion->getLineItems() ?>
+                                <?php foreach ($planes as $plan) : ?>
+                                    <div class="row">
+                                        <div class="col-6">
+                                            RD$
+                                            <br>
+                                            RD$
+                                            <br>
+                                            RD$
+                                        </div>
+                                        <div class="col-6 text-right">
+                                            <?= number_format($plan->getTotalAfterDiscount(), 2) ?>
+                                            <br>
+                                            <?= number_format($plan->getTaxAmount(), 2) ?>
+                                            <br>
+                                            <?= number_format($plan->getNetTotal(), 2) ?>
+                                        </div>
+                                    </div>
+                                <?php endforeach ?>
                             </p>
                         </div>
                     <?php endif ?>
                 <?php endforeach ?>
             <?php endif ?>
         </div>
-    </div>
-    <div class="col-12">
-        &nbsp;
-    </div>
-    <div class="col-12">
-        &nbsp;
-    </div>
-    <div class="col-12">
-        &nbsp;
     </div>
 </div>

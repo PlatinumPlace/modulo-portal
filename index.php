@@ -1,19 +1,55 @@
 <?php
-
 include "api/vendor/autoload.php";
 include "config/config.php";
 include "libs/api.php";
-include "app.php";
 
-$app = new app;
-// reanuda o inicia las sesiones dentro del portal
-// verifica no existe un usuario,
-// si no existe,redirige al controlador login para iniciar sesion y se detiene la ejecucion
-// si existe,continua
 session_start();
-if (!isset($_SESSION['usuario'])) {
-    $app->iniciar_sesion();
-}else {
-    $app->validar_sesion();
-    $app->portal();
+if (!isset($_SESSION["usuario_id"])) {
+    require_once("controllers/login.php");
+    $controlador = new LoginController;
+    $controlador->iniciar_sesion();
+    exit();
+}
+if (time() - $_SESSION['tiempo'] > 3600) {
+    require_once("controllers/login.php");
+    $controlador = new LoginController;
+    $controlador->cerarr_sesion();
+    exit();
+}
+$_SESSION['tiempo'] = time();
+if (isset($_GET['url'])) {
+    $url  = $_GET['url'];
+    $url = explode('/', rtrim($url, '/'));
+    if ($url[1] == "cerrar_sesion") {
+        require_once("controllers/login.php");
+        $controlador = new LoginController;
+        $controlador->cerarr_sesion();
+        exit();
+    }
+    $peticion = 'controllers/' . strtolower($url[0]) . '.php';
+    if (file_exists($peticion)) {
+        require_once $peticion;
+        $controlador = ucfirst($url[0]) . "Controller";
+        $portal = new $controlador;
+        if (isset($url[1]) and method_exists($controlador, $url[1])) {
+            if (!empty($url[2])) {
+                $portal->{$url[1]}($url[2]);
+            } else {
+                $portal->{$url[1]}();
+            }
+        } else {
+            require_once("views/header.php");
+            require_once("views/error.php");
+            require_once("views/footer.php");
+            exit();
+        }
+    } else {
+        require_once("views/header.php");
+        require_once("views/error.php");
+        require_once("views/footer.php");
+    }
+} else {
+    require_once("controllers/home.php");
+    $controlador = new HomeController;
+    $controlador->index();
 }
