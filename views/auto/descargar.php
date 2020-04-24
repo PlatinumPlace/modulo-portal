@@ -36,7 +36,7 @@
     <div class="container">
         <div class="row">
             <div class="col-2">
-                <?php if ($trato->getFieldValue('P_liza') == null) : ?>
+                <?php if ($trato->getFieldValue('Cliente') == null) : ?>
                     <img src="<?= constant('url') ?>public/img/logo.png" width="100" height="100">
                 <?php else : ?>
                     <?php foreach ($cotizaciones as $cotizacion) : ?>
@@ -48,7 +48,7 @@
             </div>
             <div class="col-8">
                 <h4 class="text-uppercase text-center">
-                    <?php if ($trato->getFieldValue('P_liza') != null) : ?>
+                    <?php if ($trato->getFieldValue('Cliente') != null) : ?>
                         resumen coberturas
                     <?php else : ?>
                         cotización
@@ -60,7 +60,7 @@
             </div>
             <div class="col-2">
                 <b>
-                    <?php if ($trato->getFieldValue('P_liza') == null) : ?>
+                    <?php if ($trato->getFieldValue('Cliente') == null) : ?>
                         Cotización No.
                     <?php else : ?>
                         Resumen No.
@@ -129,9 +129,9 @@
                     </div>
                     <div class="col">
                         <P>
-                            <?= $trato->getFieldValue('Tipo_de_vehiculo') ?><br>
-                            <?= strtoupper($trato->getFieldValue('Marca')) ?><br>
-                            <?= strtoupper($trato->getFieldValue('Modelo')) ?><br>
+                            <?= $trato->getFieldValue('Tipo_de_veh_culo') ?><br>
+                            <?= strtoupper($trato->getFieldValue('Marca')->getLookupLabel()) ?><br>
+                            <?= strtoupper($trato->getFieldValue('Modelo')->getLookupLabel()) ?><br>
                             <?= $trato->getFieldValue('A_o_de_Fabricacion') ?><br>
                             RD$<?= number_format($trato->getFieldValue('Valor_Asegurado'), 2) ?>
                         </P>
@@ -197,7 +197,7 @@
                             <?php $contrato = $this->getRecord("Contratos", $cotizacion->getFieldValue('Contrato')->getEntityId()) ?>
                             <div class="col-2">
                                 <p>
-                                    <?php if ($trato->getFieldValue('P_liza') == null) : ?>
+                                    <?php if ($trato->getFieldValue('Cliente') == null) : ?>
                                         <?php $ruta_imagen = $this->downloadPhoto("Vendors", $contrato->getFieldValue('Aseguradora')->getEntityId(), "public/img/") ?>
                                         <img height="50" width="110" src="<?= constant('url') . $ruta_imagen ?>">
                                     <?php else : ?>
@@ -262,7 +262,7 @@
                 </div>
             </div>
         </div>
-        <?php if ($trato->getFieldValue('P_liza') != null) : ?>
+        <?php if ($trato->getFieldValue('Cliente') != null) : ?>
             <?php $aseguradora = $this->getRecord("Vendors", $trato->getFieldValue('Aseguradora')->getEntityId()) ?>
             <?php $ruta_imagen = $this->downloadPhoto("Vendors", $contrato->getFieldValue('Aseguradora')->getEntityId(), "public/img/") ?>
             <div class="row">
@@ -282,11 +282,13 @@
                             <b>Modelo </b>
                         </div>
                         <div class="col-4">
-                            <?= $trato->getFieldValue('P_liza')->getLookupLabel() ?><br>
-                            <?= $trato->getFieldValue('Tipo_de_vehiculo') ?><br>
+                            <?php foreach ($cotizaciones as $cotizacion) : ?>
+                                <?= $cotizacion->getFieldValue('P_liza')->getLookupLabel() ?><br>
+                            <?php endforeach ?>
+                            <?= $trato->getFieldValue('Tipo_de_veh_culo') ?><br>
                             <?= $trato->getFieldValue('A_o_de_Fabricacion') ?><br>
-                            <?= $trato->getFieldValue('Marca') ?><br>
-                            <?= $trato->getFieldValue('Modelo') ?>
+                            <?= $trato->getFieldValue('Marca')->getLookupLabel() ?><br>
+                            <?= $trato->getFieldValue('Modelo')->getLookupLabel() ?>
                         </div>
                         <div class="col-md-2">
                             <b>Chasis </b>

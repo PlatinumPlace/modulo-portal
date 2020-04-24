@@ -1,8 +1,8 @@
 <div class="row">
 
-    <div class="col-lg-8">
+    <div class="col-lg-9">
         <h4 class="text-uppercase">
-            <?php if ($trato->getFieldValue('P_liza') != null) : ?>
+            <?php if ($trato->getFieldValue('Cliente') != null) : ?>
                 resumen coberturas
             <?php else : ?>
                 cotización
@@ -76,9 +76,9 @@
                     </div>
                     <div class="col">
                         <P>
-                            <?= $trato->getFieldValue('Tipo_de_vehiculo') ?><br>
-                            <?= strtoupper($trato->getFieldValue('Marca')) ?><br>
-                            <?= strtoupper($trato->getFieldValue('Modelo')) ?><br>
+                            <?= $trato->getFieldValue('Tipo_de_veh_culo') ?><br>
+                            <?= strtoupper($trato->getFieldValue('Marca')->getLookupLabel()) ?><br>
+                            <?= strtoupper($trato->getFieldValue('Modelo')->getLookupLabel()) ?><br>
                             <?= $trato->getFieldValue('A_o_de_Fabricacion') ?><br>
                             RD$<?= number_format($trato->getFieldValue('Valor_Asegurado'), 2) ?>
                         </P>
@@ -111,8 +111,8 @@
         </div>
     </div>
 
-    <div class="col-md-4">
-        <div class="card my-4">
+    <div class="col-md-3">
+        <div class="card my-3">
             <div class="card-header">
                 <h5>Opciones</h5>
             </div>
@@ -124,7 +124,7 @@
                         </div>
                     <?php else : ?>
                         <div class="form-group row justify-content-md-center">
-                            <a href="<?= constant('url') ?>auto/emitir/<?= $trato->getEntityId() ?>" class="btn btn-success"><?= $retVal = ($trato->getFieldValue('P_liza') == null) ? "Emitir" : "Completar"; ?></a>
+                            <a href="<?= constant('url') ?>auto/emitir/<?= $trato->getEntityId() ?>" class="btn btn-success"><?= $retVal = ($trato->getFieldValue('Cliente') == null) ? "Emitir" : "Completar"; ?></a>
                         </div>
                         <div class="form-group row justify-content-md-center">
                             <a href="<?= constant('url') ?>auto/descargar/<?= $trato->getEntityId() ?>" class="btn btn-info">Descargar</a>
@@ -132,18 +132,16 @@
                     <?php endif ?>
                 <?php endif ?>
                 <div class="form-group row justify-content-md-center">
-                    <?php if ($trato->getFieldValue('P_liza') != null) : ?>
-                        <ul class="list-group">
-                            <li class="list-group-item">
-                                <a download="Condiciones del Vehículos" href="<?= constant('url') ?>public/documents/condiciones del vehiculo.pdf" class="btn btn-link">Condiciones del Vehículos</a>
-                            </li>
-                            <li class="list-group-item">
-                                <a download="Formulario de conocimiento" href="<?= constant('url') ?>public/documents/formulario de conocimiento.pdf" class="btn btn-link">Formulario de conocimiento</a>
-                            </li>
-                            <li class="list-group-item">
-                                <a download="Formulario de Inspección de Vehículos" href="<?= constant('url') ?>public/documents/formulario de inspeccion.pdf" class="btn btn-link">Formulario de Inspección</a>
-                            </li>
-                        </ul>
+                    <?php if ($trato->getFieldValue('Cliente') != null) : ?>
+                        <div class="form-group row justify-content-md-center">
+                            <a download="Condiciones del Vehículos" href="<?= constant('url') ?>public/documents/condiciones del vehiculo.pdf" class="btn btn-link">Condiciones del Vehículos</a>
+                        </div>
+                        <div class="form-group row justify-content-md-center">
+                            <a download="Formulario de conocimiento" href="<?= constant('url') ?>public/documents/formulario de conocimiento.pdf" class="btn btn-link">Formulario de conocimiento</a>
+                        </div>
+                        <div class="form-group row justify-content-md-center">
+                            <a download="Formulario de Inspección de Vehículos" href="<?= constant('url') ?>public/documents/formulario de inspeccion.pdf" class="btn btn-link">Formulario de Inspección</a>
+                        </div>
                     <?php endif ?>
                 </div>
             </div>

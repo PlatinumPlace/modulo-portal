@@ -1,8 +1,8 @@
 <form method="POST" action="<?= constant('url') ?>auto/crear">
     <div class="row">
 
-        <div class="col-lg-8">
-            <div class="card my-8">
+        <div class="col-lg-9">
+            <div class="card my-9">
                 <div class="card-header">
                     <h5>Tipo de Cotización</h5>
                 </div>
@@ -17,7 +17,7 @@
                         </div>
                         <label class="col-sm-2 col-form-label">Para</label>
                         <div class="col-sm-4">
-                            <select name="cotizacion" class="form-control">
+                            <select name="tipo" class="form-control">
                                 <option value="Auto" selected>Auto</option>
                                 <option value="Vida">Vida</option>
                                 <option value="Incendio Hipotecario">Incendio Hipotecario</option>
@@ -109,8 +109,8 @@
             </div>
         </div>
 
-        <div class="col-md-4">
-            <div class="col my-4">
+        <div class="col-md-3">
+            <div class="col my-3">
                 <div class="card">
                     <div class="card-header">
                         <h5>Opciones</h5>

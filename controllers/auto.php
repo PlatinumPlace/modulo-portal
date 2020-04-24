@@ -10,30 +10,29 @@ class AutoController extends Api
     public function crear()
     {
         if (isset($_POST['submit'])) {
-            $trato["Contact_Name"] =  $_SESSION['usuario_id'];
-            $trato["Lead_Source"] = "Portal GNB";
-            $trato["Deal_Name"] = "Cotización";
-            $trato["A_o_de_Fabricacion"] = $_POST['A_o_de_Fabricacion'];
-            $trato["Chasis"] = $_POST['chasis'];
-            $trato["Color"] = $_POST['color'];
-            $marca = $this->getRecord("Marcas", $_POST['marca']);
-            $trato["Marca"] = $marca->getFieldValue('Name');
+            $oferta["Contact_Name"] =  $_SESSION['usuario_id'];
+            $oferta["Lead_Source"] = "Portal GNB";
+            $oferta["Deal_Name"] = "Cotización";
+            $oferta["A_o_de_Fabricacion"] = $_POST['A_o_de_Fabricacion'];
+            $oferta["Chasis"] = $_POST['chasis'];
+            $oferta["Color"] = $_POST['color'];
+            $oferta["Marca"] = $_POST['marca'];
+            $oferta["Modelo"] = $_POST['modelo'];
             $modelo = $this->getRecord("Modelos", $_POST['modelo']);
-            $trato["Modelo"] = $modelo->getFieldValue('Name');
-            $trato["Tipo_de_vehiculo"] = $modelo->getFieldValue('Tipo');
-            $trato["Placa"] = $_POST['placa'];
-            $trato["Plan"] = $_POST['plan'];
-            $trato["Type"] = $_POST['cotizacion'];
-            $trato["Uso"] = $_POST['uso'];
-            $trato["Tipo_de_poliza"] = $_POST['poliza'];
-            $trato["Valor_Asegurado"] = $_POST['Valor_Asegurado'];
-            $trato["Stage"] = "Cotizando";
+            $trato["Tipo_de_veh_culo"] = $modelo->getFieldValue('Tipo');
+            $oferta["Placa"] = $_POST['placa'];
+            $oferta["Plan"] = $_POST['plan'];
+            $oferta["Type"] = $_POST['tipo'];
+            $oferta["Uso"] = $_POST['uso'];
+            $oferta["Tipo_de_poliza"] = $_POST['poliza'];
+            $oferta["Valor_Asegurado"] = $_POST['Valor_Asegurado'];
+            $oferta["Stage"] = "Cotizando";
             if (isset($_POST['estado'])) {
-                $trato["Es_nuevo"] = true;
+                $oferta["Es_nuevo"] = true;
             } else {
-                $trato["Es_nuevo"] = false;
+                $oferta["Es_nuevo"] = false;
             }
-            $datos = $this->createRecord("Deals", $trato) . "-auto";
+            $datos = $this->createRecord("Deals", $oferta) . "-auto";
             $direccion = constant('url') . 'home/cargando/' . $datos;
             header("Location:" . $direccion);
             exit;
@@ -96,22 +95,6 @@ class AutoController extends Api
         $cotizaciones = $this->searchRecordsByCriteria("Quotes", $criterio);
         require_once("views/auto/descargar.php");
     }
-    public function detalles($datos)
-    {
-        $id = $datos;
-        $trato = $this->getRecord("Deals", $id);
-        if (empty($trato)) {
-            require_once("views/header.php");
-            require_once("views/error.php");
-            require_once("views/footer.php");
-            exit;
-        }
-        $criterio = "Deal_Name:equals:" . $id;
-        $cotizaciones = $this->searchRecordsByCriteria("Quotes", $criterio);
-        require_once("views/header.php");
-        require_once("views/auto/detalles.php");
-        require_once("views/footer.php");
-    }
     public function emitir($datos)
     {
         $id = $datos;
@@ -165,6 +148,22 @@ class AutoController extends Api
         }
         require_once("views/header.php");
         require_once("views/auto/emitir.php");
+        require_once("views/footer.php");
+    }
+    public function detalles($datos)
+    {
+        $id = $datos;
+        $trato = $this->getRecord("Deals", $id);
+        if (empty($trato)) {
+            require_once("views/header.php");
+            require_once("views/error.php");
+            require_once("views/footer.php");
+            exit;
+        }
+        $criterio = "Deal_Name:equals:" . $id;
+        $cotizaciones = $this->searchRecordsByCriteria("Quotes", $criterio);
+        require_once("views/header.php");
+        require_once("views/auto/detalles.php");
         require_once("views/footer.php");
     }
 }

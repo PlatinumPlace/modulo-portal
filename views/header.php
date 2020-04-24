@@ -26,7 +26,7 @@
     <!-- Navigation -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top">
         <div class="container">
-            <a class="navbar-brand" href="<?= constant('url') ?>">IT - Insurance Tech</a>
+            <a class="navbar-brand" href="<?= constant('url') ?>"></a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -38,32 +38,38 @@
                             <span class="sr-only">(current)</span>
                         </a>
                     </li>
-                    <li class="nav-item">
+                    <li class="nav-item active">
                         <a class="nav-link" href="<?= constant('url') ?>home/buscar">
                             <ion-icon name="search" size="small"></ion-icon> Buscar
                         </a>
                     </li>
-                    <li class="nav-item dropdown">
+                    <li class="nav-item dropdown active">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <ion-icon name="clipboard" size="small"></ion-icon> Cotización
+                            <ion-icon name="clipboard" size="small"></ion-icon> Cotizaciones
                         </a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                             <a class="dropdown-item" href="<?= constant('url') ?>auto/crear">
-                                Para Auto
+                                Auto
+                            </a>
+                            <a class="dropdown-item disabled" href="#">
+                                Incendio
+                            </a>
+                            <a class="dropdown-item disabled" href="#">
+                                Vida
                             </a>
                         </div>
                     </li>
-                    <li class="nav-item dropdown">
+                    <li class="nav-item dropdown active">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <ion-icon name="stats-chart" size="small"></ion-icon> Reporte
+                            <ion-icon name="stats-chart" size="small"></ion-icon> Reportes
                         </a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <a class="dropdown-item" href="<?= constant('url') ?>reporte/poliza">
-                                Para Póliza
+                            <a class="dropdown-item disabled" href="<?= constant('url') ?>reporte/poliza">
+                                Pólizas
                             </a>
                         </div>
                     </li>
-                    <li class="nav-item">
+                    <li class="nav-item active">
                         <a class="nav-link" onclick="return confirm('¿Deseas cerrar sesión?')" href="<?= constant('url') ?>login/cerrar_sesion">
                             <ion-icon name="lock-open" size="small"></ion-icon>
                         </a>

@@ -7,7 +7,7 @@
         <?php endif ?>
         <div class="card">
             <div class="card-body">
-                <?php if ($trato->getFieldValue('P_liza') == null) : ?>
+                <?php if ($trato->getFieldValue('Cliente') == null) : ?>
                     <div class="form-group row">
                         <label class="col-sm-2 col-form-label">Aseguradora</label>
                         <div class="col-sm-4">
@@ -33,7 +33,7 @@
                         <label class="col-sm-2 col-form-label">Expedientes</label>
                         <div class="col-sm-4">
                             <div class="custom-file">
-                                <input type="file" class="custom-file-input" id="customFile1" multiple name="documentos[]" <?= $retVal = ($trato->getFieldValue('P_liza') != null) ? "required" : ""; ?>>
+                                <input type="file" class="custom-file-input" id="customFile1" multiple name="documentos[]" required >
                                 <label class="custom-file-label" for="customFile1">Cargar</label>
                             </div>
                         </div>
@@ -52,7 +52,7 @@
         <a href="<?= constant('url') ?>auto/detalles/<?= $trato->getEntityId() ?>" class="btn btn-primary">Detalles</a>
         |
         <button type="submit" name="submit" class="btn btn-success">
-            <?= $retVal = ($trato->getFieldValue('P_liza') == null) ? "Emitir" : "Completar"; ?>
+            <?= $retVal = ($trato->getFieldValue('Cliente') == null) ? "Emitir" : "Completar"; ?>
         </button>
     </div>
 </form>

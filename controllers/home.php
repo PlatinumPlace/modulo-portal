@@ -20,7 +20,7 @@ class HomeController extends Api
             foreach ($tratos as $trato) {
                 $total += 1;
                 if (
-                    $trato->getFieldValue("P_liza") != null
+                    $trato->getFieldValue("Cliente") != null
                     and
                     date("Y-m", strtotime($trato->getFieldValue("Fecha_de_emisi_n"))) == date('Y-m')
                 ) {
@@ -28,7 +28,7 @@ class HomeController extends Api
                     $filtro_emisiones = $trato->getFieldValue("Stage");
                 }
                 if (
-                    $trato->getFieldValue("P_liza") != null
+                    $trato->getFieldValue("Cliente") != null
                     and
                     date("Y-m", strtotime($trato->getFieldValue("Closing_Date"))) == date('Y-m')
                 ) {

@@ -24,7 +24,7 @@
         <tr>
             <th>Cotización No.</th>
             <th>RNC/Cédula</th>
-            <th>Póliza</th>
+            <th>Nombre del Asegurado</th>
             <th>Bien Asegurado</th>
             <th>Suma Asegurada</th>
             <th>Estado</th>
@@ -39,24 +39,8 @@
                 <?php if ($lim <= 50) : ?>
                     <tr>
                         <td><?= $trato->getFieldValue('No_Cotizaci_n')  ?></td>
-                        <td>
-                            <?php
-                            if ($trato->getFieldValue('RNC_Cedula') == null) {
-                                echo "N/A";
-                            } else {
-                                echo $trato->getFieldValue('RNC_Cedula');
-                            }
-                            ?>
-                        </td>
-                        <td>
-                            <?php
-                            if ($trato->getFieldValue('P_liza') == null) {
-                                echo "N/A";
-                            } else {
-                                echo $trato->getFieldValue('P_liza')->getLookupLabel();
-                            }
-                            ?>
-                        </td>
+                        <td><?= $trato->getFieldValue('RNC_Cedula') ?></td>
+                        <td><?= $trato->getFieldValue('Nombre') . " " . $trato->getFieldValue('Apellido') ?></td>
                         <td><?= $trato->getFieldValue('Type')  ?></td>
                         <td>RD$<?= number_format($trato->getFieldValue('Valor_Asegurado'), 2) ?></td>
                         <td><?= $trato->getFieldValue("Stage") ?></td>
