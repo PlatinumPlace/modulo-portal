@@ -1,4 +1,4 @@
-<form class="row" enctype="multipart/form-data" method="POST" action="<?= constant('url') ?>auto/emitir/<?= $trato->getEntityId() ?>">
+<form class="row" enctype="multipart/form-data" method="POST" action="<?= constant('url') ?>auto/emitir/<?= $oferta->getEntityId() ?>">
     <div class="col-12">
         <?php if (isset($_POST['submit'])) : ?>
             <div class="alert alert-primary" role="alert">
@@ -7,7 +7,7 @@
         <?php endif ?>
         <div class="card">
             <div class="card-body">
-                <?php if ($trato->getFieldValue('Cliente') == null) : ?>
+                <?php if ($oferta->getFieldValue('Cliente') == null) : ?>
                     <div class="form-group row">
                         <label class="col-sm-2 col-form-label">Aseguradora</label>
                         <div class="col-sm-4">
@@ -33,7 +33,7 @@
                         <label class="col-sm-2 col-form-label">Expedientes</label>
                         <div class="col-sm-4">
                             <div class="custom-file">
-                                <input type="file" class="custom-file-input" id="customFile1" multiple name="documentos[]" required >
+                                <input type="file" class="custom-file-input" id="customFile1" multiple name="documentos[]" required>
                                 <label class="custom-file-label" for="customFile1">Cargar</label>
                             </div>
                         </div>
@@ -49,10 +49,10 @@
         &nbsp;
     </div>
     <div class="col-4">
-        <a href="<?= constant('url') ?>auto/detalles/<?= $trato->getEntityId() ?>" class="btn btn-primary">Detalles</a>
+        <a href="<?= constant('url') ?>auto/detalles/<?= $oferta->getEntityId() ?>" class="btn btn-primary">Detalles</a>
         |
         <button type="submit" name="submit" class="btn btn-success">
-            <?= $retVal = ($trato->getFieldValue('Cliente') == null) ? "Emitir" : "Completar"; ?>
+            <?= ($oferta->getFieldValue('Cliente') == null) ? "Emitir" : "Completar"; ?>
         </button>
     </div>
 </form>

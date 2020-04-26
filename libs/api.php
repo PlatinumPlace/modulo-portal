@@ -4,14 +4,14 @@ use zcrmsdk\crm\crud\ZCRMRecord;
 use zcrmsdk\crm\setup\restclient\ZCRMRestClient;
 use zcrmsdk\crm\exception\ZCRMException;
 
-class Api
+class api
 {
     // array con los parametros de zoho app
     public $configuration = array(
-        "client_id" => "",
-        "client_secret" => "",
-        "redirect_uri" => "",
-        "currentUserEmail" => "",
+        "client_id" => "1000.6SM53DOWIRAR3JKMCHVGZZG4108SPH",
+        "client_secret" => "66ae479d5cc7b5f7bb6794572b05798f705844264e",
+        "redirect_uri" => "http://localhost/portal/api.php",
+        "currentUserEmail" => "tecnologia@gruponobe.com",
         "token_persistence_path" => "api"
     );
     // inicializa las clases del api
@@ -30,11 +30,13 @@ class Api
             $response = $moduleIns->searchRecordsByCriteria($criteria);
             $records = $response->getData();
         } catch (ZCRMException $ex) {
+            /*
             echo $ex->getMessage();
             echo "<br/>";
             echo $ex->getExceptionCode();
             echo "<br/>";
             echo $ex->getFile();
+            */
         }
         return $records;
     }
@@ -53,6 +55,7 @@ class Api
         array_push($records, $record);
         $responseIn = $moduleIns->createRecords($records);
         foreach ($responseIn->getEntityResponses() as $responseIns) {
+            /*
             echo "HTTP Status Code:" . $responseIn->getHttpStatusCode();
             echo "<br/>";
             echo "Status:" . $responseIns->getStatus();
@@ -62,6 +65,7 @@ class Api
             echo "Code:" . $responseIns->getCode();
             echo "<br/>";
             echo "Details:" . json_encode($responseIns->getDetails());
+            */
             $result = json_decode(json_encode($responseIns->getDetails()), true);
         }
         return $result['id'];
@@ -75,11 +79,13 @@ class Api
             $response = $moduleIns->getRecord($record_id);
             $record = $response->getData();
         } catch (ZCRMException $ex) {
+            /*
             echo $ex->getMessage();
             echo "<br/>";
             echo $ex->getExceptionCode();
             echo "<br/>";
             echo $ex->getFile();
+            */
         }
         return $record;
     }
@@ -92,6 +98,7 @@ class Api
             $record->setFieldValue($propertie, $propertie_value);
         }
         $responseIns = $record->update();
+        /*
         echo "HTTP Status Code:" . $responseIns->getHttpStatusCode();
         echo "<br/>";
         echo "Status:" . $responseIns->getStatus();
@@ -101,6 +108,7 @@ class Api
         echo "Code:" . $responseIns->getCode();
         echo "<br/>";
         echo "Details:" . json_encode($responseIns->getDetails());
+        */
     }
     // descarga la imagen de perfil de un registro del crm, tomando el nombre del modulo,
     // el id y la ubicacion donde se guardan las imagenes
@@ -125,11 +133,13 @@ class Api
             $response = $moduleIns->getRecords();
             $records = $response->getData();
         } catch (ZCRMException $ex) {
+            /*
             echo $ex->getMessage();
             echo "<br/>";
             echo $ex->getExceptionCode();
             echo "<br/>";
             echo $ex->getFile();
+            */
         }
         return $records;
     }
@@ -139,6 +149,7 @@ class Api
     {
         $record = ZCRMRestClient::getInstance()->getRecordInstance($module_name, $record_id);
         $responseIns = $record->uploadAttachment($filePath);
+        /*
         echo "HTTP Status Code:" . $responseIns->getHttpStatusCode();
         echo "<br/>";
         echo "Status:" . $responseIns->getStatus();
@@ -148,5 +159,6 @@ class Api
         echo "Code:" . $responseIns->getCode();
         echo "<br/>";
         echo "Details:" . $responseIns->getDetails()['id'];
+        */
     }
 }

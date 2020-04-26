@@ -10,24 +10,14 @@
                     <div class="form-group row">
                         <label class="col-sm-2 col-form-label">Póliza</label>
                         <div class="col-sm-4">
-                            <select name="poliza" class="form-control">
+                            <select name="Tipo_de_poliza" class="form-control">
                                 <option selected value="Declarativa">Declarativa</option>
                                 <option value="Individual">Individual</option>
                             </select>
                         </div>
-                        <label class="col-sm-2 col-form-label">Para</label>
-                        <div class="col-sm-4">
-                            <select name="tipo" class="form-control">
-                                <option value="Auto" selected>Auto</option>
-                                <option value="Vida">Vida</option>
-                                <option value="Incendio Hipotecario">Incendio Hipotecario</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="form-group row">
                         <label class="col-sm-2 col-form-label">Plan</label>
                         <div class="col-sm-4">
-                            <select name="plan" class="form-control">
+                            <select name="Plan" class="form-control">
                                 <option value="Mensual Full" selected>Mensual Full</option>
                                 <option value="Anual Full">Anual Full</option>
                                 <option value="Ley">Ley</option>
@@ -45,7 +35,7 @@
                     <div class="form-group row">
                         <label class="col-sm-2 col-form-label">Marca</label>
                         <div class="col-sm-4">
-                            <select class="form-control" name="marca" id="marca" onchange="obtener_modelos(this)" required>
+                            <select class="form-control" name="Marca" id="marca" onchange="obtener_modelos(this)" required>
                                 <option value="" selected disabled>Selecciona una Marca</option>
                                 <?php
                                 $marcas = $this->getRecords("Marcas");
@@ -58,7 +48,7 @@
                         </div>
                         <label class="col-sm-2 col-form-label">Modelo</label>
                         <div class="col-sm-4">
-                            <select class="form-control" name="modelo" id="modelo" required>
+                            <select class="form-control" name="Modelo" id="modelo" required>
                                 <option value="" selected disabled>Selecciona un Modelo</option>
                                 <div id="modelo"></div>
                             </select>
@@ -77,31 +67,31 @@
                     <div class="form-group row">
                         <label class="col-sm-2 col-form-label">Chasis</label>
                         <div class="col-sm-4">
-                            <input type="text" class="form-control" name="chasis">
+                            <input type="text" class="form-control" name="Chasis">
                         </div>
                         <label class="col-sm-2 col-form-label">Color</label>
                         <div class="col-sm-4">
-                            <input type="text" class="form-control" name="color">
+                            <input type="text" class="form-control" name="Color">
                         </div>
                     </div>
                     <div class="form-group row">
                         <label class="col-sm-2 col-form-label">Uso</label>
                         <div class="col-sm-4">
-                            <select name="uso" class="form-control">
+                            <select name="Uso" class="form-control">
                                 <option selected value="Privado">Privado</option>
                                 <option value="Publico">Publico</option>
                             </select>
                         </div>
                         <label class="col-sm-2 col-form-label">Placa</label>
                         <div class="col-sm-4">
-                            <input type="text" class="form-control" name="placa">
+                            <input type="text" class="form-control" name="Placa">
                         </div>
                     </div>
                     <div class="form-group row">
                         <div class="col-sm-2">¿Es nuevo?</div>
                         <div class="col-sm-10">
                             <div class="form-check">
-                                <input class="form-check-input" type="checkbox" name="estado">
+                                <input class="form-check-input" type="checkbox" name="Es_nuevo">
                             </div>
                         </div>
                     </div>
@@ -142,4 +132,4 @@
             });
         }
     }
-</script>';
+</script>;

@@ -5,12 +5,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>
-        <?php if ($trato->getFieldValue('Stage') == "Cotizando") : ?>
+        <?php if ($oferta->getFieldValue('Stage') == "Cotizando") : ?>
             Cotización No.
         <?php else : ?>
             Resumen No.
         <?php endif ?>
-        <?= $trato->getFieldValue('No_Cotizaci_n') ?>
+        <?= $oferta->getFieldValue('No_Cotizaci_n') ?>
     </title>
     <!-- Bootstrap core CSS -->
     <link href="<?= constant('url') ?>public/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
@@ -36,38 +36,34 @@
     <div class="container">
         <div class="row">
             <div class="col-2">
-                <?php if ($trato->getFieldValue('Cliente') == null) : ?>
+                <?php if ($oferta->getFieldValue('Cliente') == null) : ?>
                     <img src="<?= constant('url') ?>public/img/logo.png" width="100" height="100">
                 <?php else : ?>
-                    <?php foreach ($cotizaciones as $cotizacion) : ?>
-                        <?php $contrato = $this->getRecord("Contratos", $cotizacion->getFieldValue('Contrato')->getEntityId()) ?>
-                        <?php $ruta_imagen = $this->downloadPhoto("Vendors", $contrato->getFieldValue('Aseguradora')->getEntityId(), "public/img/") ?>
-                        <img width="170" height="75" src="<?= constant('url') . $ruta_imagen ?>">
-                    <?php endforeach ?>
+                    <img width="170" height="75" src="<?= constant('url') . $imagen_aseguradora ?>">
                 <?php endif ?>
             </div>
             <div class="col-8">
                 <h4 class="text-uppercase text-center">
-                    <?php if ($trato->getFieldValue('Cliente') != null) : ?>
+                    <?php if ($oferta->getFieldValue('Cliente') != null) : ?>
                         resumen coberturas
                     <?php else : ?>
                         cotización
                     <?php endif ?>
                     <br>
                     seguro vehículo de motor<br>
-                    plan <?= $trato->getFieldValue('Plan') ?>
+                    plan <?= $oferta->getFieldValue('Plan') ?>
                 </h4>
             </div>
             <div class="col-2">
                 <b>
-                    <?php if ($trato->getFieldValue('Cliente') == null) : ?>
+                    <?php if ($oferta->getFieldValue('Cliente') == null) : ?>
                         Cotización No.
                     <?php else : ?>
                         Resumen No.
                     <?php endif ?>
-                </b> <?= $trato->getFieldValue('No_Cotizaci_n') ?>
+                </b> <?= $oferta->getFieldValue('No_Cotizaci_n') ?>
                 <br>
-                <b>Fecha</b> <?= $trato->getFieldValue('Fecha_de_emisi_n') ?>
+                <b>Fecha</b> <?= $oferta->getFieldValue('Fecha_de_emisi_n') ?>
             </div>
             <div class="col-12">
                 &nbsp;
@@ -87,10 +83,10 @@
                     </div>
                     <div class="col">
                         <P>
-                            <?= $trato->getFieldValue('Nombre') . " " . $trato->getFieldValue('Apellido') ?><br>
-                            <?= $trato->getFieldValue('RNC_Cedula') ?><br>
-                            <?= $trato->getFieldValue('Email') ?><br>
-                            <?= $trato->getFieldValue('Direcci_n') ?>
+                            <?= $oferta->getFieldValue('Nombre') . " " . $oferta->getFieldValue('Apellido') ?><br>
+                            <?= $oferta->getFieldValue('RNC_Cedula') ?><br>
+                            <?= $oferta->getFieldValue('Email') ?><br>
+                            <?= $oferta->getFieldValue('Direcci_n') ?>
                         </P>
                     </div>
                 </div>
@@ -106,9 +102,9 @@
                     </div>
                     <div class="col">
                         <P>
-                            <?= $trato->getFieldValue('Tel_Residencia') ?><br>
-                            <?= $trato->getFieldValue('Telefono') ?><br>
-                            <?= $trato->getFieldValue('Tel_Trabajo') ?><br>
+                            <?= $oferta->getFieldValue('Tel_Residencia') ?><br>
+                            <?= $oferta->getFieldValue('Telefono') ?><br>
+                            <?= $oferta->getFieldValue('Tel_Trabajo') ?><br>
                         </P>
                     </div>
                 </div>
@@ -129,11 +125,11 @@
                     </div>
                     <div class="col">
                         <P>
-                            <?= $trato->getFieldValue('Tipo_de_veh_culo') ?><br>
-                            <?= strtoupper($trato->getFieldValue('Marca')->getLookupLabel()) ?><br>
-                            <?= strtoupper($trato->getFieldValue('Modelo')->getLookupLabel()) ?><br>
-                            <?= $trato->getFieldValue('A_o_de_Fabricacion') ?><br>
-                            RD$<?= number_format($trato->getFieldValue('Valor_Asegurado'), 2) ?>
+                            <?= $oferta->getFieldValue('Tipo_de_veh_culo') ?><br>
+                            <?= strtoupper($oferta->getFieldValue('Marca')->getLookupLabel()) ?><br>
+                            <?= strtoupper($oferta->getFieldValue('Modelo')->getLookupLabel()) ?><br>
+                            <?= $oferta->getFieldValue('A_o_de_Fabricacion') ?><br>
+                            RD$<?= number_format($oferta->getFieldValue('Valor_Asegurado'), 2) ?>
                         </P>
                     </div>
                 </div>
@@ -152,11 +148,11 @@
                     </div>
                     <div class="col">
                         <P>
-                            <?= $trato->getFieldValue('Chasis') ?><br>
-                            <?= $trato->getFieldValue('Placa') ?><br>
-                            <?= $trato->getFieldValue('Color') ?><br>
-                            <?= $trato->getFieldValue('Uso') ?><br>
-                            <?= $retVal = ($trato->getFieldValue('Es_nuevo') == 1) ? "Nuevo" : "Usado"; ?>
+                            <?= $oferta->getFieldValue('Chasis') ?><br>
+                            <?= $oferta->getFieldValue('Placa') ?><br>
+                            <?= $oferta->getFieldValue('Color') ?><br>
+                            <?= $oferta->getFieldValue('Uso') ?><br>
+                            <?= ($oferta->getFieldValue('Es_nuevo') == 1) ? "Nuevo" : "Usado"; ?>
                         </P>
                     </div>
                 </div>
@@ -194,12 +190,14 @@
                     </div>
                     <?php foreach ($cotizaciones as $cotizacion) : ?>
                         <?php if ($cotizacion->getFieldValue('Grand_Total') > 0) : ?>
-                            <?php $contrato = $this->getRecord("Contratos", $cotizacion->getFieldValue('Contrato')->getEntityId()) ?>
+                            <?php if ($oferta->getFieldValue('Cliente') == null) : ?>
+                                <?php $contrato = $this->getRecord("Contratos", $cotizacion->getFieldValue('Contrato')->getEntityId()) ?>
+                                <?php $imagen_aseguradora = $this->downloadPhoto("Vendors", $contrato->getFieldValue('Aseguradora')->getEntityId(), "public/img/") ?>
+                            <?php endif ?>
                             <div class="col-2">
                                 <p>
-                                    <?php if ($trato->getFieldValue('Cliente') == null) : ?>
-                                        <?php $ruta_imagen = $this->downloadPhoto("Vendors", $contrato->getFieldValue('Aseguradora')->getEntityId(), "public/img/") ?>
-                                        <img height="50" width="110" src="<?= constant('url') . $ruta_imagen ?>">
+                                    <?php if ($oferta->getFieldValue('Cliente') == null) : ?>
+                                        <img height="50" width="110" src="<?= constant('url') . $imagen_aseguradora ?>">
                                     <?php else : ?>
                                         &nbsp;
                                     <?php endif ?>
@@ -207,17 +205,17 @@
                                 <p>
                                     <b>&nbsp;</b><br>
                                     <?php
-                                    $resultado = $trato->getFieldValue('Valor_Asegurado') * ($contrato->getFieldValue('Riesgos_comprensivos') / 100);
+                                    $resultado = $oferta->getFieldValue('Valor_Asegurado') * ($contrato->getFieldValue('Riesgos_comprensivos') / 100);
                                     echo "RD$" . number_format($resultado);
                                     ?><br>
                                     <?= $contrato->getFieldValue('Riesgos_Comprensivos_Deducible') ?><br>
                                     <?= $contrato->getFieldValue('Rotura_de_cristales_Deducible') ?><br>
                                     <?php
-                                    $resultado = $trato->getFieldValue('Valor_Asegurado') * ($contrato->getFieldValue('Colisi_n_y_vuelco') / 100);
+                                    $resultado = $oferta->getFieldValue('Valor_Asegurado') * ($contrato->getFieldValue('Colisi_n_y_vuelco') / 100);
                                     echo "RD$" . number_format($resultado);
                                     ?><br>
                                     <?php
-                                    $resultado = $trato->getFieldValue('Valor_Asegurado') * ($contrato->getFieldValue('Incendio_y_robo') / 100);
+                                    $resultado = $oferta->getFieldValue('Valor_Asegurado') * ($contrato->getFieldValue('Incendio_y_robo') / 100);
                                     echo "RD$" . number_format($resultado);
                                     ?><br><br>
                                     <b>&nbsp;</b><br>
@@ -232,9 +230,9 @@
                                     RD$<?= number_format($contrato->getFieldValue('Fianza_judicial')) ?><br>
                                     <br>
                                     <b>&nbsp;</b><br>
-                                    <?= $Asistencia_vial = ($contrato->getFieldValue('Asistencia_vial') == 1) ? "Aplica" : "No Aplica"; ?><br>
-                                    <?= $Renta_Veh_culo = ($contrato->getFieldValue('Renta_Veh_culo') == 1) ? "Aplica" : "No Aplica"; ?><br>
-                                    <?= $Casa_del_Conductor_CAA = ($contrato->getFieldValue('Asistencia_Accidente') == 1) ? "Aplica" : "No Aplica"; ?>
+                                    <?= ($contrato->getFieldValue('Asistencia_vial') == 1) ? "Aplica" : "No Aplica"; ?><br>
+                                    <?= ($contrato->getFieldValue('Renta_Veh_culo') == 1) ? "Aplica" : "No Aplica"; ?><br>
+                                    <?= ($contrato->getFieldValue('Asistencia_Accidente') == 1) ? "Aplica" : "No Aplica"; ?>
                                     <br><br>
                                     <?php $planes = $cotizacion->getLineItems() ?>
                                     <?php foreach ($planes as $plan) : ?>
@@ -262,16 +260,12 @@
                 </div>
             </div>
         </div>
-        <?php if ($trato->getFieldValue('Cliente') != null) : ?>
-            <?php $aseguradora = $this->getRecord("Vendors", $trato->getFieldValue('Aseguradora')->getEntityId()) ?>
-            <?php $ruta_imagen = $this->downloadPhoto("Vendors", $contrato->getFieldValue('Aseguradora')->getEntityId(), "public/img/") ?>
+        <?php if ($oferta->getFieldValue('Cliente') != null) : ?>
             <div class="row">
                 <div class="col-6 border">
-                    <?php if ($ruta_imagen != null) : ?>
-                        <div class="col-2">
-                            <img height="50" width="150" src="<?= constant('url') . $ruta_imagen ?>">
-                        </div>
-                    <?php endif ?>
+                    <div class="col-2">
+                        <img height="50" width="150" src="<?= constant('url') . $imagen_aseguradora ?>">
+                    </div>
                     <br>
                     <div class="row">
                         <div class="col-md-2">
@@ -282,13 +276,11 @@
                             <b>Modelo </b>
                         </div>
                         <div class="col-4">
-                            <?php foreach ($cotizaciones as $cotizacion) : ?>
-                                <?= $cotizacion->getFieldValue('P_liza')->getLookupLabel() ?><br>
-                            <?php endforeach ?>
-                            <?= $trato->getFieldValue('Tipo_de_veh_culo') ?><br>
-                            <?= $trato->getFieldValue('A_o_de_Fabricacion') ?><br>
-                            <?= $trato->getFieldValue('Marca')->getLookupLabel() ?><br>
-                            <?= $trato->getFieldValue('Modelo')->getLookupLabel() ?>
+                            <?= $poliza ?><br>
+                            <?= $oferta->getFieldValue('Tipo_de_veh_culo') ?><br>
+                            <?= $oferta->getFieldValue('A_o_de_Fabricacion') ?><br>
+                            <?= $oferta->getFieldValue('Marca')->getLookupLabel() ?><br>
+                            <?= $oferta->getFieldValue('Modelo')->getLookupLabel() ?>
                         </div>
                         <div class="col-md-2">
                             <b>Chasis </b>
@@ -298,15 +290,15 @@
                             <b>Vigencia </b>
                         </div>
                         <div class="col-4">
-                            <?= $trato->getFieldValue('Chasis') ?>
+                            <?= $oferta->getFieldValue('Chasis') ?>
                             <br>
-                            <?= $trato->getFieldValue('Placa') ?>
+                            <?= $oferta->getFieldValue('Placa') ?>
                             <br>
-                            <?= $trato->getFieldValue('Fecha_de_emisi_n') ?>
+                            <?= $oferta->getFieldValue('Fecha_de_emisi_n') ?>
                             <br>
                             Hasta
                             <br>
-                            <?= $trato->getFieldValue('Closing_Date') ?>
+                            <?= $oferta->getFieldValue('Closing_Date') ?>
                         </div>
                     </div>
                 </div>
@@ -346,7 +338,7 @@
             <div class="saltopagina"></div>
             <div class="row">
                 <div class="col-4">
-                    <img height="50" width="150" src="<?= constant('url') . $ruta_imagen ?>">
+                    <img height="50" width="150" src="<?= constant('url') . $imagen_aseguradora ?>">
                 </div>
                 <div class="col-8">
                     <h4>EXTRACTO DE LAS PRINCIPALES CONDICIONES DE

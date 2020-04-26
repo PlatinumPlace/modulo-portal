@@ -2,22 +2,22 @@
 
     <div class="col-lg-9">
         <h4 class="text-uppercase">
-            <?php if ($trato->getFieldValue('Cliente') != null) : ?>
+            <?php if ($oferta->getFieldValue('Cliente') != null) : ?>
                 resumen coberturas
             <?php else : ?>
                 cotización
             <?php endif ?>
             <br>
             seguro vehículo de motor<br>
-            plan <?= $trato->getFieldValue('Plan') ?>
+            plan <?= $oferta->getFieldValue('Plan') ?>
         </h4>
-        <?php if ($trato->getFieldValue('Stage') == "Abandonado") : ?>
+        <?php if ($oferta->getFieldValue('Stage') == "Abandonado") : ?>
             <div class="alert alert-danger" role="alert">
                 Cotización Abandonada
             </div>
         <?php endif ?>
         <div class="row">
-            <?php if ($trato->getFieldValue('Nombre') != null) : ?>
+            <?php if ($oferta->getFieldValue('Nombre') != null) : ?>
                 <div class="col-12 d-flex justify-content-center bg-primary text-white">
                     <h6>DATOS DEL CLIENTE</h6>
                 </div>
@@ -33,10 +33,10 @@
                         </div>
                         <div class="col">
                             <P>
-                                <?= $trato->getFieldValue('Nombre') . " " . $trato->getFieldValue('Apellido') ?><br>
-                                <?= $trato->getFieldValue('RNC_Cedula') ?><br>
-                                <?= $trato->getFieldValue('Email') ?><br>
-                                <?= $trato->getFieldValue('Direcci_n') ?>
+                                <?= $oferta->getFieldValue('Nombre') . " " . $oferta->getFieldValue('Apellido') ?><br>
+                                <?= $oferta->getFieldValue('RNC_Cedula') ?><br>
+                                <?= $oferta->getFieldValue('Email') ?><br>
+                                <?= $oferta->getFieldValue('Direcci_n') ?>
                             </P>
                         </div>
                     </div>
@@ -52,9 +52,9 @@
                         </div>
                         <div class="col">
                             <P>
-                                <?= $trato->getFieldValue('Tel_Residencia') ?><br>
-                                <?= $trato->getFieldValue('Telefono') ?><br>
-                                <?= $trato->getFieldValue('Tel_Trabajo') ?><br>
+                                <?= $oferta->getFieldValue('Tel_Residencia') ?><br>
+                                <?= $oferta->getFieldValue('Telefono') ?><br>
+                                <?= $oferta->getFieldValue('Tel_Trabajo') ?><br>
                             </P>
                         </div>
                     </div>
@@ -76,11 +76,11 @@
                     </div>
                     <div class="col">
                         <P>
-                            <?= $trato->getFieldValue('Tipo_de_veh_culo') ?><br>
-                            <?= strtoupper($trato->getFieldValue('Marca')->getLookupLabel()) ?><br>
-                            <?= strtoupper($trato->getFieldValue('Modelo')->getLookupLabel()) ?><br>
-                            <?= $trato->getFieldValue('A_o_de_Fabricacion') ?><br>
-                            RD$<?= number_format($trato->getFieldValue('Valor_Asegurado'), 2) ?>
+                            <?= $oferta->getFieldValue('Tipo_de_veh_culo') ?><br>
+                            <?= strtoupper($oferta->getFieldValue('Marca')->getLookupLabel()) ?><br>
+                            <?= strtoupper($oferta->getFieldValue('Modelo')->getLookupLabel()) ?><br>
+                            <?= $oferta->getFieldValue('A_o_de_Fabricacion') ?><br>
+                            RD$<?= number_format($oferta->getFieldValue('Valor_Asegurado'), 2) ?>
                         </P>
                     </div>
                 </div>
@@ -99,11 +99,11 @@
                     </div>
                     <div class="col">
                         <P>
-                            <?= $trato->getFieldValue('Chasis') ?><br>
-                            <?= $trato->getFieldValue('Placa') ?><br>
-                            <?= $trato->getFieldValue('Color') ?><br>
-                            <?= $trato->getFieldValue('Uso') ?><br>
-                            <?= $retVal = ($trato->getFieldValue('Es_nuevo') == 1) ? "Nuevo" : "Usado"; ?>
+                            <?= $oferta->getFieldValue('Chasis') ?><br>
+                            <?= $oferta->getFieldValue('Placa') ?><br>
+                            <?= $oferta->getFieldValue('Color') ?><br>
+                            <?= $oferta->getFieldValue('Uso') ?><br>
+                            <?= ($oferta->getFieldValue('Es_nuevo') == 1) ? "Nuevo" : "Usado"; ?>
                         </P>
                     </div>
                 </div>
@@ -117,22 +117,22 @@
                 <h5>Opciones</h5>
             </div>
             <div class="card-body">
-                <?php if ($trato->getFieldValue('Stage') != "Abandonado") : ?>
-                    <?php if ($trato->getFieldValue('Nombre') == null) : ?>
+                <?php if ($oferta->getFieldValue('Stage') != "Abandonado") : ?>
+                    <?php if ($oferta->getFieldValue('Nombre') == null) : ?>
                         <div class="form-group row justify-content-md-center">
-                            <a href="<?= constant('url') ?>auto/completar/<?= $trato->getEntityId() ?>" class="btn btn-primary">Siguiente</a>
+                            <a href="<?= constant('url') ?>auto/completar/<?= $oferta->getEntityId() ?>" class="btn btn-primary">Siguiente</a>
                         </div>
                     <?php else : ?>
                         <div class="form-group row justify-content-md-center">
-                            <a href="<?= constant('url') ?>auto/emitir/<?= $trato->getEntityId() ?>" class="btn btn-success"><?= $retVal = ($trato->getFieldValue('Cliente') == null) ? "Emitir" : "Completar"; ?></a>
+                            <a href="<?= constant('url') ?>auto/emitir/<?= $oferta->getEntityId() ?>" class="btn btn-success"><?= $retVal = ($oferta->getFieldValue('Cliente') == null) ? "Emitir" : "Completar"; ?></a>
                         </div>
                         <div class="form-group row justify-content-md-center">
-                            <a href="<?= constant('url') ?>auto/descargar/<?= $trato->getEntityId() ?>" class="btn btn-info">Descargar</a>
+                            <a href="<?= constant('url') ?>auto/descargar/<?= $oferta->getEntityId() ?>" class="btn btn-info">Descargar</a>
                         </div>
                     <?php endif ?>
                 <?php endif ?>
                 <div class="form-group row justify-content-md-center">
-                    <?php if ($trato->getFieldValue('Cliente') != null) : ?>
+                    <?php if ($oferta->getFieldValue('Cliente') != null) : ?>
                         <div class="form-group row justify-content-md-center">
                             <a download="Condiciones del Vehículos" href="<?= constant('url') ?>public/documents/condiciones del vehiculo.pdf" class="btn btn-link">Condiciones del Vehículos</a>
                         </div>
@@ -153,22 +153,20 @@
     <div class="col-md-12 d-flex justify-content-center bg-primary text-white">
         <h6>COBERTURAS</h6>
     </div>
-    <?php if (!empty($cotizaciones)) : ?>
-        <div class="col-12 border">
-            <div class="row">
-                <?php foreach ($cotizaciones as $cotizacion) : ?>
-                    <?php if ($cotizacion->getFieldValue('Grand_Total') == 0) : ?>
-                        <?php $contrato = $this->getRecord("Contratos", $cotizacion->getFieldValue('Contrato')->getEntityId()) ?>
-                        <div class="col">
-                            <div class="alert alert-info" role="alert">
-                                <b><?= $contrato->getFieldValue('Aseguradora')->getLookupLabel() ?></b> no esta disponible.
-                            </div>
+    <div class="col-12 border">
+        <div class="row">
+            <?php foreach ($cotizaciones as $cotizacion) : ?>
+                <?php if ($cotizacion->getFieldValue('Grand_Total') == 0) : ?>
+                    <?php $contrato = $this->getRecord("Contratos", $cotizacion->getFieldValue('Contrato')->getEntityId()) ?>
+                    <div class="col">
+                        <div class="alert alert-info" role="alert">
+                            <b><?= $contrato->getFieldValue('Aseguradora')->getLookupLabel() ?></b> no esta disponible.
                         </div>
-                    <?php endif ?>
-                <?php endforeach ?>
-            </div>
+                    </div>
+                <?php endif ?>
+            <?php endforeach ?>
         </div>
-    <?php endif ?>
+    </div>
     <div class="col-12 border">
         <div class="row">
             <div class="col">
@@ -197,71 +195,71 @@
                     <b>Prima Total</b>
                 </p>
             </div>
-            <?php if (!empty($cotizaciones)) : ?>
-                <?php foreach ($cotizaciones as $cotizacion) : ?>
-                    <?php if ($cotizacion->getFieldValue('Grand_Total') > 0) : ?>
+            <?php foreach ($cotizaciones as $cotizacion) : ?>
+                <?php if ($cotizacion->getFieldValue('Grand_Total') > 0) : ?>
+                    <?php if ($oferta->getFieldValue('Cliente') == null) : ?>
                         <?php $contrato = $this->getRecord("Contratos", $cotizacion->getFieldValue('Contrato')->getEntityId()) ?>
-                        <div class="col-2">
-                            <p>
-                                <?php $ruta_imagen = $this->downloadPhoto("Vendors", $contrato->getFieldValue('Aseguradora')->getEntityId(), "public/img/") ?>
-                                <img height="50" width="110" src="<?= constant('url') . $ruta_imagen ?>">
-                            </p>
-                            <p>
-                                <b>&nbsp;</b><br>
-                                <?php
-                                $resultado = $trato->getFieldValue('Valor_Asegurado') * ($contrato->getFieldValue('Riesgos_comprensivos') / 100);
-                                echo "RD$" . number_format($resultado);
-                                ?><br>
-                                <?= $contrato->getFieldValue('Riesgos_Comprensivos_Deducible') ?><br>
-                                <?= $contrato->getFieldValue('Rotura_de_cristales_Deducible') ?><br>
-                                <?php
-                                $resultado = $trato->getFieldValue('Valor_Asegurado') * ($contrato->getFieldValue('Colisi_n_y_vuelco') / 100);
-                                echo "RD$" . number_format($resultado);
-                                ?><br>
-                                <?php
-                                $resultado = $trato->getFieldValue('Valor_Asegurado') * ($contrato->getFieldValue('Incendio_y_robo') / 100);
-                                echo "RD$" . number_format($resultado);
-                                ?><br><br>
-                                <b>&nbsp;</b><br>
-                                RD$<?= number_format($contrato->getFieldValue('Da_os_Propiedad_ajena')) ?><br>
-                                RD$<?= number_format($contrato->getFieldValue('Lesiones_Muerte_1_Pers')) ?><br>
-                                RD$<?= number_format($contrato->getFieldValue('Lesiones_Muerte_m_s_de_1_Pers')) ?><br>
-                                RD$<?= number_format($contrato->getFieldValue('Lesiones_Muerte_1_pasajero')) ?><br>
-                                RD$<?= number_format($contrato->getFieldValue('Lesiones_Muerte_m_s_de_1_pasajero')) ?><br>
-                                <br>
-                                RD$<?= number_format($contrato->getFieldValue('Riesgos_conductor')) ?><br>
-                                <br>
-                                RD$<?= number_format($contrato->getFieldValue('Fianza_judicial')) ?><br>
-                                <br>
-                                <b>&nbsp;</b><br>
-                                <?= $Asistencia_vial = ($contrato->getFieldValue('Asistencia_vial') == 1) ? "Aplica" : "No Aplica"; ?><br>
-                                <?= $Renta_Veh_culo = ($contrato->getFieldValue('Renta_Veh_culo') == 1) ? "Aplica" : "No Aplica"; ?><br>
-                                <?= $Casa_del_Conductor_CAA = ($contrato->getFieldValue('Asistencia_Accidente') == 1) ? "Aplica" : "No Aplica"; ?>
-                                <br>
-                                <?php $planes = $cotizacion->getLineItems() ?>
-                                <?php foreach ($planes as $plan) : ?>
-                                    <div class="row">
-                                        <div class="col-6">
-                                            RD$
-                                            <br>
-                                            RD$
-                                            <br>
-                                            RD$
-                                        </div>
-                                        <div class="col-6 text-right">
-                                            <?= number_format($plan->getTotalAfterDiscount(), 2) ?>
-                                            <br>
-                                            <?= number_format($plan->getTaxAmount(), 2) ?>
-                                            <br>
-                                            <?= number_format($plan->getNetTotal(), 2) ?>
-                                        </div>
-                                    </div>
-                                <?php endforeach ?>
-                            </p>
-                        </div>
+                        <?php $imagen_aseguradora = $this->downloadPhoto("Vendors", $contrato->getFieldValue('Aseguradora')->getEntityId(), "public/img/") ?>
                     <?php endif ?>
-                <?php endforeach ?>
-            <?php endif ?>
+                    <div class="col-2">
+                        <p>
+                            <img height="50" width="110" src="<?= constant('url') . $imagen_aseguradora ?>">
+                        </p>
+                        <p>
+                            <b>&nbsp;</b><br>
+                            <?php
+                            $resultado = $oferta->getFieldValue('Valor_Asegurado') * ($contrato->getFieldValue('Riesgos_comprensivos') / 100);
+                            echo "RD$" . number_format($resultado);
+                            ?><br>
+                            <?= $contrato->getFieldValue('Riesgos_Comprensivos_Deducible') ?><br>
+                            <?= $contrato->getFieldValue('Rotura_de_cristales_Deducible') ?><br>
+                            <?php
+                            $resultado = $oferta->getFieldValue('Valor_Asegurado') * ($contrato->getFieldValue('Colisi_n_y_vuelco') / 100);
+                            echo "RD$" . number_format($resultado);
+                            ?><br>
+                            <?php
+                            $resultado = $oferta->getFieldValue('Valor_Asegurado') * ($contrato->getFieldValue('Incendio_y_robo') / 100);
+                            echo "RD$" . number_format($resultado);
+                            ?><br><br>
+                            <b>&nbsp;</b><br>
+                            RD$<?= number_format($contrato->getFieldValue('Da_os_Propiedad_ajena')) ?><br>
+                            RD$<?= number_format($contrato->getFieldValue('Lesiones_Muerte_1_Pers')) ?><br>
+                            RD$<?= number_format($contrato->getFieldValue('Lesiones_Muerte_m_s_de_1_Pers')) ?><br>
+                            RD$<?= number_format($contrato->getFieldValue('Lesiones_Muerte_1_pasajero')) ?><br>
+                            RD$<?= number_format($contrato->getFieldValue('Lesiones_Muerte_m_s_de_1_pasajero')) ?><br>
+                            <br>
+                            RD$<?= number_format($contrato->getFieldValue('Riesgos_conductor')) ?><br>
+                            <br>
+                            RD$<?= number_format($contrato->getFieldValue('Fianza_judicial')) ?><br>
+                            <br>
+                            <b>&nbsp;</b><br>
+                            <?= ($contrato->getFieldValue('Asistencia_vial') == 1) ? "Aplica" : "No Aplica"; ?><br>
+                            <?= ($contrato->getFieldValue('Renta_Veh_culo') == 1) ? "Aplica" : "No Aplica"; ?><br>
+                            <?= ($contrato->getFieldValue('Asistencia_Accidente') == 1) ? "Aplica" : "No Aplica"; ?>
+                            <br>
+                            <?php $planes = $cotizacion->getLineItems() ?>
+                            <?php foreach ($planes as $plan) : ?>
+                                <div class="row">
+                                    <div class="col-6">
+                                        RD$
+                                        <br>
+                                        RD$
+                                        <br>
+                                        RD$
+                                    </div>
+                                    <div class="col-6 text-right">
+                                        <?= number_format($plan->getTotalAfterDiscount(), 2) ?>
+                                        <br>
+                                        <?= number_format($plan->getTaxAmount(), 2) ?>
+                                        <br>
+                                        <?= number_format($plan->getNetTotal(), 2) ?>
+                                    </div>
+                                </div>
+                            <?php endforeach ?>
+                        </p>
+                    </div>
+                <?php endif ?>
+            <?php endforeach ?>
         </div>
     </div>
 </div>

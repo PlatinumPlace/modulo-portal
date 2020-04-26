@@ -1,11 +1,11 @@
 <form class="form-inline" method="POST" action="<?= constant('url') ?>home/buscar">
     <div class="form-group mb-2">
         <select class="form-control" name="parametro" required>
-            <option value="numero" selected>No. de cotización</option>
-            <option value="id">RNC/Cédula</option>
-            <option value="nombre">Nombre</option>
-            <option value="apellido">Apellido</option>
-            <option value="chasis">Chasis</option>
+            <option value="No_Cotizaci_n" selected>No. de cotización</option>
+            <option value="RNC_Cedula">RNC/Cédula</option>
+            <option value="Nombre">Nombre</option>
+            <option value="Apellido">Apellido</option>
+            <option value="Chasis">Chasis</option>
         </select>
     </div>
     <div class="form-group mx-sm-3 mb-2">

@@ -26,7 +26,7 @@
                     <?php endif ?>
                     <div class="card shadow-lg border-0 rounded-lg mt-5">
                         <div class="card-body">
-                            <form method="POST" action="<?= constant('url') ?>login">
+                            <form method="POST" action="<?= constant('url') ?>">
                                 <div class="form-group">
                                     <label class="small mb-1">Usuario</label>
                                     <input class="form-control py-4" type="text" name="usuario" required />

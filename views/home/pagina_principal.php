@@ -56,7 +56,7 @@
         </div>
       </div>
       <div class="card-body">
-        <a href="<?= $retVal = ($vencimientos > 0) ? constant('url') . "home/lista/" . $filtro_vencimientos : "#"; ?>" class="card-link">Ver más</a>
+        <a href="<?= ($vencimientos > 0) ? constant('url') . "home/lista/" . $filtro_vencimientos : "#"; ?>" class="card-link">Ver más</a>
       </div>
     </div>
   </div>

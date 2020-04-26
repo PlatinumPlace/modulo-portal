@@ -26,7 +26,7 @@
     <!-- Navigation -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top">
         <div class="container">
-            <a class="navbar-brand" href="<?= constant('url') ?>"></a>
+            <a class="navbar-brand" href="<?= constant('url') ?>">IT - Insurance Tech</a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -65,7 +65,7 @@
                         </a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                             <a class="dropdown-item disabled" href="<?= constant('url') ?>reporte/poliza">
-                                Pólizas
+                                Póliza
                             </a>
                         </div>
                     </li>
