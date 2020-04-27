@@ -13,7 +13,7 @@ if (isset($_GET['url'])) {
     if ($url[1] == "cerrar_sesion") {
         $login->salir();
     }
-    $peticion = 'controllers/' . strtolower(ucfirst($url[0])) . 'Controller.php';
+    $peticion = 'controllers/' . ucfirst($url[0]) . 'Controller.php';
     if (file_exists($peticion)) {
         require_once $peticion;
         $controlador = ucfirst($url[0]) . "Controller";

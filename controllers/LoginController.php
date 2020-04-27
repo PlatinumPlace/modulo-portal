@@ -22,6 +22,8 @@ class LoginController extends api
                         $cambios["Sesi_n_activa"] = true;
                         $this->updateRecord("Contacts", $cambios, $contacto->getEntityId());
                         $_SESSION['usuario_id'] = $contacto->getEntityId();
+                        $_SESSION['usuario_nombre'] = $contacto->getFieldValue("First_Name") . " " . $contacto->getFieldValue("Last_Name");
+                        $_SESSION['empresa_id'] = $contacto->getFieldValue("Account_Name")->getEntityId();
                         $_SESSION['tiempo'] = time();
                         setcookie("usuario_id", $contacto->getEntityId(), time() + 259200);
                         header("Location:" . constant("url"));

@@ -1,14 +1,19 @@
-<form class="row" enctype="multipart/form-data" method="POST" action="<?= constant('url') ?>reporte/exportarCSV">
+<form class="row" enctype="multipart/form-data" method="POST" action="<?= constant('url') ?>reporte/poliza">
     <div class="col-12">
+        <?php if (isset($_POST['submit'])) : ?>
+            <div class="alert alert-primary" role="alert">
+                <?= $alerta ?>
+            </div>
+        <?php endif ?>
         <div class="card">
             <div class="card-body">
                 <div class="form-group row">
                     <label class="col-sm-2 col-form-label">Aseguradora</label>
                     <div class="col-sm-4">
-                        <select name="aseguradora" class="form-control" required>
+                        <select name="contrato" class="form-control" required>
                             <?php
                             foreach ($contratos as $contrato) {
-                                echo '<option value="' . $contrato->getFieldValue("Aseguradora")->getEntityId() . '">' . $contrato->getFieldValue("Aseguradora")->getLookupLabel()  . '</option>';
+                                echo '<option value="' . $contrato->getEntityId() . '">' . $contrato->getFieldValue("Aseguradora")->getLookupLabel()  . '</option>';
                             }
                             ?>
                         </select>
