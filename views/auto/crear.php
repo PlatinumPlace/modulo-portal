@@ -1,8 +1,11 @@
 <form method="POST" action="<?= constant('url') ?>auto/crear">
     <div class="row">
 
-        <div class="col-lg-9">
-            <div class="card my-9">
+        <div class="col-lg-8">
+
+            <br>
+            
+            <div class="card my-8">
                 <div class="card-header">
                     <h5>Tipo de Cotización</h5>
                 </div>
@@ -26,7 +29,9 @@
                     </div>
                 </div>
             </div>
+
             <br>
+
             <div class="card my-8">
                 <div class="card-header">
                     <h5>Datos de Vehículo</h5>
@@ -97,21 +102,18 @@
                     </div>
                 </div>
             </div>
+
         </div>
 
-        <div class="col-md-3">
-            <div class="col my-3">
-                <div class="card">
-                    <div class="card-header">
-                        <h5>Opciones</h5>
-                    </div>
-                    <div class="card-body">
-                        <div class="form-group row justify-content-md-center">
-                            <button type="submit" name="submit" class="btn btn-success">Cotizar</button>
-                        </div>
-                    </div>
+        <div class="col-md-4">
+
+            <div class="card my-4">
+                <h5 class="card-header">Opciones</h5>
+                <div class="card-body">
+                    <button type="submit" name="submit" class="btn btn-success">Cotizar</button>
                 </div>
             </div>
+
         </div>
 
     </div>
@@ -132,4 +134,4 @@
             });
         }
     }
-</script>;
+</script>

@@ -8,7 +8,7 @@
 <input value="<?= $funcion ?>" id="funcion" hidden>
 <input value="<?= $id ?>" id="id" hidden>
 <script>
-    var time = 3200;
+    var time = 4000;
     var url = document.getElementById("url").value;
     var id = document.getElementById("id").value;
     var controlador = document.getElementById("controlador").value;

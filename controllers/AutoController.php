@@ -58,12 +58,6 @@ class AutoController extends api
             exit;
         }
         $emitida = array("Emitido", "En trámite");
-        if (in_array($oferta->getFieldValue("Stage"), $emitida)) {
-            $imagen_aseguradora = $this->downloadPhoto("Vendors", $oferta->getFieldValue('Aseguradora')->getEntityId(), "public/img/");
-            foreach ($cotizaciones as $cotizacion) {
-                $contrato = $this->getRecord("Contratos", $cotizacion->getFieldValue('Contrato')->getEntityId());
-            }
-        }
         require_once("views/header.php");
         require_once("views/auto/detalles.php");
         require_once("views/footer.php");
