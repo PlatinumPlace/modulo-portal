@@ -14,9 +14,9 @@
     <button type="submit" name="submit" class="btn btn-primary mb-2">Buscar</button>|
     <a href="<?= constant('url') ?>home/buscar" class="btn btn-info mb-2">Limpiar</a>
 </form>
-<?php if (empty($resultado)) : ?>
+<?php if (!empty($alerta)) : ?>
     <div class="alert alert-info" role="alert">
-        No se encontraron registros
+        <?= $alerta ?>
     </div>
 <?php endif ?>
 <table class="table">

@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>
-        <?php if ($oferta->getFieldValue('Stage') == "Cotizando") : ?>
+        <?php if (!in_array($oferta->getFieldValue("Stage"), $emitida)) : ?>
             Cotización No.
         <?php else : ?>
             Resumen No.
@@ -36,7 +36,7 @@
     <div class="container">
         <div class="row">
             <div class="col-2">
-                <?php if ($oferta->getFieldValue('Cliente') == null) : ?>
+                <?php if (!in_array($oferta->getFieldValue("Stage"), $emitida)) : ?>
                     <img src="<?= constant('url') ?>public/img/logo.png" width="100" height="100">
                 <?php else : ?>
                     <img width="170" height="75" src="<?= constant('url') . $imagen_aseguradora ?>">
@@ -44,10 +44,10 @@
             </div>
             <div class="col-8">
                 <h4 class="text-uppercase text-center">
-                    <?php if ($oferta->getFieldValue('Cliente') != null) : ?>
-                        resumen coberturas
-                    <?php else : ?>
+                    <?php if (!in_array($oferta->getFieldValue("Stage"), $emitida)) : ?>
                         cotización
+                    <?php else : ?>
+                        resumen coberturas
                     <?php endif ?>
                     <br>
                     seguro vehículo de motor<br>
@@ -56,7 +56,7 @@
             </div>
             <div class="col-2">
                 <b>
-                    <?php if ($oferta->getFieldValue('Cliente') == null) : ?>
+                    <?php if (!in_array($oferta->getFieldValue("Stage"), $emitida)) : ?>
                         Cotización No.
                     <?php else : ?>
                         Resumen No.
@@ -190,13 +190,13 @@
                     </div>
                     <?php foreach ($cotizaciones as $cotizacion) : ?>
                         <?php if ($cotizacion->getFieldValue('Grand_Total') > 0) : ?>
-                            <?php if ($oferta->getFieldValue('Cliente') == null) : ?>
+                            <?php if (!in_array($oferta->getFieldValue("Stage"), $emitida)) : ?>
                                 <?php $contrato = $this->getRecord("Contratos", $cotizacion->getFieldValue('Contrato')->getEntityId()) ?>
                                 <?php $imagen_aseguradora = $this->downloadPhoto("Vendors", $contrato->getFieldValue('Aseguradora')->getEntityId(), "public/img/") ?>
                             <?php endif ?>
                             <div class="col-2">
                                 <p>
-                                    <?php if ($oferta->getFieldValue('Cliente') == null) : ?>
+                                    <?php if (!in_array($oferta->getFieldValue("Stage"), $emitida)) : ?>
                                         <img height="50" width="110" src="<?= constant('url') . $imagen_aseguradora ?>">
                                     <?php else : ?>
                                         &nbsp;
@@ -260,7 +260,7 @@
                 </div>
             </div>
         </div>
-        <?php if ($oferta->getFieldValue('Cliente') != null) : ?>
+        <?php if (in_array($oferta->getFieldValue("Stage"), $emitida)) : ?>
             <div class="row">
                 <div class="col-6 border">
                     <div class="col-2">

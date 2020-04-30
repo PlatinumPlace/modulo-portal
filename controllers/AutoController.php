@@ -31,19 +31,17 @@ class AutoController extends api
             } else {
                 $oferta["Es_nuevo"]  = false;
             }
-            $resultado = $this->createRecord("Deals", $oferta);
-            $datos = $resultado . "-auto";
-            $direccion = constant('url') . 'home/cargando/' . $datos;
-            header("Location:" . $direccion);
+            $id = $this->createRecord("Deals", $oferta);
+            $direccion = 'auto-detalles-' . $id;
+            header("Location:" . constant('url') . 'home/cargando/' . $direccion);
             exit;
         }
         require_once("views/header.php");
         require_once("views/auto/crear.php");
         require_once("views/footer.php");
     }
-    public function detalles($datos)
+    public function detalles($id = null)
     {
-        $id = $datos;
         $oferta = $this->getRecord("Deals", $id);
         if (empty($oferta)) {
             require_once("views/header.php");
@@ -59,7 +57,8 @@ class AutoController extends api
             require_once("views/footer.php");
             exit;
         }
-        if ($oferta->getFieldValue('Cliente') != null) {
+        $emitida = array("Emitido", "En trámite");
+        if (in_array($oferta->getFieldValue("Stage"), $emitida)) {
             $imagen_aseguradora = $this->downloadPhoto("Vendors", $oferta->getFieldValue('Aseguradora')->getEntityId(), "public/img/");
             foreach ($cotizaciones as $cotizacion) {
                 $contrato = $this->getRecord("Contratos", $cotizacion->getFieldValue('Contrato')->getEntityId());
@@ -69,9 +68,8 @@ class AutoController extends api
         require_once("views/auto/detalles.php");
         require_once("views/footer.php");
     }
-    public function completar($datos)
+    public function completar($id = null)
     {
-        $id = $datos;
         $oferta = $this->getRecord("Deals", $id);
         if (empty($oferta)) {
             require_once("views/header.php");
@@ -93,17 +91,15 @@ class AutoController extends api
             $cambios["Tel_Trabajo"] = $_POST['Tel_Trabajo'];
             $cambios["Fecha_de_Nacimiento"] = $_POST['Fecha_de_Nacimiento'];
             $this->updateRecord("Deals", $cambios, $id);
-            $direccion = constant('url') . 'auto/detalles/' . $id;
-            header("Location:" . $direccion);
+            header("Location:" . constant('url') . 'auto/detalles/' . $id);
             exit;
         }
         require_once("views/header.php");
         require_once("views/auto/completar.php");
         require_once("views/footer.php");
     }
-    public function descargar($datos)
+    public function descargar($id = null)
     {
-        $id = $datos;
         $oferta = $this->getRecord("Deals", $id);
         if (empty($oferta)) {
             require_once("views/header.php");
@@ -119,7 +115,8 @@ class AutoController extends api
             require_once("views/footer.php");
             exit;
         }
-        if ($oferta->getFieldValue('Cliente') != null) {
+        $emitida = array("Emitido", "En trámite");
+        if (in_array($oferta->getFieldValue("Stage"), $emitida)) {
             $aseguradora = $this->getRecord("Vendors", $oferta->getFieldValue('Aseguradora')->getEntityId());
             $imagen_aseguradora = $this->downloadPhoto("Vendors", $oferta->getFieldValue('Aseguradora')->getEntityId(), "public/img/");
             foreach ($cotizaciones as $cotizacion) {
@@ -129,9 +126,8 @@ class AutoController extends api
         }
         require_once("views/auto/descargar.php");
     }
-    public function emitir($datos)
+    public function emitir($id = null)
     {
-        $id = $datos;
         $oferta = $this->getRecord("Deals", $id);
         if (empty($oferta)) {
             require_once("views/header.php");
@@ -147,6 +143,7 @@ class AutoController extends api
             require_once("views/footer.php");
             exit;
         }
+        $emitida = array("Emitido", "En trámite");
         if (isset($_POST['submit'])) {
             $ruta_cotizacion = "public/tmp";
             if (!is_dir($ruta_cotizacion)) {
@@ -165,10 +162,11 @@ class AutoController extends api
                     move_uploaded_file($tmp_name, "$ruta_cotizacion/$name");
                     $this->uploadAttachment("Deals", $id, "$ruta_cotizacion/$name");
                     unlink("$ruta_cotizacion/$name");
+                    $direccion = 'auto-descargar-' . $id;
                     $alerta =
                         "Póliza emitida,descargue la previsualizacion para obtener el carnet. "
                         .
-                        '<a href="' . constant("url") . 'auto/descargar/' . $id . '" class="btn btn-link">Descargar</a>                    ';
+                        '<a href="' . constant("url") . 'home/cargando/' . $direccion . '" class="btn btn-link">Descargar</a>';
                 } else {
                     $alerta = "Error al cargar documentos, solo se permiten archivos PDF.";
                 }

@@ -1,4 +1,4 @@
-<form class="row" enctype="multipart/form-data" method="POST" action="<?= constant('url') ?>reporte/poliza">
+<form class="row" enctype="multipart/form-data" method="POST" action="<?= constant('url') ?>reporte/index">
     <div class="col-12">
         <?php if (isset($_POST['submit'])) : ?>
             <div class="alert alert-primary" role="alert">
@@ -8,9 +8,25 @@
         <div class="card">
             <div class="card-body">
                 <div class="form-group row">
+                    <label class="col-sm-2 col-form-label">Tipo de reporte</label>
+                    <div class="col-sm-4">
+                        <select name="reporte_tipo" class="form-control" required>
+                            <option value="polizas" selected>Pólizas emitidas</option>
+                            <option value="comisiones">Comisiones</option>
+                        </select>
+                    </div>
+                    <label class="col-sm-2 col-form-label">Usuario</label>
+                    <div class="col-sm-4">
+                        <select name="usuario" class="form-control" required>
+                            <option value="1" selected><?= $_SESSION['usuario_nombre'] ?></option>
+                            <option value="">Todos</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group row">
                     <label class="col-sm-2 col-form-label">Aseguradora</label>
                     <div class="col-sm-4">
-                        <select name="contrato" class="form-control" required>
+                        <select name="contrato_id" class="form-control" required>
                             <?php
                             foreach ($contratos as $contrato) {
                                 echo '<option value="' . $contrato->getEntityId() . '">' . $contrato->getFieldValue("Aseguradora")->getLookupLabel()  . '</option>';

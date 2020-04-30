@@ -2,10 +2,10 @@
 
     <div class="col-lg-9">
         <h4 class="text-uppercase">
-            <?php if ($oferta->getFieldValue('Cliente') != null) : ?>
-                resumen coberturas
-            <?php else : ?>
+            <?php if (!in_array($oferta->getFieldValue("Stage"), $emitida)) : ?>
                 cotización
+            <?php else : ?>
+                resumen coberturas
             <?php endif ?>
             <br>
             seguro vehículo de motor<br>
@@ -124,7 +124,7 @@
                         </div>
                     <?php else : ?>
                         <div class="form-group row justify-content-md-center">
-                            <a href="<?= constant('url') ?>auto/emitir/<?= $oferta->getEntityId() ?>" class="btn btn-success"><?= $retVal = ($oferta->getFieldValue('Cliente') == null) ? "Emitir" : "Completar"; ?></a>
+                            <a href="<?= constant('url') ?>auto/emitir/<?= $oferta->getEntityId() ?>" class="btn btn-success"><?= (!in_array($oferta->getFieldValue("Stage"), $emitida)) ? "Emitir" : "Completar"; ?></a>
                         </div>
                         <div class="form-group row justify-content-md-center">
                             <a href="<?= constant('url') ?>auto/descargar/<?= $oferta->getEntityId() ?>" class="btn btn-info">Descargar</a>
@@ -132,15 +132,15 @@
                     <?php endif ?>
                 <?php endif ?>
                 <div class="form-group row justify-content-md-center">
-                    <?php if ($oferta->getFieldValue('Cliente') != null) : ?>
+                    <?php if (in_array($oferta->getFieldValue("Stage"), $emitida)) : ?>
                         <div class="form-group row justify-content-md-center">
-                            <a download="Condiciones del Vehículos" href="<?= constant('url') ?>public/documents/condiciones del vehiculo.pdf" class="btn btn-link">Condiciones del Vehículos</a>
+                            <a download="Condiciones del Vehículos.pdf" href="<?= constant('url') ?>public/documents/condiciones_vehiculo.pdf" class="btn btn-link">Condiciones del Vehículos</a>
                         </div>
                         <div class="form-group row justify-content-md-center">
-                            <a download="Formulario de conocimiento" href="<?= constant('url') ?>public/documents/formulario de conocimiento.pdf" class="btn btn-link">Formulario de conocimiento</a>
+                            <a download="Formulario de Conocimiento.pdf" href="<?= constant('url') ?>public/documents/for_conocimiento.pdf" class="btn btn-link">Formulario de conocimiento</a>
                         </div>
                         <div class="form-group row justify-content-md-center">
-                            <a download="Formulario de Inspección de Vehículos" href="<?= constant('url') ?>public/documents/formulario de inspeccion.pdf" class="btn btn-link">Formulario de Inspección</a>
+                            <a download="Formulario de Inspección de Vehículos.pdf" href="<?= constant('url') ?>public/documents/for_inspeccion.pdf" class="btn btn-link">Formulario de Inspección</a>
                         </div>
                     <?php endif ?>
                 </div>
@@ -197,7 +197,7 @@
             </div>
             <?php foreach ($cotizaciones as $cotizacion) : ?>
                 <?php if ($cotizacion->getFieldValue('Grand_Total') > 0) : ?>
-                    <?php if ($oferta->getFieldValue('Cliente') == null) : ?>
+                    <?php if (!in_array($oferta->getFieldValue("Stage"), $emitida)) : ?>
                         <?php $contrato = $this->getRecord("Contratos", $cotizacion->getFieldValue('Contrato')->getEntityId()) ?>
                         <?php $imagen_aseguradora = $this->downloadPhoto("Vendors", $contrato->getFieldValue('Aseguradora')->getEntityId(), "public/img/") ?>
                     <?php endif ?>

@@ -26,7 +26,7 @@
     <!-- Navigation -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top">
         <div class="container">
-            <a class="navbar-brand" href="<?= constant('url') ?>"></a>
+            <a class="navbar-brand" href="<?= constant('url') ?>">IT - Insurance Tech</a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -53,15 +53,10 @@
                             </a>
                         </div>
                     </li>
-                    <li class="nav-item dropdown active">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="<?= constant('url') ?>reporte/index">
                             <ion-icon name="stats-chart" size="small"></ion-icon> Reportes
                         </a>
-                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <a class="dropdown-item" href="<?= constant('url') ?>reporte/poliza">
-                                Póliza
-                            </a>
-                        </div>
                     </li>
                     <li class="nav-item active">
                         <a class="nav-link" onclick="return confirm('¿Deseas cerrar sesión?')" href="<?= constant('url') ?>login/cerrar_sesion">

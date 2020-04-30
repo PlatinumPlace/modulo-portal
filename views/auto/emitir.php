@@ -7,7 +7,7 @@
         <?php endif ?>
         <div class="card">
             <div class="card-body">
-                <?php if ($oferta->getFieldValue('Cliente') == null) : ?>
+                <?php if (!in_array($oferta->getFieldValue("Stage"), $emitida)) : ?>
                     <div class="form-group row">
                         <label class="col-sm-2 col-form-label">Aseguradora</label>
                         <div class="col-sm-4">
@@ -52,7 +52,7 @@
         <a href="<?= constant('url') ?>auto/detalles/<?= $oferta->getEntityId() ?>" class="btn btn-primary">Detalles</a>
         |
         <button type="submit" name="submit" class="btn btn-success">
-            <?= ($oferta->getFieldValue('Cliente') == null) ? "Emitir" : "Completar"; ?>
+            <?= (in_array($oferta->getFieldValue("Stage"), $emitida)) ? "Emitir" : "Completar"; ?>
         </button>
     </div>
 </form>

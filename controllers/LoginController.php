@@ -7,7 +7,7 @@ class LoginController extends api
     {
         parent::__construct();
     }
-    public function entrar()
+    public function iniciar_sesion()
     {
         if (isset($_POST['submit'])) {
             $criterio = "((Email:equals:" . $_POST['usuario'] . ") and (Contrase_a:equals:" . $_POST['clave'] . "))";
@@ -38,7 +38,7 @@ class LoginController extends api
         }
         require_once("views/login/entrar.php");
     }
-    public function salir()
+    public function cerrar_sesion()
     {
         $cambios["Sesi_n_activa"] = false;
         $this->updateRecord("Contacts", $cambios, $_SESSION['usuario_id']);
@@ -47,20 +47,5 @@ class LoginController extends api
         setcookie("usuario_id", '', 1);
         header("Location:" . constant("url"));
         exit();
-    }
-    public function validar()
-    {
-        session_start();
-        $_SESSION["usuario_id"] = (isset($_COOKIE["usuario_id"])) ? $_COOKIE["usuario_id"] : "";
-        if (empty($_SESSION["usuario_id"])) {
-            $this->entrar();
-            exit();
-        } else {
-            if (time() - $_SESSION['tiempo'] > 3600) {
-                $this->salir();
-            } else {
-                $_SESSION['tiempo'] = time();
-            }
-        }
     }
 }
