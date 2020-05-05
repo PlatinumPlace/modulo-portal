@@ -4,17 +4,17 @@ use zcrmsdk\crm\crud\ZCRMRecord;
 use zcrmsdk\crm\setup\restclient\ZCRMRestClient;
 use zcrmsdk\crm\exception\ZCRMException;
 
-class api
+class zoho_api
 {
     public $configuration = array(
         "client_id" => "",
         "client_secret" => "",
         "currentUserEmail" => "",
-        "token_persistence_path" => "api"
+        "token_persistence_path" => "zoho_api"
     );
     public function __construct()
     {
-        $this->configuration["redirect_uri"] = constant("url") . "install.php";
+        $this->configuration["redirect_uri"] = constant("url") . "helpers/instalar_zoho_api.php";
         ZCRMRestClient::initialize($this->configuration);
     }
     public function createRecord($module_name, array $record_model)

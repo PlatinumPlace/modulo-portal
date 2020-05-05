@@ -1,13 +1,13 @@
 <?php
-include "api/vendor/autoload.php";
-include "models/api.php";
+include "zoho_api/vendor/autoload.php";
+include "models/zoho_api.php";
 
 use zcrmsdk\oauth\ZohoOAuth;
 use zcrmsdk\crm\setup\restclient\ZCRMRestClient;
 
 if (isset($_POST["submit"])) {
-    $api = new api;
-    ZCRMRestClient::initialize($api->configuration);
+    $zoho_api = new zoho_api;
+    ZCRMRestClient::initialize($zoho_api->configuration);
     $oAuthClient = ZohoOAuth::getClientInstance();
     $grantToken = $_POST['grant_token'];
     $oAuthTokens = $oAuthClient->generateAccessToken($grantToken);

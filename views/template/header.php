@@ -13,8 +13,9 @@
 
     <!-- Custom styles for this template -->
     <link href="<?= constant('url') ?>public/css/blog-post.css" rel="stylesheet">
-    <!-- https://ionicons.com/ Icons -->
-    <script src="https://unpkg.com/ionicons@5.0.0/dist/ionicons.js"></script>
+
+    <!--Import Google Icon Font-->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
     <title>IT - Insurance Tech</title>
     <link rel="icon" type="image/png" href="<?= constant('url') ?>public/img/logo.png">
@@ -26,7 +27,6 @@
     <!-- Navigation -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top">
         <div class="container">
-            <a class="navbar-brand" href="<?= constant('url') ?>"></a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -34,33 +34,33 @@
                 <ul class="navbar-nav ml-auto">
                     <li class="nav-item active">
                         <a class="nav-link" href="<?= constant('url') ?>">
-                            <ion-icon name="bar-chart" size="small"></ion-icon> Panel de Control
+                            <i class="tiny material-icons">dashboard</i> Panel de Control
                             <span class="sr-only">(current)</span>
                         </a>
                     </li>
                     <li class="nav-item active">
-                        <a class="nav-link" href="<?= constant('url') ?>home/buscar">
-                            <ion-icon name="search" size="small"></ion-icon> Buscar
+                        <a class="nav-link" href="<?= constant('url') ?>cotizaciones/buscar" title="ssss">
+                            <i class="tiny material-icons">search</i> Buscar
                         </a>
                     </li>
                     <li class="nav-item dropdown active">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <ion-icon name="clipboard" size="small"></ion-icon> Cotizaciones
+                            <i class="tiny material-icons">payment</i> Cotizaciones
                         </a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <a class="dropdown-item" href="<?= constant('url') ?>auto/crear">
+                            <a class="dropdown-item" href="<?= constant('url') ?>cotizaciones/crear_auto">
                                 Auto
                             </a>
                         </div>
                     </li>
                     <li class="nav-item active">
-                        <a class="nav-link" href="<?= constant('url') ?>reporte/index">
-                            <ion-icon name="stats-chart" size="small"></ion-icon> Reportes
+                        <a class="nav-link" href="<?= constant('url') ?>reportes/index">
+                            <i class="tiny material-icons">event</i> Reportes
                         </a>
                     </li>
                     <li class="nav-item active">
-                        <a class="nav-link" onclick="return confirm('¿Deseas cerrar sesión?')" href="<?= constant('url') ?>login/cerrar_sesion">
-                            <ion-icon name="lock-open" size="small"></ion-icon>
+                        <a class="nav-link" onclick="return confirm('¿Deseas cerrar sesión?')" href="<?= constant('url') ?>usuarios/salir" title="Cerrar sesión">
+                            <i class="tiny material-icons">lock_open</i>
                         </a>
                     </li>
                 </ul>
@@ -69,5 +69,10 @@
     </nav>
 
     <!-- Page Content -->
+    <br>
     <div class="container">
-        <br>
+        <div class="row">
+            <div class="col-md-2">
+&nbsp;
+            </div>
+            <div class="col-md-10">
