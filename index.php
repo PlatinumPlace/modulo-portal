@@ -1,55 +1,74 @@
 <?php
+
 include "config/config.php";
-include "zoho_api/vendor/autoload.php";
-include "models/zoho_api.php";
-include "models/usuario.php";
-include "models/cotizacion.php";
-include "models/reporte.php";
-include "controllers/LoginController.php";
-include "controllers/HomeController.php";
+include "api/vendor/autoload.php";
+include "libs/api.php";
 
-$usuario = new LoginController;
-$home = new HomeController;
 
-$zoho_api = "zoho_api/zcrm_oauthtokens.txt";
-if (filesize($zoho_api) == 0) {
+$api = new api;
+
+$header = "pages/template/header.php";
+$footer = "pages/template/footer.php";
+$error = "pages/home/error.php";
+$pagina_principal = "pages/home/pagina_principal.php";
+
+
+
+if (filesize("api/zcrm_oauthtokens.txt") == 0) {
+
     header("Location:" . constant("url") . "install.php");
     exit();
 }
 
+
+
 session_start();
 $_SESSION["usuario_id"] = (isset($_COOKIE["usuario_id"])) ? $_COOKIE["usuario_id"] : "";
+
 if (empty($_SESSION["usuario_id"])) {
-    $usuario->iniciar_sesion();
+
+    require_once("pages/login/iniciar_sesion.php");
     exit();
 } else {
-    if (time() - $_SESSION['tiempo'] > 3600) {
-        $usuario->cerrar_sesion();
+
+    if (time() -   $_SESSION['tiempo'] > 3600) {
+
+        require_once("pages/login/cerrar_sesion.php");
+        exit();
     } else {
+
         $_SESSION['tiempo'] = time();
     }
 }
 
-if (isset($_GET['url'])) {
-    $url  = $_GET['url'];
-    $url = explode('/', rtrim($url, '/'));
-    $peticion = 'controllers/' . ucfirst($url[0]) . 'Controller.php';
+
+
+if (!empty($_GET['url'])) {
+
+    $url = explode('/', rtrim($_GET['url'], '/'));
+
+    $peticion = "pages/$url[0]/$url[1].php";
+
+    $datos  = (isset($url[2])) ? $url[2] : "";
+
     if (file_exists($peticion)) {
-        require_once $peticion;
-        $controlador = ucfirst($url[0]) . "Controller";
-        $portal = new $controlador;
-        if (isset($url[1]) and method_exists($controlador, $url[1])) {
-            if (!empty($url[2])) {
-                $portal->{$url[1]}($url[2]);
-            } else {
-                $portal->{$url[1]}();
-            }
-        } else {
-            $home->error();
+
+        if ($url[1] == "descargar_auto") {
+
+            require_once $peticion;
+            exit;
         }
+
+        require_once $header;
+        require_once $peticion;
+        require_once $footer;
     } else {
-        $home->error();
+        require_once $header;
+        require_once $error;
+        require_once $footer;
     }
 } else {
-    $home->pagina_principal();
+    require_once $header;
+    require_once $pagina_principal;
+    require_once $footer;
 }

@@ -1,3 +1,6 @@
+<?php
+$alerta = $datos;
+?>
 <h1 class="text-center">
     <?php if (!empty($alerta)) : ?>
         <?= $alerta ?>

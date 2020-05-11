@@ -9,16 +9,16 @@
     <meta name="author" content="">
 
     <!-- Bootstrap core CSS -->
-    <link href="<?= constant('url') ?>public/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="<?= constant('url') ?>vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
 
     <!-- Custom styles for this template -->
-    <link href="<?= constant('url') ?>public/css/blog-post.css" rel="stylesheet">
+    <link href="<?= constant('url') ?>css/blog-post.css" rel="stylesheet">
 
     <!--Import Google Icon Font-->
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
     <title>IT - Insurance Tech</title>
-    <link rel="icon" type="image/png" href="<?= constant('url') ?>public/img/logo.png">
+    <link rel="icon" type="image/png" href="<?= constant('url') ?>img/logo.png">
 
 </head>
 
@@ -34,18 +34,18 @@
                 <ul class="navbar-nav ml-auto">
                     <li class="nav-item active">
                         <a class="nav-link" href="<?= constant('url') ?>">
-                            <i class="tiny material-icons">dashboard</i> Panel de Control
+                            <i class="material-icons">assessment</i> Panel de Control
                             <span class="sr-only">(current)</span>
                         </a>
                     </li>
                     <li class="nav-item active">
-                        <a class="nav-link" href="<?= constant('url') ?>cotizaciones/buscar" title="ssss">
-                            <i class="tiny material-icons">search</i> Buscar
+                        <a class="nav-link" href="<?= constant('url') ?>cotizaciones/buscar">
+                            <i class="material-icons">search</i> Buscar
                         </a>
                     </li>
                     <li class="nav-item dropdown active">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <i class="tiny material-icons">payment</i> Cotizaciones
+                            <i class="material-icons">payment</i> Cotizaciones
                         </a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                             <a class="dropdown-item" href="<?= constant('url') ?>cotizaciones/crear_auto">
@@ -54,13 +54,13 @@
                         </div>
                     </li>
                     <li class="nav-item active">
-                        <a class="nav-link" href="<?= constant('url') ?>reportes/index">
-                            <i class="tiny material-icons">event</i> Reportes
+                        <a class="nav-link" href="<?= constant('url') ?>cotizaciones/exportar_csv">
+                            <i class="material-icons">assignment</i> Reportes
                         </a>
                     </li>
                     <li class="nav-item active">
-                        <a class="nav-link" onclick="return confirm('¿Deseas cerrar sesión?')" href="<?= constant('url') ?>usuarios/salir" title="Cerrar sesión">
-                            <i class="tiny material-icons">lock_open</i>
+                        <a class="nav-link" onclick="return confirm('¿Deseas cerrar sesión?')" href="<?= constant('url') ?>login/cerrar_sesion" title="Cerrar sesión">
+                            <i class="material-icons">lock_open</i>
                         </a>
                     </li>
                 </ul>
@@ -73,6 +73,6 @@
     <div class="container">
         <div class="row">
             <div class="col-md-2">
-&nbsp;
+                <img src="<?= constant('url') ?>img/logo.png" alt="Smiley face" height="200" width="150">
             </div>
             <div class="col-md-10">
