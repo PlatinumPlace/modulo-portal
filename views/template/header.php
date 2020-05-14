@@ -9,16 +9,16 @@
     <meta name="author" content="">
 
     <!-- Bootstrap core CSS -->
-    <link href="<?= constant('url') ?>vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="<?= constant('url') ?>public/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
 
     <!-- Custom styles for this template -->
-    <link href="<?= constant('url') ?>css/blog-post.css" rel="stylesheet">
+    <link href="<?= constant('url') ?>public/css/blog-post.css" rel="stylesheet">
 
     <!--Import Google Icon Font-->
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
     <title>IT - Insurance Tech</title>
-    <link rel="icon" type="image/png" href="<?= constant('url') ?>img/logo.png">
+    <link rel="icon" type="image/png" href="<?= constant('url') ?>public/img/logo.png">
 
 </head>
 
@@ -43,23 +43,18 @@
                             <i class="material-icons">search</i> Buscar
                         </a>
                     </li>
-                    <li class="nav-item dropdown active">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <i class="material-icons">payment</i> Cotizaciones
+                    <li class="nav-item active">
+                        <a class="nav-link" href="<?= constant('url') ?>cotizaciones/crear_auto">
+                            <i class="material-icons">directions_car</i> Auto
                         </a>
-                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <a class="dropdown-item" href="<?= constant('url') ?>cotizaciones/crear_auto">
-                                Auto
-                            </a>
-                        </div>
                     </li>
                     <li class="nav-item active">
-                        <a class="nav-link" href="<?= constant('url') ?>cotizaciones/exportar_csv">
+                        <a class="nav-link" href="<?= constant('url') ?>cotizaciones/exportar">
                             <i class="material-icons">assignment</i> Reportes
                         </a>
                     </li>
                     <li class="nav-item active">
-                        <a class="nav-link" onclick="return confirm('¿Deseas cerrar sesión?')" href="<?= constant('url') ?>login/cerrar_sesion" title="Cerrar sesión">
+                        <a class="nav-link" onclick="return confirm('¿Deseas cerrar sesión?')" href="<?= constant('url') ?>usuarios/cerrar_sesion" title="Cerrar sesión">
                             <i class="material-icons">lock_open</i>
                         </a>
                     </li>
@@ -73,6 +68,6 @@
     <div class="container">
         <div class="row">
             <div class="col-md-2">
-                <img src="<?= constant('url') ?>img/logo.png" alt="Smiley face" height="200" width="150">
+                <img src="<?= constant('url') ?>public/img/logo.png" height="200" width="150">
             </div>
             <div class="col-md-10">

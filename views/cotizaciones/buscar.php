@@ -1,16 +1,3 @@
-<?php
-
-if (isset($_POST['submit'])) {
-
-    $criterio = "((Contact_Name:equals:" . $_SESSION['usuario_id'] . ") and (" . $_POST['parametro'] . ":equals:" . $_POST['busqueda'] . "))";
-} else {
-
-    $criterio = "Contact_Name:equals:" . $_SESSION['usuario_id'];
-}
-
-$cotizaciones = $api->buscar_registro_por_criterio("Deals", $criterio);
-
-?>
 <form class="form-inline" method="POST" action="<?= constant('url') ?>cotizaciones/buscar">
 
     <div class="form-group mb-2">

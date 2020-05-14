@@ -1,29 +1,10 @@
-<?php
-
-$cotizacion =  $api->obtener_registro("Deals", $datos);
-
-if (empty($cotizacion) or $cotizacion->getFieldValue('Stage') == "Abandonado") {
-    header("Location: " . constant('url') . "home/error/");
-    exit();
-}
-
-$criterio = "Deal_Name:equals:" . $datos;
-$cotizacion_detalles = $api->buscar_registro_por_criterio("Quotes", $criterio);
-
-if (empty($cotizacion_detalles)) {
-    header("Location: " . constant('url') . "home/error/");
-    exit();
-}
-
-$emitida = array("Emitido", "En trámite");
-
-?>
 <h2 class="text-uppercase text-center">
     <?php if (!in_array($cotizacion->getFieldValue("Stage"), $emitida)) : ?>
         cotización
     <?php else : ?>
-        cotizacion coberturas
+        resumen
     <?php endif ?>
+    coberturas
     <br>
     seguro vehículo de motor
     <br>
@@ -62,9 +43,9 @@ $emitida = array("Emitido", "En trámite");
             <h5 class="card-header">Documentos</h5>
             <div class="card-body">
 
-                <a download="Condiciones del Vehículos.pdf" href="<?= constant('url') ?>files/condiciones_vehiculo.pdf" class="btn btn-link">Condiciones del Vehículos</a>
-                <a download="Formulario de Conocimiento.pdf" href="<?= constant('url') ?>files/for_conocimiento.pdf" class="btn btn-link">Formulario de conocimiento</a>
-                <a download="Formulario de Inspección de Vehículos.pdf" href="<?= constant('url') ?>files/for_inspeccion.pdf" class="btn btn-link">Formulario de Inspección</a>
+                <a download="Condiciones del Vehículos.pdf" href="<?= constant('url') ?>public/files/condiciones_vehiculo.pdf" class="btn btn-link">Condiciones del Vehículos</a>
+                <a download="Formulario de Conocimiento.pdf" href="<?= constant('url') ?>public/files/for_conocimiento.pdf" class="btn btn-link">Formulario de conocimiento</a>
+                <a download="Formulario de Inspección de Vehículos.pdf" href="<?= constant('url') ?>public/files/for_inspeccion.pdf" class="btn btn-link">Formulario de Inspección</a>
 
             </div>
         </div>
@@ -75,14 +56,9 @@ $emitida = array("Emitido", "En trámite");
 
                 <ul class="list-group">
                     <?php
-
-                    $documentos_adjuntos = $api->obtener_archivos("Deals", $datos);
-
-                    
                     foreach ($documentos_adjuntos as $documento) {
                         echo '<li class="list-group-item">' . $documento->getFileName() . '</li>';
                     }
-
                     ?>
                 </ul>
 
@@ -201,7 +177,7 @@ $emitida = array("Emitido", "En trámite");
                 </tr>
             </thead>
             <tbody>
-                <?php foreach ($cotizacion_detalles as $resumen) : ?>
+                <?php foreach ($detalles as $resumen) : ?>
                     <tr>
                         <th scope="row">
                             <?= $resumen->getFieldValue('Aseguradora')->getLookupLabel() ?>

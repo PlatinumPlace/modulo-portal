@@ -1,36 +1,3 @@
-<?php
-
-if (isset($_POST['submit'])) {
-
-    $criterio = "((Email:equals:" . $_POST['Email'] . ") and (Contrase_a:equals:" . $_POST['Contrase_a'] . "))";
-    $usuarios = $api->buscar_registro_por_criterio("Contacts", $criterio);
-
-    if (!empty($usuarios)) {
-
-        foreach ($usuarios as $usuario) {
-
-            if ($usuario->getFieldValue("Estado") == true and $usuario->getFieldValue("Sesi_n_activa") == false) {
-
-                $cambios["Sesi_n_activa"] = true;
-                $api->modificar_registro("Contacts", $cambios, $usuario->getEntityId());
-
-                $_SESSION['usuario_id'] = $usuario->getEntityId();
-                $_SESSION['usuario_nombre'] = $usuario->getFieldValue("First_Name") . " " . $usuario->getFieldValue("Last_Name");
-                $_SESSION['empresa_id'] = $usuario->getFieldValue("Account_Name")->getEntityId();
-                $_SESSION['tiempo'] = time();
-                setcookie("usuario_id", $usuario->getEntityId(), time() + 259200);
-
-                header("Location:" . constant("url"));
-                exit();
-            } else {
-                $alerta = "El usuario no esta disponible.";
-            }
-        }
-    } else {
-        $alerta = "El usuario o contraseña incorrectos.";
-    }
-}
-?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -53,7 +20,7 @@ if (isset($_POST['submit'])) {
     <div class="container">
         <div class="row">
             <div class="col-md-2">
-                <img src="<?= constant('url') ?>img/logo.png" alt="Smiley face" height="200" width="150">
+                <img src="<?= constant('url') ?>public/img/logo.png" height="200" width="150">
             </div>
             <div class="col-md-10">
                 <div class="row justify-content-center">

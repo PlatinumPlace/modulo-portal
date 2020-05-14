@@ -1,5 +1,6 @@
 <?php
 
+
 /*
     public function reporte_csv($titulo_reporte, $reporte_tipo, $tipo, $inicio, $fin)
     {
@@ -337,7 +338,7 @@
         
 
 */
-
+/*
 $aseguradoras = $this->contrato->aseguradoras();
 
         if (isset($_POST["csv"])) {
@@ -360,10 +361,10 @@ $aseguradoras = $this->contrato->aseguradoras();
 
             $alerta = "El reporte no se genero.";
         }
-
+*/
 ?>
 
-<form enctype="multipart/form-data" method="POST" action="<?= constant('url') ?>reportes/index">
+<form enctype="multipart/form-data" method="POST" action="<?= constant('url') ?>cotizaciones/exportar_csv">
 
 
     <?php if ($_POST) : ?>
@@ -378,15 +379,15 @@ $aseguradoras = $this->contrato->aseguradoras();
             <div class="form-group row">
                 <label class="col-sm-2 col-form-label">Reporte de </label>
                 <div class="col-sm-4">
-                    <select name="reporte_tipo" class="form-control" required>
-                        <option value="polizas" selected>Pólizas emitidas</option>
+                    <select name="tipo_reporte" class="form-control">
+                        <option value="emisiones" selected>Pólizas emitidas</option>
                         <option value="cotizaciones">Cotizaciones</option>
                         <option value="comisiones">Comisiones</option>
                     </select>
                 </div>
                 <label class="col-sm-2 col-form-label">Tipo</label>
                 <div class="col-sm-4">
-                    <select name="tipo" class="form-control" required>
+                    <select name="tipo_cotizacion" class="form-control">
                         <option value="Auto" selected>Auto</option>
                     </select>
                 </div>
@@ -394,21 +395,26 @@ $aseguradoras = $this->contrato->aseguradoras();
             <div class="form-group row">
                 <label class="col-sm-2 col-form-label">Aseguradora</label>
                 <div class="col-sm-4">
-                    <select name="contrato_id" class="form-control" required>
-                        <?php foreach ($aseguradoras as $contrato_id => $nombre_aseguradora) : ?>
-                            <option value="<?= $contrato_id ?>"><?= $nombre_aseguradora ?></option>
-                        <?php endforeach ?>
+                    <select name="aseguradpra_id" class="form-control" required>
+                        <option value="" selected disabled>Selecciona una Aseguradora</option>
+                        <?php
+
+                        foreach ($aseguradoras as $id => $nombre) {
+                            echo '<option value="' . $id . '">' . $nombre . '</option>';
+                        }
+
+                        ?>
                     </select>
                 </div>
             </div>
             <div class="form-group row">
                 <label class="col-sm-2 col-form-label">Desde</label>
                 <div class="col-sm-4">
-                    <input type="date" class="form-control" name="inicio" required>
+                    <input type="date" class="form-control" name="desde" required>
                 </div>
                 <label class="col-sm-2 col-form-label">Hasta</label>
                 <div class="col-sm-4">
-                    <input type="date" class="form-control" name="fin" required>
+                    <input type="date" class="form-control" name="hasta" required>
                 </div>
             </div>
         </div>

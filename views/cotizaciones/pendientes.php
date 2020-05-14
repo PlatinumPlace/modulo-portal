@@ -1,9 +1,3 @@
-<?php
-
-$criterio = "Contact_Name:equals:" . $_SESSION['usuario_id'];
-$cotizaciones = $api->buscar_registro_por_criterio("Deals", $criterio);
-
-?>
 <table class="table">
     <thead>
         <tr>

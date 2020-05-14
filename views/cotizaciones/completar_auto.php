@@ -1,78 +1,3 @@
-<?php
-
-$cotizacion =  $api->obtener_registro("Deals", $datos);
-
-$criterio = "Reporting_To:equals:" . $_SESSION["usuario_id"];
-$mis_clientes = $api->buscar_registro_por_criterio("Contacts", $criterio);
-sort($mis_clientes);
-
-if (empty($cotizacion) or $cotizacion->getFieldValue('Stage') == "Abandonado") {
-    header("Location: " . constant('url') . "home/error/");
-    exit();
-}
-
-if (isset($_POST['submit'])) {
-
-    if (!empty($_POST["Chasis"])) {
-        $cambios["Chasis"] = $_POST["Chasis"];
-    }
-    if (!empty($_POST["Color"])) {
-        $cambios["Color"] = $_POST["Color"];
-    }
-    if (!empty($_POST["Placa"])) {
-        $cambios["Placa"] = $_POST["Placa"];
-    }
-
-    if (!empty($_POST["mis_clientes"])) {
-
-        $cliente = $api->getRecord("Contacts", $_POST["mis_clientes"]);
-
-        $cambios["Direcci_n"] = $cliente->getFieldValue("Mailing_Street");
-        $cambios["Nombre"] = $cliente->getFieldValue("First_Name");
-        $cambios["Apellido"] = $cliente->getFieldValue("Last_Name");
-        $cambios["RNC_Cedula"] = $cliente->getFieldValue("RNC_C_dula");
-        $cambios["Telefono"] = $cliente->getFieldValue("Phone");
-        $cambios["Tel_Residencia"] = $cliente->getFieldValue("Home_Phone");
-        $cambios["Tel_Trabajo"] = $cliente->getFieldValue("Tel_Trabajo");
-        $cambios["Fecha_de_Nacimiento"] = $cliente->getFieldValue("Date_of_Birth");
-        $cambios["Email"] = $cliente->getFieldValue("Email");
-    } else {
-
-        if (!empty($_POST["Direcci_n"])) {
-            $cambios["Direcci_n"] = $_POST["Direcci_n"];
-        }
-        if (!empty($_POST["Nombre"])) {
-            $cambios["Nombre"] = $_POST["Nombre"];
-        }
-        if (!empty($_POST["Apellido"])) {
-            $cambios["Apellido"] = $_POST["Apellido"];
-        }
-        if (!empty($_POST["RNC_Cedula"])) {
-            $cambios["RNC_Cedula"] = $_POST["RNC_Cedula"];
-        }
-        if (!empty($_POST["Telefono"])) {
-            $cambios["Telefono"] = $_POST["Telefono"];
-        }
-        if (!empty($_POST["Tel_Residencia"])) {
-            $cambios["Tel_Residencia"] = $_POST["Tel_Residencia"];
-        }
-        if (!empty($_POST["Tel_Trabajo"])) {
-            $cambios["Tel_Trabajo"] = $_POST["Tel_Trabajo"];
-        }
-        if (!empty($_POST["Fecha_de_Nacimiento"])) {
-            $cambios["Fecha_de_Nacimiento"] = $_POST["Fecha_de_Nacimiento"];
-        }
-        if (!empty($_POST["Email"])) {
-            $cambios["Email"] = $_POST["Email"];
-        }
-    }
-    $api->updateRecord("Deals", $cambios, $datos);
-
-    header("Location:" . constant('url') . 'cotizaciones/detalles_auto/' . $datos);
-    exit;
-}
-
-?>
 <form method="POST" action="<?= constant('url') ?>cotizaciones/completar_auto/<?= $cotizacion->getEntityId() ?>">
 
 
@@ -97,7 +22,7 @@ if (isset($_POST['submit'])) {
                         <select name="mis_clientes" class="form-control">
                             <option selected value="">Ninguno</option>
                             <?php
-                            foreach ($mis_clientes as $cliente) {
+                            foreach ($clientes as $cliente) {
                                 $nombre = $cliente->getFieldValue("First_Name") . " " . $cliente->getFieldValue("Last_Name");
                                 echo '<option value="' . $cliente->getEntityId() . '">' . strtoupper($nombre) . '</option>';
                             }
@@ -195,14 +120,14 @@ if (isset($_POST['submit'])) {
 
                 <label class="col-sm-2 col-form-label">Color</label>
                 <div class="col-sm-4">
-                    <input type="text" class="form-control" name="Color" value="<?= $cotizacion->getFieldValue('Color') ?>">
+                    <input type="text" class="form-control" name="Color" required value="<?= $cotizacion->getFieldValue('Color') ?>">
                 </div>
             </div>
 
             <div class="form-group row">
                 <label class="col-sm-2 col-form-label">Placa</label>
                 <div class="col-sm-4">
-                    <input type="text" class="form-control" name="Placa" value="<?= $cotizacion->getFieldValue('Placa') ?>">
+                    <input type="text" class="form-control" name="Placa" required value="<?= $cotizacion->getFieldValue('Placa') ?>">
                 </div>
             </div>
 
@@ -245,8 +170,6 @@ if (isset($_POST['submit'])) {
             document.getElementById("Apellido").required = false;
             document.getElementById("Email").required = false;
             document.getElementById("Fecha_de_Nacimiento").required = false;
-
-
         }
 
     }

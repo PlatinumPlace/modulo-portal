@@ -1,11 +1,3 @@
-<?php
-
-$criterio = "Contact_Name:equals:" . $_SESSION['usuario_id'];
-$cotizaciones = $api->buscar_registro_por_criterio("Deals", $criterio);
-
-$emitida = array("Emitido", "En trámite");
-
-?>
 <table class="table">
     <thead>
         <tr>
@@ -24,7 +16,7 @@ $emitida = array("Emitido", "En trámite");
                 <?php if (
                     in_array($cotizacion->getFieldValue("Stage"), $emitida)
                     and
-                    date("Y-m", strtotime($cotizacion->getFieldValue("Fecha_de_emisi_n"))) == date('Y-m')
+                    date("Y-m", strtotime($cotizacion->getFieldValue("Closing_Date"))) == date('Y-m')
                 ) : ?>
                     <tr>
                         <td><?= $cotizacion->getFieldValue('No_Cotizaci_n')  ?></td>

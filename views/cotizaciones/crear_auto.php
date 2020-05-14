@@ -1,62 +1,3 @@
-<?php
-
-$marcas = $api->obtener_registros("Marcas");
-sort($marcas);
-
-if (isset($_POST['submit'])) {
-
-    $cotizacion["Stage"] = "Cotizando";
-    $cotizacion["Type"] = "Auto";
-    $cotizacion["Lead_Source"] = "Portal GNB";
-    $cotizacion["Deal_Name"] = "Cotización";
-    $cotizacion["Contact_Name"] =  $_SESSION['usuario_id'];
-
-    if (!empty($_POST["Tipo_de_poliza"])) {
-        $cotizacion["Tipo_de_poliza"] = $_POST["Tipo_de_poliza"];
-    }
-    if (!empty($_POST["Plan"])) {
-        $cotizacion["Plan"] = $_POST["Plan"];
-    }
-    if (!empty($_POST["Marca"])) {
-        $cotizacion["Marca"] = $_POST["Marca"];
-    }
-    if (!empty($_POST["Modelo"])) {
-        $cotizacion["Modelo"] = $_POST["Modelo"];
-        $modelo = $api->getRecord("Modelos", $_POST['Modelo']);
-        $cotizacion["Tipo_de_veh_culo"] = $modelo->getFieldValue('Tipo');
-    }
-    if (!empty($_POST["Valor_Asegurado"])) {
-        $cotizacion["Valor_Asegurado"] = $_POST["Valor_Asegurado"];
-    }
-    if (!empty($_POST["A_o_de_Fabricacion"])) {
-        $cotizacion["A_o_de_Fabricacion"] = $_POST["A_o_de_Fabricacion"];
-    }
-    if (!empty($_POST["Chasis"])) {
-        $cotizacion["Chasis"] = $_POST["Chasis"];
-    }
-    if (!empty($_POST["Color"])) {
-        $cotizacion["Color"] = $_POST["Color"];
-    }
-    if (!empty($_POST["Uso"])) {
-        $cotizacion["Uso"] = $_POST["Uso"];
-    }
-    if (!empty($_POST["Placa"])) {
-        $cotizacion["Placa"] = $_POST["Placa"];
-    }
-    if (!empty($_POST['Es_nuevo'])) {
-        $cotizacion["Es_nuevo"]  = true;
-    } else {
-        $cotizacion["Es_nuevo"]  = false;
-    }
-
-    $id = $api->createRecord("Deals", $cotizacion);
-
-    $direccion = 'cotizaciones-detalles_auto-' . $id;
-    header("Location:" . constant('url') . 'home/cargando/' . $direccion);
-    exit;
-}
-
-?>
 <form method="POST" action="<?= constant('url') ?>cotizaciones/crear_auto">
 
     <div class="card">
@@ -111,7 +52,7 @@ if (isset($_POST['submit'])) {
 
                 <label class="col-sm-2 col-form-label">Modelo</label>
                 <div class="col-sm-4">
-                <select class="form-control" name="Modelo" id="modelo" required>
+                    <select class="form-control" name="Modelo" id="modelo" required>
                         <option value="" selected disabled>Selecciona un Modelo</option>
                         <div id="modelo"></div>
                     </select>
