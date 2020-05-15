@@ -1,4 +1,4 @@
-<form method="POST" action="<?= constant('url') ?>cotizaciones/crear_auto">
+<form method="POST" action="<?= constant('crear_cotizacion_auto') ?>">
 
     <div class="card">
         <h5 class="card-header">Tipo de Cotización</h5>
@@ -139,20 +139,18 @@
     </div>
 
 </form>
-<input value="<?= constant('url') ?>" id="url" hidden>
+
 <script>
     function obtener_modelos(val) {
-        var url = document.getElementById("url").value; {
-            $.ajax({
-                url: url + "libs/obtener_modelos.php",
-                type: "POST",
-                data: {
-                    marcas_id: val.value
-                },
-                success: function(response) {
-                    document.getElementById("modelo").innerHTML = response;
-                }
-            });
-        }
+        $.ajax({
+            url: "libs/obtener_modelos.php",
+            type: "POST",
+            data: {
+                marcas_id: val.value
+            },
+            success: function(response) {
+                document.getElementById("modelo").innerHTML = response;
+            }
+        });
     }
 </script>

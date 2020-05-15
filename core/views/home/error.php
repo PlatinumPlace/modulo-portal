@@ -3,5 +3,5 @@
 </h1>
 
 <center>
-    <a href="<?= constant('url') ?>" class="btn btn-info">Ir a inicio</a>
+    <a href="<?= constant('pagina_principal') ?>" class="btn btn-info">Ir a inicio</a>
 </center>

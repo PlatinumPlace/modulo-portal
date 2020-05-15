@@ -1,4 +1,4 @@
-<form method="POST" action="<?= constant('url') ?>cotizaciones/completar_auto/<?= $cotizacion->getEntityId() ?>">
+<form method="POST" action="<?= constant('completar_cotizacion_') ?><?= strtolower($cotizacion->getFieldValue('Type')) ?>&value=<?= $cotizacion->getEntityId() ?>">
 
 
     <ul class="nav nav-tabs">

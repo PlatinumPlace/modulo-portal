@@ -13,9 +13,9 @@
         <?= $cotizacion->getFieldValue('No_Cotizaci_n') ?>
     </title>
     <!-- Bootstrap core CSS -->
-    <link href="<?= constant('url') ?>vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="<?= constant('url') ?>public/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
 
-    <link rel="icon" type="image/png" href="<?= constant('url') ?>img/logo.png">
+    <link rel="icon" type="image/png" href="<?= constant('url') ?>public/img/logo.png">
 
     <style>
         @media all {

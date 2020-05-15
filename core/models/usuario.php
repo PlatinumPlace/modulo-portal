@@ -30,8 +30,7 @@ class usuario extends api
                 setcookie("usuario_id", $usuario->getEntityId(), time() + 259200);
                 setcookie("tiempo", time(), time() + 259200);
 
-                header("Location:" . constant("url"));
-                exit();
+                return true;
             }
         }
     }

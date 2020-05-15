@@ -36,12 +36,12 @@ if (isset($_POST["submit"])) {
         <p class="font-italic"><a href="https://www.zoho.com/es-xl/crm/developer/docs/server-side-sdks/php.html#Initialization" target="_blank">Referencias</a></p>
         
         <ol>
-            <li>Seguir instrucciones de para "Generar tokens" y crear "cliente propio" <a href="https://accounts.zoho.com/developerconsole" target="_blank">aqui</a>.</li>
+            <li>Seguir instrucciones para "Generar tokens" y crear "cliente propio" <a href="https://accounts.zoho.com/developerconsole" target="_blank">aqui</a>.</li>
             <li>Completar configuracion en libs/api.php.</li>
             <li>Generar una clave de cliente propio y ingresarla en el formulario. <b>Ambito:</b> <br> ZohoCRM.modules.ALL,ZohoCRM.settings.ALL,aaaserver.profile.READ</li>
         </ol>
         
-        <form action="<?= constant('url') ?>" method="post">
+        <form action="<?= constant('pagina_principal') ?>" method="post">
 
             <div class="form-group">
                 <label>Clave cliente propio</label>
@@ -55,7 +55,7 @@ if (isset($_POST["submit"])) {
         
         <?php if (isset($_POST["submit"])) : ?>
             <div class="alert alert-primary" role="alert">
-                Token generado 
+                Token generado. <a href="<?= constant('pagina_principal') ?>">Ir a index</a>
             </div>
         <?php endif ?>
 

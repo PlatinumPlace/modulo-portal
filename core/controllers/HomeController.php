@@ -55,7 +55,7 @@ class HomeController
         require_once("core/views/template/footer.php");
     }
 
-    public function cargando($nueva_url)
+    public function reedirigir_controlador($nueva_url)
     {
         $url = explode("-", $nueva_url);
         $controlador = $url[0];
@@ -63,7 +63,7 @@ class HomeController
         $id = $url[2];
 
         require_once("core/views/template/header.php");
-        require_once("core/views/home/cargando.php");
+        require_once("core/views/home/reedirigir_controlador.php");
         require_once("core/views/template/footer.php");
     }
 }

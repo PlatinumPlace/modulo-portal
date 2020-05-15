@@ -28,10 +28,10 @@
         <div class="card-body">
 
             <?php if ($cotizacion->getFieldValue('Nombre') == null) : ?>
-                <a href="<?= constant('url') ?>cotizaciones/completar_auto/<?= $cotizacion->getEntityId() ?>" class="btn btn-primary">Siguiente</a>
+                <a href="<?= constant('completar_cotizacion_') ?><?= strtolower($cotizacion->getFieldValue('Type')) ?>&value=<?= $cotizacion->getEntityId() ?>" class="btn btn-primary">Siguiente</a>
             <?php else : ?>
-                <a href="<?= constant('url') ?>cotizaciones/emitir/<?= $cotizacion->getEntityId() ?>" class="btn btn-success">Emitir</a>
-                <a href="<?= constant('url') ?>cotizaciones/descargar_auto/<?= $cotizacion->getEntityId() ?>" class="btn btn-info">Descargar</a>
+                <a href="<?= constant('emiti_cotizacion') ?><?= strtolower($cotizacion->getFieldValue('Type')) ?>&value=<?= $cotizacion->getEntityId() ?>" class="btn btn-success">Emitir</a>
+                <a href="<?= constant('descargar_cotizacion_') ?><?= strtolower($cotizacion->getFieldValue('Type')) ?>&value=<?= $cotizacion->getEntityId() ?>" class="btn btn-info">Descargar</a>
             <?php endif ?>
 
         </div>
@@ -43,9 +43,9 @@
             <h5 class="card-header">Documentos</h5>
             <div class="card-body">
 
-                <a download="Condiciones del Vehículos.pdf" href="<?= constant('url') ?>public/files/condiciones_vehiculo.pdf" class="btn btn-link">Condiciones del Vehículos</a>
-                <a download="Formulario de Conocimiento.pdf" href="<?= constant('url') ?>public/files/for_conocimiento.pdf" class="btn btn-link">Formulario de conocimiento</a>
-                <a download="Formulario de Inspección de Vehículos.pdf" href="<?= constant('url') ?>public/files/for_inspeccion.pdf" class="btn btn-link">Formulario de Inspección</a>
+                <a download="Condiciones del Vehículos.pdf" href="public/files/condiciones_vehiculo.pdf" class="btn btn-link">Condiciones del Vehículos</a>
+                <a download="Formulario de Conocimiento.pdf" href="public/files/for_conocimiento.pdf" class="btn btn-link">Formulario de conocimiento</a>
+                <a download="Formulario de Inspección de Vehículos.pdf" href="public/files/for_inspeccion.pdf" class="btn btn-link">Formulario de Inspección</a>
 
             </div>
         </div>

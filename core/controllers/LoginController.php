@@ -2,22 +2,29 @@
 
 class LoginController
 {
+    public $usuario;
+
+    function __construct()
+    {
+        $this->usuario = new usuario;
+    }
 
     public function index()
     {
-        $usuario = new usuario;
 
         if (isset($_POST['submit'])) {
 
-            $usuario_nuevo = $usuario->verificar($_POST['Email'], $_POST['Contrase_a']);
+            $usuario_nuevo = $this->usuario->verificar($_POST['Email'], $_POST['Contrase_a']);
 
             if (!empty($usuario_nuevo)) {
 
-                $resultado = $usuario->ingresar($usuario_nuevo);
+                $resultado = $this->usuario->ingresar($usuario_nuevo);
 
                 if (empty($resultado)) {
-
                     $alerta = "El usuario no esta disponible.";
+                } else {
+                    header("Location: " . constant('pagina_principal'));
+                    exit();
                 }
             } else {
                 $alerta = "El usuario o contraseña incorrectos.";
@@ -29,11 +36,9 @@ class LoginController
 
     public function cerrar_sesion()
     {
-        $usuario = new usuario;
+        $this->usuario->salir();
 
-        $usuario->salir();
-
-        header("Location:" . constant("url"));
+        header("Location: " . constant('iniciar_sesion'));
+        exit;
     }
-
 }

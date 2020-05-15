@@ -27,9 +27,8 @@ class app
             $login->index();
             exit;
         } else {
-            if (time() -   $_SESSION['tiempo'] > 3600) {
+            if (time() - $_SESSION['tiempo'] > 3600) {
                 $login->cerrar_sesion();
-                exit;
             } else {
                 $_SESSION['tiempo'] = time();
             }
@@ -50,13 +49,14 @@ class app
             if (file_exists($peticion)) {
 
                 require_once $peticion;
+
                 $claseControlador = ucfirst($url[0]) . "Controller";
                 $controlador =  new $claseControlador;
+
                 $funcion = (isset($url[1])) ? $url[1] : "";
                 $valor = (isset($url[2])) ? $url[2] : "";
 
                 if (method_exists($controlador, $funcion)) {
-
                     if (!empty($valor)) {
                         $controlador->{$funcion}($valor);
                     } else {

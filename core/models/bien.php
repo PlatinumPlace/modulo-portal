@@ -1,6 +1,6 @@
 <?php
 
-class auto extends api
+class bien extends api
 {
 
     function __construct()
@@ -13,7 +13,7 @@ class auto extends api
         return $this->getRecords("Marcas");
     }
 
-    public function modelo_detalles($modelo_id)
+    public function detalles_modelo($modelo_id)
     {
         return $this->getRecord("Modelos", $modelo_id);
     }

@@ -12,7 +12,7 @@
             <h5>Cotizaciones <br> Totales</h5>
         </div>
         <div class="card-body">
-            <a href="<?= constant('url') ?>cotizaciones/buscar" class="card-link">Ver más</a>
+            <a href="<?= constant('buscar_cotizaciones') ?>" class="card-link">Ver más</a>
         </div>
     </div>
 
@@ -23,7 +23,7 @@
             <h5>Cotizaciones <br> al Mes</h5>
         </div>
         <div class="card-body">
-            <a href="<?= constant('url') ?>cotizaciones/pendientes" class="card-link">Ver más</a>
+            <a href="<?= constant('cotizaciones_pendientes') ?>" class="card-link">Ver más</a>
         </div>
     </div>
 
@@ -34,7 +34,7 @@
             <h5>Emisiones <br> al Mes</h5>
         </div>
         <div class="card-body">
-            <a href="<?= constant('url') ?>cotizaciones/emisiones" class="card-link">Ver más</a>
+            <a href="<?= constant('emisiones_mensuales') ?>" class="card-link">Ver más</a>
         </div>
     </div>
 
@@ -45,7 +45,7 @@
             <h5>Vencimientos <br> al Mes</h5>
         </div>
         <div class="card-body">
-            <a href="<?= constant('url') ?>cotizaciones/vencimientos" class="card-link">Ver más</a>
+            <a href="<?= constant('vencimientos_mensuales') ?>" class="card-link">Ver más</a>
         </div>
     </div>
 
