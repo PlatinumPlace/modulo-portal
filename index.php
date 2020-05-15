@@ -1,14 +1,14 @@
 <?php
 
 include "config/config.php";
-include "zoho_api/vendor/autoload.php";
-include "libs/zoho_api.php";
-include "models/usuario.php";
-include "models/cotizacion.php";
-include "models/auto.php";
-include "models/cliente.php";
-include "models/aseguradora.php";
-include "models/contrato.php";
+include "api/vendor/autoload.php";
+include "libs/api.php";
+include "core/models/usuario.php";
+include "core/models/cotizacion.php";
+include "core/models/auto.php";
+include "core/models/cliente.php";
+include "core/models/aseguradora.php";
+include "core/models/contrato.php";
 include "app.php";
 
 $app = new app;

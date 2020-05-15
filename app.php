@@ -2,14 +2,14 @@
 
 class app
 {
-    public $home = "controllers/HomeController.php";
-    public $login = "controllers/UsuariosController.php";
+    public $api = "api/zcrm_oauthtokens.txt";
+    public $home = "core/controllers/HomeController.php";
+    public $login = "core/controllers/LoginController.php";
 
     public function verificar_zoho_api()
     {
-        if (filesize("zoho_api/zcrm_oauthtokens.txt") == 0) {
-
-            require_once("zoho_api/install.php");
+        if (!file_exists($this->api) or filesize($this->api) == 0) {
+            require_once("api/install.php");
             exit();
         }
     }
@@ -17,7 +17,7 @@ class app
     public function verificar_sesion()
     {
         require_once $this->login;
-        $login = new UsuariosController;
+        $login = new LoginController;
 
         session_start();
         $_SESSION["usuario_id"] = (isset($_COOKIE["usuario_id"])) ? $_COOKIE["usuario_id"] : "";

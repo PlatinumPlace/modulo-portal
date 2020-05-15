@@ -1,11 +1,11 @@
 <?php
-include dirname(__FILE__, 2) . '/zoho_api/vendor/autoload.php';
-include dirname(__FILE__, 2) . '/libs/zoho_api.php';
+include dirname(__FILE__, 2) . '/api/vendor/autoload.php';
+include dirname(__FILE__, 2) . '/libs/api.php';
 
 use zcrmsdk\crm\setup\restclient\ZCRMRestClient;
 
-$api = new zoho_api;
-$api->configuration["token_persistence_path"] = dirname(__FILE__, 2) . "/zoho_api";
+$api = new api;
+$api->configuration["token_persistence_path"] = dirname(__FILE__, 2) . "/api";
 ZCRMRestClient::initialize($api->configuration);
 
 $criterio = "Marca:equals:" . $_POST["marcas_id"];
