@@ -54,7 +54,7 @@
                         </a>
                     </li>
                     <li class="nav-item active">
-                        <a class="nav-link" onclick="return confirm('¿Deseas cerrar sesión?')" href="<?= constant('url') ?>usuarios/cerrar_sesion" title="Cerrar sesión">
+                        <a class="nav-link" onclick="return confirm('¿Deseas cerrar sesión?')" href="<?= constant('url') ?>login/cerrar_sesion" title="Cerrar sesión">
                             <i class="material-icons">lock_open</i>
                         </a>
                     </li>
