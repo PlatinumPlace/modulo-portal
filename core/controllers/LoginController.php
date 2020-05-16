@@ -23,7 +23,7 @@ class LoginController
                 if (empty($resultado)) {
                     $alerta = "El usuario no esta disponible.";
                 } else {
-                    header("Location: " . constant('pagina_principal'));
+                    header("Location: " . constant('url'));
                     exit();
                 }
             } else {
@@ -38,7 +38,7 @@ class LoginController
     {
         $this->usuario->salir();
 
-        header("Location: " . constant('iniciar_sesion'));
+        header("Location: " . constant('url'));
         exit;
     }
 }

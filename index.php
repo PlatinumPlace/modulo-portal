@@ -1,6 +1,6 @@
 <?php
 
-include "config/urls.php";
+include "config/config.php";
 include "api/vendor/autoload.php";
 include "libs/api.php";
 include "core/models/usuario.php";

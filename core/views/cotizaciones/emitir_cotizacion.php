@@ -1,4 +1,4 @@
-<form enctype="multipart/form-data" method="POST" action="<?= constant('url') ?>cotizaciones/emitir/<?= $cotizacion->getEntityId() ?>">
+<form enctype="multipart/form-data" method="POST" action="<?= constant('url') ?>cotizaciones/emitir_cotizacion/<?= $cotizacion->getEntityId() ?>">
 
     <?php if (isset($_POST['submit'])) : ?>
 
@@ -22,9 +22,7 @@
                             foreach ($detalles as $resumen) {
 
                                 if ($resumen->getFieldValue('Grand_Total') > 0) {
-
-                                    $contrato_detalles = $contrato->detalles($resumen->getFieldValue('Contrato')->getEntityId());
-
+                                    $contrato_detalles = $this->contrato->detalles($resumen->getFieldValue('Contrato')->getEntityId());
                                     echo '<option value="' . $contrato_detalles->getFieldValue('Aseguradora')->getEntityId() . '">' . $contrato_detalles->getFieldValue('Aseguradora')->getLookupLabel() . '</option>';
                                 }
                             }
@@ -67,7 +65,7 @@
             <div class="card">
                 <h5 class="card-header">Opciones</h5>
                 <div class="card-body">
-                    <a href="<?= constant('url') ?>cotizaciones/detalles_<?= strtolower($cotizacion->getFieldValue("Type")) ?>/<?= $cotizacion->getEntityId() ?>" class="btn btn-primary">Detalles</a>
+                    <a href="<?= constant('url') ?><?= strtolower($cotizacion->getFieldValue("Type")) ?>/detalles_cotizacion/<?= $cotizacion->getEntityId() ?>" class="btn btn-primary">Detalles</a>
                     |
                     <button type="submit" name="submit" class="btn btn-success">
                         Aceptar

@@ -44,7 +44,7 @@ class app
 
             $url = explode('/', rtrim($_GET['url'], '/'));
 
-            $peticion = "controllers/" . ucfirst($url[0]) . "Controller.php";
+            $peticion = "core/controllers/" . ucfirst($url[0]) . "Controller.php";
 
             if (file_exists($peticion)) {
 

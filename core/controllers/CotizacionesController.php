@@ -3,15 +3,15 @@
 class CotizacionesController
 {
     public $cotizacion;
-    public $cliente;
-    public $auto;
+    public $contrato;
 
     function __construct()
     {
         $this->cotizacion = new cotizacion;
+        $this->contrato = new contrato;
     }
 
-    public function buscar()
+    public function buscar_cotizaciones()
     {
         if (isset($_POST['submit'])) {
             $cotizaciones = $this->cotizacion->buscar($_POST['parametro'], $_POST['busqueda']);
@@ -20,45 +20,42 @@ class CotizacionesController
         }
 
         require_once("core/views/template/header.php");
-        require_once("core/views/cotizaciones/buscar.php");
+        require_once("core/views/cotizaciones/buscar_cotizaciones.php");
         require_once("core/views/template/footer.php");
     }
 
-    public function emisiones()
+    public function emisiones_mensuales()
     {
         $cotizaciones = $this->cotizacion->lista();
         $emitida = array("Emitido", "En trámite");
 
         require_once("core/views/template/header.php");
-        require_once("core/views/cotizaciones/emisiones.php");
+        require_once("core/views/cotizaciones/emisiones_mensuales.php");
         require_once("core/views/template/footer.php");
     }
 
-    public function pendientes()
+    public function cotizaciones_pendientes()
     {
         $cotizaciones = $this->cotizacion->lista();
 
         require_once("core/views/template/header.php");
-        require_once("core/views/cotizaciones/pendientes.php");
+        require_once("core/views/cotizaciones/cotizaciones_pendientes.php");
         require_once("core/views/template/footer.php");
     }
 
-    public function vencimientos()
+    public function vencimientos_mensuales()
     {
         $cotizaciones = $this->cotizacion->lista();
         $emitida = array("Emitido", "En trámite");
 
         require_once("core/views/template/header.php");
-        require_once("core/views/cotizaciones/vencimientos.php");
+        require_once("core/views/cotizaciones/vencimientos_mensuales.php");
         require_once("core/views/template/footer.php");
     }
 
-    public function emitir($id)
+    public function emitir_cotizacion($id)
     {
-        $cotizaciones = new cotizacion;
-        $contrato = new contrato;
-
-        $resultado = $cotizaciones->detalles($id);
+        $resultado = $this->cotizacion->detalles($id);
         $cotizacion =  $resultado["oferta"];
         $detalles =  $resultado["cotizaciones"];
 
@@ -93,20 +90,20 @@ class CotizacionesController
                     $name = basename($_FILES["cotizacion_firmada"]["name"]);
                     move_uploaded_file($tmp_name, "$ruta_cotizacion/$name");
 
-                    $cotizaciones->adjuntar_archivos($id, "$ruta_cotizacion/$name");
+                    $this->cotizacion->adjuntar_archivos($id, "$ruta_cotizacion/$name");
 
                     unlink("$ruta_cotizacion/$name");
 
                     $cambios["Aseguradora"] = $_POST["aseguradora"];
                     $cambios["Stage"] = "En trámite";
                     $cambios["Deal_Name"] = "Resumen";
-                    $cotizaciones->actualizar($id, $cambios);
+                    $this->cotizacion->actualizar($id, $cambios);
 
-                    $direccion = 'cotizaciones-descargar_' . $cotizacion->getFieldValue("Type") . "-" . $id;
+                    $direccion = strtolower($cotizacion->getFieldValue("Type")) . "/" . "descargar_cotizacion/" . $id;
                     $alerta =
                         "Póliza emitida,descargue la previsualizacion para obtener el carnet. "
                         .
-                        '<a href="' . constant("url") . 'home/cargando/' . $direccion . '" class="btn btn-link">Descargar</a>';
+                        '<a href="' . constant("url") . 'home/reedirigir_controlador/' . $direccion . '" class="btn btn-link">Descargar</a>';
                 } else {
                     $alerta = "Error al cargar documentos, solo se permiten archivos PDF.";
                 }
@@ -121,7 +118,7 @@ class CotizacionesController
                         $name = basename($_FILES["documentos"]["name"][$key]);
                         move_uploaded_file($tmp_name, "$ruta_cotizacion/$name");
 
-                        $cotizaciones->adjuntar_archivos($id, "$ruta_cotizacion/$name");
+                        $this->cotizacion->adjuntar_archivos($id, "$ruta_cotizacion/$name");
 
                         unlink("$ruta_cotizacion/$name");
                     }
@@ -132,11 +129,11 @@ class CotizacionesController
         }
 
         require_once("core/views/template/header.php");
-        require_once("core/views/cotizaciones/emitir.php");
+        require_once("core/views/cotizaciones/emitir_cotizacion.php");
         require_once("core/views/template/footer.php");
     }
 
-    public function exportar()
+    public function exportar_cotizaciones()
     {
         $aseguradora = new aseguradora;
         $cotizacion = new cotizacion;
@@ -152,7 +149,7 @@ class CotizacionesController
         }
 
         require_once("core/views/template/header.php");
-        require_once("core/views/cotizaciones/exportar.php");
+        require_once("core/views/cotizaciones/exportar_cotizaciones.php");
         require_once("core/views/template/footer.php");
     }
 }

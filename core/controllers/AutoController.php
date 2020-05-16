@@ -1,6 +1,6 @@
 <?php
 
-class LoginController
+class AutoController
 {
     public $cotizacion;
     public $bien;
@@ -15,7 +15,7 @@ class LoginController
 
     public function crear_cotizacion()
     {
-        $marcas = $this->auto->lista_marcas();
+        $marcas = $this->bien->lista_marcas();
         sort($marcas);
 
         if (isset($_POST['submit'])) {
@@ -30,7 +30,7 @@ class LoginController
             $nueva_cotizacion["Marca"] = $_POST["Marca"];
             $nueva_cotizacion["Modelo"] = $_POST["Modelo"];
 
-            $modelo = $this->auto->detalles_modelo($_POST['Modelo']);
+            $modelo = $this->bien->detalles_modelo($_POST['Modelo']);
 
             $nueva_cotizacion["Tipo_de_veh_culo"] = $modelo->getFieldValue('Tipo');
             $nueva_cotizacion["Valor_Asegurado"] = $_POST["Valor_Asegurado"];
@@ -44,8 +44,8 @@ class LoginController
 
             $id = $this->cotizacion->crear($nueva_cotizacion);
 
-            $direccion = 'cotizaciones-detalles_auto-' . $id;
-            header("Location:" . constant('reedirigir_controlador') . '&value=' . $direccion);
+            $direccion = 'auto-detalles_cotizacion-' . $id;
+            header("Location:" . constant('url') . 'home/reedirigir_controlador/' . $direccion);
             exit;
         }
 
@@ -54,7 +54,7 @@ class LoginController
         require_once("core/views/template/footer.php");
     }
 
-    public function detalles_auto($id)
+    public function detalles_cotizacion($id)
     {
         $resultado = $this->cotizacion->detalles($id);
 
@@ -67,11 +67,11 @@ class LoginController
         }
 
         require_once("core/views/template/header.php");
-        require_once("core/views/cotizaciones/detalles_auto.php");
+        require_once("core/views/auto/detalles_cotizacion.php");
         require_once("core/views/template/footer.php");
     }
 
-    public function completar_auto($id)
+    public function completar_cotizacion($id)
     {
         $resultado = $this->cotizacion->detalles($id);
         $cotizacion =  $resultado["oferta"];
@@ -123,16 +123,16 @@ class LoginController
 
             $this->cotizacion->actualizar($id, $cambios);
 
-            header("Location:" . constant('detalles_cotizacion_') . strtolower($cotizacion->getFieldValue('Type')) . '&value=' . $id);
+            header("Location:" . constant('url')."auto/detalles_cotizacion/" . $id);
             exit;
         }
 
         require_once("core/views/template/header.php");
-        require_once("core/views/cotizaciones/completar_auto.php");
+        require_once("core/views/auto/completar_cotizacion.php");
         require_once("core/views/template/footer.php");
     }
 
-    public function descargar_auto($id)
+    public function descargar_cotizacion($id)
     {
         $cotizaciones = new cotizacion;
         $contrato = new contrato;
@@ -163,6 +163,6 @@ class LoginController
             }
         }
 
-        require_once("core/views/cotizaciones/descargar_auto.php");
+        require_once("core/views/auto/descargar_cotizacion.php");
     }
 }

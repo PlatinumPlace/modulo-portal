@@ -11,9 +11,9 @@
 </footer>
 
 <!-- Bootstrap core JavaScript -->
-<script src="public/vendor/jquery/jquery-2.1.1.min.js"></script>
-<script src="public/vendor/jquery/jquery.min.js"></script>
-<script src="public/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="<?= constant("url") ?>public/vendor/jquery/jquery-2.1.1.min.js"></script>
+<script src="<?= constant("url") ?>public/vendor/jquery/jquery.min.js"></script>
+<script src="<?= constant("url") ?>public/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 
 </body>
 

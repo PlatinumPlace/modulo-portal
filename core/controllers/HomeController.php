@@ -55,9 +55,9 @@ class HomeController
         require_once("core/views/template/footer.php");
     }
 
-    public function reedirigir_controlador($nueva_url)
+    public function reedirigir_controlador($peticion)
     {
-        $url = explode("-", $nueva_url);
+        $url = explode("-", $peticion);
         $controlador = $url[0];
         $funcion = $url[1];
         $id = $url[2];

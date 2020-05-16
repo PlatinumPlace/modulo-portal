@@ -650,7 +650,7 @@
         var id = document.getElementById("id").value;
         setTimeout(function() {
             window.print();
-            window.location = url + "cotizaciones/detalles_auto/" + id;
+            window.location = url + "auto/detalles_cotizacion/" + id;
         }, time);
     </script>
 </body>
