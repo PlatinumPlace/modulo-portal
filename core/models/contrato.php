@@ -28,4 +28,16 @@ class contrato extends api
         return $resultado;
     }
 
+    public function lista_aseguradoras()
+    {
+        $criterio = "Socio:equals:" . $_SESSION['empresa_id'];
+        $contratos = $this->searchRecordsByCriteria("Contratos", $criterio);
+
+        foreach ($contratos as $contrato) {
+            $aseguradoras[$contrato->getEntityId()] = $contrato->getFieldValue('Aseguradora')->getLookupLabel();
+        }
+
+        return array_unique($aseguradoras);
+    }
+
 }

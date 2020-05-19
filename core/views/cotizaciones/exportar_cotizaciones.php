@@ -377,7 +377,7 @@ $aseguradoras = $this->contrato->aseguradoras();
     <div class="card">
         <div class="card-body">
             <div class="form-group row">
-                <label class="col-sm-2 col-form-label">Reporte de </label>
+                <label class="col-sm-2 col-form-label">Tipo de reporte</label>
                 <div class="col-sm-4">
                     <select name="tipo_reporte" class="form-control">
                         <option value="emisiones" selected>Pólizas emitidas</option>
@@ -385,7 +385,7 @@ $aseguradoras = $this->contrato->aseguradoras();
                         <option value="comisiones">Comisiones</option>
                     </select>
                 </div>
-                <label class="col-sm-2 col-form-label">Tipo</label>
+                <label class="col-sm-2 col-form-label">Tipo de cotización</label>
                 <div class="col-sm-4">
                     <select name="tipo_cotizacion" class="form-control">
                         <option value="Auto" selected>Auto</option>
@@ -395,12 +395,12 @@ $aseguradoras = $this->contrato->aseguradoras();
             <div class="form-group row">
                 <label class="col-sm-2 col-form-label">Aseguradora</label>
                 <div class="col-sm-4">
-                    <select name="aseguradpra_id" class="form-control" required>
+                    <select name="contrato_id" class="form-control" required>
                         <option value="" selected disabled>Selecciona una Aseguradora</option>
                         <?php
 
-                        foreach ($aseguradoras as $id => $nombre) {
-                            echo '<option value="' . $id . '">' . $nombre . '</option>';
+                        foreach ($contratos as $id => $nombre_aseguradora) {
+                            echo '<option value="' . $id . '">' . $nombre_aseguradora . '</option>';
                         }
 
                         ?>

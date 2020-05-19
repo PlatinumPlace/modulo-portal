@@ -1,16 +1,24 @@
 <form method="POST" action="<?= constant('url') ?>auto/completar_cotizacion/<?= $cotizacion->getEntityId() ?>">
 
+    <?php if (!empty($alerta)) : ?>
+        <div class="alert alert-primary" role="alert">
+            <?= $alerta ?>
+        </div>
+    <?php endif ?>
 
-    <ul class="nav nav-tabs">
+
+    <ul class="nav border">
         <li class="nav-item">
-            <button class="nav-link active" onclick="mis_clientes()">Mis Clientes</button>
+            <a class="nav-link" href="#" onclick="mis_clientes()">Clientes Existentes</a>
         </li>
         <li class="nav-item">
-            <button class="nav-link" onclick="cliente_nuevo()">Cliente Nuevo</button>
+            <a class="nav-link" href="#" onclick="cliente_nuevo()">Cliente Nuevo</a>
         </li>
     </ul>
 
-    <div id="mis_clientes">
+    <br>
+
+    <div id="mis_clientes" style="display: none">
 
         <div class="card">
             <h5 class="card-header">Mis Clientes</h5>

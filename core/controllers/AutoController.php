@@ -5,12 +5,16 @@ class AutoController
     public $cotizacion;
     public $bien;
     public $cliente;
+    public $aseguradora;
+    public $contrato;
 
     function __construct()
     {
         $this->cotizacion = new cotizacion;
         $this->bien = new bien;
         $this->cliente = new cliente;
+        $this->contrato = new contrato;
+        $this->aseguradora = new aseguradora;
     }
 
     public function crear_cotizacion()
@@ -79,7 +83,7 @@ class AutoController
         sort($clientes);
 
         if (
-            $cotizacion->getFieldValue('Nombre') != null
+            $cotizacion->getFieldValue('Email') != null
             or
             empty($cotizacion)
             or
@@ -121,10 +125,16 @@ class AutoController
                 $cambios["Email"] = $_POST["Email"];
             }
 
-            $this->cotizacion->actualizar($id, $cambios);
+            if (empty($cambios["Email"])) {
+                $alerta = "Ha ocurrido un error,vuelve a intertarlo.";
+            }
+            else {
+                $this->cotizacion->actualizar($id, $cambios);
 
-            header("Location:" . constant('url')."auto/detalles_cotizacion/" . $id);
-            exit;
+                header("Location:" . constant('url')."auto/detalles_cotizacion/" . $id);
+                exit;
+            }
+
         }
 
         require_once("core/views/template/header.php");
@@ -134,11 +144,7 @@ class AutoController
 
     public function descargar_cotizacion($id)
     {
-        $cotizaciones = new cotizacion;
-        $contrato = new contrato;
-        $aseguradora = new aseguradora;
-
-        $resultado = $cotizaciones->detalles($id);
+        $resultado = $this->cotizacion->detalles($id);
         $cotizacion =  $resultado["oferta"];
         $detalles =  $resultado["cotizaciones"];
         $emitida = array("Emitido", "En trámite");
@@ -156,10 +162,10 @@ class AutoController
 
         if (in_array($cotizacion->getFieldValue("Stage"), $emitida)) {
 
-            $imagen_aseguradora = $aseguradora->foto($cotizacion->getFieldValue("Aseguradora")->getEntityId());
+            $imagen_aseguradora = $this->aseguradora->foto($cotizacion->getFieldValue("Aseguradora")->getEntityId());
 
             foreach ($detalles as $resumen) {
-                $coberturas = $contrato->detalles($resumen->getFieldValue('Contrato')->getEntityId());
+                $coberturas = $this->contrato->detalles($resumen->getFieldValue('Contrato')->getEntityId());
             }
         }
 

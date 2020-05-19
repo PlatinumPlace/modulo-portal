@@ -217,7 +217,7 @@
                             <div class="col-2">
 
                                 <?php if (!in_array($cotizacion->getFieldValue("Stage"), $emitida)) : ?>
-                                    <?php $imagen_aseguradora = $aseguradora->foto($resumen->getFieldValue("Aseguradora")->getEntityId()) ?>
+                                    <?php $imagen_aseguradora = $this->aseguradora->foto($resumen->getFieldValue("Aseguradora")->getEntityId()) ?>
                                     <img height="31" width="90" src="<?= constant('url') . $imagen_aseguradora ?>">
                                 <?php else : ?>
                                     &nbsp;
@@ -228,7 +228,7 @@
 
                                     <div class="card-body">
 
-                                        <?php $coberturas = $contrato->detalles($resumen->getFieldValue('Contrato')->getEntityId()) ?>
+                                        <?php $coberturas = $this->contrato->detalles($resumen->getFieldValue('Contrato')->getEntityId()) ?>
 
                                         <p class="card-text">
                                             <small>

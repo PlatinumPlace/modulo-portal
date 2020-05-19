@@ -135,16 +135,12 @@ class CotizacionesController
 
     public function exportar_cotizaciones()
     {
-        $aseguradora = new aseguradora;
-        $cotizacion = new cotizacion;
-
-        $aseguradoras = $aseguradora->lista();
+        $contratos = $this->contrato->lista_aseguradoras();
 
         if (isset($_POST["csv"])) {
 
             if ($_POST['tipo_reporte'] == "emisiones") {
-
-                $resultado = $cotizacion->exportar_csv_emisiones($_POST["tipo_cotizacion"], $_POST["aseguradpra_id"], $_POST["desde"], $_POST["hasta"]);
+                $resultado = $this->cotizacion->exportar_csv_emisiones($_POST["tipo_cotizacion"], $_POST["contrato_id"], $_POST["desde"], $_POST["hasta"]);
             }
         }
 
