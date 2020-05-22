@@ -1,10 +1,11 @@
 <h2 class="text-uppercase text-center">
-    Emisiones Del Mes
+    Cotizaciones Pendientes
 </h2>
 
 <div class="card">
     <div class="card-body">
         <table class="table table-bordered">
+
             <thead>
                 <tr>
                     <th>No. <br> Cotización</th>
@@ -16,14 +17,11 @@
                     <th>Opciones</th>
                 </tr>
             </thead>
+
             <tbody>
                 <?php if (!empty($cotizaciones)) : ?>
                     <?php foreach ($cotizaciones as $cotizacion) : ?>
-                        <?php if (
-                            in_array($cotizacion->getFieldValue("Stage"), $emitida)
-                            and
-                            date("Y-m", strtotime($cotizacion->getFieldValue("Fecha_de_emisi_n"))) == date('Y-m')
-                        ) : ?>
+                        <?php if ($cotizacion->getFieldValue("Stage") == "Cotizando") : ?>
                             <tr>
                                 <td><?= $cotizacion->getFieldValue('No_Cotizaci_n')  ?></td>
                                 <td><?= $cotizacion->getFieldValue('Nombre') . " " . $cotizacion->getFieldValue('Apellido') ?></td>
@@ -46,6 +44,7 @@
                     <?php endforeach ?>
                 <?php endif ?>
             </tbody>
+
         </table>
     </div>
 </div>

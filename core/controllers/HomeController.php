@@ -5,9 +5,11 @@ class HomeController
 
     public function index()
     {
+
+        $usuario = json_decode($_COOKIE["usuario"], true);
         $api = new api;
 
-        $criterio = "Contact_Name:equals:" . $_SESSION['usuario_id'];
+        $criterio = "Contact_Name:equals:" . $usuario['id'];
         $cotizaciones = $api->searchRecordsByCriteria("Deals", $criterio);
 
         $resultado["total"] = 0;
@@ -55,15 +57,20 @@ class HomeController
         require_once("core/views/template/footer.php");
     }
 
-    public function reedirigir_controlador($peticion)
+    public function redirect($peticion = null)
     {
-        $url = explode("-", $peticion);
-        $controlador = $url[0];
-        $funcion = $url[1];
-        $id = $url[2];
+        if (empty($peticion)) {
+            $this->error();
+            exit;
+        } else {
+            $url = explode('-', $peticion);
+            $controlador = $url[0];
+            $funcion = $url[1];
+            $datos = $url[2];
+        }
 
         require_once("core/views/template/header.php");
-        require_once("core/views/home/reedirigir_controlador.php");
+        require_once("core/views/home/reedirigir.php");
         require_once("core/views/template/footer.php");
     }
 }

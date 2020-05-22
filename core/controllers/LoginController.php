@@ -9,7 +9,7 @@ class LoginController
         $this->usuario = new usuario;
     }
 
-    public function index()
+    public function iniciar_sesion()
     {
 
         if (isset($_POST['submit'])) {
@@ -23,7 +23,7 @@ class LoginController
                 if (empty($resultado)) {
                     $alerta = "El usuario no esta disponible.";
                 } else {
-                    header("Location: " . constant('url'));
+                    header("Location: ?url=home/index");
                     exit();
                 }
             } else {
@@ -38,7 +38,12 @@ class LoginController
     {
         $this->usuario->salir();
 
-        header("Location: " . constant('url'));
+        header("Location: ?url=home/index");
         exit;
+    }
+
+    public function continuar_sesion()
+    {
+        $this->usuario->continuar();
     }
 }

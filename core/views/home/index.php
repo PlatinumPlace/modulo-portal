@@ -12,7 +12,7 @@
             <h5>Cotizaciones <br> Totales</h5>
         </div>
         <div class="card-body">
-            <a href="<?= constant('url') ?>cotizaciones/buscar_cotizacion" class="card-link">Ver más</a>
+            <a href="?url=cotizaciones/buscar" class="card-link">Ver más</a>
         </div>
     </div>
 
@@ -23,7 +23,7 @@
             <h5>Cotizaciones <br> al Mes</h5>
         </div>
         <div class="card-body">
-            <a href="<?= constant('url') ?>cotizaciones/cotizaciones_pendientes" class="card-link">Ver más</a>
+            <a href="?url=cotizaciones/pendientes" class="card-link">Ver más</a>
         </div>
     </div>
 
@@ -34,7 +34,7 @@
             <h5>Emisiones <br> al Mes</h5>
         </div>
         <div class="card-body">
-            <a href="<?= constant('url') ?>cotizaciones/emisiones_mensuales" class="card-link">Ver más</a>
+            <a href="?url=cotizaciones/emisiones_mensuales" class="card-link">Ver más</a>
         </div>
     </div>
 
@@ -45,7 +45,7 @@
             <h5>Vencimientos <br> al Mes</h5>
         </div>
         <div class="card-body">
-            <a href="<?= constant('url') ?>cotizaciones/vencimientos_mensuales" class="card-link">Ver más</a>
+            <a href="?url=cotizaciones/vencimientos_mensuales" class="card-link">Ver más</a>
         </div>
     </div>
 
@@ -54,15 +54,9 @@
 <br>
 
 <div class="card">
-    <h5 class="card-header">Póliza emitidas este mes</h5>
+    <h5 class="card-header">Cantidad de pólizas emitidas este mes</h5>
     <div class="card-body">
         <table class="table table-striped table-borderless">
-            <thead>
-                <tr>
-                    <th scope="col">Aseguradoras</th>
-                    <th scope="col">Cantidad de Pólizas</th>
-                </tr>
-            </thead>
             <tbody>
                 <?php if (!empty($aseguradoras)) : ?>
 

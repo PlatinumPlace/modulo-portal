@@ -19,19 +19,12 @@ class app
         require_once $this->login;
         $login = new LoginController;
 
-        session_start();
-        $_SESSION["usuario_id"] = (isset($_COOKIE["usuario_id"])) ? $_COOKIE["usuario_id"] : "";
-        $_SESSION["tiempo"] = (isset($_COOKIE["tiempo"])) ? $_COOKIE["tiempo"] : "";
-
-        if (empty($_SESSION["usuario_id"])) {
-            $login->index();
+        if (!isset($_COOKIE["usuario"])) {
+            $login->iniciar_sesion();
             exit;
-        } else {
-            if (time() - $_SESSION['tiempo'] > 3600) {
-                $login->cerrar_sesion();
-            } else {
-                $_SESSION['tiempo'] = time();
-            }
+        }
+        else {
+            $login->continuar_sesion();
         }
     }
 
@@ -40,9 +33,9 @@ class app
         require_once $this->home;
         $home = new HomeController;
 
-        if (!empty($_GET['url'])) {
+        if (isset($_GET['url'])) {
 
-            $url = explode('/', rtrim($_GET['url'], '/'));
+            $url = explode('/', $_GET['url']);
 
             $peticion = "core/controllers/" . ucfirst($url[0]) . "Controller.php";
 
@@ -53,15 +46,14 @@ class app
                 $claseControlador = ucfirst($url[0]) . "Controller";
                 $controlador =  new $claseControlador;
 
-                $funcion = (isset($url[1])) ? $url[1] : "";
-                $valor = (isset($url[2])) ? $url[2] : "";
+                if (method_exists($controlador, $url[1])) {
 
-                if (method_exists($controlador, $funcion)) {
-                    if (!empty($valor)) {
-                        $controlador->{$funcion}($valor);
-                    } else {
-                        $controlador->{$funcion}();
+                    if (isset($url[2])) {
+                        $controlador->{$url[1]}($url[2]);
+                    }else {
+                        $controlador->{$url[1]}();
                     }
+
                 } else {
                     $home->error();
                 }

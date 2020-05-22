@@ -18,17 +18,13 @@ class usuario extends api
     {
         foreach ($usuarios as $usuario) {
 
-            if ($usuario->getFieldValue("Estado") == true and $usuario->getFieldValue("Sesi_n_activa") == false) {
+            if ($usuario->getFieldValue("Estado") == true) {
 
-                $cambios["Sesi_n_activa"] = true;
-                $this->updateRecord("Contacts", $usuario->getEntityId(), $cambios);
+                $sesion['id'] = $usuario->getEntityId();
+                $sesion['nombre'] = $usuario->getFieldValue("First_Name") . " " . $usuario->getFieldValue("Last_Name");
+                $sesion['empresa_id'] = $usuario->getFieldValue("Account_Name")->getEntityId();
 
-                $_SESSION['usuario_id'] = $usuario->getEntityId();
-                $_SESSION['usuario_nombre'] = $usuario->getFieldValue("First_Name") . " " . $usuario->getFieldValue("Last_Name");
-                $_SESSION['empresa_id'] = $usuario->getFieldValue("Account_Name")->getEntityId();
-                $_SESSION['tiempo'] = time();
-                setcookie("usuario_id", $usuario->getEntityId(), time() + 259200);
-                setcookie("tiempo", time(), time() + 259200);
+                setcookie("usuario", json_encode($sesion), time() + 3600,"/");
 
                 return true;
             }
@@ -37,11 +33,15 @@ class usuario extends api
 
     public function salir()
     {
-        $cambios["Sesi_n_activa"] = false;
-        $this->updateRecord("Contacts", $_SESSION['usuario_id'], $cambios);
+        setcookie("usuario", '', time() - 1, "/" );
+    }
 
-        session_destroy();
-        setcookie("usuario_id", '', time() - 1, "/portal");
-        setcookie("tiempo", '', time() - 1, "/portal");
+    public function continuar()
+    {        
+        $usuario = json_decode($_COOKIE["usuario"], true);
+
+        $this->salir();
+
+        setcookie("usuario", json_encode($usuario), time() + 3600,"/");
     }
 }

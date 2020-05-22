@@ -41,7 +41,7 @@ if (isset($_POST["submit"])) {
             <li>Generar una clave de cliente propio y ingresarla en el formulario. <b>Ambito:</b> <br> ZohoCRM.modules.ALL,ZohoCRM.settings.ALL,aaaserver.profile.READ</li>
         </ol>
         
-        <form action="<?= constant('url') ?>" method="post">
+        <form action="index.php" method="post">
 
             <div class="form-group">
                 <label>Clave cliente propio</label>
@@ -55,7 +55,7 @@ if (isset($_POST["submit"])) {
         
         <?php if (isset($_POST["submit"])) : ?>
             <div class="alert alert-primary" role="alert">
-                Token generado. <a href="<?= constant('url') ?>">Ir a index</a>
+                Token generado. <a href="index.php">Ir a index</a>
             </div>
         <?php endif ?>
 

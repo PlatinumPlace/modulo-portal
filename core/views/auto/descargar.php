@@ -13,9 +13,9 @@
         <?= $cotizacion->getFieldValue('No_Cotizaci_n') ?>
     </title>
     <!-- Bootstrap core CSS -->
-    <link href="<?= constant('url') ?>public/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="public/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
 
-    <link rel="icon" type="image/png" href="<?= constant('url') ?>public/img/logo.png">
+    <link rel="icon" type="image/png" href="public/img/logo.png">
 
     <style>
         @media all {
@@ -43,9 +43,9 @@
 
             <div class="col-2">
                 <?php if (!in_array($cotizacion->getFieldValue("Stage"), $emitida)) : ?>
-                    <img src="<?= constant('url') ?>public/img/logo.png" width="100" height="100">
+                    <img src="public/img/logo.png" width="100" height="100">
                 <?php else : ?>
-                    <img width="170" height="75" src="<?= constant('url') . $imagen_aseguradora ?>">
+                    <img width="170" height="75" src="<?=$imagen_aseguradora ?>">
                 <?php endif ?>
             </div>
             <div class="col-8">
@@ -217,8 +217,8 @@
                             <div class="col-2">
 
                                 <?php if (!in_array($cotizacion->getFieldValue("Stage"), $emitida)) : ?>
-                                    <?php $imagen_aseguradora = $this->aseguradora->foto($resumen->getFieldValue("Aseguradora")->getEntityId()) ?>
-                                    <img height="31" width="90" src="<?= constant('url') . $imagen_aseguradora ?>">
+                                    <?php $imagen_aseguradora = $this->cotizacion->foto_aseguradora($resumen->getFieldValue("Aseguradora")->getEntityId()) ?>
+                                    <img height="31" width="90" src="<?= $imagen_aseguradora ?>">
                                 <?php else : ?>
                                     &nbsp;
                                 <?php endif ?>
@@ -228,7 +228,7 @@
 
                                     <div class="card-body">
 
-                                        <?php $coberturas = $this->contrato->detalles($resumen->getFieldValue('Contrato')->getEntityId()) ?>
+                                        <?php $coberturas = $this->cotizacion->contrato_detalles($resumen->getFieldValue('Contrato')->getEntityId()) ?>
 
                                         <p class="card-text">
                                             <small>
@@ -346,7 +346,7 @@
 
                     <br>
 
-                    <img height="50" width="150" src="<?= constant('url') . $imagen_aseguradora ?>">
+                    <img height="50" width="150" src="<?=   $imagen_aseguradora ?>">
 
                     <br>
                     <br>
@@ -459,7 +459,7 @@
                 <div class="row">
 
                     <div class="col-2">
-                        <img height="50" width="150" src="<?= constant('url') . $imagen_aseguradora ?>">
+                        <img height="50" width="150" src="<?=   $imagen_aseguradora ?>">
                     </div>
                     <div class="col-7 text-center">
                         <h4>
@@ -641,16 +641,12 @@
         </div>
     </div>
 
-
-    <input value="<?= $id ?>" id="id" hidden>
-    <input value="<?= constant('url') ?>" id="url" hidden>
     <script>
-        var url = document.getElementById("url").value;
         var time = 500;
-        var id = document.getElementById("id").value;
+        var id = <?= json_encode($id) ?>;
         setTimeout(function() {
             window.print();
-            window.location = url + "auto/detalles_cotizacion/" + id;
+            window.location = "?url=auto/detalles/" + id;
         }, time);
     </script>
 </body>
