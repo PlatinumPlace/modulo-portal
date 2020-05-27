@@ -1,6 +1,6 @@
 <?php
 
-class LoginController
+class usuarios
 {
     public $usuario;
 
@@ -23,7 +23,7 @@ class LoginController
                 if (empty($resultado)) {
                     $alerta = "El usuario no esta disponible.";
                 } else {
-                    header("Location: ?url=home/index");
+                    header("Location:" . constant("url"));
                     exit();
                 }
             } else {
@@ -31,14 +31,16 @@ class LoginController
             }
         }
 
-        require_once("core/views/login/index.php");
+        require_once("core/views/template/header_login.php");
+        require_once("core/views/usuarios/index.php");
+        require_once("core/views/template/footer_login.php");
     }
 
     public function cerrar_sesion()
     {
         $this->usuario->salir();
 
-        header("Location: ?url=home/index");
+        header("Location:" . constant("url"));
         exit;
     }
 

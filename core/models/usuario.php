@@ -24,7 +24,7 @@ class usuario extends api
                 $sesion['nombre'] = $usuario->getFieldValue("First_Name") . " " . $usuario->getFieldValue("Last_Name");
                 $sesion['empresa_id'] = $usuario->getFieldValue("Account_Name")->getEntityId();
 
-                setcookie("usuario", json_encode($sesion), time() + 3600,"/");
+                setcookie("usuario", json_encode($sesion), time() + 3600, "/");
 
                 return true;
             }
@@ -33,15 +33,15 @@ class usuario extends api
 
     public function salir()
     {
-        setcookie("usuario", '', time() - 1, "/" );
+        setcookie("usuario", '', time() - 1, "/");
     }
 
     public function continuar()
-    {        
+    {
         $usuario = json_decode($_COOKIE["usuario"], true);
 
         $this->salir();
 
-        setcookie("usuario", json_encode($usuario), time() + 3600,"/");
+        setcookie("usuario", json_encode($usuario), time() + 3600, "/");
     }
 }

@@ -3,8 +3,10 @@
 class app
 {
     public $api = "api/zcrm_oauthtokens.txt";
-    public $home = "core/controllers/HomeController.php";
-    public $login = "core/controllers/LoginController.php";
+    public $home_path = "core/controllers/cotizaciones.php";
+    public $home_controller = "cotizaciones";
+    public $login_path = "core/controllers/usuarios.php";
+    public $login_controller = "usuarios";
 
     public function verificar_zoho_api()
     {
@@ -16,41 +18,39 @@ class app
 
     public function verificar_sesion()
     {
-        require_once $this->login;
-        $login = new LoginController;
+        require_once $this->login_path;
+        $login = new $this->login_controller;
 
         if (!isset($_COOKIE["usuario"])) {
             $login->iniciar_sesion();
             exit;
-        }
-        else {
+        } else {
             $login->continuar_sesion();
         }
     }
 
     public function buscar_controlador()
     {
-        require_once $this->home;
-        $home = new HomeController;
+        require_once $this->home_path;
+        $home = new $this->home_controller;
 
         if (isset($_GET['url'])) {
 
-            $url = explode('/', $_GET['url']);
+            $url = rtrim($_GET['url'],"/");
+            $url = explode('/', $url);
 
-            $peticion = "core/controllers/" . ucfirst($url[0]) . "Controller.php";
+            $ubicacion_controlador = "core/controllers/".$url[0].".php";
 
-            if (file_exists($peticion)) {
+            if (file_exists($ubicacion_controlador)) {
 
-                require_once $peticion;
-
-                $claseControlador = ucfirst($url[0]) . "Controller";
-                $controlador =  new $claseControlador;
-
-                if (method_exists($controlador, $url[1])) {
+                require_once $ubicacion_controlador;
+                $controlador = new $url[0];
+                
+                if (isset($url[1]) and method_exists($controlador, $url[1])) {
 
                     if (isset($url[2])) {
                         $controlador->{$url[1]}($url[2]);
-                    }else {
+                    } else {
                         $controlador->{$url[1]}();
                     }
 
@@ -61,7 +61,7 @@ class app
                 $home->error();
             }
         } else {
-            $home->index();
+            $home->pagina_principal();
         }
     }
 }

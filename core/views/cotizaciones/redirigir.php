@@ -6,13 +6,14 @@
 
 
 <script>
-    var controlador = <?= json_encode($controlador) ?>;
-    var funcion = <?= json_encode($funcion) ?>;
+    var url = "<?= constant("url") ?>";
+    var controlador = "<?= $controlador ?>";
+    var funcion = "<?= $funcion ?>";
     var datos = <?= json_encode($datos) ?>;
 
     var time = 4500;
 
     setTimeout(function() {
-        window.location = "?url=" + controlador + "/" + funcion + "/" + datos;
+        window.location = url + controlador + "/" + funcion + "/" + datos;
     }, time);
 </script>

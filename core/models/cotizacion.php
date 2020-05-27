@@ -13,7 +13,6 @@ class cotizacion extends api
 
     public function lista()
     {
-
         $criterio = "Contact_Name:equals:" . $this->usuario['id'];
         return $this->searchRecordsByCriteria("Deals", $criterio);
     }
@@ -75,7 +74,7 @@ class cotizacion extends api
 
         return array_unique($aseguradoras);
     }
-    
+
     public function lista_clientes()
     {
         $criterio = "Reporting_To:equals:" . $this->usuario["id"];
@@ -98,7 +97,7 @@ class cotizacion extends api
 
     public function contrato_detalles($id)
     {
-       return $this->getRecord("Contratos", $id);
+        return $this->getRecord("Contratos", $id);
     }
 
     public function exportar_emisiones_csv($tipo_cotizacion, $contrato_id, $desde, $hasta)
@@ -264,7 +263,7 @@ class cotizacion extends api
             $total_valor = 0;
             foreach ($cotizaciones as $cotizacion) {
 
-                $resumen = $this->getRecord("Deals",$cotizacion->getFieldValue("Deal_Name")->getEntityId());
+                $resumen = $this->getRecord("Deals", $cotizacion->getFieldValue("Deal_Name")->getEntityId());
 
                 if (
                     date("Y-m-d", strtotime($resumen->getFieldValue("Fecha_de_emisi_n")))  > $desde

@@ -22,9 +22,9 @@
 
 <div class="card">
     <div class="card-body">
+        <form method="POST" action="<?= constant("url") ?>cotizaciones/crear">
 
-        <div id="auto">
-            <form method="POST" action="?url=cotizaciones/crear">
+            <div id="auto">
 
                 <h5>Tipo de Cotización</h5>
                 <hr>
@@ -127,10 +127,8 @@
                     </div>
                 </div>
 
-            </form>
-        </div>
-
-
+            </div>
+        </form>
     </div>
 </div>
 
@@ -149,8 +147,10 @@
 
 
     function obtener_modelos(val) {
+        var url = "<?= constant("url") ?>";
+
         $.ajax({
-            url: "libs/obtener_modelos.php",
+            url: url + "libs/obtener_modelos.php",
             type: "POST",
             data: {
                 marcas_id: val.value

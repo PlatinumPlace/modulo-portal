@@ -9,16 +9,16 @@
     <meta name="author" content="">
 
     <!-- Bootstrap core CSS -->
-    <link href="public/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="<?= constant("url") ?>public/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
 
     <!-- Custom styles for this template -->
-    <link href="public/css/blog-post.css" rel="stylesheet">
+    <link href="<?= constant("url") ?>public/css/blog-post.css" rel="stylesheet">
 
     <!--Import Google Icon Font-->
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
     <title>IT - Insurance Tech</title>
-    <link rel="icon" type="image/png" href="public/img/logo.png">
+    <link rel="icon" type="image/png" href="<?= constant("url") ?>public/img/logo.png">
 
 </head>
 
@@ -33,28 +33,28 @@
             <div class="collapse navbar-collapse" id="navbarResponsive">
                 <ul class="navbar-nav ml-auto">
                     <li class="nav-item active">
-                        <a class="nav-link" href="?url=home/index">
+                        <a class="nav-link" href="<?= constant("url") ?>">
                             <i class="material-icons">assessment</i> Panel de Control
                             <span class="sr-only">(current)</span>
                         </a>
                     </li>
                     <li class="nav-item active">
-                        <a class="nav-link" href="?url=cotizaciones/buscar">
+                        <a class="nav-link" href="<?= constant("url") ?>cotizaciones/buscar">
                             <i class="material-icons">search</i> Buscar
                         </a>
                     </li>
                     <li class="nav-item active">
-                        <a class="nav-link" href="?url=cotizaciones/exportar">
+                        <a class="nav-link" href="<?= constant("url") ?>cotizaciones/exportar">
                             <i class="material-icons">assignment</i> Reportes
                         </a>
                     </li>
                     <li class="nav-item active">
-                        <a class="nav-link" href="?url=cotizaciones/crear">
+                        <a class="nav-link" href="<?= constant("url") ?>cotizaciones/crear">
                             <i class="material-icons">create</i> Cotizar
                         </a>
                     </li>
                     <li class="nav-item active">
-                        <a class="nav-link" onclick="return confirm('¿Deseas cerrar sesión?')" href="?url=login/cerrar_sesion" title="Cerrar sesión">
+                        <a class="nav-link" onclick="return confirm('¿Deseas cerrar sesión?')" href="<?= constant("url") ?>usuarios/cerrar_sesion" title="Cerrar sesión">
                             <i class="material-icons">lock_open</i>
                         </a>
                     </li>
@@ -68,6 +68,6 @@
     <div class="container">
         <div class="row">
             <div class="col-md-2">
-                <img src="public/img/logo.png" height="200" width="150">
+                <img src="<?= constant("url") ?>public/img/logo.png" height="200" width="150">
             </div>
             <div class="col-md-10">

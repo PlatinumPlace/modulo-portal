@@ -20,7 +20,7 @@
                 <input type="text" class="form-control" name="busqueda" required>
             </div>
 
-            <button type="submit" name="submit" class="btn btn-primary mb-2">Buscar</button>
+            <button type="submit" class="btn btn-primary mb-2">Buscar</button>
             |
             <a href="?url=cotizaciones/buscar" class="btn btn-info mb-2">Limpiar</a>
 
@@ -71,11 +71,14 @@
                                 <td><?= date("d/m/Y", strtotime($cotizacion->getFieldValue("Closing_Date"))) ?></td>
                                 <td>
                                     <?php if ($cotizacion->getFieldValue("Stage") != "Abandonado") : ?>
-                                        <a href="?url=<?= strtolower($cotizacion->getFieldValue('Type')) ?>/detalles/<?= $cotizacion->getEntityId() ?>" title="Detalles">
+                                        <a href="<?= constant("url") . strtolower($cotizacion->getFieldValue('Type')) ?>/detalles/<?= $cotizacion->getEntityId() ?>" title="Detalles">
                                             <i class="tiny material-icons">details</i>
                                         </a>
                                         <?php if ($cotizacion->getFieldValue('Email') != null) : ?>
-                                            <a href="?url=<?= strtolower($cotizacion->getFieldValue('Type')) ?>/descargar/<?= $cotizacion->getEntityId() ?>" title="Descargar">
+                                            <a href="<?= constant("url") . strtolower($cotizacion->getFieldValue('Type')) ?>/emitir/<?= $cotizacion->getEntityId() ?>" title="Emitir">
+                                                <i class="tiny material-icons">folder_shared</i>
+                                            </a>
+                                            <a href="<?= constant("url") . strtolower($cotizacion->getFieldValue('Type')) ?>/descargar/<?= $cotizacion->getEntityId() ?>" title="Descargar">
                                                 <i class="tiny material-icons">file_download</i>
                                             </a>
                                         <?php endif ?>

@@ -30,14 +30,17 @@
                                 <td><?= $cotizacion->getFieldValue("Stage") ?></td>
                                 <td><?= date("d/m/Y", strtotime($cotizacion->getFieldValue("Closing_Date"))) ?></td>
                                 <td>
-                                    <a href="?url=<?= strtolower($cotizacion->getFieldValue('Type')) ?>/detalles/<?= $cotizacion->getEntityId() ?>" title="Detalles">
-                                        <i class="tiny material-icons">details</i>
-                                    </a>
-                                    <?php if ($cotizacion->getFieldValue('Email') != null) : ?>
-                                        <a href="?url=<?= strtolower($cotizacion->getFieldValue('Type')) ?>/descargar/<?= $cotizacion->getEntityId() ?>" title="Descargar">
-                                            <i class="tiny material-icons">file_download</i>
+                                <a href="<?= constant("url") . strtolower($cotizacion->getFieldValue('Type')) ?>/detalles/<?= $cotizacion->getEntityId() ?>" title="Detalles">
+                                            <i class="tiny material-icons">details</i>
                                         </a>
-                                    <?php endif ?>
+                                        <?php if ($cotizacion->getFieldValue('Email') != null) : ?>
+                                            <a href="<?= constant("url") . strtolower($cotizacion->getFieldValue('Type')) ?>/emitir/<?= $cotizacion->getEntityId() ?>" title="Emitir">
+                                                <i class="tiny material-icons">folder_shared</i>
+                                            </a>
+                                            <a href="<?= constant("url") . strtolower($cotizacion->getFieldValue('Type')) ?>/descargar/<?= $cotizacion->getEntityId() ?>" title="Descargar">
+                                                <i class="tiny material-icons">file_download</i>
+                                            </a>
+                                        <?php endif ?>
                                 </td>
                             </tr>
                         <?php endif ?>
