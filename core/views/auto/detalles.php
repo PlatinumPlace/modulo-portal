@@ -11,9 +11,9 @@
         <div class="card">
             <h5 class="card-header">Documentos</h5>
             <div class="card-body">
-                <a download="Condiciones del Vehículos.pdf" href="<?= constant("url")?>public/files/condiciones_vehiculo.pdf" class="btn btn-link">Condiciones del Vehículos</a>
-                <a download="Formulario de Conocimiento.pdf" href="<?= constant("url")?>public/files/for_conocimiento.pdf" class="btn btn-link">Formulario de conocimiento</a>
-                <a download="Formulario de Inspección de Vehículos.pdf" href="<?= constant("url")?>public/files/for_inspeccion.pdf" class="btn btn-link">Formulario de Inspección</a>
+                <a download="Condiciones del Vehículos.pdf" href="<?= constant("url") ?>public/files/condiciones_vehiculo.pdf" class="btn btn-link">Condiciones del Vehículos</a>
+                <a download="Formulario de Conocimiento.pdf" href="<?= constant("url") ?>public/files/for_conocimiento.pdf" class="btn btn-link">Formulario de conocimiento</a>
+                <a download="Formulario de Inspección de Vehículos.pdf" href="<?= constant("url") ?>public/files/for_inspeccion.pdf" class="btn btn-link">Formulario de Inspección</a>
             </div>
         </div>
 
@@ -186,38 +186,43 @@
 
 <div class="card">
     <div class="card-body">
-        <div class="table-responsive">
-            <table class="table table-striped table-borderless">
-                <thead>
-                    <tr>
-                        <th scope="col">Aseguradora</th>
-                        <th scope="col">Prima Neta</th>
-                        <th scope="col">ISC</th>
-                        <th scope="col">Prima Total</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php foreach ($detalles as $info) : ?>
+
+        <?php if (!empty($detalles)) : ?>
+            <div class="table-responsive">
+                <table class="table table-striped table-borderless">
+                    <thead>
                         <tr>
-                            <th scope="row">
-                                <?= $info->getFieldValue('Aseguradora')->getLookupLabel() ?>
-                            </th>
-                            <?php if ($info->getFieldValue('Grand_Total') == 0) : ?>
-                                <td>N/A</td>
-                                <td>N/A</td>
-                                <td>N/A</td>
-                            <?php else : ?>
-                                <?php $planes = $info->getLineItems() ?>
-                                <?php foreach ($planes as $plan) : ?>
-                                    <td>RD$<?= number_format($plan->getTotalAfterDiscount(), 2) ?></td>
-                                    <td>RD$<?= number_format($plan->getTaxAmount(), 2) ?></td>
-                                    <td>RD$<?= number_format($plan->getNetTotal(), 2) ?></td>
-                                <?php endforeach ?>
-                            <?php endif ?>
+                            <th scope="col">Aseguradora</th>
+                            <th scope="col">Prima Neta</th>
+                            <th scope="col">ISC</th>
+                            <th scope="col">Prima Total</th>
                         </tr>
-                    <?php endforeach ?>
-                </tbody>
-            </table>
-        </div>
+                    </thead>
+                    <tbody>
+                        <?php foreach ($detalles as $info) : ?>
+                            <tr>
+                                <th scope="row">
+                                    <?= $info->getFieldValue('Aseguradora')->getLookupLabel() ?>
+                                </th>
+                                <?php if ($info->getFieldValue('Grand_Total') == 0) : ?>
+                                    <td>N/A</td>
+                                    <td>N/A</td>
+                                    <td>N/A</td>
+                                <?php else : ?>
+                                    <?php $planes = $info->getLineItems() ?>
+                                    <?php foreach ($planes as $plan) : ?>
+                                        <td>RD$<?= number_format($plan->getTotalAfterDiscount(), 2) ?></td>
+                                        <td>RD$<?= number_format($plan->getTaxAmount(), 2) ?></td>
+                                        <td>RD$<?= number_format($plan->getNetTotal(), 2) ?></td>
+                                    <?php endforeach ?>
+                                <?php endif ?>
+                            </tr>
+                        <?php endforeach ?>
+                    </tbody>
+                </table>
+            </div>
+        <?php else : ?>
+            <h4>Ha ocurrido un error,verifica los datos y crea otra cotización</h4>
+        <?php endif ?>
     </div>
 </div>

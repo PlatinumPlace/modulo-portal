@@ -9,26 +9,14 @@ class auto
         $this->cotizacion = new cotizacion;
     }
 
-    public function detalles($url = null)
+    public function detalles($id = null)
     {
-        $url = json_decode($url, true);
-        if (is_array($url)) {
-            $id = $url[0];
-            $alerta = $url[1];
-        } else {
-            $id = $url;
-        }
-
         $resultado = $this->cotizacion->detalles($id);
         $resumen =  $resultado["oferta"];
         $detalles =  $resultado["cotizaciones"];
         $emitida = array("Emitido", "En trámite");
 
-        if (
-            empty($resumen)
-            or
-            empty($detalles)
-        ) {
+        if (empty($resumen)) {
             header("Location:" . constant("url") . "cotizaciones/error");
             exit();
         }
@@ -39,6 +27,10 @@ class auto
 
         if ($resumen->getFieldValue("Stage") == "Abandonada") {
             $alerta = 'Cotización Abandonada';
+        }
+
+        if (isset($_GET["alert"])) {
+            $alerta = $_GET["alert"];
         }
 
         require_once("core/views/template/header.php");
@@ -67,7 +59,6 @@ class auto
         }
 
         $clientes = $this->cotizacion->lista_clientes();
-        sort($clientes);
 
         if ($_POST) {
 
@@ -101,11 +92,26 @@ class auto
                 $cambios["Email"] = $_POST["Email"];
             }
 
-            $this->cotizacion->actualizar($id, $cambios);
+            if (
+                empty($cambios["RNC_Cedula"])
+                or
+                empty($cambios["Nombre"])
+                or
+                empty($cambios["Apellido"])
+                or
+                empty($cambios["Email"])
+                or
+                empty($cambios["Fecha_de_Nacimiento"])
+            ) {
+                $alerta = "Debes completar almenos el <b>nombre,RNC/Cedula,Email y fecha de nacimiento</b> para agregar un cliente.";
+            } else {
 
-            $peticion = array($id, "Cliente agregado corectamente");
-            header("Location:" . constant("url") . "cotizaciones/redirigir/auto-detalles-" . json_encode($peticion));
-            exit;
+                $this->cotizacion->actualizar($id, $cambios);
+                $alerta = "Cliente agregado";
+
+                header("Location:" . constant("url") . "auto/detalles/$id?alert=$alerta");
+                exit;
+            }
         }
 
         require_once("core/views/template/header.php");
@@ -182,10 +188,7 @@ class auto
                 $alerta = "Documentos adjuntados";
             }
 
-            echo $alerta;
-
-            $peticion = array($id, $alerta);
-            header("Location:" . constant("url") . "cotizaciones/redirigir/auto-detalles-" . json_encode($peticion));
+            header("Location:" . constant("url") . "cotizaciones/redirigir/auto-detalles-$id-$alerta");
             exit;
         }
 
@@ -216,6 +219,10 @@ class auto
         }
 
         if (in_array($resumen->getFieldValue("Stage"), $emitida)) {
+
+            foreach ($detalles  as $info) {
+                $poliza = $info->getFieldValue('P_liza')->getLookupLabel();
+            }
 
             $imagen_aseguradora = $this->cotizacion->foto_aseguradora($resumen->getFieldValue("Aseguradora")->getEntityId());
 

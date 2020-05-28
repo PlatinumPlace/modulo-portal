@@ -62,7 +62,7 @@
                 <?php if (in_array($resumen->getFieldValue("Stage"), $emitida)) : ?>
                     <b> Póliza No.</b>
                     <br>
-                    <?= $resumen->getFieldValue('P_liza') ?>
+                    <?= $poliza ?>
                     <br>
                 <?php endif ?>
                 <b>Fecha</b> <br> <?= $resumen->getFieldValue('Fecha_de_emisi_n') ?>
@@ -355,7 +355,7 @@
                                     <b>Tipo:</b>
                                 </div>
                                 <div class="col-8">
-                                    <?= $resumen->getFieldValue('P_liza') ?><br>
+                                    <?= $poliza ?><br>
                                     <?= strtoupper($resumen->getFieldValue('Marca')->getLookupLabel()) ?><br>
                                     <?= $resumen->getFieldValue('Placa') ?><br>
                                     <?= $resumen->getFieldValue('A_o_de_Fabricacion') ?><br>
@@ -449,7 +449,7 @@
                     </h4>
                 </div>
                 <div class="col-3">
-                    <b>Póliza No. <br> <?= $resumen->getFieldValue('P_liza') ?></b>
+                    <b>Póliza No. <br> <?= $poliza ?></b>
                 </div>
 
                 <div class="col-12">

@@ -11,7 +11,7 @@
             </div>
         <?php endif ?>
 
-        <form method="POST" action="?url=cotizaciones/exportar">
+        <form method="POST" action="<?= constant("url") ?>cotizaciones/exportar">
 
             <h5>Reporte</h5>
             <hr>
@@ -20,6 +20,7 @@
                     <label class="font-weight-bold">Tipo</label>
                     <select name="tipo_reporte" class="form-control">
                         <option value="emisiones" selected>Emisiones</option>
+                        <option value="comisiones">Comisiones</option>
                         <option value="cotizaciones">Cotizaciones</option>
                     </select>
                 </div>
@@ -27,7 +28,7 @@
                 <div class="form-group col-md-6">
                     <label class="font-weight-bold">Tipo de Cotización</label>
                     <select name="tipo_cotizacion" class="form-control">
-                        <option value="Auto" selected>Auto</option>
+                        <option value="auto" selected>Auto</option>
                     </select>
                 </div>
             </div>

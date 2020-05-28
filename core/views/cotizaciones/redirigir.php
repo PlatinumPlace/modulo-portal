@@ -9,11 +9,17 @@
     var url = "<?= constant("url") ?>";
     var controlador = "<?= $controlador ?>";
     var funcion = "<?= $funcion ?>";
-    var datos = <?= json_encode($datos) ?>;
+    var id = "<?= $id ?>";
+    var alerta = "<?= $alerta ?>";
+
+    if (alerta != null) {
+        var nueva_url = url + controlador + "/" + funcion + "/" + id + "?alert=" + alerta;
+    } else {
+        var nueva_url = url + controlador + "/" + funcion + "/" + id;
+    }
 
     var time = 4500;
-
     setTimeout(function() {
-        window.location = url + controlador + "/" + funcion + "/" + datos;
+        window.location = nueva_url;
     }, time);
 </script>
