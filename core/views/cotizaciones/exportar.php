@@ -5,7 +5,7 @@
 <div class="card">
     <div class="card-body">
 
-        <?php if ($_POST) : ?>
+        <?php if (!empty($alerta)) : ?>
             <div class="alert alert-primary" role="alert">
                 <?= $alerta ?>
             </div>
@@ -19,9 +19,9 @@
                 <div class="form-group col-md-6">
                     <label class="font-weight-bold">Tipo</label>
                     <select name="tipo_reporte" class="form-control">
-                        <option value="emisiones" selected>Emisiones</option>
+                        <option value="emisiones">Emisiones</option>
                         <option value="comisiones">Comisiones</option>
-                        <option value="cotizaciones">Cotizaciones</option>
+                        <option value="cotizaciones" selected>Cotizaciones</option>
                     </select>
                 </div>
 

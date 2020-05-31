@@ -12,13 +12,13 @@
     var id = "<?= $id ?>";
     var alerta = "<?= $alerta ?>";
 
-    if (alerta != null) {
+    if (alerta != "") {
         var nueva_url = url + controlador + "/" + funcion + "/" + id + "?alert=" + alerta;
     } else {
         var nueva_url = url + controlador + "/" + funcion + "/" + id;
     }
 
-    var time = 4500;
+    var time = 5000;
     setTimeout(function() {
         window.location = nueva_url;
     }, time);
