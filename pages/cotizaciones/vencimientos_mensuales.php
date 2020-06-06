@@ -1,5 +1,16 @@
+<?php
+
+$api = new api;
+$usuario = json_decode($_COOKIE["usuario"], true);
+
+$criterio = "Contact_Name:equals:" . $usuario['id'];
+$cotizaciones =  $api->searchRecordsByCriteria("Deals", $criterio);
+
+$emitida = array("Emitido", "En trámite");
+
+?>
 <h2 class="text-uppercase text-center">
-    Emisiones Del Mes
+    Vencimientos Del Mes
 </h2>
 
 <div class="card">
@@ -22,7 +33,7 @@
                         <?php if (
                             in_array($cotizacion->getFieldValue("Stage"), $emitida)
                             and
-                            date("Y-m", strtotime($cotizacion->getFieldValue("Fecha_de_emisi_n"))) == date('Y-m')
+                            date("Y-m", strtotime($cotizacion->getFieldValue("Closing_Date"))) == date('Y-m')
                         ) : ?>
                             <tr>
                                 <td><?= $cotizacion->getFieldValue('No_Cotizaci_n')  ?></td>

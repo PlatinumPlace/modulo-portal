@@ -11,7 +11,7 @@ class api
         "client_id" => "",
         "client_secret" => "",
         "currentUserEmail" => "",
-        "redirect_uri"=>"api/install.php",
+        "redirect_uri" => "api/install.php",
         "token_persistence_path" => "api"
     );
 
@@ -87,13 +87,20 @@ class api
         return $records;
     }
 
-    public function searchRecordsByCriteria($module_api_name, $criteria)
+    public function searchRecordsByCriteria($module_api_name, $criteria, $page = null)
     {
         $moduleIns = ZCRMRestClient::getInstance()->getModuleInstance($module_api_name);
         $records = null;
 
+        if ($page == null) {
+            $page = 1;
+        }
+
+        $param_map = array("page" => $page, "per_page" => 200);
+
+
         try {
-            $response = $moduleIns->searchRecordsByCriteria($criteria);
+            $response = $moduleIns->searchRecordsByCriteria($criteria, $param_map);
             $records = $response->getData();
         } catch (ZCRMException $ex) {
             echo $ex->getMessage();
@@ -130,20 +137,24 @@ class api
 
     public function downloadPhoto($module_api_name, $record_id, $filePath)
     {
+        if (!is_dir($filePath)) {
+            mkdir($filePath, 0755, true);
+        }
+
         $record = ZCRMRestClient::getInstance()->getRecordInstance($module_api_name, $record_id);
         $fileResponseIns = $record->downloadPhoto();
 
         echo "HTTP Status Code:" . $fileResponseIns->getHttpStatusCode();
         echo "File Name:" . $fileResponseIns->getFileName();
 
-        $fp = fopen($filePath . $fileResponseIns->getFileName(), "w");
+        $fp = fopen($filePath . "/" . $fileResponseIns->getFileName(), "w");
 
         $stream = $fileResponseIns->getFileContent();
         fputs($fp, $stream);
 
         fclose($fp);
 
-        return $filePath . $fileResponseIns->getFileName();
+        return $filePath . "/" . $fileResponseIns->getFileName();
     }
 
     public function uploadAttachment($module_api_name, $record_id, $filePath)

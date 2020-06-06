@@ -9,16 +9,16 @@
     <meta name="author" content="">
 
     <!-- Bootstrap core CSS -->
-    <link href="<?= constant("url") ?>public/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="<?= constant("url") ?>vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
 
     <!-- Custom styles for this template -->
-    <link href="<?= constant("url") ?>public/css/blog-post.css" rel="stylesheet">
+    <link href="<?= constant("url") ?>css/blog-post.css" rel="stylesheet">
 
     <!--Import Google Icon Font-->
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
     <title>IT - Insurance Tech</title>
-    <link rel="icon" type="image/png" href="<?= constant("url") ?>public/img/logo.png">
+    <link rel="icon" type="image/png" href="<?= constant("url") ?>img/logo.png">
 
 </head>
 
@@ -67,7 +67,7 @@
     <br>
     <div class="container">
         <div class="row">
-            <div class="col-md-2">
-                <img src="<?= constant("url") ?>public/img/logo.png" height="200" width="150">
+            <div class="col-2">
+                <img src="<?= constant("url") ?>img/logo.png" height="180" width="150">
             </div>
-            <div class="col-md-10">
+            <div class="col-10">

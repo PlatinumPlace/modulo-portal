@@ -4,9 +4,7 @@ use zcrmsdk\oauth\ZohoOAuth;
 use zcrmsdk\crm\setup\restclient\ZCRMRestClient;
 
 if (isset($_POST["submit"])) {
-    
     $api = new api;
-
     ZCRMRestClient::initialize($api->configuration);
     $oAuthClient = ZohoOAuth::getClientInstance();
     $grantToken = $_POST['grant_token'];
