@@ -1,20 +1,11 @@
 <?php
 
-$api = new api;
-$usuario = json_decode($_COOKIE["usuario"], true);
+$cotizaciones = new cotizaciones;
 
-$url = rtrim($_GET['url'], "/");
-$url = explode('/', $url);
-$alerta  = (isset($url[2])) ?  $url[2] : "";;
-
-$criterio = "Socio:equals:" .  $usuario['empresa_id'];
-$contratos = $api->searchRecordsByCriteria("Contratos", $criterio);
-if (!empty($contratos)) {
-    foreach ($contratos as $contrato) {
-        $aseguradoras[$contrato->getEntityId()] = $contrato->getFieldValue('Aseguradora')->getLookupLabel();
-    }
-    $contrato = array_unique($aseguradoras);
-}
+$url = $cotizaciones->obtener_url();
+$alerta  = (isset($url[0])) ? $url[0] : "";
+$contrato = $cotizaciones->lista_aseguradoras();
+$emitida = array("Emitido", "En trámite");
 
 if (isset($_POST["pdf"])) {
 
@@ -31,20 +22,16 @@ if (isset($_POST["pdf"])) {
 }
 if (isset($_POST["csv"])) {
 
-    $emitida = array("Emitido", "En trámite");
-    $contrato =  $api->getRecord("Contratos", $_POST["contrato_id"]);
-    $criterio = "((Contact_Name:equals:" .  $usuario['id'] . ") and (Type:equals:" . ucfirst($_POST["tipo_cotizacion"]) . "))";
-    $cotizaciones = $api->searchRecordsByCriteria("Deals", $criterio);
+    $contrato =  $cotizaciones->detalles_contrato($_POST["contrato_id"]);
+    $lista = $cotizaciones->buscar_cotizaciones("Type", ucfirst($_POST["tipo_cotizacion"]));
 
-    if (!empty($cotizaciones)) {
+    if (!empty($lista)) {
 
         // verificar csv
-        $ubicacion_reporte = "files";
-        $reporte_csv = "$ubicacion_reporte/reporte.csv";
-        if (!is_dir($ubicacion_reporte)) {
-            mkdir($ubicacion_reporte, 0755, true);
+        if (!is_dir("files")) {
+            mkdir("files", 0755, true);
         }
-        $fp = fopen($reporte_csv, 'w');
+        $fp = fopen("files/reporte.csv", 'w');
 
         // encabezado
         $titulo = "Reporte " . ucfirst($_POST["tipo_reporte"]) . " " . ucfirst($_POST["tipo_cotizacion"]);
@@ -54,7 +41,7 @@ if (isset($_POST["csv"])) {
             array("Aseguradora:", $contrato->getFieldValue("Aseguradora")->getLookupLabel()),
             array("Poliza:", $contrato->getFieldValue('No_P_liza')),
             array("Desde:", $_POST["desde"], "Hasta:", $_POST["hasta"]),
-            array("Vendedor:", $usuario['nombre']),
+            array("Vendedor:", $_SESSION["usuario"]['nombre']),
             array("")
         );
         foreach ($encabezado as $campos) {
@@ -95,17 +82,16 @@ if (isset($_POST["csv"])) {
         $prima_total_sumatoria = 0;
         $valor_asegurado_sumatoria = 0;
         $comision_sumatoria = 0;
-        foreach ($cotizaciones as $resumen) {
+        foreach ($lista as $resumen) {
             if (
                 date("Y-m-d", strtotime($resumen->getFieldValue("Fecha_de_emisi_n")))  >= $_POST["desde"]
                 and
                 date("Y-m-d", strtotime($resumen->getFieldValue("Fecha_de_emisi_n"))) <= $_POST["hasta"]
                 and
-                $resumen->getFieldValue("Contact_Name")->getEntityId() == $usuario["id"]
+                $resumen->getFieldValue("Contact_Name")->getEntityId() == $_SESSION["usuario"]["id"]
             ) {
 
-                $criterio = "Deal_Name:equals:" . $resumen->getEntityId();
-                $detalles = $api->searchRecordsByCriteria("Quotes", $criterio);
+                $detalles = $cotizaciones->detalles_cotizaciones($resumen->getEntityId());
 
                 // planes
                 foreach ($detalles as $info) {
@@ -206,11 +192,9 @@ if (isset($_POST["csv"])) {
                 fputcsv($fp, $campos);
             }
 
-
             fclose($fp);
 
-            $alerta = 'Reporte generado correctamente,
-        <a download="' . $titulo . '.csv" href="' . constant("url") . $reporte_csv . '" class="btn btn-link">descargar</a>';
+            $alerta = 'Reporte generado correctamente,<a download="' . $titulo . '.csv" href="' . constant("url") . 'files/reporte.csv" class="btn btn-link">descargar</a>';
         }
     } else {
         $alerta = "Ha ocurrido un error,vuelva a intentarlo";

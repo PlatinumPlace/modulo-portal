@@ -1,14 +1,12 @@
 <?php
 
-$api = new api;
+$cotizaciones = new cotizaciones;
 
-$url = rtrim($_GET['url'], "/");
-$url = explode('/', $url);
-$id = $url[2];
+$url = $cotizaciones->obtener_url();
+$id = $url[0];
 
-$resumen = $api->getRecord("Deals", $id);
-$criterio = "Deal_Name:equals:" . $id;
-$detalles = $api->searchRecordsByCriteria("Quotes", $criterio);
+$resumen = $cotizaciones->detalles_oferta($id);
+$detalles = $cotizaciones->detalles_cotizaciones($id);
 $emitida = array("Emitido", "En trámite");
 
 if (
@@ -20,7 +18,7 @@ if (
     or
     $resumen->getFieldValue('Stage') == "Abandonado"
 ) {
-    header("Location:?url=home/error");
+    header("Location:" . constant("url") . "cotizaciones/error");
     exit();
 }
 
@@ -28,10 +26,10 @@ if (in_array($resumen->getFieldValue("Stage"), $emitida)) {
 
     foreach ($detalles  as $info) {
         $poliza = $info->getFieldValue('P_liza')->getLookupLabel();
-        $coberturas = $api->getRecord("Contratos", $info->getFieldValue('Contrato')->getEntityId());
+        $coberturas = $cotizaciones->detalles_contrato($info->getFieldValue('Contrato')->getEntityId());
     }
 
-    $imagen_aseguradora = $api->downloadPhoto("Vendors", $resumen->getFieldValue("Aseguradora")->getEntityId(), "img/");
+    $imagen_aseguradora = $cotizaciones->imagen_aseguradora($resumen->getFieldValue("Aseguradora")->getEntityId());
 }
 
 ?>
@@ -40,16 +38,12 @@ if (in_array($resumen->getFieldValue("Stage"), $emitida)) {
 
 <head>
 
+    <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="">
-    <meta name="author" content="">
 
-    <!-- Bootstrap core CSS -->
-    <link href="<?= constant("url") ?>vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-
-    <!-- Custom styles for this template -->
-    <link href="<?= constant("url") ?>css/blog-post.css" rel="stylesheet">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
 
     <!--Import Google Icon Font-->
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
@@ -199,7 +193,6 @@ if (in_array($resumen->getFieldValue("Stage"), $emitida)) {
                 <div class="row">
 
                     <div class="col-4">
-
                         <div class="card border-0">
                             <div class="card-body">
 
@@ -255,7 +248,7 @@ if (in_array($resumen->getFieldValue("Stage"), $emitida)) {
                             <div class="col-2">
 
                                 <?php if (!in_array($resumen->getFieldValue("Stage"), $emitida)) : ?>
-                                    <?php constant("url") . $imagen_aseguradora = $api->downloadPhoto("Vendors", $info->getFieldValue("Aseguradora")->getEntityId(), "img") ?>
+                                    <?php constant("url") . $imagen_aseguradora = $cotizaciones->imagen_aseguradora($info->getFieldValue("Aseguradora")->getEntityId()) ?>
                                     <img height="31" width="90" src="<?= constant("url") . $imagen_aseguradora ?>">
                                 <?php else : ?>
                                     &nbsp;
@@ -268,7 +261,7 @@ if (in_array($resumen->getFieldValue("Stage"), $emitida)) {
 
 
                                         <?php if (!in_array($resumen->getFieldValue("Stage"), $emitida)) : ?>
-                                            <?php $coberturas = $api->getRecord("Contratos", $info->getFieldValue('Contrato')->getEntityId()) ?>
+                                            <?php $coberturas = $cotizaciones->detalles_contrato($info->getFieldValue('Contrato')->getEntityId()) ?>
                                         <?php endif ?>
 
                                         <p class="card-text">

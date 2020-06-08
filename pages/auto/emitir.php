@@ -1,14 +1,12 @@
 <?php
 
-$api = new api;
+$cotizaciones = new cotizaciones;
 
-$url = rtrim($_GET['url'], "/");
-$url = explode('/', $url);
-$id = $url[2];
+$url = $cotizaciones->obtener_url();
+$id = $url[0];
 
-$resumen = $api->getRecord("Deals", $id);
-$criterio = "Deal_Name:equals:" . $id;
-$detalles =$api->searchRecordsByCriteria("Quotes", $criterio);
+$resumen = $cotizaciones->detalles_oferta($id);
+$detalles = $cotizaciones->detalles_cotizaciones($id);
 
 $emitida = array("Emitido", "En trámite");
 
@@ -25,55 +23,14 @@ if (
 
 if ($_POST) {
 
-    $ruta_cotizacion = "tmp";
-    if (!is_dir($ruta_cotizacion)) {
-        mkdir($ruta_cotizacion, 0755, true);
-    }
-
     if (!empty($_FILES["cotizacion_firmada"]["name"])) {
-
-        $extension = pathinfo($_FILES["cotizacion_firmada"]["name"], PATHINFO_EXTENSION);
-        $permitido = array("pdf");
-
-        if (in_array($extension, $permitido)) {
-
-            $tmp_name = $_FILES["cotizacion_firmada"]["tmp_name"];
-            $name = basename($_FILES["cotizacion_firmada"]["name"]);
-            move_uploaded_file($tmp_name, "$ruta_cotizacion/$name");
-
-            $api->uploadAttachment("Deals", $id, "$ruta_cotizacion/$name");
-
-            unlink("$ruta_cotizacion/$name");
-
-            $cambios["Aseguradora"] = $_POST["aseguradora_id"];
-            $cambios["Stage"] = "En trámite";
-            $cambios["Deal_Name"] = "Resumen";
-            $api->updateRecord("Deals", $id, $cambios);
-
-            $alerta = "Póliza emitida,descargue la previsualizacion para obtener el carnet. ";
-        } else {
-            $alerta = "Error al cargar documentos, solo se permiten archivos PDF.";
-        }
+        $alerta = $cotizaciones->emitir($id);
     } else if (!empty($_FILES["documentos"]['name'][0])) {
-
-        foreach ($_FILES["documentos"]["error"] as $key => $error) {
-
-            if ($error == UPLOAD_ERR_OK) {
-
-                $tmp_name = $_FILES["documentos"]["tmp_name"][$key];
-                $name = basename($_FILES["documentos"]["name"][$key]);
-                move_uploaded_file($tmp_name, "$ruta_cotizacion/$name");
-
-                $api->uploadAttachment("Deals", $id, "$ruta_cotizacion/$name");
-
-                unlink("$ruta_cotizacion/$name");
-            }
-        }
-
-        $alerta = "Documentos adjuntados";
+        $alerta = $cotizaciones->adjuntar_archivos($id);
     }
 
-    header("Location:" . constant("url") . "cotizaciones/redirigir/auto-detalles-$id-$alerta");
+    $url = array("auto", "detalles", $id, $alerta);
+    header("Location:" . constant("url") . "cotizaciones/redirigir/" . json_encode($url));
     exit;
 }
 

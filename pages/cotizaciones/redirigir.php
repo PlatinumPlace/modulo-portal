@@ -1,10 +1,7 @@
 <?php
 
-$url = rtrim($_GET['url'], "/");
-$url = explode('/', $url);
-
-$nueva_url = rtrim($url[2], "-");
-$nueva_url = explode('-', $nueva_url);
+$cotizaciones = new cotizaciones;
+$url = $cotizaciones->obtener_url();
 
 ?>
 <br><br><br>
@@ -15,19 +12,15 @@ $nueva_url = explode('-', $nueva_url);
 
 <script>
     var url = "<?= constant("url") ?>";
-    var carpeta = "<?= $nueva_url[0] ?>";
-    var pagina = "<?= $nueva_url[1] ?>";
-    var id = "<?= (!empty($nueva_url[2])) ? $nueva_url[2] : ""; ?>";
-    var alerta = "<?= (!empty($nueva_url[3])) ? $nueva_url[3] : ""; ?>";
+    var data = <?= $url[0] ?>;
+    var nueva_url = "";
 
-    if (alerta != "") {
-        var nueva_url = url + carpeta + "/" + pagina + "/" + id + "?alert=" + alerta;
-    } else {
-        var nueva_url = url + carpeta + "/" + pagina + "/" + id;
+    for (var i = 0; i < data.length; i++) {
+        nueva_url += data[i] + "/";
     }
 
     var time = 5500;
     setTimeout(function() {
-        window.location = nueva_url;
+        window.location = url + nueva_url;
     }, time);
 </script>

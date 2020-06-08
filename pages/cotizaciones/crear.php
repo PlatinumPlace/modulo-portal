@@ -1,39 +1,14 @@
 <?php
 
-$api = new api;
-$usuario = json_decode($_COOKIE["usuario"], true);
+$cotizaciones = new cotizaciones;
 
-$marcas = $api->getRecords("Marcas");
+$marcas = $cotizaciones->obtener_marcas();
 sort($marcas);
 
 if (isset($_POST['crear_auto'])) {
-    $usuario = json_decode($_COOKIE["usuario"], true);
-
-    $nueva_cotizacion["Stage"] = "Cotizando";
-    $nueva_cotizacion["Type"] = "Auto";
-    $nueva_cotizacion["Lead_Source"] = "Portal GNB";
-    $nueva_cotizacion["Deal_Name"] = "Cotización";
-    $nueva_cotizacion["Contact_Name"] =  $usuario['id'];
-    $nueva_cotizacion["Tipo_de_poliza"] = $_POST["Tipo_de_poliza"];
-    $nueva_cotizacion["Plan"] = $_POST["Plan"];
-    $nueva_cotizacion["Marca"] = $_POST["Marca"];
-    $nueva_cotizacion["Modelo"] = $_POST["Modelo"];
-
-    $modelo = $api->getRecord("Modelos", $_POST['Modelo']);
-
-    $nueva_cotizacion["Tipo_de_veh_culo"] = $modelo->getFieldValue('Tipo');
-    $nueva_cotizacion["Valor_Asegurado"] = $_POST["Valor_Asegurado"];
-
-    $nueva_cotizacion["A_o_de_Fabricacion"] = $_POST["A_o_de_Fabricacion"];
-    $nueva_cotizacion["Chasis"] = (isset($_POST["Chasis"])) ? $_POST["Chasis"] : null;
-    $nueva_cotizacion["Color"] = (isset($_POST["Color"])) ? $_POST["Color"] : null;
-    $nueva_cotizacion["Uso"] = (isset($_POST["Uso"])) ? $_POST["Uso"] : null;
-    $nueva_cotizacion["Placa"] = (isset($_POST["Placa"])) ? $_POST["Placa"] : null;
-    $nueva_cotizacion["Es_nuevo"] = (isset($_POST["Es_nuevo"])) ? true : false;
-
-    $id = $api->createRecord("Deals", $nueva_cotizacion);
-
-    header("Location:" . constant("url") . "cotizaciones/redirigir/auto-detalles-$id");
+    $id = $cotizaciones->crear_auto();
+    $url = array("auto", "detalles", $id);
+    header("Location:" . constant("url") . "cotizaciones/redirigir/" . json_encode($url));
     exit;
 }
 
@@ -51,7 +26,12 @@ if (isset($_POST['crear_auto'])) {
         <ul class="navbar-nav">
             <li class="nav-item active">
                 <a class="nav-link" href="#" onclick="crear_auto()">
-                    <i class="material-icons">directions_car</i> Para vehículo
+                    <svg class="bi bi-truck" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                        <path fill-rule="evenodd" d="M0 3.5A1.5 1.5 0 0 1 1.5 2h9A1.5 1.5 0 0 1 12 3.5v7h-1v-7a.5.5 0 0 0-.5-.5h-9a.5.5 0 0 0-.5.5v7a.5.5 0 0 0 .5.5v1A1.5 1.5 0 0 1 0 10.5v-7zM4.5 11h6v1h-6v-1z" />
+                        <path fill-rule="evenodd" d="M11 5h2.02a1.5 1.5 0 0 1 1.17.563l1.481 1.85a1.5 1.5 0 0 1 .329.938V10.5a1.5 1.5 0 0 1-1.5 1.5h-1v-1h1a.5.5 0 0 0 .5-.5V8.35a.5.5 0 0 0-.11-.312l-1.48-1.85A.5.5 0 0 0 13.02 6H12v4.5h-1V5zm-8 8a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm0 1a2 2 0 1 0 0-4 2 2 0 0 0 0 4z" />
+                        <path fill-rule="evenodd" d="M12 13a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm0 1a2 2 0 1 0 0-4 2 2 0 0 0 0 4z" />
+                    </svg>
+                    Para vehículo
                 </a>
             </li>
         </ul>
@@ -177,11 +157,6 @@ if (isset($_POST['crear_auto'])) {
         var auto = document.getElementById("auto");
         if (auto.style.display === "none") {
             auto.style.display = "block";
-
-            document.getElementById("Valor_Asegurado").required = true;
-            document.getElementById("A_o_de_Fabricacion").required = true;
-            document.getElementById("marca").required = true;
-            document.getElementById("modelo").required = true;
         }
     }
 

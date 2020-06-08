@@ -14,12 +14,26 @@ class app
 
     public function verificar_sesion()
     {
-        if (!isset($_COOKIE["usuario"])) {
-            $this->buscar_pagina("usuarios/iniciar_sesion");
+        session_start();
+        $pagina_login = "pages/usuarios/iniciar_sesion.php";
+        if (isset($_GET['url'])) {
+            $url = rtrim($_GET['url'], "/");
+            $url = explode('/', $url);
+
+            if ($url[1] == "cerrar_sesion") {
+                unset($_SESSION["usuario"]);
+            }
+        }
+        if (!isset($_SESSION["usuario"])) {
+            require_once($pagina_login);
             exit;
         } else {
-            require_once("pages/usuarios/continuar_sesion.php");
+            if (time() -  $_SESSION["usuario"]["tiempo_activo"] > 3600) {
+                require_once($pagina_login);
+                exit;
+            }
         }
+        $_SESSION["usuario"]["tiempo_activo"] = time();
     }
 
     public function buscar_pagina($pagina = null)
@@ -36,7 +50,7 @@ class app
 
             if ($url[1] == "descargar") {
                 require_once($pagina);
-            }else {
+            } else {
                 require_once($header);
                 if (file_exists($pagina)) {
                     require_once($pagina);
@@ -46,22 +60,9 @@ class app
                 require_once($footer);
             }
         } else {
-
-            if ($pagina == null) {
-
-                require_once("pages/template/header.php");
-                require_once("pages/cotizaciones/pagina_principal.php");
-                require_once("pages/template/footer.php");
-            } else {
-
-                $url = rtrim($pagina, "/");
-                $url = explode('/', $url);
-
-                $pagina = "pages/" . $url[0] . "/" . $url[1] . ".php";
-                if (file_exists($pagina)) {
-                    require_once($pagina);
-                }
-            }
+            require_once("pages/template/header.php");
+            require_once("pages/cotizaciones/pagina_principal.php");
+            require_once("pages/template/footer.php");
         }
     }
 }

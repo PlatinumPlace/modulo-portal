@@ -1,14 +1,12 @@
 <?php
 
-$api = new api;
+$cotizaciones = new cotizaciones;
 
-$url = rtrim($_GET['url'], "/");
-$url = explode('/', $url);
-$id = $url[2];
+$url = $cotizaciones->obtener_url();
+$id = $url[0];
 
-$resumen = $api->getRecord("Deals", $id);
-$criterio = "Deal_Name:equals:" . $id;
-$detalles =$api->searchRecordsByCriteria("Quotes", $criterio);
+$resumen = $cotizaciones->detalles_oferta($id);
+$detalles = $cotizaciones->detalles_cotizaciones($id);
 
 $emitida = array("Emitido", "En trámite");
 
@@ -18,7 +16,7 @@ if (empty($resumen)) {
 }
 
 if (in_array($resumen->getFieldValue("Stage"), $emitida)) {
-    $documentos_adjuntos = $api->getAttachments("Deals", $id);
+    $documentos_adjuntos = $cotizaciones->lista_docomentos_adjuntos($id);
 }
 
 if ($resumen->getFieldValue("Stage") == "Abandonada") {
@@ -26,7 +24,7 @@ if ($resumen->getFieldValue("Stage") == "Abandonada") {
 }
 
 if (isset($_GET["alert"])) {
-    $alerta = $_GET["alert"];
+    $alerta = $url[1];
 }
 
 require_once("pages/template/header_auto.php");
