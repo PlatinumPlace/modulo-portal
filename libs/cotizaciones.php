@@ -57,7 +57,7 @@ class cotizaciones extends api
         $contratos = $this->searchRecordsByCriteria("Contratos", $criterio, 1, 200);
         if (!empty($contratos)) {
             foreach ($contratos as $contrato) {
-                $aseguradoras[$contrato->getEntityId()] = $contrato->getFieldValue('Aseguradora')->getLookupLabel();
+                $aseguradoras[$contrato->getFieldValue('Aseguradora')->getEntityId()] = $contrato->getFieldValue('Aseguradora')->getLookupLabel();
             }
             return array_unique($aseguradoras);
         }
@@ -155,7 +155,7 @@ class cotizaciones extends api
 
     public function imagen_aseguradora($aseguradora_id)
     {
-        $ruta = "img";
+        $ruta = "public/img";
         if (!is_dir($ruta)) {
             mkdir($ruta, 0755, true);
         }
@@ -164,7 +164,7 @@ class cotizaciones extends api
 
     public function emitir($oferta_id)
     {
-        $ruta = "tmp";
+        $ruta = "public/tmp";
         if (!is_dir($ruta)) {
             mkdir($ruta, 0755, true);
         }
@@ -192,7 +192,7 @@ class cotizaciones extends api
 
     public function adjuntar_archivos($oferta_id)
     {
-        $ruta = "tmp";
+        $ruta = "public/tmp";
         if (!is_dir($ruta)) {
             mkdir($ruta, 0755, true);
         }
@@ -215,158 +215,240 @@ class cotizaciones extends api
         return $this->getAttachments("Deals", $oferta_id);
     }
 
-    public function exportar_csv()
+    public function exportar_auto_csv()
     {
-        if (!is_dir("files")) {
-            mkdir("files", 0755, true);
+        if (!is_dir("public/files")) {
+            mkdir("public/files", 0755, true);
         }
-        $contrato =  $this->detalles_contrato($_POST["contrato_id"]);
-        $lista = $this->buscar_cotizaciones("Type", ucfirst($_POST["tipo_cotizacion"]));
-        if ($lista) {
-            $fp = fopen("files/reporte.csv", 'w');
-            $titulo = "Reporte " . ucfirst($_POST["tipo_reporte"]) . " " . ucfirst($_POST["tipo_cotizacion"]);
-            $encabezado = array(
-                array($contrato->getFieldValue("Socio")->getLookupLabel()),
-                array($titulo),
-                array("Aseguradora:", $contrato->getFieldValue("Aseguradora")->getLookupLabel()),
-                array("Poliza:", $contrato->getFieldValue('No_P_liza')),
-                array("Desde:", $_POST["desde"], "Hasta:", $_POST["hasta"]),
-                array("Vendedor:", $_SESSION["usuario"]['nombre']),
-                array("")
-            );
-            foreach ($encabezado as $campos) {
-                fputcsv($fp, $campos);
-            }
-            if ($_POST["tipo_cotizacion"] == "auto") {
-                $tabla_encabezado = array(
-                    array(
-                        "Fecha Emision",
-                        "Nombre Asegurado",
-                        "Cedula",
-                        "Marca",
-                        "Modelo",
-                        "Ano",
-                        "Color",
-                        "Chasis",
-                        "Placa",
-                        "Valor Asegurado",
-                        "Plan",
-                        "Prima Neta",
-                        "ISC",
-                        "Prima Total"
-                    )
-                );
-                if ($_POST["tipo_reporte"] == "comisiones") {
-                    $tabla_encabezado[0][] = "Comision";
-                }
-            }
-            foreach ($tabla_encabezado as $campos) {
-                fputcsv($fp, $campos);
-            }
-            $prima_neta_sumatoria = 0;
-            $isc_sumatoria = 0;
-            $prima_total_sumatoria = 0;
-            $valor_asegurado_sumatoria = 0;
-            $comision_sumatoria = 0;
-            foreach ($lista as $resumen) {
-                if (
-                    date("Y-m-d", strtotime($resumen->getFieldValue("Fecha_de_emisi_n")))  >= $_POST["desde"]
-                    and
-                    date("Y-m-d", strtotime($resumen->getFieldValue("Fecha_de_emisi_n"))) <= $_POST["hasta"]
-                    and
-                    $resumen->getFieldValue("Contact_Name")->getEntityId() == $_SESSION["usuario"]["id"]
-                ) {
-                    $detalles = $this->detalles_cotizaciones($resumen->getEntityId());
-                    foreach ($detalles as $info) {
-                        if (
-                            $info->getFieldValue("Aseguradora")->getEntityId() == $contrato->getFieldValue("Aseguradora")->getEntityId()
-                            and
-                            $info->getFieldValue('Grand_Total') > 0
-                        ) {
-                            $planes = $info->getLineItems();
-                            foreach ($planes as $plan) {
-                                $prima_neta = $plan->getTotalAfterDiscount();
-                                $isc = $plan->getTaxAmount();
-                                $prima_total = $plan->getNetTotal();
-                            }
-                            $comision = $info->getFieldValue('Comisi_n_Socio');
-
-                            if ($_POST["tipo_reporte"] == "cotizaciones") {
-                                $estado[] = "Cotizando";
-                            } elseif ($_POST["tipo_reporte"] == "emisiones" or $_POST["tipo_reporte"] == "comisiones") {
-                                $estado = array("En trámite", "Emitido");
-                            }
-                            if (in_array($resumen->getFieldValue("Stage"), $estado)) {
-                                $prima_neta_tabla = "RD$" .  number_format($prima_neta, 2);
-                                $isc_tabla = "RD$" . number_format($isc, 2);
-                                $prima_total_tabla = "RD$" . number_format($prima_total, 2);
-                                $comision_tabla = "RD$" . number_format($comision, 2);
-                                $valor_asegurado_tabla = "RD$" . number_format($resumen->getFieldValue('Valor_Asegurado'), 2);
-                                if ($_POST["tipo_cotizacion"] == "auto") {
-                                    $tabla_contenido = array(
-                                        array(
-                                            date("Y-m-d", strtotime($resumen->getFieldValue("Fecha_de_emisi_n"))),
-                                            $resumen->getFieldValue("Nombre") . " " . $resumen->getFieldValue("Apellido"),
-                                            $resumen->getFieldValue("RNC_Cedula"),
-                                            $resumen->getFieldValue('Marca')->getLookupLabel(),
-                                            $resumen->getFieldValue('Modelo')->getLookupLabel(),
-                                            $resumen->getFieldValue('A_o_de_Fabricacion'),
-                                            $resumen->getFieldValue('Color'),
-                                            $resumen->getFieldValue('Chasis'),
-                                            $resumen->getFieldValue('Placa'),
-                                            $valor_asegurado_tabla,
-                                            $resumen->getFieldValue('Plan'),
-                                            $prima_neta_tabla,
-                                            $isc_tabla,
-                                            $prima_total_tabla
-                                        )
-                                    );
-                                    $valor_asegurado_sumatoria += $resumen->getFieldValue('Valor_Asegurado');
-                                    $prima_neta_sumatoria += $prima_neta;
-                                    $isc_sumatoria += $isc;
-                                    $prima_total_sumatoria += $prima_total;
-                                    if ($_POST["tipo_reporte"] == "comisiones") {
-                                        $tabla_contenido[0][] = $comision_tabla;
-                                        $comision_sumatoria += $comision;
-                                    }
+        $fp = fopen("public/files/reporte.csv", 'w');
+        $titulo = "Reporte " . ucfirst($_POST["tipo_reporte"]) . " " . ucfirst($_POST["tipo_cotizacion"]);
+        $encabezado = array(
+            array($_SESSION["usuario"]['empresa_nombre']),
+            array($titulo),
+            array("Desde:", $_POST["desde"], "Hasta:", $_POST["hasta"]),
+            array("Vendedor:", $_SESSION["usuario"]['nombre']),
+            array("")
+        );
+        foreach ($encabezado as $campos) {
+            fputcsv($fp, $campos);
+        }
+        $encabezado_tabla = array(
+            array(
+                "Emision",
+                "Vigencia",
+                "Nombre",
+                "RNC/Cedula",
+                "Marca",
+                "Modelo",
+                "Tipo",
+                "Ano",
+                "Color",
+                "Chasis",
+                "Placa",
+                "Valor",
+                "Prima",
+                "Aseguradora"
+            )
+        );
+        if ($_POST["tipo_reporte"] == "comisiones") {
+            $encabezado_tabla[0][] = "Comision";
+        }
+        foreach ($encabezado_tabla as $campos) {
+            fputcsv($fp, $campos);
+        }
+        $pagina = 1;
+        $criterio = "Contact_Name:equals:" .  $_SESSION["usuario"]['id'];
+        $emitida = array("Emitido", "En trámite");
+        do {
+            $cotizaciones = $this->searchRecordsByCriteria("Quotes", $criterio, $pagina, 200);
+            if (!empty($cotizaciones)) {
+                $pagina++;
+                $prima_sumatoria = 0;
+                $valor_sumatoria = 0;
+                $comision_sumatoria=0;
+                if ($_POST["tipo_reporte"] == "cotizaciones") {
+                    if (empty($_POST["aseguradora_id"])) {
+                        foreach ($cotizaciones as $cotizacion) {
+                            $oferta =  $this->getRecord("Deals", $cotizacion->getFieldValue("Deal_Name")->getEntityId());
+                            if (
+                                date("Y-m-d", strtotime($oferta->getFieldValue("Fecha_de_emisi_n")))  >= $_POST["desde"]
+                                and
+                                date("Y-m-d", strtotime($oferta->getFieldValue("Fecha_de_emisi_n"))) <= $_POST["hasta"]
+                                and
+                                $oferta->getFieldValue("Stage") == "Cotizando"
+                                and
+                                $cotizacion->getFieldValue('Grand_Total') > 0
+                            ) {
+                                $prima_sumatoria += $oferta->getFieldValue('Valor_Asegurado');
+                                $valor_sumatoria += $cotizacion->getFieldValue('Grand_Total');
+                                $contenido = array(
+                                    array(
+                                        date("Y-m-d", strtotime($oferta->getFieldValue("Fecha_de_emisi_n"))),
+                                        date("Y-m-d", strtotime($oferta->getFieldValue("Closing_Date"))),
+                                        $oferta->getFieldValue("Nombre") . " " . $oferta->getFieldValue("Apellido"),
+                                        $oferta->getFieldValue("RNC_Cedula"),
+                                        $oferta->getFieldValue('Marca')->getLookupLabel(),
+                                        $oferta->getFieldValue('Modelo')->getLookupLabel(),
+                                        $oferta->getFieldValue('Tipo_de_veh_culo'),
+                                        $oferta->getFieldValue('A_o_de_Fabricacion'),
+                                        $oferta->getFieldValue('Color'),
+                                        $oferta->getFieldValue('Chasis'),
+                                        $oferta->getFieldValue('Placa'),
+                                        number_format($oferta->getFieldValue('Valor_Asegurado'), 2),
+                                        number_format($cotizacion->getFieldValue('Grand_Total'), 2),
+                                        $cotizacion->getFieldValue('Aseguradora')->getLookupLabel()
+                                    )
+                                );
+                                foreach ($contenido as $campos) {
+                                    fputcsv($fp, $campos);
                                 }
-                                foreach ($tabla_contenido as $campos) {
+                            }
+                        }
+                    } else {
+                        foreach ($cotizaciones as $cotizacion) {
+                            $oferta =  $this->getRecord("Deals", $cotizacion->getFieldValue("Deal_Name")->getEntityId());
+                            if (
+                                date("Y-m-d", strtotime($oferta->getFieldValue("Fecha_de_emisi_n")))  >= $_POST["desde"]
+                                and
+                                date("Y-m-d", strtotime($oferta->getFieldValue("Fecha_de_emisi_n"))) <= $_POST["hasta"]
+                                and
+                                $oferta->getFieldValue("Stage") == "Cotizando"
+                                and
+                                $cotizacion->getFieldValue('Grand_Total') > 0
+                                and
+                                $cotizacion->getFieldValue("Aseguradora")->getEntityId() == $_POST["aseguradora_id"]
+                            ) {
+                                $prima_sumatoria += $oferta->getFieldValue('Valor_Asegurado');
+                                $valor_sumatoria += $cotizacion->getFieldValue('Grand_Total');
+                                $contenido = array(
+                                    array(
+                                        date("Y-m-d", strtotime($oferta->getFieldValue("Fecha_de_emisi_n"))),
+                                        date("Y-m-d", strtotime($oferta->getFieldValue("Closing_Date"))),
+                                        $oferta->getFieldValue("Nombre") . " " . $oferta->getFieldValue("Apellido"),
+                                        $oferta->getFieldValue("RNC_Cedula"),
+                                        $oferta->getFieldValue('Marca')->getLookupLabel(),
+                                        $oferta->getFieldValue('Modelo')->getLookupLabel(),
+                                        $oferta->getFieldValue('Tipo_de_veh_culo'),
+                                        $oferta->getFieldValue('A_o_de_Fabricacion'),
+                                        $oferta->getFieldValue('Color'),
+                                        $oferta->getFieldValue('Chasis'),
+                                        $oferta->getFieldValue('Placa'),
+                                        number_format($oferta->getFieldValue('Valor_Asegurado'), 2),
+                                        number_format($cotizacion->getFieldValue('Grand_Total'), 2),
+                                        $cotizacion->getFieldValue('Aseguradora')->getLookupLabel()
+                                    )
+                                );
+                                foreach ($contenido as $campos) {
+                                    fputcsv($fp, $campos);
+                                }
+                            }
+                        }
+                    }
+                } elseif ($_POST["tipo_reporte"] == "emisiones") {
+                    if (empty($_POST["aseguradora_id"])) {
+                        foreach ($cotizaciones as $cotizacion) {
+                            $oferta =  $this->getRecord("Deals", $cotizacion->getFieldValue("Deal_Name")->getEntityId());
+                            if (
+                                date("Y-m-d", strtotime($oferta->getFieldValue("Fecha_de_emisi_n")))  >= $_POST["desde"]
+                                and
+                                date("Y-m-d", strtotime($oferta->getFieldValue("Fecha_de_emisi_n"))) <= $_POST["hasta"]
+                                and
+                                in_array($cotizacion->getFieldValue("Stage"), $emitida)
+                                and
+                                $cotizacion->getFieldValue('Grand_Total') > 0
+                            ) {
+                                $prima_sumatoria += $oferta->getFieldValue('Valor_Asegurado');
+                                $valor_sumatoria += $cotizacion->getFieldValue('Grand_Total');
+                                $comision_sumatoria += $cotizacion->getFieldValue('Comisi_n_Socio');
+                                $contenido = array(
+                                    array(
+                                        date("Y-m-d", strtotime($oferta->getFieldValue("Fecha_de_emisi_n"))),
+                                        date("Y-m-d", strtotime($oferta->getFieldValue("Closing_Date"))),
+                                        $oferta->getFieldValue("Nombre") . " " . $oferta->getFieldValue("Apellido"),
+                                        $oferta->getFieldValue("RNC_Cedula"),
+                                        $oferta->getFieldValue('Marca')->getLookupLabel(),
+                                        $oferta->getFieldValue('Modelo')->getLookupLabel(),
+                                        $oferta->getFieldValue('Tipo_de_veh_culo'),
+                                        $oferta->getFieldValue('A_o_de_Fabricacion'),
+                                        $oferta->getFieldValue('Color'),
+                                        $oferta->getFieldValue('Chasis'),
+                                        $oferta->getFieldValue('Placa'),
+                                        number_format($oferta->getFieldValue('Valor_Asegurado'), 2),
+                                        number_format($cotizacion->getFieldValue('Grand_Total'), 2),
+                                        $cotizacion->getFieldValue('Aseguradora')->getLookupLabel()
+                                    )
+                                );
+                                if ($_POST["tipo_reporte"] == "comisiones") {
+                                    $contenido[0][] = number_format($cotizacion->getFieldValue('Comisi_n_Socio'), 2);
+                                }
+                                foreach ($contenido as $campos) {
+                                    fputcsv($fp, $campos);
+                                }
+                            }
+                        }
+                    } else {
+                        foreach ($cotizaciones as $cotizacion) {
+                            $oferta =  $this->getRecord("Deals", $cotizacion->getFieldValue("Deal_Name")->getEntityId());
+                            if (
+                                date("Y-m-d", strtotime($oferta->getFieldValue("Fecha_de_emisi_n")))  >= $_POST["desde"]
+                                and
+                                date("Y-m-d", strtotime($oferta->getFieldValue("Fecha_de_emisi_n"))) <= $_POST["hasta"]
+                                and
+                                in_array($cotizacion->getFieldValue("Stage"), $emitida)
+                                and
+                                $cotizacion->getFieldValue('Grand_Total') > 0
+                                and
+                                $cotizacion->getFieldValue("Aseguradora")->getEntityId() == $_POST["aseguradora_id"]
+                            ) {
+                                $prima_sumatoria += $oferta->getFieldValue('Valor_Asegurado');
+                                $valor_sumatoria += $cotizacion->getFieldValue('Grand_Total');
+                                $comision_sumatoria += $cotizacion->getFieldValue('Comisi_n_Socio');
+                                $contenido = array(
+                                    array(
+                                        date("Y-m-d", strtotime($oferta->getFieldValue("Fecha_de_emisi_n"))),
+                                        date("Y-m-d", strtotime($oferta->getFieldValue("Closing_Date"))),
+                                        $oferta->getFieldValue("Nombre") . " " . $oferta->getFieldValue("Apellido"),
+                                        $oferta->getFieldValue("RNC_Cedula"),
+                                        $oferta->getFieldValue('Marca')->getLookupLabel(),
+                                        $oferta->getFieldValue('Modelo')->getLookupLabel(),
+                                        $oferta->getFieldValue('Tipo_de_veh_culo'),
+                                        $oferta->getFieldValue('A_o_de_Fabricacion'),
+                                        $oferta->getFieldValue('Color'),
+                                        $oferta->getFieldValue('Chasis'),
+                                        $oferta->getFieldValue('Placa'),
+                                        number_format($oferta->getFieldValue('Valor_Asegurado'), 2),
+                                        number_format($cotizacion->getFieldValue('Grand_Total'), 2),
+                                        $cotizacion->getFieldValue('Aseguradora')->getLookupLabel()
+                                    )
+                                );
+                                if ($_POST["tipo_reporte"] == "comisiones") {
+                                    $contenido[0][] = number_format($cotizacion->getFieldValue('Comisi_n_Socio'), 2);
+                                }
+                                foreach ($contenido as $campos) {
                                     fputcsv($fp, $campos);
                                 }
                             }
                         }
                     }
                 }
-            }
-            if (!isset($tabla_contenido)) {
-                fclose($fp);
-                return "No existen resultados para la aseguradora seleccionada.";
-            } else {
-                $prima_neta_sumatoria = "RD$" . number_format($prima_neta_sumatoria, 2);
-                $isc_sumatoria = "RD$" . number_format($isc_sumatoria, 2);
-                $prima_total_sumatoria = "RD$" . number_format($prima_total_sumatoria, 2);
-                $valor_asegurado_sumatoria = "RD$" . number_format($valor_asegurado_sumatoria, 2);
-                $comision_sumatoria = "RD$" . number_format($comision_sumatoria, 2);
-                if ($_POST["tipo_cotizacion"] == "auto") {
-                    $pie_pagina = array(
-                        array(""),
-                        array("Total Primas Netas:", $prima_neta_sumatoria),
-                        array("Total ISC:", $isc_sumatoria),
-                        array("Total Primas Totales:", $prima_total_sumatoria),
-                        array("Total Valores Asegurados:", $valor_asegurado_sumatoria)
-                    );
-                    if ($_POST["tipo_reporte"] == "comisiones") {
-                        $pie_pagina[5] = array("Total Comisiones:", $comision_sumatoria);
-                    }
+                if (empty($contenido)) {
+                    fclose($fp);
+                    return "No se encontraron registros.";
                 }
+                $pie_pagina = array(
+                    array(""),
+                    array("Total Comisiones:", number_format($comision_sumatoria, 2)),
+                    array("Total Primas:", number_format($prima_sumatoria, 2)),
+                    array("Total Valores:", number_format($valor_sumatoria, 2))
+                );
                 foreach ($pie_pagina as $campos) {
                     fputcsv($fp, $campos);
                 }
-                fclose($fp);
-                return 'Reporte generado correctamente,<a download="' . $titulo . '.csv" href="' . constant("url") . 'files/reporte.csv" class="btn btn-link">descargar</a>';
+            } else {
+                $pagina = 0;
             }
-        } else {
-            return "Ha ocurrido un error,vuelva a intentarlo";
-        }
+        } while ($pagina > 0);
+        fclose($fp);
+        return 'Reporte generado correctamente,<a download="' . $titulo . '.csv" href="' . constant("url") . 'public/files/reporte.csv" class="btn btn-link">descargar</a>';
     }
 }

@@ -5,7 +5,7 @@ $cotizaciones = new cotizaciones;
 
 $url = $portal->obtener_url();
 $alerta  = (isset($url[0])) ? $url[0] : "";
-$contrato = $cotizaciones->lista_aseguradoras();
+$aseguradoras = $cotizaciones->lista_aseguradoras();
 $emitida = array("Emitido", "En trámite");
 
 if (isset($_POST["pdf"])) {
@@ -22,7 +22,9 @@ if (isset($_POST["pdf"])) {
     exit();
 }
 if (isset($_POST["csv"])) {
-    $alerta = $cotizaciones->exportar_csv();
+    if ($_POST["tipo_cotizacion"] == "auto") {
+        $alerta = $cotizaciones->exportar_auto_csv();
+    }
 }
 
 ?>
@@ -30,15 +32,14 @@ if (isset($_POST["csv"])) {
     Reporte de cotizaciones
 </h2>
 
+<?php if (!empty($alerta)) : ?>
+    <div class="alert alert-primary" role="alert">
+        <?= $alerta ?>
+    </div>
+<?php endif ?>
+
 <div class="card">
     <div class="card-body">
-
-        <?php if (!empty($alerta)) : ?>
-            <div class="alert alert-primary" role="alert">
-                <?= $alerta ?>
-            </div>
-        <?php endif ?>
-
         <form method="POST" action="<?= constant("url") ?>cotizaciones/exportar">
 
             <h5>Reporte</h5>
@@ -47,36 +48,16 @@ if (isset($_POST["csv"])) {
                 <div class="form-group col-md-6">
                     <label class="font-weight-bold">Tipo</label>
                     <select name="tipo_reporte" class="form-control">
+                        <option value="cotizaciones" selected>Cotizaciones</option>
                         <option value="emisiones">Emisiones</option>
                         <option value="comisiones">Comisiones</option>
-                        <option value="cotizaciones" selected>Cotizaciones</option>
                     </select>
                 </div>
 
                 <div class="form-group col-md-6">
-                    <label class="font-weight-bold">Tipo de Cotización</label>
+                    <label class="font-weight-bold">Para</label>
                     <select name="tipo_cotizacion" class="form-control">
                         <option value="auto" selected>Auto</option>
-                    </select>
-                </div>
-            </div>
-
-            <br>
-
-            <h5>Aseguradora</h5>
-            <hr>
-            <div class="form-row">
-                <div class="form-group col-md-6">
-                    <label class="font-weight-bold">Nombre</label>
-                    <select name="contrato_id" class="form-control" required>
-                        <option value="" selected disabled>Selecciona una Aseguradora</option>
-                        <?php
-                        if (!empty($contrato)) {
-                            foreach ($contrato as $id => $nombre_aseguradora) {
-                                echo '<option value="' . $id . '">' . $nombre_aseguradora . '</option>';
-                            }
-                        }
-                        ?>
                     </select>
                 </div>
             </div>
@@ -94,6 +75,25 @@ if (isset($_POST["csv"])) {
                 <div class="form-group col-md-6">
                     <label class="font-weight-bold">Hasta</label>
                     <input type="date" class="form-control" name="hasta" required>
+                </div>
+            </div>
+
+            <br>
+
+            <h5>Aseguradora</h5>
+            <hr>
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <select name="aseguradora_id" class="form-control">
+                        <option value="" selected>Todas</option>
+                        <?php
+                        if (!empty($aseguradoras)) {
+                            foreach ($aseguradoras as $id => $nombre) {
+                                echo '<option value="' . $id . '">' . $nombre . '</option>';
+                            }
+                        }
+                        ?>
+                    </select>
                 </div>
             </div>
 

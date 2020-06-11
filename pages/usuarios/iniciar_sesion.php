@@ -18,7 +18,7 @@ if ($_POST) {
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
 
     <title>IT - Insurance Tech</title>
-    <link rel="icon" type="image/png" href="<?= constant("url") ?>img/logo.png">
+    <link rel="icon" type="image/png" href="<?= constant("url") ?>public/img/logo.png">
 </head>
 
 <body>
@@ -29,7 +29,7 @@ if ($_POST) {
         <div class="row">
 
             <div class="col-md-2">
-                <img src="<?= constant("url") ?>img/logo.png" height="200" width="150">
+                <img src="<?= constant("url") ?>public/img/logo.png" height="200" width="150">
             </div>
 
             <div class="col-md-10">

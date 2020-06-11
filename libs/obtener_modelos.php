@@ -11,7 +11,7 @@ $pagina = 1;
 $criterio = "Marca:equals:" . $_POST["marcas_id"];
 do {
     $modelos = $api->searchRecordsByCriteria("Modelos", $criterio, $pagina, 200);
-    if ($modelos) {
+    if (!empty($modelos)) {
         $pagina++;
         sort($modelos);
         foreach ($modelos as $modelo) {

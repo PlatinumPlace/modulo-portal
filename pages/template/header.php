@@ -14,7 +14,7 @@
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
     <title>IT - Insurance Tech</title>
-    <link rel="icon" type="image/png" href="<?= constant("url") ?>img/logo.png">
+    <link rel="icon" type="image/png" href="<?= constant("url") ?>public/img/logo.png">
 
 </head>
 
@@ -63,6 +63,6 @@
     <div class="container">
         <div class="row">
             <div class="col-2">
-                <img src="<?= constant("url") ?>img/logo.png" height="180" width="150">
+                <img src="<?= constant("url") ?>public/img/logo.png" height="180" width="150">
             </div>
             <div class="col-10">

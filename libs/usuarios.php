@@ -17,6 +17,7 @@ class usuarios extends api
                     $_SESSION["usuario"]['id'] = $usuario->getEntityId();
                     $_SESSION["usuario"]['nombre'] = $usuario->getFieldValue("First_Name") . " " . $usuario->getFieldValue("Last_Name");
                     $_SESSION["usuario"]['empresa_id'] = $usuario->getFieldValue("Account_Name")->getEntityId();
+                    $_SESSION["usuario"]['empresa_nombre'] = $usuario->getFieldValue("Account_Name")->getLookupLabel();
                     $_SESSION["usuario"]['tiempo_activo'] = time();
                     header("Location:" . constant("url"));
                     exit();
