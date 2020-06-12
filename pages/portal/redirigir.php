@@ -1,8 +1,6 @@
-<?php
-
+<?php 
 $portal = new portal;
 $url = $portal->obtener_url();
-
 ?>
 <br><br><br>
 <div class="d-flex align-items-center">
