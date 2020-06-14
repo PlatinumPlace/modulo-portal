@@ -14,16 +14,7 @@ class app
 
     public function verificar_sesion()
     {
-        session_start();
         $pagina_login = "pages/usuarios/iniciar_sesion.php";
-        if (isset($_GET['url'])) {
-            $url = rtrim($_GET['url'], "/");
-            $url = explode('/', $url);
-
-            if ($url[1] == "cerrar_sesion") {
-                unset($_SESSION["usuario"]);
-            }
-        }
         if (!isset($_SESSION["usuario"])) {
             require_once($pagina_login);
             exit;
@@ -42,23 +33,33 @@ class app
 
             $url = rtrim($_GET['url'], "/");
             $url = explode('/', $url);
-
             $header = "pages/template/header.php";
-            $pagina = "pages/" . $url[0] . "/" . $url[1] . ".php";
             $footer = "pages/template/footer.php";
             $error = "pages/portal/error.php";
 
-            if ($url[1] == "descargar") {
+            if (isset($url[1]) and $url[1] == "descargar") {
                 require_once($pagina);
-            } else {
-                require_once($header);
+                exit();
+            }
+
+            if (isset($url[1]) and $url[1] == "cerrar_sesion") {
+                unset($_SESSION["usuario"]);
+                $this->verificar_sesion();
+                exit();
+            }
+
+            require_once($header);
+            if (isset($url[0]) and isset($url[1])) {
+                $pagina = "pages/" . $url[0] . "/" . $url[1] . ".php";
                 if (file_exists($pagina)) {
                     require_once($pagina);
                 } else {
                     require_once($error);
                 }
-                require_once($footer);
+            } else {
+                require_once($error);
             }
+            require_once($footer);
         } else {
             require_once("pages/template/header.php");
             require_once("pages/portal/pagina_principal.php");
