@@ -1,6 +1,6 @@
 <?php
 
-class auto extends api
+class auto extends cotizaciones
 {
     function __construct()
     {
@@ -14,13 +14,8 @@ class auto extends api
         $cotizaciones =  $this->searchRecordsByCriteria("Quotes", $criterio, 1, 200);
         $emitida = array("Emitido", "En trámite");
 
-        if (isset($_GET['url'])) {
-
-            $url = rtrim($_GET['url'], "/");
-            $url = explode('/', $url);
-
-            $alerta = $url[3];
-        }
+        $url = $this->obtener_url();
+        $alerta = $url[0];
 
         if (isset($_GET["page"])) {
             $num_pagina = $_GET["page"];

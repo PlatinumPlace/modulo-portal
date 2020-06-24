@@ -7,6 +7,37 @@ class cotizaciones extends api
         parent::__construct();
     }
 
+    public function error()
+    {
+        require_once("core/views/cotizaciones/error.php");
+    }
+
+    public function redirigir($url)
+    {
+        require_once("core/views/layout/header_main.php");
+        require_once("core/views/cotizaciones/redirigir.php");
+        require_once("core/views/layout/footer_main.php");
+    }
+
+    public function obtener_url()
+    {
+        $url = rtrim($_GET['url'], "/");
+        $url = explode('/', $url);
+
+        $resultado = array();
+        $cont = 0;
+
+        foreach ($url as $posicion => $valor) {
+
+            if ($posicion > 2) {
+                $resultado[$cont] = $valor;
+                $cont++;
+            }
+        }
+
+        return $resultado;
+    }
+
     public function index()
     {
         $total = 0;
@@ -65,13 +96,11 @@ class cotizaciones extends api
     public function buscar($num_pagina = 1)
     {
         if ($_POST) {
-
             $criterio = "((Contact_Name:equals:" .  $_SESSION["usuario"]['id'] . ") and (" . $_POST['parametro'] . ":equals:" . $_POST['busqueda'] . "))";
-            $lista =  $this->searchRecordsByCriteria("Deals", $criterio, $num_pagina, 25);
+            $lista =  $this->searchRecordsByCriteria("Deals", $criterio, $num_pagina, 15);
         } else {
-
             $criterio = "Contact_Name:equals:" . $_SESSION["usuario"]["id"];
-            $lista = $this->searchRecordsByCriteria("Deals", $criterio, $num_pagina, 25);
+            $lista = $this->searchRecordsByCriteria("Deals", $criterio, $num_pagina, 15);
         }
 
         require_once("core/views/layout/header_main.php");
@@ -137,9 +166,9 @@ class cotizaciones extends api
                 empty($nueva_cotizacion["Valor_Asegurado"])
             ) {
                 $alerta = "Ha ocurrido un error,intentano de nuevo.";
-            }else if (ctype_alnum($nueva_cotizacion["chasis"])) {
+            } else if (ctype_alnum($nueva_cotizacion["chasis"])) {
                 $alerta = "Chasis invalido, solo admite letras y número.";;
-            }else {
+            } else {
                 $nuevo_resumen = $this->createRecord("Deals", $nueva_cotizacion);
                 $nueva_url = array("auto", "detalles", $nuevo_resumen['id']);
                 header("Location:" . constant("url") . "home/redirigir/" . json_encode($nueva_url));
@@ -369,7 +398,7 @@ class cotizaciones extends api
                 unlink($csv);
                 exit;
             } else {
-                $alerta= 'Exportación fallida, el archivo esta vacío.';
+                $alerta = 'Exportación fallida, el archivo esta vacío.';
             }
         }
 

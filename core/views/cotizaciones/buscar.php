@@ -3,31 +3,35 @@
     <li class="breadcrumb-item active">Cotizaciones</li>
 </ol>
 
-<div class="card mb-4">
-    <div class="card-body">
+<div class="col-xl-7">
+    <div class="card mb-4">
+        <div class="card-body">
 
-        <form class="form-inline" method="post" action="<?= constant("url") ?>cotizaciones/buscar">
+            <form class="form-inline" method="post" action="<?= constant("url") ?>cotizaciones/buscar">
 
-            <div class="form-group mb-2">
-                <select class="form-control" name="parametro" required>
-                    <option value="No_Cotizaci_n" selected>No. de cotización</option>
-                    <option value="RNC_Cedula">RNC/Cédula</option>
-                    <option value="Nombre">Nombre</option>
-                    <option value="Apellido">Apellido</option>
-                    <option value="Chasis">Chasis</option>
-                </select>
-            </div>
+                <div class="form-group mb-2 mr-sm-2">
+                    <select class="form-control" name="parametro" required>
+                        <option value="No_Cotizaci_n" selected>No. de cotización</option>
+                        <option value="RNC_Cedula">RNC/Cédula</option>
+                        <option value="Nombre">Nombre</option>
+                        <option value="Apellido">Apellido</option>
+                        <option value="Chasis">Chasis</option>
+                    </select>
+                </div>
 
-            <div class="form-group mx-sm-3 mb-2">
-                <input type="text" class="form-control" name="busqueda" required>
-            </div>
+                <div class="form-group mb-2 mr-sm-2">
+                    <input type="text" class="form-control" name="busqueda" required>
+                </div>
 
-            <button type="submit" class="btn btn-primary mb-2">Buscar</button>
-            |
-            <a href="<?= constant("url") ?>cotizaciones/buscar" class="btn btn-info mb-2">Limpiar</a>
+                <div class="form-group mb-2 mr-sm-2">
+                    <button type="submit" class="btn btn-primary">Buscar</button>
+                    |
+                    <a href="<?= constant("url") ?>cotizaciones/buscar" class="btn btn-info">Limpiar</a>
+                </div>
 
-        </form>
+            </form>
 
+        </div>
     </div>
 </div>
 
@@ -85,18 +89,17 @@
                         <?php endforeach ?>
                     <?php endif ?>
                 </tbody>
-
-                <nav aria-label="Page navigation example">
-                    <ul class="pagination justify-content-end">
-                        <li class="page-item">
-                            <a class="page-link" href="<?= constant("url") ?>cotizaciones/buscar/<?= $num_pagina - 1 ?>">Anterior</a>
-                        </li>
-                        <li class="page-item">
-                            <a class="page-link" href="<?= constant("url") ?>cotizaciones/buscar/<?= $num_pagina + 1 ?>">Siguente</a>
-                        </li>
-                    </ul>
-                </nav>
             </table>
         </div>
+        <nav aria-label="Page navigation example">
+            <ul class="pagination justify-content-end">
+                <li class="page-item">
+                    <a class="page-link" href="<?= constant("url") ?>cotizaciones/buscar/<?= $num_pagina - 1 ?>">Anterior</a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="<?= constant("url") ?>cotizaciones/buscar/<?= $num_pagina + 1 ?>">Siguente</a>
+                </li>
+            </ul>
+        </nav>
     </div>
 </div>
