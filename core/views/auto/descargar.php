@@ -81,7 +81,7 @@
                         <b>Direccion:</b>
                     </div>
                     <div class="col-8">
-                        <?= $resumen->getFieldValue('Nombre') . " " . $resumen->getFieldValue('Apellido') ?><br>
+                        <?= $resumen->getFieldValue('Nombre') . " " . $resumen->getFieldValue('Apellidos') ?><br>
                         <?= $resumen->getFieldValue('RNC_Cedula') ?><br>
                         <?= $resumen->getFieldValue('Email') ?><br>
                         <?= $resumen->getFieldValue('Direcci_n') ?>
@@ -400,7 +400,7 @@
                         <div class="text-center"><b>RESERVE SU DERECHO</b></div>
                         <div class="row">
                             <div class="col-12">
-                                <b>Aseguradora</b> Tel. <?= $coberturas->getFieldValue('Tel_fono_Aseguradora') ?>
+                                <b>Aseguradora</b> Tel. <?= $aseguradora->getFieldValue('Phone') ?>
                             </div>
                             <br>
                             <?php if ($coberturas->getFieldValue('Asistencia_Accidente') != null) : ?>

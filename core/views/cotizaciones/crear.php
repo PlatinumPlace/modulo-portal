@@ -10,27 +10,32 @@
     </div>
 <?php endif ?>
 
-<form class="row" method="POST" action="<?= constant("url") ?>cotizaciones/crear">
+<form class="row justify-content-center" method="POST" action="<?= constant("url") ?>cotizaciones/crear">
 
-    <div class="col-xl-6">
+    <div class="col-lg-10">
+
         <div class="card mb-4">
-
-            <div class="card-header">Cotización</div>
-
+            <h5 class="card-header">Cotización</h5>
             <div class="card-body">
-
-                <div class="form-group">
-                    <label class="small mb-1">Tipo de cotización</label>
-                    <select name="tipo_cotizacion" class="form-control" onchange="tipo_de_cotizacion(this)">
-                        <option value="" selected disabled>Selecciona un tipo</option>
-                        <option value="auto">Auto</option>
-                    </select>
-                </div>
 
                 <div class="form-row">
                     <div class="col-md-6">
                         <div class="form-groups">
-                            <label class="small mb-1">Tipo de póliza</label>
+                            <label class="font-weight-bold">Tipo de cotización</label>
+                            <select name="tipo_cotizacion" class="form-control" onchange="tipo_de_cotizacion(this)">
+                                <option value="" selected disabled>Selecciona un tipo</option>
+                                <option value="auto">Auto</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <br>
+
+                <div class="form-row">
+                    <div class="col-md-6">
+                        <div class="form-groups">
+                            <label class="font-weight-bold">Tipo de póliza</label>
                             <select name="tipo_poliza" class="form-control">
                                 <option selected value="Declarativa">Declarativa</option>
                                 <option value="Individual">Individual</option>
@@ -39,7 +44,7 @@
                     </div>
                     <div class="col-md-6">
                         <div class="form-groups">
-                            <label class="small mb-1">Tipo de plan</label>
+                            <label class="font-weight-bold">Tipo de plan</label>
                             <select name="tipo_plan" class="form-control">
                                 <option value="Mensual Full" selected>Mensual Full</option>
                                 <option value="Anual Full">Anual Full</option>
@@ -51,60 +56,59 @@
 
                 <br>
 
-                <div class="form-group">
-                    <label class="small mb-1">Valor Asegurado</label>
-                    <input class="form-control" type="number" name="valor" />
+                <div class="form-row">
+                    <div class="col-md-6">
+                        <div class="form-groups">
+                            <label class="font-weight-bold">Valor Asegurado</label>
+                            <input class="form-control" type="number" name="valor" value="<?= (isset($_POST["valor"])) ? $_POST["valor"] : null ?>" />
+                        </div>
+                    </div>
                 </div>
 
             </div>
         </div>
-    </div>
-
-    <div class="col-xl-6">
 
         <div id="auto" style="display: none;">
             <div class="card mb-4">
-
-                <div class="card-header">Vehículo</div>
-
+                <h5 class="card-header">Vehículo</h5>
                 <div class="card-body">
 
-                    <div class="form-group">
-                        <label class="small mb-1">Marca</label>
-                        <select class="form-control" name="marca" id="marca" onchange="obtener_modelos(this)">
-                            <option value="" selected disabled>Selecciona una Marca</option>
-                            <?php
-                            foreach ($marcas as $marca) {
-                                echo '<option value="' . $marca->getEntityId() . '">' . strtoupper($marca->getFieldValue("Name")) . '</option>';
-                            }
-                            ?>
-                        </select>
-                    </div>
-
-                    <div class="form-group">
-                        <label class="small mb-1">Modelo</label>
-                        <select class="form-control" name="modelo" id="modelo">
-                            <option value="" selected disabled>Selecciona un Modelo</option>
-                            <div id="modelo"></div>
-                        </select>
-                    </div>
-
                     <div class="form-row">
+
                         <div class="col-md-6">
                             <div class="form-groups">
-                                <label class="small mb-1">Año de fabricación</label>
-                                <input class="form-control" type="number" name="fabricacion" maxlength="4" />
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-groups">
-                                <label class="small mb-1">Uso</label>
-                                <select name="uso" class="form-control">
-                                    <option selected value="Privado">Privado</option>
-                                    <option value="Publico">Publico</option>
+                                <label class="font-weight-bold">Marca</label>
+                                <select class="form-control" name="marca" id="marca" onchange="obtener_modelos(this)">
+                                    <option value="" selected disabled>Selecciona una Marca</option>
+                                    <?php
+                                    $pagina = 1;
+                                    do {
+                                        $marcas =  $this->getRecords("Marcas", $pagina, 200);
+                                        if (!empty($marcas)) {
+                                            $pagina++;
+                                            sort($marcas);
+                                            foreach ($marcas as $marca) {
+                                                echo '<option value="' . $marca->getEntityId() . '">' . strtoupper($marca->getFieldValue("Name")) . '</option>';
+                                            }
+                                        } else {
+                                            $pagina = 0;
+                                        }
+                                    } while ($pagina > 0);
+                                    ?>
                                 </select>
                             </div>
                         </div>
+
+                        <div class="col-md-6">
+                            <div class="form-groups">
+                                <label class="font-weight-bold">Modelo</label>
+                                <select class="form-control" name="modelo" id="modelo">
+                                    <option value="" selected disabled>Selecciona un Modelo</option>
+                                    <div id="modelo"></div>
+                                </select>
+                            </div>
+                        </div>
+
                     </div>
 
                     <br>
@@ -112,27 +116,9 @@
                     <div class="form-row">
                         <div class="col-md-6">
                             <div class="form-groups">
-                                <label class="small mb-1">Color</label>
-                                <input type="text" class="form-control" name="color">
+                                <label class="font-weight-bold">Año de fabricación</label>
+                                <input type="number" pattern="/^-?\d+\.?\d*$/" onKeyPress="if(this.value.length==4) return false;" class="form-control" name="fabricacion" value="<?= (isset($_POST["fabricacion"])) ? $_POST["fabricacion"] : null ?>" />
                             </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-groups">
-                                <label class="small mb-1">Placa</label>
-                                <input type="text" class="form-control" name="placa">
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label class="small mb-1">Chasis</label>
-                        <input type="text" class="form-control" name="chasis">
-                    </div>
-
-                    <div class="form-group col-md-6">
-                        <div class="form-group form-check">
-                            <input class="form-check-input" type="checkbox" name="nuevo">
-                            <div class="font-weight-bold">¿Es nuevo?</div>
                         </div>
                     </div>
 
@@ -141,9 +127,7 @@
         </div>
 
         <div class="card mb-4">
-
-            <div class="card-header">Opciones</div>
-
+            <h5 class="card-header">Opciones</h5>
             <div class="card-body">
                 <button type="submit" class="btn btn-success">Cotizar</button>
             </div>

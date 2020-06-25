@@ -13,7 +13,7 @@
         nueva_url += data[i] + "/";
     }
 
-    var time = 5500;
+    var time = 6500;
     setTimeout(function() {
         window.location = url + nueva_url;
     }, time);

@@ -15,7 +15,9 @@ class auto extends cotizaciones
         $emitida = array("Emitido", "En trámite");
 
         $url = $this->obtener_url();
-        $alerta = $url[0];
+        if (!empty($url)) {
+            $alerta = $url[0];
+        }
 
         if (isset($_GET["page"])) {
             $num_pagina = $_GET["page"];
@@ -30,10 +32,6 @@ class auto extends cotizaciones
 
         if (empty($cotizaciones)) {
             $alerta = "Ha ocurrido un error cotizando,verifica los datos y intentelo de nuevo.";
-        }
-
-        if (in_array($resumen->getFieldValue("Stage"), $emitida)) {
-            $documentos_adjuntos = $this->getAttachments("Deals", $resumen_id, $num_pagina, 3);
         }
 
         if ($resumen->getFieldValue("Stage") == "Abandonada") {
@@ -62,12 +60,9 @@ class auto extends cotizaciones
             or
             $resumen->getFieldValue('Email') != null
         ) {
-            header("Location:" . constant("url") . "portal/error");
+            header("Location:" . constant("url") . "cotizaciones/error");
             exit();
         }
-
-        $pagina = 1;
-        $criterio = "Informar_a:equals:" . $_SESSION["usuario"]["id"];
 
         if ($_POST) {
 
@@ -77,24 +72,24 @@ class auto extends cotizaciones
             $cambios["Uso"] = (isset($_POST["uso"])) ? $_POST["uso"] : null;
             $cambios["Es_nuevo"] = (!empty($_POST["nuevo"])) ? true : false;
 
-            if (isset($_POST["cliente"]) and $_POST["cliente"] == "nuevo") {
+            if (isset($_POST["tipo_cliente"]) and $_POST["tipo_cliente"] == "nuevo") {
 
                 $cambios["Direcci_n"] = (isset($_POST["direccion"])) ? $_POST["direccion"] : null;
                 $cambios["Nombre"] = (isset($_POST["nombre"])) ? $_POST["nombre"] : null;
-                $cambios["Apellido"] = (isset($_POST["apellido"])) ? $_POST["apellido"] : null;
+                $cambios["Apellidos"] = (isset($_POST["apellido"])) ? $_POST["apellido"] : null;
                 $cambios["RNC_Cedula"] = (isset($_POST["rnc/cedula"])) ? $_POST["rnc/cedula"] : null;
                 $cambios["Telefono"] = (isset($_POST["telefono"])) ? $_POST["telefono"] : null;
                 $cambios["Tel_Residencia"] = (isset($_POST["tel_residencia"])) ? $_POST["tel_residencia"] : null;
                 $cambios["Tel_Trabajo"] = (isset($_POST["tel_trabajo"])) ? $_POST["tel_trabajo"] : null;
                 $cambios["Fecha_de_Nacimiento"] = (isset($_POST["fecha_nacimiento"])) ? $_POST["fecha_nacimiento"] : null;
                 $cambios["Email"] = (isset($_POST["correo"])) ? $_POST["correo"] : null;
-            } elseif (isset($_POST["cliente"]) and $_POST["cliente"] == "existente") {
+            } elseif (isset($_POST["tipo_cliente"]) and $_POST["tipo_cliente"] == "existente") {
 
-                $cliente = $this->getRecord("Clientes", $_POST["mis_clientes"]);
+                $cliente = $this->getRecord("Clientes", $_POST["clientes"]);
 
                 $cambios["Direcci_n"] = $cliente->getFieldValue("Direcci_n");
                 $cambios["Nombre"] = $cliente->getFieldValue("Name");
-                $cambios["Apellido"] = $cliente->getFieldValue("Apellidos");
+                $cambios["Apellidos"] = $cliente->getFieldValue("Apellidos");
                 $cambios["RNC_Cedula"] = $cliente->getFieldValue("RNC_C_dula");
                 $cambios["Telefono"] = $cliente->getFieldValue("Tel_fono");
                 $cambios["Tel_Residencia"] = $cliente->getFieldValue("Tel_Residencia");
@@ -106,21 +101,19 @@ class auto extends cotizaciones
             if (
                 empty($cambios["Nombre"])
                 or
-                empty($cambios["Email"])
-                or
                 empty($cambios["RNC_Cedula"])
                 or
                 empty($cambios["Fecha_de_Nacimiento"])
                 or
                 empty($cambios["Chasis"])
             ) {
-                $alerta = "Debes completar almenos: Chasis,RNC/cedula,Nombre,Correo y Fecha de nacimiento.";
+                $alerta = "Debes completar almenos: Chasis,RNC/cedula,Nombre y Fecha de nacimiento.";
             } else {
                 $this->updateRecord("Deals", $resumen_id, $cambios);
 
                 $alerta = "Cliente agregado";
                 $nueva_url = array("auto", "detalles", $resumen_id, $alerta);
-                header("Location:" . constant("url") . "home/redirigir/" . json_encode($nueva_url));
+                header("Location:" . constant("url") . "cotizaciones/redirigir/" . json_encode($nueva_url));
                 exit;
             }
         }
@@ -165,6 +158,8 @@ class auto extends cotizaciones
             }
 
             $imagen_aseguradora =  $this->downloadPhoto("Vendors", $resumen->getFieldValue("Aseguradora")->getEntityId(), "$ruta/");
+        
+            $aseguradora = $this->getRecord("Vendors", $resumen->getFieldValue("Aseguradora")->getEntityId());
         }
 
         require_once("core/views/auto/descargar.php");
@@ -217,7 +212,7 @@ class auto extends cotizaciones
 
                     $alerta = "Cotizacion emitida,descargue la previsualizacion para obtener el carnet.";
                     $nueva_url = array("auto", "detalles", $resumen_id, $alerta);
-                    header("Location:" . constant("url") . "home/redirigir/" . json_encode($nueva_url));
+                    header("Location:" . constant("url") . "cotizaciones/redirigir/" . json_encode($nueva_url));
                     exit;
                 } else {
                     $alerta = "Error al cargar documentos, solo se permiten archivos PDF.";

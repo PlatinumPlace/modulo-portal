@@ -121,57 +121,47 @@ class cotizaciones extends api
 
     public function crear()
     {
-        $marcas =  $this->getRecords("Marcas", 1, 200);
-        sort($marcas);
-
         if ($_POST) {
 
-            $nueva_cotizacion["Deal_Name"] = "Cotización";
-            $nueva_cotizacion["Stage"] = "Cotizando";
-            $nueva_cotizacion["Lead_Source"] = "Portal GNB";
-            $nueva_cotizacion["Tipo_de_poliza"] = $_POST["tipo_poliza"];
-            $nueva_cotizacion["Plan"] = $_POST["tipo_plan"];
-            $nueva_cotizacion["Contact_Name"] = $_SESSION["usuario"]['id'];
-            $nueva_cotizacion["Account_Name"] = $_SESSION["usuario"]['empresa_id'];
+            $nuevo_resumen["Deal_Name"] = "Cotización";
+            $nuevo_resumen["Stage"] = "Cotizando";
+            $nuevo_resumen["Lead_Source"] = "Portal GNB";
+            $nuevo_resumen["Tipo_de_poliza"] = $_POST["tipo_poliza"];
+            $nuevo_resumen["Plan"] = $_POST["tipo_plan"];
+            $nuevo_resumen["Contact_Name"] = $_SESSION["usuario"]['id'];
+            $nuevo_resumen["Account_Name"] = $_SESSION["usuario"]['empresa_id'];
+            $nuevo_resumen["Valor_Asegurado"] = (!empty($_POST["valor"])) ? $_POST["valor"] : null;;
 
             if (!empty($_POST["tipo_cotizacion"]) and $_POST['tipo_cotizacion'] == "auto") {
 
-                $nueva_cotizacion["Type"] = "Auto";
-                $nueva_cotizacion["Marca"] = (!empty($_POST["marca"])) ? $_POST["marca"] : null;
+                $nuevo_resumen["Type"] = "Auto";
+                $nuevo_resumen["Marca"] = (!empty($_POST["marca"])) ? $_POST["marca"] : null;
 
                 if (!empty($_POST["modelo"])) {
-                    $nueva_cotizacion["Modelo"] = $_POST["modelo"];
+                    $nuevo_resumen["Modelo"] = $_POST["modelo"];
                     $modelo = $this->getRecord("Modelos", $_POST['modelo']);
-                    $nueva_cotizacion["Tipo_de_veh_culo"] = $modelo->getFieldValue('Tipo');
+                    $nuevo_resumen["Tipo_de_veh_culo"] = $modelo->getFieldValue('Tipo');
                 }
 
-                $nueva_cotizacion["Valor_Asegurado"] = (!empty($_POST["valor"])) ? $_POST["valor"] : null;;
-                $nueva_cotizacion["A_o_de_Fabricacion"] = (!empty($_POST["fabricacion"])) ? $_POST["fabricacion"] : null;
-                $nueva_cotizacion["Chasis"] = (!empty($_POST["chasis"])) ? $_POST["chasis"] : null;
-                $nueva_cotizacion["Color"] = (!empty($_POST["color"])) ? $_POST["color"] : null;
-                $nueva_cotizacion["Uso"] = (!empty($_POST["uso"])) ? $_POST["uso"] : null;
-                $nueva_cotizacion["Placa"] = (!empty($_POST["placa"])) ? $_POST["placa"] : null;
-                $nueva_cotizacion["Es_nuevo"] = (!empty($_POST["nuevo"])) ? true : false;
+                $nuevo_resumen["A_o_de_Fabricacion"] = (!empty($_POST["fabricacion"])) ? $_POST["fabricacion"] : null;
             }
 
             if (
-                empty($nueva_cotizacion["Marca"])
+                empty($nuevo_resumen["Marca"])
                 or
-                empty($nueva_cotizacion["Modelo"])
+                empty($nuevo_resumen["Modelo"])
                 or
-                empty($nueva_cotizacion["Tipo_de_veh_culo"])
+                empty($nuevo_resumen["Tipo_de_veh_culo"])
                 or
-                empty($nueva_cotizacion["A_o_de_Fabricacion"])
+                empty($nuevo_resumen["A_o_de_Fabricacion"])
                 or
-                empty($nueva_cotizacion["Valor_Asegurado"])
+                empty($nuevo_resumen["Valor_Asegurado"])
             ) {
-                $alerta = "Ha ocurrido un error,intentano de nuevo.";
-            } else if (ctype_alnum($nueva_cotizacion["chasis"])) {
-                $alerta = "Chasis invalido, solo admite letras y número.";;
+                $alerta = "Debes completar los campos: Valor asegurado y año de fabricación.";
             } else {
-                $nuevo_resumen = $this->createRecord("Deals", $nueva_cotizacion);
-                $nueva_url = array("auto", "detalles", $nuevo_resumen['id']);
-                header("Location:" . constant("url") . "home/redirigir/" . json_encode($nueva_url));
+                $resultado = $this->createRecord("Deals", $nuevo_resumen);
+                $nueva_url = array("auto", "detalles", $resultado['id']);
+                header("Location:" . constant("url") . "cotizaciones/redirigir/" . json_encode($nueva_url));
                 exit;
             }
         }
@@ -273,7 +263,7 @@ class cotizaciones extends api
                                             $contenido_csv[] =  array(
                                                 date("Y-m-d", strtotime($resumen->getFieldValue("Fecha_de_emisi_n"))),
                                                 date("Y-m-d", strtotime($resumen->getFieldValue("Closing_Date"))),
-                                                $resumen->getFieldValue("Nombre") . " " . $resumen->getFieldValue("Apellido"),
+                                                $resumen->getFieldValue("Nombre") . " " . $resumen->getFieldValue("Apellidos"),
                                                 $resumen->getFieldValue("RNC_Cedula"),
                                                 $resumen->getFieldValue('Marca')->getLookupLabel(),
                                                 $resumen->getFieldValue('Modelo')->getLookupLabel(),
@@ -292,7 +282,7 @@ class cotizaciones extends api
                                             $contenido_csv[] =  array(
                                                 date("Y-m-d", strtotime($resumen->getFieldValue("Fecha_de_emisi_n"))),
                                                 date("Y-m-d", strtotime($resumen->getFieldValue("Closing_Date"))),
-                                                $resumen->getFieldValue("Nombre") . " " . $resumen->getFieldValue("Apellido"),
+                                                $resumen->getFieldValue("Nombre") . " " . $resumen->getFieldValue("Apellidos"),
                                                 $resumen->getFieldValue("RNC_Cedula"),
                                                 $resumen->getFieldValue('Marca')->getLookupLabel(),
                                                 $resumen->getFieldValue('Modelo')->getLookupLabel(),
@@ -324,7 +314,7 @@ class cotizaciones extends api
                                             $contenido_csv[] =  array(
                                                 date("Y-m-d", strtotime($resumen->getFieldValue("Fecha_de_emisi_n"))),
                                                 date("Y-m-d", strtotime($resumen->getFieldValue("Closing_Date"))),
-                                                $resumen->getFieldValue("Nombre") . " " . $resumen->getFieldValue("Apellido"),
+                                                $resumen->getFieldValue("Nombre") . " " . $resumen->getFieldValue("Apellidos"),
                                                 $resumen->getFieldValue("RNC_Cedula"),
                                                 $resumen->getFieldValue('Marca')->getLookupLabel(),
                                                 $resumen->getFieldValue('Modelo')->getLookupLabel(),
@@ -345,7 +335,7 @@ class cotizaciones extends api
                                             $contenido_csv[] =  array(
                                                 date("Y-m-d", strtotime($resumen->getFieldValue("Fecha_de_emisi_n"))),
                                                 date("Y-m-d", strtotime($resumen->getFieldValue("Closing_Date"))),
-                                                $resumen->getFieldValue("Nombre") . " " . $resumen->getFieldValue("Apellido"),
+                                                $resumen->getFieldValue("Nombre") . " " . $resumen->getFieldValue("Apellidos"),
                                                 $resumen->getFieldValue("RNC_Cedula"),
                                                 $resumen->getFieldValue('Marca')->getLookupLabel(),
                                                 $resumen->getFieldValue('Modelo')->getLookupLabel(),

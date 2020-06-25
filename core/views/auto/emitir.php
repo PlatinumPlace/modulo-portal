@@ -4,56 +4,59 @@
     </div>
 <?php endif ?>
 
-<div class="card">
-    <div class="card-body">
-        <form enctype="multipart/form-data" method="POST" action="<?= constant("url") ?>auto/emitir/<?= $resumen_id ?>">
+<form class="row justify-content-center" enctype="multipart/form-data" method="POST" action="<?= constant("url") ?>auto/emitir/<?= $resumen_id ?>">
 
-            <?php if (!in_array($resumen->getFieldValue("Stage"), $emitida)) : ?>
+    <div class="col-lg-10">
 
-                <h5>Aseguradora</h5>
-                <hr>
-                <div class="form-row">
-                    <div class="form-group col-md-6">
-                        <label class="font-weight-bold">Nombre</label>
-                        <select name="aseguradora_id" class="form-control" required>
-                            <option value="" selected disabled>Selecciona una Aseguradora</option>
-                            <?php
-                            foreach ($cotizaciones as $cotizacion) {
-                                if ($cotizacion->getFieldValue('Grand_Total') > 0) {
-                                    echo '<option value="' . $cotizacion->getFieldValue('Aseguradora')->getEntityId() . '">' . $cotizacion->getFieldValue('Aseguradora')->getLookupLabel() . '</option>';
+        <div class="card mb-4">
+            <h5 class="card-header">Adjuntar Documentos</h5>
+            <div class="card-body">
+
+                <?php if (!in_array($resumen->getFieldValue("Stage"), $emitida)) : ?>
+                    <div class="form-row">
+
+                        <div class="col-md-6">
+                            <label class="font-weight-bold">Aseguradora</label>
+                            <select name="aseguradora_id" class="form-control" required>
+                                <option value="" selected disabled>Selecciona una Aseguradora</option>
+                                <?php
+                                foreach ($cotizaciones as $cotizacion) {
+                                    if ($cotizacion->getFieldValue('Grand_Total') > 0) {
+                                        echo '<option value="' . $cotizacion->getFieldValue('Aseguradora')->getEntityId() . '">' . $cotizacion->getFieldValue('Aseguradora')->getLookupLabel() . '</option>';
+                                    }
                                 }
-                            }
-                            ?>
-                        </select>
+                                ?>
+                            </select>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="font-weight-bold">Cotización Firmada</label>
+                            <input type="file" class="form-control-file" name="cotizacion_firmada" required>
+                        </div>
+
                     </div>
 
-                    <div class="form-group col-md-6">
-                        <label class="font-weight-bold">Cotización Firmada</label>
-                        <input type="file" class="form-control-file" name="cotizacion_firmada" required>
+                <?php else : ?>
+
+                    <div class="form-row">
+                        <div class="col-md-6">
+                            <label class="font-weight-bold">Otros Documentos</label>
+                            <input type="file" class="form-control-file" multiple name="documentos[]" required>
+                        </div>
                     </div>
-                </div>
 
-            <?php else : ?>
+                <?php endif ?>
 
-                <h5>Adjuntar documentos a la cotización</h5>
-                <hr>
-                <div class="form-row">
-                    <div class="form-group col-md-6">
-                        <label class="font-weight-bold">Expedientes</label>
-                        <input type="file" class="form-control-file" multiple name="documentos[]" required>
-                    </div>
-                </div>
-
-            <?php endif ?>
-
-            <br>
-
-            <div class="form-row">
-                <div class="form-group col-md-6">
-                    <button type="submit" name="submit" class="btn btn-success">Aceptar</button>
-                </div>
             </div>
+        </div>
 
-        </form>
+        <div class="card mb-4">
+            <h5 class="card-header">Opciones</h5>
+            <div class="card-body">
+                <button type="submit" class="btn btn-success">Completar</button>
+            </div>
+        </div>
+
     </div>
-</div>
+
+</form>
