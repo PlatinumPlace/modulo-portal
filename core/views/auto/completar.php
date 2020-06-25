@@ -15,14 +15,12 @@
                 <div class="form-row">
 
                     <div class="col-md-6">
-                        <label class="font-weight-bold">Chasis</label>
-                        <br>
+                        <label class="font-weight-bold">Chasis <small>(sin guiones,solo números y letras)</small></label>
                         <input type="text" class="form-control" name="chasis" value="<?= (isset($_POST["chasis"])) ? $_POST["chasis"] : $resumen->getFieldValue('Chasis'); ?>">
                     </div>
 
                     <div class="col-md-6">
                         <label class="font-weight-bold">Color</label>
-                        <br>
                         <input type="text" class="form-control" name="color" value="<?= (isset($_POST["color"])) ? $_POST["color"] : $resumen->getFieldValue('Color'); ?>">
                     </div>
 
@@ -35,7 +33,6 @@
 
                     <div class="col-md-6">
                         <label class="font-weight-bold">Uso</label>
-                        <br>
                         <select name="uso" class="form-control">
                             <option selected disabled value="<?= $resumen->getFieldValue('Uso') ?>"><?= (!empty($resumen->getFieldValue('Uso'))) ? $resumen->getFieldValue('Uso') : "Selecciona una opcion"; ?></option>
                             <option value="Privado">Privado</option>
@@ -45,7 +42,6 @@
 
                     <div class="col-md-6">
                         <label class="font-weight-bold">Placa</label>
-                        <br>
                         <input type="text" class="form-control" name="placa" value="<?= (isset($_POST["place"])) ? $_POST["place"] : $resumen->getFieldValue('Placa'); ?>">
                     </div>
 
@@ -178,19 +174,24 @@
                                     <option selected value="">Ninguno</option>
                                     <?php
                                     $pagina = 1;
-                                    $criterio = "Socio:equals:" . $_SESSION["usuario"]["empresa_id"];  
+                                    $criterio = "Socio:equals:" . $_SESSION["usuario"]["empresa_id"];
+                                    $clientes = array();
                                     do {
                                         $polizas =  $this->searchRecordsByCriteria("P_lizas", $criterio, $pagina, 200);
                                         if (!empty($polizas)) {
                                             $pagina++;
                                             sort($polizas);
                                             foreach ($polizas as $poliza) {
-                                                echo '<option value="' . $poliza->getFieldValue('Propietario')->getEntityId() . '">' . strtoupper($poliza->getFieldValue('Propietario')->getLookupLabel()) . '</option>';
+                                                $clientes[$poliza->getFieldValue('Propietario')->getEntityId()] = strtoupper($poliza->getFieldValue('Propietario')->getLookupLabel());
                                             }
                                         } else {
                                             $pagina = 0;
                                         }
                                     } while ($pagina > 0);
+                                    $clientes =  array_unique($clientes);
+                                    foreach ($clientes as $posicion => $valor) {
+                                        echo '<option value="' . $posicion . '">' . $valor . '</option>';
+                                    }
                                     ?>
                                 </select>
                             </div>

@@ -106,8 +106,10 @@ class auto extends cotizaciones
                 empty($cambios["Fecha_de_Nacimiento"])
                 or
                 empty($cambios["Chasis"])
+                or
+                !ctype_alnum($cambios["Chasis"])
             ) {
-                $alerta = "Debes completar almenos: Chasis,RNC/cedula,Nombre y Fecha de nacimiento.";
+                $alerta = "Debes completar almenos: Chasis valido,RNC/cedula,Nombre y Fecha de nacimiento del cliente.";
             } else {
                 $this->updateRecord("Deals", $resumen_id, $cambios);
 

@@ -14,7 +14,7 @@
                         <option value="No_Cotizaci_n" selected>No. de cotización</option>
                         <option value="RNC_Cedula">RNC/Cédula</option>
                         <option value="Nombre">Nombre</option>
-                        <option value="Apellido">Apellido</option>
+                        <option value="Apellidos">Apellidos</option>
                         <option value="Chasis">Chasis</option>
                     </select>
                 </div>
@@ -65,7 +65,7 @@
                         <?php foreach ($lista as $cotizacion) : ?>
                             <tr>
                                 <td><?= $cotizacion->getFieldValue('No_Cotizaci_n')  ?></td>
-                                <td><?= $cotizacion->getFieldValue('Nombre') . " " . $cotizacion->getFieldValue('Apellido') ?></td>
+                                <td><?= $cotizacion->getFieldValue('Nombre') . " " . $cotizacion->getFieldValue('Apellidos') ?></td>
                                 <td><?= $cotizacion->getFieldValue('Type')  ?></td>
                                 <td>RD$<?= number_format($cotizacion->getFieldValue('Valor_Asegurado'), 2) ?></td>
                                 <td><?= $cotizacion->getFieldValue("Stage") ?></td>

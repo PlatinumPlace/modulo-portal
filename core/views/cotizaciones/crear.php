@@ -115,6 +115,25 @@
 
                     <div class="form-row">
                         <div class="col-md-6">
+                            <label class="font-weight-bold">Uso</label>
+                            <select name="uso" class="form-control">
+                                <option value="Privado" selected>Privado</option>
+                                <option value="Publico">Publico</option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="font-weight-bold">&nbsp;</label>
+                            <div class="form-group form-check">
+                                <input class="form-check-input" type="checkbox" name="nuevo">
+                                ¿Es nuevo?
+                            </div>
+                        </div>
+                    </div>
+
+                    <br>
+                    <div class="form-row">
+                        <div class="col-md-6">
                             <div class="form-groups">
                                 <label class="font-weight-bold">Año de fabricación</label>
                                 <input type="number" pattern="/^-?\d+\.?\d*$/" onKeyPress="if(this.value.length==4) return false;" class="form-control" name="fabricacion" value="<?= (isset($_POST["fabricacion"])) ? $_POST["fabricacion"] : null ?>" />

@@ -144,6 +144,8 @@ class cotizaciones extends api
                 }
 
                 $nuevo_resumen["A_o_de_Fabricacion"] = (!empty($_POST["fabricacion"])) ? $_POST["fabricacion"] : null;
+                $nuevo_resumen["Uso"] = (!empty($_POST["uso"])) ? $_POST["uso"] : null;
+                $cambios["Es_nuevo"] = (!empty($_POST["nuevo"])) ? true : false;
             }
 
             if (
@@ -157,7 +159,7 @@ class cotizaciones extends api
                 or
                 empty($nuevo_resumen["Valor_Asegurado"])
             ) {
-                $alerta = "Debes completar los campos: Valor asegurado y año de fabricación.";
+                $alerta = "Debes completar los campos: valor asegurado, marca, modelo y año de fabricación.";
             } else {
                 $resultado = $this->createRecord("Deals", $nuevo_resumen);
                 $nueva_url = array("auto", "detalles", $resultado['id']);

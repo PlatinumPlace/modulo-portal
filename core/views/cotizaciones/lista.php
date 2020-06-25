@@ -36,7 +36,7 @@
                                 <?php if ($cotizacion->getFieldValue("Stage") == "Cotizando") : ?>
                                     <tr>
                                         <td><?= $cotizacion->getFieldValue('No_Cotizaci_n') ?></td>
-                                        <td><?= $cotizacion->getFieldValue('Nombre') . " " . $cotizacion->getFieldValue('Apellido') ?></td>
+                                        <td><?= $cotizacion->getFieldValue('Nombre') . " " . $cotizacion->getFieldValue('Apellidos') ?></td>
                                         <td><?= $cotizacion->getFieldValue('Type') ?></td>
                                         <td>RD$<?= number_format($cotizacion->getFieldValue('Valor_Asegurado'), 2) ?></td>
                                         <td><?= $cotizacion->getFieldValue("Stage") ?></td>
