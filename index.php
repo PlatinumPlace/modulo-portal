@@ -1,87 +1,64 @@
 <?php
 
+include "zoho_sdk/vendor/autoload.php";
 include "config/config.php";
-include "api/vendor/autoload.php";
-include "core/models/api.php";
-include "core/controllers/usuarios.php";
-include "core/controllers/cotizaciones.php";
-include "core/controllers/auto.php";
+include "config/zoho_api.php";
+include "models/usuario.php";
+include "models/resumen.php";
+include "models/cotizacion.php";
+include "controllers/home.php";
+include "controllers/usuarios.php";
 
-use zcrmsdk\oauth\ZohoOAuth;
-use zcrmsdk\crm\setup\restclient\ZCRMRestClient;
+session_start();
 
-function verificar_token()
-{
-    $token = "api/zcrm_oauthtokens.txt";
-    if (!file_exists($token) or filesize($token) == 0) {
+if (!file_exists("zoho_sdk/zcrm_oauthtokens.txt") or filesize("zoho_sdk/zcrm_oauthtokens.txt") == 0) {
+    require_once 'views/layout/header_login.php';
+    require_once 'zoho_sdk/token.php';
+    require_once 'views/layout/footer_login.php';
+    exit();
+}
 
-        if ($_POST) {
 
-            $api = new api;
-            ZCRMRestClient::initialize($api->configuration);
-
-            $oAuthClient = ZohoOAuth::getClientInstance();
-            $grantToken = $_POST['grant_token'];
-            $oAuthTokens = $oAuthClient->generateAccessToken($grantToken);
-        }
-
-        require_once("core/views/layout/header_login.php");
-        require_once("core/views/token.php");
-        require_once("core/views/layout/footer_login.php");
-
+if (!isset($_SESSION["usuario"])) {
+    $usuarios = new usuarios();
+    $usuarios->iniciar_Sesion();
+    exit();
+} else {
+    if (time() - $_SESSION["usuario"]["tiempo_activo"] > 3600) {
+        session_destroy();
+        header("Location:" . constant("url"));
         exit();
     }
 }
+$_SESSION["usuario"]["tiempo_activo"] = time();
 
-function verificar_sesion()
-{
-    $usuarios = new usuarios;
 
-    if (!isset($_SESSION["usuario"])) {
-        $usuarios->iniciar_sesion();
-        exit;
-    } else {
-        if (time() -  $_SESSION["usuario"]["tiempo_activo"] > 3600) {
-            $usuarios->cerrar_sesion();
-        }
-    }
-    $_SESSION["usuario"]["tiempo_activo"] = time();
-}
+$home = new home;
+if (isset($_GET['url'])) {
 
-function buscar_controlador()
-{
-    $cotizaciones = new cotizaciones;
+    $url = rtrim($_GET['url'], "/");
+    $url = explode('/', $url);
 
-    if (isset($_GET['url'])) {
+    if (isset($url[0]) and isset($url[1])) {
 
-        $url = rtrim($_GET['url'], "/");
-        $url = explode('/', $url);
+        $controlador = 'controllers/' . $url[0] . '.php';
 
-        if (isset($url[0]) and isset($url[1])) {
+        if (file_exists($controlador)) {
 
-            $ruta = "core/controllers/" . $url[0] . ".php";
-            if (!file_exists($ruta)) {
-                $cotizaciones->error();
-                exit;
-            }
-
+            include $controlador;
             $controlador = new $url[0];
+
             if (method_exists($controlador, $url[1])) {
-                if (isset($url[2])) {
-                    $controlador->{$url[1]}($url[2]);
-                } else {
-                    $controlador->{$url[1]}();
-                }
+                $controlador->{$url[1]}();
+            } else {
+                $home->error();
             }
         } else {
-            $cotizaciones->error();
+            $home->error();
         }
     } else {
-        $cotizaciones->index();
+        $home->error();
     }
+} else {
+    $home->index();
 }
-
-session_start();
-verificar_token();
-verificar_sesion();
-buscar_controlador();
