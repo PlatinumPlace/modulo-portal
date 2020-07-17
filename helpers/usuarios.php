@@ -3,7 +3,7 @@
 use zcrmsdk\crm\exception\ZCRMException;
 use zcrmsdk\crm\setup\restclient\ZCRMRestClient;
 
-class usuario extends zoho_api
+class usuarios extends api
 {
     function __construct()
     {
@@ -14,7 +14,10 @@ class usuario extends zoho_api
     {
         $moduleIns = ZCRMRestClient::getInstance()->getModuleInstance("Contacts");
         $criteria = "((Email:equals:" . $_POST['email'] . ") and (Contrase_a:equals:" . $_POST['pass'] . "))";
-        $param_map = array("page" => 1, "per_page" => 1);
+        $param_map = array(
+            "page" => 1,
+            "per_page" => 1
+        );
         try {
             $response = $moduleIns->searchRecordsByCriteria($criteria, $param_map);
             $records = $response->getData();
@@ -35,7 +38,7 @@ class usuario extends zoho_api
             echo "<br>";
             echo $ex->getFile();
             echo "<br>";
-            */
+             */
         }
     }
 }

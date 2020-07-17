@@ -1,27 +1,33 @@
 <?php
+include 'php_sdk/vendor/autoload.php';
+include 'config/config.php';
+include 'config/api.php';
+include 'helpers/usuarios.php';
+include 'helpers/cotizaciones.php';
 
-include "zoho_sdk/vendor/autoload.php";
-include "config/config.php";
-include "config/zoho_api.php";
-include "models/usuario.php";
-include "models/resumen.php";
-include "models/cotizacion.php";
-include "controllers/home.php";
-include "controllers/usuarios.php";
+function obtener_url()
+{
+    $url = rtrim($_GET['url'], "/");
+    $url =  explode('/', $url);
+    $resultado = array();
+    $cont = 0;
+    foreach ($url as $posicion => $valor) {
+        if ($posicion > 1) {
+            $resultado[$cont] = $valor;
+            $cont++;
+        }
+    }
+    return $resultado;
+}
 
-session_start();
-
-if (!file_exists("zoho_sdk/zcrm_oauthtokens.txt") or filesize("zoho_sdk/zcrm_oauthtokens.txt") == 0) {
-    require_once 'views/layout/header_login.php';
-    require_once 'zoho_sdk/token.php';
-    require_once 'views/layout/footer_login.php';
+if (!file_exists("php_sdk/zcrm_oauthtokens.txt") or filesize("php_sdk/zcrm_oauthtokens.txt") == 0) {
+    require_once 'php_sdk/token.php';
     exit();
 }
 
-
+session_start();
 if (!isset($_SESSION["usuario"])) {
-    $usuarios = new usuarios();
-    $usuarios->iniciar_Sesion();
+    require_once 'pages/login/iniciar_sesion.php';
     exit();
 } else {
     if (time() - $_SESSION["usuario"]["tiempo_activo"] > 3600) {
@@ -32,8 +38,6 @@ if (!isset($_SESSION["usuario"])) {
 }
 $_SESSION["usuario"]["tiempo_activo"] = time();
 
-
-$home = new home;
 if (isset($_GET['url'])) {
 
     $url = rtrim($_GET['url'], "/");
@@ -41,24 +45,21 @@ if (isset($_GET['url'])) {
 
     if (isset($url[0]) and isset($url[1])) {
 
-        $controlador = 'controllers/' . $url[0] . '.php';
+        if ($url[1] == "cerrar_sesion") {
+            session_destroy();
+            header("Location:" . constant("url"));
+            exit();
+        }
+        $pagina = "pages/" . $url[0] . "/" . $url[1] . ".php";
 
-        if (file_exists($controlador)) {
-
-            include $controlador;
-            $controlador = new $url[0];
-
-            if (method_exists($controlador, $url[1])) {
-                $controlador->{$url[1]}();
-            } else {
-                $home->error();
-            }
+        if (file_exists($pagina)) {
+            require_once $pagina;
         } else {
-            $home->error();
+            require_once 'pages/error.php';
         }
     } else {
-        $home->error();
+        require_once 'pages/error.php';
     }
 } else {
-    $home->index();
+    require_once 'pages/index.php';
 }
