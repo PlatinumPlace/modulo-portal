@@ -1,15 +1,3 @@
-<?php
-if ($_POST) {
-    $usuarios = new usuarios;
-    $usuarios->validar_usuario();
-    if (isset($_SESSION["usuario"])) {
-        header("Location:" . constant("url"));
-        exit();
-    } else {
-        $alerta = "Usuario o contraseña incorrectos.";
-    }
-}
-?>
 <!DOCTYPE html>
 <html lang="en">
 

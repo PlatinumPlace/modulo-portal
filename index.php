@@ -1,9 +1,9 @@
 <?php
 include 'php_sdk/vendor/autoload.php';
 include 'config/config.php';
-include 'config/api.php';
-include 'helpers/usuarios.php';
-include 'helpers/cotizaciones.php';
+include 'config/config_api.php';
+include "core/models/api.php";
+include "core/controllers/home.php";
 
 function obtener_url()
 {
@@ -27,7 +27,9 @@ if (!file_exists("php_sdk/zcrm_oauthtokens.txt") or filesize("php_sdk/zcrm_oauth
 
 session_start();
 if (!isset($_SESSION["usuario"])) {
-    require_once 'pages/login/iniciar_sesion.php';
+    require_once "core/controllers/usuarios.php";
+    $usuarios = new usuarios;
+    $usuarios->iniciar_sesion();
     exit();
 } else {
     if (time() - $_SESSION["usuario"]["tiempo_activo"] > 3600) {
@@ -38,28 +40,33 @@ if (!isset($_SESSION["usuario"])) {
 }
 $_SESSION["usuario"]["tiempo_activo"] = time();
 
+$home = new home;
 if (isset($_GET['url'])) {
 
     $url = rtrim($_GET['url'], "/");
     $url = explode('/', $url);
 
     if (isset($url[0]) and isset($url[1])) {
+        $ubicacion_archivo = "core/controllers/" . $url[0] . ".php";
+        if (file_exists($ubicacion_archivo)) {
+            require_once $ubicacion_archivo;
+            $controlador = new $url[0];
 
-        if ($url[1] == "cerrar_sesion") {
-            session_destroy();
-            header("Location:" . constant("url"));
+            if (method_exists($controlador, $url[1])) {
+                $controlador->{$url[1]}();
+            } else {
+                $home->error();
+                exit();
+            }
+        } else {
+            $home->error();
             exit();
         }
-        $pagina = "pages/" . $url[0] . "/" . $url[1] . ".php";
-
-        if (file_exists($pagina)) {
-            require_once $pagina;
-        } else {
-            require_once 'pages/error.php';
-        }
     } else {
-        require_once 'pages/error.php';
+        $home->error();
+        exit();
     }
 } else {
-    require_once 'pages/index.php';
+    $home->index();
+    exit();
 }

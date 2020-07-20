@@ -1,11 +1,11 @@
 <?php
 include dirname(__FILE__, 2) . '/php_sdk/vendor/autoload.php';
-include dirname(__FILE__, 2) . '/config/api.php';
+include dirname(__FILE__, 2) . '/config/config_api.php';
 
 use zcrmsdk\crm\setup\restclient\ZCRMRestClient;
 use zcrmsdk\crm\exception\ZCRMException;
 
-$api = new api();
+$api = new config_api();
 $api->configuration["token_persistence_path"] = dirname(__FILE__, 2) . "/php_sdk";
 ZCRMRestClient::initialize($api->configuration);
 
