@@ -29,7 +29,7 @@
                     <i class="fas fa-user fa-fw"></i>
                 </a>
                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
-                    <a class="dropdown-item" onclick="return confirm('¿Deseas cerrar Sesión?')" href="<?= constant("url") ?>usuarios/cerrar_sesion">Cerrar Sesión</a>
+                    <a href="<?= constant("url") ?>contactos/cerrar_sesion" class="dropdown-item" onclick="return confirm('¿Deseas cerrar Sesión?')">Cerrar Sesión</a>
                 </div>
             </li>
         </ul>
@@ -49,24 +49,31 @@
                             <div class="sb-nav-link-icon"> <i class="fas fa-chart-area"></i> </div>
                             Panel de Control
                         </a>
-                        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseLayouts" aria-expanded="false" aria-controls="collapseLayouts">
+                        
+                        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseLayouts1" aria-expanded="false" aria-controls="collapseLayouts">
                             <div class="sb-nav-link-icon"><i class="fas  fa-book-open"></i></div>
-                            Crear Cotización
+                            Cotizaciones
                             <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                         </a>
-                        <div class="collapse" id="collapseLayouts" aria-labelledby="headingOne" data-parent="#sidenavAccordion">
+                        <div class="collapse" id="collapseLayouts1" aria-labelledby="headingOne" data-parent="#sidenavAccordion">
                             <nav class="sb-sidenav-menu-nested nav">
-                                <a class="nav-link" href="<?= constant("url") ?>cotizaciones/crear_auto">Auto</a>
+                                <a class="nav-link" href="<?= constant("url") ?>cotizaciones/buscar">Buscar</a>
+                                <a class="nav-link" href="<?= constant("url") ?>cotizaciones/reporte">Reporte</a>
+                                <a class="nav-link" href="<?= constant("url") ?>cotizaciones/crear_auto">Crear Auto</a>
                             </nav>
                         </div>
-                        <a class="nav-link" href="<?= constant("url") ?>cotizaciones/buscar">
-                            <div class="sb-nav-link-icon"> <i class="fab fa-searchengin"></i> </div>
-                            Buscar Cotización
+                        
+                        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseLayouts2" aria-expanded="false" aria-controls="collapseLayouts">
+                            <div class="sb-nav-link-icon"><i class="fas fa-users"></i></div>
+                            Emisiones
+                            <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                         </a>
-                        <a class="nav-link" href="<?= constant("url") ?>cotizaciones/reportes">
-                            <div class="sb-nav-link-icon"> <i class="fas fa-address-book"></i> </div>
-                            Reportes
-                        </a>
+                        <div class="collapse" id="collapseLayouts2" aria-labelledby="headingOne" data-parent="#sidenavAccordion">
+                            <nav class="sb-sidenav-menu-nested nav">
+                                <a class="nav-link" href="<?= constant("url") ?>tratos/buscar">Buscar</a>
+                                <a class="nav-link" href="<?= constant("url") ?>tratos/reporte"> Reporte</a>
+                            </nav>
+                        </div>
                     </div>
                 </div>
             </nav>

@@ -235,7 +235,7 @@
         var id = "<?= $url[0] ?>";
         setTimeout(function() {
             window.print();
-            window.location = url + "auto/detalles/" + id;
+            window.location = url + "cotizaciones/detalles_auto/" + id;
         }, time);
     </script>
 

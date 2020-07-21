@@ -2,18 +2,14 @@
     <?php
     if ($filtro == "pendientes") {
         echo "cotizaciones pendientes";
-    } elseif ($filtro == "emisiones_mensuales") {
-        echo "emisiones del mes";
-    } elseif ($filtro == "vencimientos_mensuales") {
-        echo "vencimientos del mes";
     } else {
         echo "buscar cotizaciones";
     }
     ?>
 </h1>
 <ol class="breadcrumb mb-4">
-    <li class="breadcrumb-item"><a href="<?= constant("url") ?>">Panel de control</a></li>
-    <li class="breadcrumb-item active">Cotizaciones</li>
+    <li class="breadcrumb-item"><a href="<?= constant("url") ?>">Panel de Control</a></li>
+    <li class="breadcrumb-item active"><a href="<?= constant("url") ?>cotizaciones/buscar">Cotizaciones</a></li>
 </ol>
 <div class="card mb-4 col-xl-8">
     <div class="card-body">
@@ -60,9 +56,13 @@
                                     echo "<td>" . $cotizacion->getFieldValue('Quote_Stage') . "</td>";
                                     echo "<td>" . $cotizacion->getFieldValue('Valid_Till') . "</td>";
                                     echo "<td>";
-                                    echo '<a href="' . constant("url") . strtolower($cotizacion->getFieldValue('Tipo')) . '/detalles/' . $cotizacion->getEntityId() . '" title="Detalles"><i class="fas fa-info-circle"></i></a>';
-                                    echo '<a href="' . constant("url") . strtolower($cotizacion->getFieldValue('Tipo')) . '/adjuntar/' . $cotizacion->getEntityId() . '" title="Adjuntar Documentos"><i class="fas fa-file-upload"></i></a>';
-                                    echo '<a href="' . constant("url") . strtolower($cotizacion->getFieldValue('Tipo')) . '/descargar/' . $cotizacion->getEntityId() . '" title="Descargar"><i class="fas fa-file-download"></i></a>';
+                                    echo '<a href="' . constant("url") . 'cotizaciones/detalles_' . strtolower($cotizacion->getFieldValue('Tipo')) . '/' . $cotizacion->getEntityId() . '" title="Detalles"><i class="fas fa-info-circle"></i></a>';
+                                    echo "&nbsp;";
+                                    if ($cotizacion->getFieldValue("Quote_Stage") == "Negociación") {
+                                        echo '<a href="' . constant("url") . 'cotizaciones/emitir_' . strtolower($cotizacion->getFieldValue('Tipo')) . '/' . $cotizacion->getEntityId() . '" title="Emitir"><i class="fas fa-user"></i></i></a>';
+                                        echo "&nbsp;";
+                                    }
+                                    echo '<a href="' . constant("url") . 'cotizaciones/descargar_' . strtolower($cotizacion->getFieldValue('Tipo')) . '/' . $cotizacion->getEntityId() . '" title="Descargar"><i class="fas fa-file-download"></i></a>';
                                     echo "</td>";
                                 } elseif ($filtro == "pendientes" and $cotizacion->getFieldValue("Quote_Stage") == "Negociación" and date("Y-m", strtotime($cotizacion->getFieldValue("Fecha_emisi_n"))) == date("Y-m")) {
                                     echo "<td>" . $cotizacion->getFieldValue('Quote_Number') . "</td>";
@@ -71,31 +71,13 @@
                                     echo "<td>" . $cotizacion->getFieldValue('Quote_Stage') . "</td>";
                                     echo "<td>" . $cotizacion->getFieldValue('Valid_Till') . "</td>";
                                     echo "<td>";
-                                    echo '<a href="' . constant("url") . strtolower($cotizacion->getFieldValue('Tipo')) . '/detalles/' . $cotizacion->getEntityId() . '" title="Detalles"><i class="fas fa-info-circle"></i></a>';
-                                    echo '<a href="' . constant("url") . strtolower($cotizacion->getFieldValue('Tipo')) . '/adjuntar/' . $cotizacion->getEntityId() . '" title="Adjuntar Documentos"><i class="fas fa-file-upload"></i></a>';
-                                    echo '<a href="' . constant("url") . strtolower($cotizacion->getFieldValue('Tipo')) . '/descargar/' . $cotizacion->getEntityId() . '" title="Descargar"><i class="fas fa-file-download"></i></a>';
-                                    echo "</td>";
-                                } elseif ($filtro == "emisiones_mensuales" and !empty($cotizacion->getFieldValue('Deal_Name')) and date("Y-m", strtotime($cotizacion->getFieldValue("Valid_Till"))) == date("Y-m")) {
-                                    echo "<td>" . $cotizacion->getFieldValue('Quote_Number') . "</td>";
-                                    echo "<td>" . $cotizacion->getFieldValue('Tipo') . "</td>";
-                                    echo "<td>RD$" . number_format($cotizacion->getFieldValue('Valor_Asegurado'), 2) . "</td>";
-                                    echo "<td>" . $cotizacion->getFieldValue('Quote_Stage') . "</td>";
-                                    echo "<td>" . $cotizacion->getFieldValue('Valid_Till') . "</td>";
-                                    echo "<td>";
-                                    echo '<a href="' . constant("url") . strtolower($cotizacion->getFieldValue('Tipo')) . '/detalles/' . $cotizacion->getEntityId() . '" title="Detalles"><i class="fas fa-info-circle"></i></a>';
-                                    echo '<a href="' . constant("url") . strtolower($cotizacion->getFieldValue('Tipo')) . '/adjuntar/' . $cotizacion->getEntityId() . '" title="Adjuntar Documentos"><i class="fas fa-file-upload"></i></a>';
-                                    echo '<a href="' . constant("url") . strtolower($cotizacion->getFieldValue('Tipo')) . '/descargar/' . $cotizacion->getEntityId() . '" title="Descargar"><i class="fas fa-file-download"></i></a>';
-                                    echo "</td>";
-                                } elseif ($filtro == "vencimientos_mensuales" and !empty($cotizacion->getFieldValue('Deal_Name')) and date("Y-m", strtotime($cotizacion->getFieldValue("Valid_Till"))) == date("Y-m")) {
-                                    echo "<td>" . $cotizacion->getFieldValue('Quote_Number') . "</td>";
-                                    echo "<td>" . $cotizacion->getFieldValue('Tipo') . "</td>";
-                                    echo "<td>RD$" . number_format($cotizacion->getFieldValue('Valor_Asegurado'), 2) . "</td>";
-                                    echo "<td>" . $cotizacion->getFieldValue('Quote_Stage') . "</td>";
-                                    echo "<td>" . $cotizacion->getFieldValue('Valid_Till') . "</td>";
-                                    echo "<td>";
-                                    echo '<a href="' . constant("url") . strtolower($cotizacion->getFieldValue('Tipo')) . '/detalles/' . $cotizacion->getEntityId() . '" title="Detalles"><i class="fas fa-info-circle"></i></a>';
-                                    echo '<a href="' . constant("url") . strtolower($cotizacion->getFieldValue('Tipo')) . '/adjuntar/' . $cotizacion->getEntityId() . '" title="Adjuntar Documentos"><i class="fas fa-file-upload"></i></a>';
-                                    echo '<a href="' . constant("url") . strtolower($cotizacion->getFieldValue('Tipo')) . '/descargar/' . $cotizacion->getEntityId() . '" title="Descargar"><i class="fas fa-file-download"></i></a>';
+                                    echo '<a href="' . constant("url") . 'cotizaciones/detalles_' . strtolower($cotizacion->getFieldValue('Tipo')) . '/' . $cotizacion->getEntityId() . '" title="Detalles"><i class="fas fa-info-circle"></i></a>';
+                                    echo "&nbsp;";
+                                    if ($cotizacion->getFieldValue("Quote_Stage") == "Negociación") {
+                                        echo '<a href="' . constant("url") . 'cotizaciones/emitir_' . strtolower($cotizacion->getFieldValue('Tipo')) . '/' . $cotizacion->getEntityId() . '" title="Emitir"><i class="fas fa-user"></i></i></a>';
+                                        echo "&nbsp;";
+                                    }
+                                    echo '<a href="' . constant("url") . 'cotizaciones/descargar_' . strtolower($cotizacion->getFieldValue('Tipo')) . '/' . $cotizacion->getEntityId() . '" title="Descargar"><i class="fas fa-file-download"></i></a>';
                                     echo "</td>";
                                 }
                                 ?>

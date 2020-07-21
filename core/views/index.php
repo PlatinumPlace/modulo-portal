@@ -12,7 +12,7 @@
         <div class="card bg-primary text-white mb-4">
             <div class="card-body">
                 Cotizaciones Totales <br>
-                <?= $total ?>
+                <?= $cotizaciones_total ?>
             </div>
             <div class="card-footer d-flex align-items-center justify-content-between">
                 <a class="small text-white stretched-link" href="<?= constant("url") ?>cotizaciones/buscar">Buscar</a>
@@ -26,7 +26,7 @@
         <div class="card bg-warning text-white mb-4">
             <div class="card-body">
                 Cotizaciones al Mes <br>
-                <?= $pendientes ?>
+                <?= $cotizaciones_pendientes ?>
             </div>
             <div class="card-footer d-flex align-items-center justify-content-between">
                 <a class="small text-white stretched-link" href="<?= constant("url") ?>cotizaciones/buscar/pendientes">Ver más</a>
@@ -40,11 +40,10 @@
         <div class="card bg-success text-white mb-4">
             <div class="card-body">
                 Emisiones al Mes <br>
-                <?= $emisiones ?>
+                <?= $tratos_emitidos ?>
             </div>
             <div class="card-footer d-flex align-items-center justify-content-between">
-                <a class="small text-white stretched-link" href="<?= constant("url") ?>cotizaciones/buscar/emisiones_mensuales">Ver
-                    más</a>
+                <a class="small text-white stretched-link" href="<?= constant("url") ?>tratos/buscar/emisiones_mensuales">Ver más</a>
                 <div class="small text-white">
                     <i class="fas fa-angle-right"></i>
                 </div>
@@ -55,11 +54,10 @@
         <div class="card bg-danger text-white mb-4">
             <div class="card-body">
                 Vencimientos al Mes <br>
-                <?= $vencimientos ?>
+                <?= $tratos_venciendo ?>
             </div>
             <div class="card-footer d-flex align-items-center justify-content-between">
-                <a class="small text-white stretched-link" href="<?= constant("url") ?>cotizaciones/buscar/vencimientos_mensuales">Ver
-                    más</a>
+                <a class="small text-white stretched-link" href="<?= constant("url") ?>tratos/buscar/vencimientos_mensuales">Ver más</a>
                 <div class="small text-white">
                     <i class="fas fa-angle-right"></i>
                 </div>

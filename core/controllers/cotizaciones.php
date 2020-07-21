@@ -134,7 +134,7 @@ class cotizaciones
             $nuevo_trato["Stage"] = "Cotizando";
             $nuevo_trato["Fecha_de_emisi_n"] =  date("Y-m-d");
             $nuevo_trato["Closing_Date"] = date("Y-m-d", strtotime(date("Y-m-d") . "+ 10 days"));
-            $nuevo_trato["Deal_Name"] = "Plan " . $_POST["tipo_plan"] . " Auto";
+            $nuevo_trato["Deal_Name"] = "Cotización Seguro Vehículo de Motor Plan" . $_POST["tipo_plan"];
             $nuevo_trato["Type"] = "Auto";
             $nuevo_trato_id = $api->crear_registro("Deals", $nuevo_trato);
 
@@ -158,15 +158,224 @@ class cotizaciones
             $nueva_cotizacion["Tipo_Veh_culo"] =  $modelo->getFieldValue("Tipo");
             $nuevo_cotizacion_id = $api->crear_registro("Quotes", $nueva_cotizacion, $plan_seleccionado);
 
-            header("Location:" . constant("url") . "auto/detalles/$nuevo_cotizacion_id");
+            header("Location:" . constant("url") . "cotizaciones/detalles_auto/$nuevo_cotizacion_id");
             exit();
         }
+
         require_once "core/views/layout/header_main.php";
-        require_once "core/views/cotizaciones/auto.php";
+        require_once "core/views/cotizaciones/crear_auto.php";
         require_once "core/views/layout/footer_main.php";
     }
 
-    public function reportes()
+    public function detalles_auto()
+    {
+        $api = new api;
+        $url = obtener_url();
+
+        if (!isset($url[0])) {
+            $home = new home;
+            $home->error();
+            exit();
+        }
+
+        $id = $url[0];
+        $num_pagina = (isset($url[1]) and is_numeric($url[1])) ? $url[1] : 1;
+        $alerta = (isset($url[1]) and !is_numeric($url[1])) ? $url[1] : null;
+        $cotizacion = $api->detalles_registro("Quotes", $id);
+
+        if (empty($cotizacion)) {
+            $home = new home;
+            $home->error();
+            exit();
+        }
+
+        require_once "core/views/layout/header_main.php";
+        require_once "core/views/cotizaciones/detalles_auto.php";
+        require_once "core/views/layout/footer_main.php";
+    }
+
+    public function descargar_auto()
+    {
+        $api = new api;
+        $url = obtener_url();
+
+        if (!isset($url[0])) {
+            $home = new home;
+            $home->error();
+            exit();
+        }
+
+        $id = $url[0];
+        $cotizacion = $api->detalles_registro("Quotes", $id);
+
+        if (empty($cotizacion)) {
+            $home = new home;
+            $home->error();
+            exit();
+        }
+
+        require_once "core/views/cotizaciones/descargar_auto.php";
+    }
+
+    public function emitir_auto()
+    {
+        $api = new api;
+        $url = obtener_url();
+
+        if (!isset($url[0])) {
+            $home = new home;
+            $home->error();
+            exit();
+        }
+
+        $id = $url[0];
+        $cotizacion = $api->detalles_registro("Quotes", $id);
+
+        if (empty($cotizacion)) {
+            $home = new home;
+            $home->error();
+            exit();
+        }
+
+        if ($cotizacion->getFieldValue("Quote_Stage") != "Negociación") {
+            $home = new home;
+            $home->error();
+            exit();
+        }
+
+        if ($_POST) {
+
+            if (!empty($_FILES["cotizacion_firmada"]["name"])) {
+                $ruta = "public/tmp";
+                if (!is_dir($ruta)) {
+                    mkdir($ruta, 0755, true);
+                }
+
+                $extension = pathinfo($_FILES["cotizacion_firmada"]["name"], PATHINFO_EXTENSION);
+                $permitido = array("pdf");
+                if (!in_array($extension, $permitido)) {
+                    $alerta = "Para emitir,solo se admiten documentos PDF.";
+                } else {
+                    $tmp_name = $_FILES["cotizacion_firmada"]["tmp_name"];
+                    $name = basename($_FILES["cotizacion_firmada"]["name"]);
+                    move_uploaded_file($tmp_name, "$ruta/$name");
+                    $api->adjuntar_archivo("Deals", $cotizacion->getFieldValue('Deal_Name')->getEntityId(), "$ruta/$name");
+                    unlink("$ruta/$name");
+
+                    $planes = $cotizacion->getLineItems();
+                    foreach ($planes as $plan) {
+                        if ($plan->getDescription() == $_POST["aseguradora"]) {
+                            $plan_id = $plan->getProduct()->getEntityId();
+                            $prima = $plan->getNetTotal();
+                        }
+                    }
+
+                    $plan_detalles = $api->detalles_registro("Products", $plan_id);
+                    $criterio = "Socio:equals:" . $_SESSION["usuario"]["empresa_id"];
+                    $contratos = $api->buscar_criterio("Contratos", $criterio, 1, 10);
+                    foreach ($contratos as $contrato) {
+                        if ($contrato->getFieldValue("Aseguradora")->getEntityId() == $plan_detalles->getFieldValue("Vendor_Name")->getEntityId()) {
+                            $poliza = $contrato->getFieldValue('No_P_liza');
+                            $comision_nobe = $prima * $contrato->getFieldValue('Comisi_n_GrupoNobe') / 100;
+                            $comision_aseguradora = $prima * $contrato->getFieldValue('Comisi_n_Aseguradora') / 100;
+                            $comision_socio = $prima * $contrato->getFieldValue('Comisi_n_Socio') / 100;
+                            $contrato_id = $contrato->getEntityId();
+                        }
+                    }
+
+
+                    if (!empty($_POST["cliente_id"])) {
+                        $cliente = $api->detalles_registro("Clientes", $_POST["cliente_id"]);
+
+                        $cliente_nuevo["RNC_C_dula"] =  $cliente->getFieldValue("RNC_C_dula");
+                        $cliente_nuevo["Aseguradora"] =  $plan_detalles->getFieldValue("Vendor_Name")->getEntityId();
+                        $cliente_nuevo["Direcci_n"] =  $cliente->getFieldValue("Direcci_n");
+                        $cliente_nuevo["Informar_a"] = $_SESSION["usuario"]['id'];
+                        $cliente_nuevo["Socio"] = $_SESSION["usuario"]['empresa_id'];
+                        $cliente_nuevo["Name"] =  $cliente->getFieldValue("Name");
+                        $cliente_nuevo["Apellido"] =  $cliente->getFieldValue("Apellido");
+                        $cliente_nuevo["Tel"] =  $cliente->getFieldValue("Tel");
+                        $cliente_nuevo["Tel_Residencia"] =  $cliente->getFieldValue("Tel_Residencia");
+                        $cliente_nuevo["Tel_Trabajo"] =  $cliente->getFieldValue("Tel_Trabajo");
+                        $cliente_nuevo["Fecha_de_Nacimiento"] = date("Y-m-d", strtotime($cliente->getFieldValue("Fecha_de_Nacimiento")));
+                        $cliente_nuevo["Email"] =  $cliente->getFieldValue("Email");
+                    } else {
+                        $cliente_nuevo["RNC_C_dula"] = $_POST["rnc_cedula"];
+                        $cliente_nuevo["Aseguradora"] =  $plan_detalles->getFieldValue("Vendor_Name")->getEntityId();
+                        $cliente_nuevo["Informar_a"] = $_SESSION["usuario"]['id'];
+                        $cliente_nuevo["Socio"] = $_SESSION["usuario"]['empresa_id'];
+                        $cliente_nuevo["Direcci_n"] = (isset($_POST["direccion"])) ? $_POST["direccion"] : null;
+                        $cliente_nuevo["Name"] = $_POST["nombre"];
+                        $cliente_nuevo["Apellido"] = (isset($_POST["apellido"])) ? $_POST["apellido"] : null;
+                        $cliente_nuevo["Tel"] = (isset($_POST["telefono"])) ? $_POST["telefono"] : null;
+                        $cliente_nuevo["Tel_Residencia"] = (isset($_POST["tel_residencia"])) ? $_POST["tel_residencia"] : null;
+                        $cliente_nuevo["Tel_Trabajo"] = (isset($_POST["tel_trabajo"])) ? $_POST["tel_trabajo"] : null;
+                        $cliente_nuevo["Fecha_de_Nacimiento"] = $_POST["fecha_nacimiento"];
+                        $cliente_nuevo["Email"] = (isset($_POST["correo"])) ? $_POST["correo"] : null;
+                    }
+                    $cliente_nuevo_id = $api->crear_registro("Clientes", $cliente_nuevo);
+
+
+                    $poliza_nueva["Name"] = $poliza;
+                    $poliza_nueva["Estado"] =  true;
+                    $poliza_nueva["Plan"] =  $cotizacion->getFieldValue('Plan');
+                    $poliza_nueva["Aseguradora"] =  $plan_detalles->getFieldValue("Vendor_Name")->getEntityId();
+                    $poliza_nueva["Prima"] =  $prima;
+                    $poliza_nueva["Propietario"] =  $cliente_nuevo_id;
+                    $poliza_nueva["Ramo"] = "Automóvil";
+                    $poliza_nueva["Socio"] =  $_SESSION["usuario"]['empresa_id'];
+                    $poliza_nueva["Tipo"] =  $cotizacion->getFieldValue('Tipo_de_poliza');
+                    $poliza_nueva["Valor_Aseguradora"] =   $cotizacion->getFieldValue('Valor_Asegurado');
+                    $poliza_nueva["Vigencia_desde"] =  date("Y-m-d");
+                    $poliza_nueva["Vigencia_hasta"] =  date("Y-m-d",  strtotime(date("Y-m-d") . "+ 1 years"));
+
+                    $poliza_nueva_id = $api->crear_registro("P_lizas", $poliza_nueva);
+
+
+                    $nuevo_bien["A_o"] = $cotizacion->getFieldValue('A_o_Fabricaci_n');
+                    $nuevo_bien["Chasis"] = $_POST["chasis"];
+                    $nuevo_bien["Color"] = $_POST["color"];
+                    $nuevo_bien["Marca"] = $cotizacion->getFieldValue('Marca')->getLookupLabel();
+                    $nuevo_bien["Modelo"] = $cotizacion->getFieldValue('Modelo')->getLookupLabel();
+                    $nuevo_bien["Name"] = $_POST["chasis"];
+                    $nuevo_bien["Placa"] = $_POST["placa"];
+                    $nuevo_bien["P_liza"] = $poliza_nueva_id;
+                    $nuevo_bien["Tipo"] = "Automóvil";
+                    $nuevo_bien["Tipo_de_veh_culo"] = $cotizacion->getFieldValue('Tipo_Veh_culo');
+
+                    $nuevo_bien_id = $api->crear_registro("Bienes", $nuevo_bien);
+
+
+                    $cambios_cotizacion["Quote_Stage"] =  "Cerrada ganada";
+                    $api->guardar_cambios_registro("Quotes", $id, $cambios_cotizacion);
+
+                    $cambios_trato["P_liza"] = $poliza_nueva_id;
+                    $cambios_trato["Bien"] = $nuevo_bien_id;
+                    $cambios_trato["Cliente"] = $cliente_nuevo_id;
+                    $cambios_trato["Contrato"] = $contrato_id;
+                    $cambios_trato["Aseguradora"] = $plan_detalles->getFieldValue("Vendor_Name")->getEntityId();
+                    $cambios_trato["Comisi_n_Aseguradora"] = round($comision_aseguradora, 2);
+                    $cambios_trato["Comisi_n_Socio"] = round($comision_socio, 2);
+                    $cambios_trato["Amount"] = round($comision_nobe, 2);
+                    $cambios_trato["Fecha_de_emisi_n"] =  date("Y-m-d");
+                    $cambios_trato["Closing_Date"] = date("Y-m-d",  strtotime(date("Y-m-d") . "+ 1 years"));
+                    $cambios_trato["Stage"] = "En trámite";
+                    $cambios_trato["Deal_Name"] = "Resumen Seguro Vehículo de Motor Plan" . $cotizacion->getFieldValue('Plan');
+
+                    $api->guardar_cambios_registro("Deals", $cotizacion->getFieldValue('Deal_Name')->getEntityId(), $cambios_trato);
+
+                    header("Location:" . constant("url") . "tratos/detalles_auto/" . $cotizacion->getFieldValue('Deal_Name')->getEntityId());
+                    exit();
+                }
+            }
+        }
+
+        require_once "core/views/layout/header_main.php";
+        require_once "core/views/cotizaciones/emitir_auto.php";
+        require_once "core/views/layout/footer_main.php";
+    }
+
+    public function reporte()
     {
         $api = new api;
 
@@ -180,6 +389,7 @@ class cotizaciones
                 "aseguradora_id" => $_POST["aseguradora_id"],
                 "tipo_cotizacion" => $_POST["tipo_cotizacion"],
                 "tipo_reporte" => $_POST["tipo_reporte"],
+                "estado_cotizacion" => $_POST["estado_cotizacion"],
                 "desde" => $_POST["desde"],
                 "hasta" => $_POST["hasta"]
             );
@@ -188,12 +398,8 @@ class cotizaciones
         }
 
         if (isset($_POST["csv"])) {
-            $titulo = "Reporte " . ucfirst($_POST["tipo_reporte"]) . " " . ucfirst($_POST["tipo_cotizacion"]);
+            $titulo = "Reporte Cotizaciones " . ucfirst($_POST["tipo_cotizacion"]);
             $ruta_csv = "public/tmp/" . $titulo . ".csv";
-
-            $prima_sumatoria = 0;
-            $valor_sumatoria = 0;
-            $comision_sumatoria = 0;
 
             $contenido_csv = array(
                 array($_SESSION["usuario"]['empresa_nombre']),
@@ -203,7 +409,7 @@ class cotizaciones
                 array("")
             );
 
-            if ($_POST["tipo_cotizacion"] == "auto" and $_POST["tipo_reporte"] == "cotizaciones") {
+            if ($_POST["tipo_cotizacion"] == "auto") {
                 $contenido_csv[] = array(
                     "Emision",
                     "Vigencia",
@@ -223,7 +429,6 @@ class cotizaciones
 
             $prima_sumatoria = 0;
             $valor_sumatoria = 0;
-            $comision_sumatoria = 0;
 
             $criterio = "Contact_Name:equals:" . $_SESSION["usuario"]["id"];
             $num_pagina = 1;
@@ -242,11 +447,9 @@ class cotizaciones
                         ) {
                             $planes = $cotizacion->getLineItems();
 
-                            if (
-                                $_POST["tipo_reporte"] == "cotizaciones"
-                                and
-                                $cotizacion->getFieldValue("Quote_Stage") == "Negociación"
-                            ) {
+                            $conv = array("ó" => "o");
+                            $tipo = strtr($cotizacion->getFieldValue("Quote_Stage"), $conv);
+                            if ($tipo == $_POST["estado_cotizacion"]) {
                                 foreach ($planes as $plan) {
                                     if ($plan->getNetTotal() > 0) {
                                         if (empty($_POST["aseguradora"])) {
@@ -332,7 +535,7 @@ class cotizaciones
             }
         }
         require_once "core/views/layout/header_main.php";
-        require_once "core/views/cotizaciones/reportes.php";
+        require_once "core/views/cotizaciones/reporte.php";
         require_once "core/views/layout/footer_main.php";
     }
 
@@ -343,11 +546,10 @@ class cotizaciones
         $url = obtener_url();
         $post = json_decode($url[0], true);
 
-        $titulo = "Reporte " . ucfirst($post["tipo_reporte"]) . " " . ucfirst($post["tipo_cotizacion"]);
+        $titulo = "Reporte Cotizaciones " . ucfirst($post["tipo_cotizacion"]);
 
         $prima_sumatoria = 0;
         $valor_sumatoria = 0;
-        $comision_sumatoria = 0;
 
         require_once "core/views/cotizaciones/descargar.php";
     }

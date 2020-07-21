@@ -27,9 +27,9 @@ if (!file_exists("php_sdk/zcrm_oauthtokens.txt") or filesize("php_sdk/zcrm_oauth
 
 session_start();
 if (!isset($_SESSION["usuario"])) {
-    require_once "core/controllers/usuarios.php";
-    $usuarios = new usuarios;
-    $usuarios->iniciar_sesion();
+    require_once "core/controllers/contactos.php";
+    $contactos = new contactos;
+    $contactos->iniciar_sesion();
     exit();
 } else {
     if (time() - $_SESSION["usuario"]["tiempo_activo"] > 3600) {

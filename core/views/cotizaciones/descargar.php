@@ -45,7 +45,7 @@
             <table class="table table-sm">
                 <thead>
                     <tr class="bg-primary text-white">
-                        <?php if ($post["tipo_cotizacion"] == "auto" and $post["tipo_reporte"] == "cotizaciones") : ?>
+                        <?php if ($post["tipo_cotizacion"] == "auto") : ?>
                             <th scope="col">Emision</th>
                             <th scope="col">Vigencia</th>
                             <th scope="col">Marca</th>
@@ -79,11 +79,9 @@
                                 ) {
                                     $planes = $cotizacion->getLineItems();
 
-                                    if (
-                                        $post["tipo_reporte"] == "cotizaciones"
-                                        and
-                                        $cotizacion->getFieldValue("Quote_Stage") == "Negociación"
-                                    ) {
+                                    $conv = array("ó" => "o");
+                                    $tipo = strtr($cotizacion->getFieldValue("Quote_Stage"), $conv);
+                                    if ($tipo == $post["estado_cotizacion"]) {
                                         foreach ($planes as $plan) {
                                             if ($plan->getNetTotal() > 0) {
                                                 if (empty($post["aseguradora"])) {
@@ -142,7 +140,7 @@
                         echo "<br>";
                         echo "RD$" . number_format($valor_sumatoria, 2);
                     } else {
-                        header("Location:" . constant("url") . "cotizaciones/reportes/No existen resultados.");
+                        header("Location:" . constant("url") . "cotizaciones/reporte/No existen resultados.");
                         exit;
                     }
                     ?>
@@ -153,7 +151,7 @@
                 var url = "<?= constant("url") ?>";
                 setTimeout(function() {
                     window.print();
-                    window.location = url + "cotizaciones/reportes";
+                    window.location = url + "cotizaciones/reporte";
                 }, time);
             </script>
 

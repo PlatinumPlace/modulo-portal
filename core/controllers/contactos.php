@@ -1,5 +1,5 @@
 <?php
-class usuarios
+class contactos
 {
     public function iniciar_sesion()
     {
