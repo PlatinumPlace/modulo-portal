@@ -40,6 +40,7 @@
                     </div>
                 </div>
             </div>
+
         </div>
 
         <div class="col-12">
@@ -48,18 +49,18 @@
 
         <div class="col-12">
             <table class="table table-sm">
-                <thead>
-                    <tr class="bg-primary text-white">
-                        <?php if ($_POST["tipo_cotizacion"] == "auto") : ?>
-                            <th scope="col">Emision</th>
-                            <th scope="col">Vigencia</th>
-                            <th scope="col">Marca</th>
-                            <th scope="col">Modelo</th>
-                            <th scope="col">Tipo</th>
-                            <th scope="col">Valor</th>
-                            <th scope="col">Prima</th>
-                            <th scope="col">Aseguradora</th>
-                        <?php endif ?>
+            <thead class="thead-dark">
+                    <tr>
+                        <th scope="col">Emision</th>
+                        <th scope="col">Vigencia</th>
+                        <th scope="col">Marca</th>
+                        <th scope="col">Modelo</th>
+                        <th scope="col">Tipo</th>
+                        <th scope="col">Año</th>
+                        <th scope="col">Plan</th>
+                        <th scope="col">Valor</th>
+                        <th scope="col">Prima</th>
+                        <th scope="col">Aseguradora</th>
                     </tr>
                 </thead>
 
@@ -78,9 +79,9 @@
                                     and
                                     date("Y-m-d", strtotime($cotizacion->getFieldValue("Fecha_emisi_n")))  <= $_POST["hasta"]
                                     and
-                                    strtolower($cotizacion->getFieldValue("Tipo")) == $_POST["tipo_cotizacion"]
+                                    $cotizacion->getFieldValue("Tipo") == "Auto"
                                     and
-                            $cotizacion->getFieldValue("Deal_Name") == null
+                                    $cotizacion->getFieldValue("Deal_Name") == null
                                 ) {
                                     $planes = $cotizacion->getLineItems();
 
@@ -96,6 +97,8 @@
                                                 echo "<td>" . $cotizacion->getFieldValue('Marca')->getLookupLabel() . "</th>";
                                                 echo "<td>" . $cotizacion->getFieldValue('Modelo')->getLookupLabel() . "</th>";
                                                 echo "<td>" . $cotizacion->getFieldValue('Tipo_Veh_culo') . "</th>";
+                                                echo "<td>" . $cotizacion->getFieldValue('A_o_Fabricaci_n') . "</th>";
+                                                echo "<td>" . $cotizacion->getFieldValue('Plan') . "</th>";
                                                 echo "<td>" . number_format($cotizacion->getFieldValue('Valor_Asegurado'), 2) . "</th>";
                                                 echo "<td>" . number_format($plan->getNetTotal(), 2) . "</th>";
                                                 echo "<td>" . $plan->getDescription() . "</th>";
@@ -110,6 +113,8 @@
                                                 echo "<td>" . $cotizacion->getFieldValue('Marca')->getLookupLabel() . "</th>";
                                                 echo "<td>" . $cotizacion->getFieldValue('Modelo')->getLookupLabel() . "</th>";
                                                 echo "<td>" . $cotizacion->getFieldValue('Tipo_Veh_culo') . "</th>";
+                                                echo "<td>" . $cotizacion->getFieldValue('A_o_Fabricaci_n') . "</th>";
+                                                echo "<td>" . $cotizacion->getFieldValue('Plan') . "</th>";
                                                 echo "<td>" . number_format($cotizacion->getFieldValue('Valor_Asegurado'), 2) . "</th>";
                                                 echo "<td>" . number_format($plan->getNetTotal(), 2) . "</th>";
                                                 echo "<td>" . $plan->getDescription() . "</th>";

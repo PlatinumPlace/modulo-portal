@@ -122,7 +122,7 @@
                         <b>Placa:</b><br>
                         <b>Color:</b><br>
                         <b>Uso:</b><br>
-                        <b>Condiciones:</b>
+                        <b>Condicion:</b>
                     </div>
 
                     <div class="col-8">
@@ -130,7 +130,7 @@
                         <?= $bien->getFieldValue('Placa') ?><br>
                         <?= $bien->getFieldValue('Color') ?><br>
                         <?php $bien->getFieldValue('Uso') ?><br>
-                        <?php $bien->getFieldValue('Condiciones') ?><br>
+                        <?php $bien->getFieldValue('Condicion') ?><br>
                     </div>
                 </div>
             </div>

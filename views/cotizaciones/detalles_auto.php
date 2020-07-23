@@ -1,4 +1,4 @@
-<h2 class="mt-4 text-uppercase text-center">
+<h2 class="mt-4 text-uppercase">
     cotización <br>
     seguro vehículo de motor <br>
     <?= $cotizacion->getFieldValue('Subject') ?>

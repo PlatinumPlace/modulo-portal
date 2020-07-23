@@ -49,7 +49,7 @@
                             <div class="sb-nav-link-icon"> <i class="fas fa-chart-area"></i> </div>
                             Panel de Control
                         </a>
-                        
+
                         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseLayouts1" aria-expanded="false" aria-controls="collapseLayouts">
                             <div class="sb-nav-link-icon"><i class="fas  fa-book-open"></i></div>
                             Cotizaciones
@@ -57,12 +57,12 @@
                         </a>
                         <div class="collapse" id="collapseLayouts1" aria-labelledby="headingOne" data-parent="#sidenavAccordion">
                             <nav class="sb-sidenav-menu-nested nav">
+                                <a class="nav-link" href="<?= constant("url") ?>cotizaciones/crear">Crear</a>
                                 <a class="nav-link" href="<?= constant("url") ?>cotizaciones/buscar">Buscar</a>
                                 <a class="nav-link" href="<?= constant("url") ?>cotizaciones/reporte">Reporte</a>
-                                <a class="nav-link" href="<?= constant("url") ?>cotizaciones/crear_auto">Crear Auto</a>
                             </nav>
                         </div>
-                        
+
                         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseLayouts2" aria-expanded="false" aria-controls="collapseLayouts">
                             <div class="sb-nav-link-icon"><i class="fas fa-users"></i></div>
                             Emisiones

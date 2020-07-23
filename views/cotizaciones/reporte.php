@@ -1,4 +1,4 @@
-<h1 class="mt-4 text-uppercase">Reporte de cotizaciones pendientes</h1>
+<h1 class="mt-4 text-uppercase">reporte de cotizaciones pendientes</h1>
 
 <ol class="breadcrumb mb-4">
     <li class="breadcrumb-item"><a href="<?= constant("url") ?>">Panel de Control</a></li>
@@ -20,30 +20,30 @@
                 <form method="POST" action="<?= constant("url") ?>cotizaciones/reporte">
 
                     <div class="form-group row">
-                        <label for="tipo_cotizacion" class="col-sm-3 col-form-label">Tipo de cotización</label>
+                        <label for="tipo_reporte" class="col-sm-3 col-form-label font-weight-bold">Tipo de emision</label>
                         <div class="col-sm-9">
-                            <select name="tipo_cotizacion" id="tipo_cotizacion" class="form-control">
+                            <select name="tipo_reporte" id="tipo_reporte" class="form-control">
                                 <option value="auto" selected>Auto</option>
                             </select>
                         </div>
                     </div>
 
                     <div class="form-group row">
-                        <label for="desde" class="col-sm-3 col-form-label">Desde</label>
+                        <label for="desde" class="col-sm-3 col-form-label font-weight-bold">Desde</label>
                         <div class="col-sm-9">
                             <input type="date" class="form-control" name="desde" id="desde" required>
                         </div>
                     </div>
 
                     <div class="form-group row">
-                        <label for="hasta" class="col-sm-3 col-form-label">Hasta</label>
+                        <label for="hasta" class="col-sm-3 col-form-label font-weight-bold">Hasta</label>
                         <div class="col-sm-9">
                             <input type="date" class="form-control" name="hasta" id="hasta" required>
                         </div>
                     </div>
 
                     <div class="form-group row">
-                        <label for="aseguradora" class="col-sm-3 col-form-label">Aseguradora</label>
+                        <label for="aseguradora" class="col-sm-3 col-form-label font-weight-bold">Aseguradora</label>
                         <div class="col-sm-9">
                             <select name="aseguradora" id="aseguradora" class="form-control">
                                 <option value="" selected>Todas</option>

@@ -1,4 +1,4 @@
-<h1 class="mt-4 text-uppercase">crear cotización para auto</h1>
+<h1 class="mt-4 text-uppercase">crear cotización auto</h1>
 
 <ol class="breadcrumb mb-4">
     <li class="breadcrumb-item"><a href="<?= constant("url") ?>">Panel de Control</a></li>
@@ -14,7 +14,7 @@
                 <form method="POST" action="<?= constant("url") ?>cotizaciones/crear_auto">
 
                     <div class="form-group row">
-                        <label for="marca" class="col-sm-3 col-form-label">Marca</label>
+                        <label for="marca" class="col-sm-3 col-form-label font-weight-bold">Marca</label>
                         <div class="col-sm-9">
                             <select class="form-control" name="marca" id="marca" onchange="obtener_modelos(this)" required>
                                 <option value="" selected disabled>Selecciona una Marca</option>
@@ -38,7 +38,7 @@
                     </div>
 
                     <div class="form-group row">
-                        <label for="modelo" class="col-sm-3 col-form-label">Modelo</label>
+                        <label for="modelo" class="col-sm-3 col-form-label font-weight-bold">Modelo</label>
                         <div class="col-sm-9">
                             <select class="form-control" name="modelo" id="modelo" required>
                                 <option value="" selected disabled>Selecciona un Modelo</option>
@@ -48,7 +48,7 @@
                     </div>
 
                     <div class="form-group row">
-                        <label for="uso" class="col-sm-3 col-form-label">Uso</label>
+                        <label for="uso" class="col-sm-3 col-form-label font-weight-bold">Uso</label>
                         <div class="col-sm-9">
                             <select name="uso" id="uso" class="form-control">
                                 <option value="Privado" selected>Privado</option>
@@ -58,7 +58,7 @@
                     </div>
 
                     <div class="form-group row">
-                        <div class="col-sm-3">¿Es nuevo?</div>
+                        <div class="col-sm-3  font-weight-bold">¿Es nuevo?</div>
                         <div class="col-sm-9">
                             <div class="form-check">
                                 <input class="form-check-input" type="checkbox" id="gridCheck1" name="estado">
@@ -67,14 +67,14 @@
                     </div>
 
                     <div class="form-group row">
-                        <label for="fabricacion" class="col-sm-3 col-form-label">Año de fabricación</label>
+                        <label for="fabricacion" class="col-sm-3 col-form-label font-weight-bold">Año de fabricación</label>
                         <div class="col-sm-9">
                             <input required type="number" class="form-control" id="fabricacion" name="fabricacion" maxlength="4">
                         </div>
                     </div>
 
                     <div class="form-group row">
-                        <label for="tipo_poliza" class="col-sm-3 col-form-label">Tipo de póliza</label>
+                        <label for="tipo_poliza" class="col-sm-3 col-form-label font-weight-bold">Tipo de póliza</label>
                         <div class="col-sm-9">
                             <select name="tipo_poliza" id="tipo_poliza" class="form-control">
                                 <option selected value="Declarativa">Declarativa</option>
@@ -84,7 +84,7 @@
                     </div>
 
                     <div class="form-group row">
-                        <label for="tipo_plan" class="col-sm-3 col-form-label">Tipo de plan</label>
+                        <label for="tipo_plan" class="col-sm-3 col-form-label font-weight-bold">Tipo de plan</label>
                         <div class="col-sm-9">
                             <select name="tipo_plan" id="tipo_plan" class="form-control">
                                 <option value="Mensual Full" selected>Mensual Full</option>
@@ -95,7 +95,7 @@
                     </div>
 
                     <div class="form-group row">
-                        <label for="valor" class="col-sm-3 col-form-label">Valor Asegurado</label>
+                        <label for="valor" class="col-sm-3 col-form-label font-weight-bold">Valor Asegurado</label>
                         <div class="col-sm-9">
                             <input required type="number" class="form-control" id="valor" name="valor">
                         </div>
