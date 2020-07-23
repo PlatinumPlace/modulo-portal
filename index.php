@@ -1,9 +1,10 @@
 <?php
+
 include 'php_sdk/vendor/autoload.php';
 include 'config/config.php';
 include 'config/config_api.php';
-include "core/models/api.php";
-include "core/controllers/home.php";
+include "models/api.php";
+include "controllers/home.php";
 
 function obtener_url()
 {
@@ -27,7 +28,7 @@ if (!file_exists("php_sdk/zcrm_oauthtokens.txt") or filesize("php_sdk/zcrm_oauth
 
 session_start();
 if (!isset($_SESSION["usuario"])) {
-    require_once "core/controllers/contactos.php";
+    require_once "controllers/contactos.php";
     $contactos = new contactos;
     $contactos->iniciar_sesion();
     exit();
@@ -47,7 +48,7 @@ if (isset($_GET['url'])) {
     $url = explode('/', $url);
 
     if (isset($url[0]) and isset($url[1])) {
-        $ubicacion_archivo = "core/controllers/" . $url[0] . ".php";
+        $ubicacion_archivo = "controllers/" . $url[0] . ".php";
         if (file_exists($ubicacion_archivo)) {
             require_once $ubicacion_archivo;
             $controlador = new $url[0];
