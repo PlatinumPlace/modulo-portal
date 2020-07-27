@@ -1,4 +1,4 @@
-<h2 class="mt-4 text-uppercase text-center">
+<h2 class="mt-4 text-uppercase">
     cotización <br>
     seguro vehículo de motor <br>
     <?= $cotizacion->getFieldValue('Subject') ?>
@@ -51,7 +51,7 @@
                                             $num_pagina++;
                                             sort($clientes);
                                             foreach ($clientes as $cliente) {
-                                                echo '<option value="' . $cliente->getEntityId() . '">' . strtoupper($cliente->getFieldValue("Name")) . " " . strtoupper($cliente->getFieldValue("Apellido")) . '</option>';
+                                                echo '<option value="' . $cliente->getEntityId() . '">' . strtoupper($cliente->getFieldValue("Nombre")) . " " . strtoupper($cliente->getFieldValue("Apellido")) . '</option>';
                                             }
                                         } else {
                                             $num_pagina = 0;

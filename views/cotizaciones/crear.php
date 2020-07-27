@@ -9,7 +9,7 @@
 <div class="row">
 
     <div class="col-4">
-        <img class="card-img-top" height="200" src="<?= constant("url") ?>public/img/car.png">
+        <img class="card-img-top" height="200" src="<?= constant("url") ?>public/img/auto.png">
         <a class="small text-white stretched-link" href="<?= constant("url") ?>cotizaciones/crear_auto"></a>
         <p class="text-center font-weight-bold">AUTO</p>
     </div>

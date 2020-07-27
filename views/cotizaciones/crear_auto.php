@@ -8,7 +8,6 @@
 
 <div class="row justify-content-center">
     <div class="col-lg-10">
-
         <div class="card mb-4">
             <div class="card-body">
                 <form method="POST" action="<?= constant("url") ?>cotizaciones/crear_auto">
@@ -103,11 +102,12 @@
 
                     <br>
                     <button type="submit" class="btn btn-primary">Crear</button>
+                    |
+                    <a href="<?= constant("url") ?>cotizaciones/crear" class="btn btn-info">Cancelar</a>
 
                 </form>
             </div>
         </div>
-
     </div>
 </div>
 

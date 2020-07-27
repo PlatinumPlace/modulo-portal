@@ -1,11 +1,11 @@
 <?php
 
-class cotizaciones extends home
+class cotizaciones
 {
     public function buscar()
     {
         $api = new api;
-        $url = $this->obtener_url();
+        $url = obtener_url();
         $filtro = (isset($url[0])) ? $url[0] : "todos";
         $num_pagina = (isset($url[1])) ? $url[1] : 1;
 
@@ -22,17 +22,10 @@ class cotizaciones extends home
         require_once "views/layout/footer_main.php";
     }
 
-    public function crear()
-    {
-        require_once "views/layout/header_main.php";
-        require_once "views/cotizaciones/crear.php";
-        require_once "views/layout/footer_main.php";
-    }
-
     public function reporte()
     {
         $api = new api;
-        $url = $this->obtener_url();
+        $url = obtener_url();
         $alerta = (isset($url[0])) ? $url[0] : null;
 
         if (isset($_POST["pdf"]) and $_POST["tipo_reporte"] == "auto") {
@@ -45,7 +38,135 @@ class cotizaciones extends home
         }
 
         if (isset($_POST["csv"]) and $_POST["tipo_reporte"] == "auto") {
-            $alerta = $this->reporte_auto($api);
+            $titulo = "Reporte Cotizaciones Auto";
+            $ruta_csv = "public/tmp/" . $titulo . ".csv";
+
+            if (!is_dir("public/tmp")) {
+                mkdir("public/tmp", 0755, true);
+            }
+
+            $contenido_csv = array(
+                array($_SESSION["usuario"]['empresa_nombre']),
+                array($titulo),
+                array("Desde:", $_POST["desde"], "Hasta:", $_POST["hasta"]),
+                array("Vendedor:", $_SESSION["usuario"]['nombre']),
+                array("")
+            );
+
+            $contenido_csv[] = array(
+                "Emision",
+                "Vigencia",
+                "Marca",
+                "Modelo",
+                "Tipo",
+                "Año",
+                "Plan",
+                "Uso",
+                "Condicion",
+                "Tipo Póliza",
+                "Valor",
+                "Prima",
+                "Aseguradora"
+            );
+
+            $prima_sumatoria = 0;
+            $valor_sumatoria = 0;
+
+            $criterio = "Contact_Name:equals:" . $_SESSION["usuario"]["id"];
+            $num_pagina = 1;
+            do {
+                $cotizaciones = $api->buscar_criterio("Quotes", $criterio, $num_pagina, 200);
+                if (!empty($cotizaciones)) {
+                    $num_pagina++;
+
+                    foreach ($cotizaciones as $cotizacion) {
+                        if (
+                            date("Y-m-d", strtotime($cotizacion->getFieldValue("Fecha_emisi_n")))  >= $_POST["desde"]
+                            and
+                            date("Y-m-d", strtotime($cotizacion->getFieldValue("Fecha_emisi_n")))  <= $_POST["hasta"]
+                            and
+                            $cotizacion->getFieldValue("Tipo") == "Auto"
+                        ) {
+                            $planes = $cotizacion->getLineItems();
+
+                            foreach ($planes as $plan) {
+                                if ($plan->getNetTotal() > 0) {
+                                    if (empty($_POST["aseguradora"])) {
+                                        $prima_sumatoria += $plan->getNetTotal();
+                                        $valor_sumatoria += $cotizacion->getFieldValue('Valor_Asegurado');
+
+                                        $contenido_csv[] = array(
+                                            date("Y-m-d", strtotime($cotizacion->getFieldValue("Fecha_emisi_n"))),
+                                            date("Y-m-d", strtotime($cotizacion->getFieldValue("Valid_Till"))),
+                                            $cotizacion->getFieldValue('Marca')->getLookupLabel(),
+                                            $cotizacion->getFieldValue('Modelo')->getLookupLabel(),
+                                            $cotizacion->getFieldValue('Tipo_Veh_culo'),
+                                            $cotizacion->getFieldValue('A_o_Fabricaci_n'),
+                                            $cotizacion->getFieldValue('Plan'),
+                                            $cotizacion->getFieldValue('Uso_Veh_culo'),
+                                            ($cotizacion->getFieldValue('Veh_culo_Nuevo') == true) ? "Nuevo" : "Usado",
+                                            $cotizacion->getFieldValue('Tipo_P_liza'),
+                                            number_format($cotizacion->getFieldValue('Valor_Asegurado'), 2),
+                                            number_format($plan->getNetTotal(), 2),
+                                            $plan->getDescription()
+                                        );
+                                    } elseif ($_POST["aseguradora"] == $plan->getDescription()) {
+                                        $prima_sumatoria += $plan->getNetTotal();
+                                        $valor_sumatoria += $cotizacion->getFieldValue('Valor_Asegurado');
+
+                                        $contenido_csv[] = array(
+                                            date("Y-m-d", strtotime($cotizacion->getFieldValue("Fecha_emisi_n"))),
+                                            date("Y-m-d", strtotime($cotizacion->getFieldValue("Valid_Till"))),
+                                            $cotizacion->getFieldValue('Marca')->getLookupLabel(),
+                                            $cotizacion->getFieldValue('Modelo')->getLookupLabel(),
+                                            $cotizacion->getFieldValue('Tipo_Veh_culo'),
+                                            $cotizacion->getFieldValue('A_o_Fabricaci_n'),
+                                            $cotizacion->getFieldValue('Plan'),
+                                            $cotizacion->getFieldValue('Uso_Veh_culo'),
+                                            ($cotizacion->getFieldValue('Veh_culo_Nuevo') == true) ? "Nuevo" : "Usado",
+                                            $cotizacion->getFieldValue('Tipo_P_liza'),
+                                            number_format($cotizacion->getFieldValue('Valor_Asegurado'), 2),
+                                            number_format($plan->getNetTotal(), 2),
+                                            $plan->getDescription()
+                                        );
+                                    }
+                                }
+                            }
+                        }
+                    }
+                } else {
+                    $num_pagina = 0;
+                }
+            } while ($num_pagina > 0);
+
+
+            $contenido_csv[] = array("");
+            $contenido_csv[] = array("Total Primas:", number_format($prima_sumatoria, 2,));
+            $contenido_csv[] = array("Total Valores:", number_format($valor_sumatoria, 2));
+
+            if ($valor_sumatoria > 0) {
+                $fp = fopen($ruta_csv, 'w');
+                foreach ($contenido_csv as $campos) {
+                    fputcsv($fp, $campos);
+                }
+                fclose($fp);
+            }
+
+            $fileName = basename($ruta_csv);
+            if (!empty($fileName) and file_exists($ruta_csv)) {
+                header('Content-Description: File Transfer');
+                header('Content-Type: application/octet-stream');
+                header('Content-Disposition: attachment; filename="' . $fileName . '"');
+                header('Expires: 0');
+                header('Cache-Control: must-revalidate');
+                header('Pragma: public');
+                header('Content-Length: ' . filesize($ruta_csv));
+                readfile($ruta_csv);
+                unlink($ruta_csv);
+                exit;
+            } else {
+                $alerta = 'No se encontraton resultados.';
+            }
         }
 
         require_once "views/layout/header_main.php";
@@ -53,139 +174,11 @@ class cotizaciones extends home
         require_once "views/layout/footer_main.php";
     }
 
-    public function reporte_auto($api)
+    public function crear()
     {
-        $titulo = "Reporte Cotizaciones Auto";
-        $ruta_csv = "public/tmp/" . $titulo . ".csv";
-
-        if (!is_dir("public/tmp")) {
-            mkdir("public/tmp", 0755, true);
-        }
-
-        $contenido_csv = array(
-            array($_SESSION["usuario"]['empresa_nombre']),
-            array($titulo),
-            array("Desde:", $_POST["desde"], "Hasta:", $_POST["hasta"]),
-            array("Vendedor:", $_SESSION["usuario"]['nombre']),
-            array("")
-        );
-
-        $contenido_csv[] = array(
-            "Emision",
-            "Vigencia",
-            "Marca",
-            "Modelo",
-            "Tipo",
-            "Año",
-            "Plan",
-            "Uso",
-            "Condicion",
-            "Tipo Póliza",
-            "Valor",
-            "Prima",
-            "Aseguradora"
-        );
-
-        $prima_sumatoria = 0;
-        $valor_sumatoria = 0;
-
-        $criterio = "Contact_Name:equals:" . $_SESSION["usuario"]["id"];
-        $num_pagina = 1;
-        do {
-            $cotizaciones = $api->buscar_criterio("Quotes", $criterio, $num_pagina, 200);
-            if (!empty($cotizaciones)) {
-                $num_pagina++;
-
-                foreach ($cotizaciones as $cotizacion) {
-                    if (
-                        date("Y-m-d", strtotime($cotizacion->getFieldValue("Fecha_emisi_n")))  >= $_POST["desde"]
-                        and
-                        date("Y-m-d", strtotime($cotizacion->getFieldValue("Fecha_emisi_n")))  <= $_POST["hasta"]
-                        and
-                        $cotizacion->getFieldValue("Tipo") == "Auto"
-                        and
-                        $cotizacion->getFieldValue("Deal_Name") == null
-                    ) {
-                        $planes = $cotizacion->getLineItems();
-
-                        foreach ($planes as $plan) {
-                            if ($plan->getNetTotal() > 0) {
-                                if (empty($_POST["aseguradora"])) {
-                                    $prima_sumatoria += $plan->getNetTotal();
-                                    $valor_sumatoria += $cotizacion->getFieldValue('Valor_Asegurado');
-
-                                    $contenido_csv[] = array(
-                                        date("Y-m-d", strtotime($cotizacion->getFieldValue("Fecha_emisi_n"))),
-                                        date("Y-m-d", strtotime($cotizacion->getFieldValue("Valid_Till"))),
-                                        $cotizacion->getFieldValue('Marca')->getLookupLabel(),
-                                        $cotizacion->getFieldValue('Modelo')->getLookupLabel(),
-                                        $cotizacion->getFieldValue('Tipo_Veh_culo'),
-                                        $cotizacion->getFieldValue('A_o_Fabricaci_n'),
-                                        $cotizacion->getFieldValue('Plan'),
-                                        $cotizacion->getFieldValue('Uso_Veh_culo'),
-                                        ($cotizacion->getFieldValue('Veh_culo_Nuevo') == true) ? "Nuevo" : "Usado",
-                                        $cotizacion->getFieldValue('Tipo_P_liza'),
-                                        number_format($cotizacion->getFieldValue('Valor_Asegurado'), 2),
-                                        number_format($plan->getNetTotal(), 2),
-                                        $plan->getDescription()
-                                    );
-                                } elseif ($_POST["aseguradora"] == $plan->getDescription()) {
-                                    $prima_sumatoria += $plan->getNetTotal();
-                                    $valor_sumatoria += $cotizacion->getFieldValue('Valor_Asegurado');
-
-                                    $contenido_csv[] = array(
-                                        date("Y-m-d", strtotime($cotizacion->getFieldValue("Fecha_emisi_n"))),
-                                        date("Y-m-d", strtotime($cotizacion->getFieldValue("Valid_Till"))),
-                                        $cotizacion->getFieldValue('Marca')->getLookupLabel(),
-                                        $cotizacion->getFieldValue('Modelo')->getLookupLabel(),
-                                        $cotizacion->getFieldValue('Tipo_Veh_culo'),
-                                        $cotizacion->getFieldValue('A_o_Fabricaci_n'),
-                                        $cotizacion->getFieldValue('Plan'),
-                                        $cotizacion->getFieldValue('Uso_Veh_culo'),
-                                        ($cotizacion->getFieldValue('Veh_culo_Nuevo') == true) ? "Nuevo" : "Usado",
-                                        $cotizacion->getFieldValue('Tipo_P_liza'),
-                                        number_format($cotizacion->getFieldValue('Valor_Asegurado'), 2),
-                                        number_format($plan->getNetTotal(), 2),
-                                        $plan->getDescription()
-                                    );
-                                }
-                            }
-                        }
-                    }
-                }
-            } else {
-                $num_pagina = 0;
-            }
-        } while ($num_pagina > 0);
-
-
-        $contenido_csv[] = array("");
-        $contenido_csv[] = array("Total Primas:", number_format($prima_sumatoria, 2,));
-        $contenido_csv[] = array("Total Valores:", number_format($valor_sumatoria, 2));
-
-        if ($valor_sumatoria > 0) {
-            $fp = fopen($ruta_csv, 'w');
-            foreach ($contenido_csv as $campos) {
-                fputcsv($fp, $campos);
-            }
-            fclose($fp);
-        }
-
-        $fileName = basename($ruta_csv);
-        if (!empty($fileName) and file_exists($ruta_csv)) {
-            header('Content-Description: File Transfer');
-            header('Content-Type: application/octet-stream');
-            header('Content-Disposition: attachment; filename="' . $fileName . '"');
-            header('Expires: 0');
-            header('Cache-Control: must-revalidate');
-            header('Pragma: public');
-            header('Content-Length: ' . filesize($ruta_csv));
-            readfile($ruta_csv);
-            unlink($ruta_csv);
-            exit;
-        } else {
-            return 'No se encontraton resultados.';
-        }
+        require_once "views/layout/header_main.php";
+        require_once "views/cotizaciones/crear.php";
+        require_once "views/layout/footer_main.php";
     }
 
     public function crear_auto()
@@ -326,11 +319,11 @@ class cotizaciones extends home
     public function detalles_auto()
     {
         $api = new api;
-        $url = $this->obtener_url();
+        $url = obtener_url();
+        $alerta = (isset($url[1])) ? $url[0] : null;
 
         if (!isset($url[0])) {
-            $home = new home;
-            $home->error();
+            require_once "views/error.php";
             exit();
         }
 
@@ -338,8 +331,12 @@ class cotizaciones extends home
         $cotizacion = $api->detalles_registro("Quotes", $id);
 
         if (empty($cotizacion)) {
-            $home = new home;
-            $home->error();
+            require_once "views/error.php";
+            exit();
+        }
+
+        if (isset($url[1]) and $url[1] == "descargar") {
+            require_once "views/cotizaciones/descargar_auto.php";
             exit();
         }
 
@@ -348,37 +345,13 @@ class cotizaciones extends home
         require_once "views/layout/footer_main.php";
     }
 
-    public function descargar_auto()
-    {
-        $api = new api;
-        $url = $this->obtener_url();
-
-        if (!isset($url[0])) {
-            $home = new home;
-            $home->error();
-            exit();
-        }
-
-        $id = $url[0];
-        $cotizacion = $api->detalles_registro("Quotes", $id);
-
-        if (empty($cotizacion)) {
-            $home = new home;
-            $home->error();
-            exit();
-        }
-
-        require_once "views/cotizaciones/descargar_auto.php";
-    }
-
     public function emitir_auto()
     {
         $api = new api;
-        $url = $this->obtener_url();
+        $url = obtener_url();
 
         if (!isset($url[0])) {
-            $home = new home;
-            $home->error();
+            require_once "views/error.php";
             exit();
         }
 
@@ -386,8 +359,7 @@ class cotizaciones extends home
         $cotizacion = $api->detalles_registro("Quotes", $id);
 
         if (empty($cotizacion) or $cotizacion->getFieldValue("Deal_Name") != null) {
-            $home = new home;
-            $home->error();
+            require_once "views/error.php";
             exit();
         }
 
@@ -441,12 +413,12 @@ class cotizaciones extends home
 
 
                     if (empty($_POST["cliente_id"])) {
-                        $cliente_nuevo["RNC_C_dula"] = $_POST["rnc_cedula"];
+                        $cliente_nuevo["Name"] = $_POST["rnc_cedula"];
                         $cliente_nuevo["Aseguradora"] =  $plan_detalles->getFieldValue("Vendor_Name")->getEntityId();
                         $cliente_nuevo["Informar_a"] = $_SESSION["usuario"]['id'];
                         $cliente_nuevo["Socio"] = $_SESSION["usuario"]['empresa_id'];
                         $cliente_nuevo["Direcci_n"] = (isset($_POST["direccion"])) ? $_POST["direccion"] : null;
-                        $cliente_nuevo["Name"] = $_POST["nombre"];
+                        $cliente_nuevo["Nombre"] = $_POST["nombre"];
                         $cliente_nuevo["Apellido"] = (isset($_POST["apellido"])) ? $_POST["apellido"] : null;
                         $cliente_nuevo["Tel"] = (isset($_POST["telefono"])) ? $_POST["telefono"] : null;
                         $cliente_nuevo["Tel_Residencia"] = (isset($_POST["tel_residencia"])) ? $_POST["tel_residencia"] : null;
@@ -477,7 +449,6 @@ class cotizaciones extends home
 
 
                     $nuevo_bien["A_o"] = $cotizacion->getFieldValue('A_o_Fabricaci_n');
-                    $nuevo_bien["Chasis"] = $_POST["chasis"];
                     $nuevo_bien["Color"] = $_POST["color"];
                     $nuevo_bien["Marca"] = $cotizacion->getFieldValue('Marca')->getLookupLabel();
                     $nuevo_bien["Modelo"] = $cotizacion->getFieldValue('Modelo')->getLookupLabel();

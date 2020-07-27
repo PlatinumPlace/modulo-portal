@@ -1,12 +1,12 @@
 <?php
 
-class tratos extends home
+class tratos
 {
     public function buscar()
     {
         $api = new api;
 
-        $url = $this->obtener_url();
+        $url = obtener_url();
         $filtro = (isset($url[0])) ? $url[0] : "todos";
         $num_pagina = (isset($url[1])) ? $url[1] : 1;
 
@@ -27,7 +27,7 @@ class tratos extends home
     {
         $api = new api;
 
-        $url = $this->obtener_url();
+        $url = obtener_url();
         $alerta = (isset($url[0])) ? $url[0] : null;
 
         if (isset($_POST["csv"]) and $_POST["tipo_reporte"] == "auto") {
@@ -49,11 +49,12 @@ class tratos extends home
     public function adjuntar()
     {
         $api = new api;
-        $url = $this->obtener_url();
+        $url = obtener_url();
 
         if (!isset($url[0])) {
-            $home = new home;
-            $home->error();
+           
+                        require_once "views/error.php";
+
             exit();
         }
 
@@ -61,8 +62,9 @@ class tratos extends home
         $trato = $api->detalles_registro("Deals", $id);
 
         if (empty($trato)) {
-            $home = new home;
-            $home->error();
+           
+                        require_once "views/error.php";
+
             exit();
         }
 
@@ -94,11 +96,12 @@ class tratos extends home
     public function detalles_auto()
     {
         $api = new api;
-        $url = $this->obtener_url();
+        $url = obtener_url();
 
         if (!isset($url[0])) {
-            $home = new home;
-            $home->error();
+           
+                        require_once "views/error.php";
+
             exit();
         }
 
@@ -108,29 +111,33 @@ class tratos extends home
 
         $trato = $api->detalles_registro("Deals", $id);
         if (empty($trato)) {
-            $home = new home;
-            $home->error();
+           
+                        require_once "views/error.php";
+
             exit();
         }
 
         $poliza = $api->detalles_registro("P_lizas", $trato->getFieldValue('P_liza')->getEntityId());
         if (empty($poliza)) {
-            $home = new home;
-            $home->error();
+           
+                        require_once "views/error.php";
+
             exit();
         }
 
         $bien = $api->detalles_registro("Bienes", $trato->getFieldValue('Bien')->getEntityId());
         if (empty($bien)) {
-            $home = new home;
-            $home->error();
+           
+                        require_once "views/error.php";
+
             exit();
         }
 
         $cliente = $api->detalles_registro("Clientes", $trato->getFieldValue('Cliente')->getEntityId());
         if (empty($cliente)) {
-            $home = new home;
-            $home->error();
+           
+                        require_once "views/error.php";
+
             exit();
         }
 
@@ -142,47 +149,53 @@ class tratos extends home
     public function descargar_auto()
     {
         $api = new api;
-        $url = $this->obtener_url();
+        $url = obtener_url();
 
         if (!isset($url[0])) {
-            $home = new home;
-            $home->error();
+           
+                        require_once "views/error.php";
+
             exit();
         }
 
         $id = $url[0];
         $trato = $api->detalles_registro("Deals", $id);
         if (empty($trato)) {
-            $home = new home;
-            $home->error();
+           
+                        require_once "views/error.php";
+
             exit();
         }
 
         $coberturas = $api->detalles_registro("Contratos", $trato->getFieldValue('Contrato')->getEntityId());
         if (empty($coberturas)) {
-            $home = new home;
-            $home->error();
+           
+                        require_once "views/error.php";
+
             exit();
         }
 
         $bien = $api->detalles_registro("Bienes", $trato->getFieldValue('Bien')->getEntityId());
         if (empty($bien)) {
-            $home = new home;
-            $home->error();
+           
+                        require_once "views/error.php";
+
             exit();
         }
 
         $cliente = $api->detalles_registro("Clientes", $trato->getFieldValue('Cliente')->getEntityId());
         if (empty($cliente)) {
-            $home = new home;
-            $home->error();
+           
+                        require_once "views/error.php";
+
             exit();
         }
 
         $aseguradora = $api->detalles_registro("Vendors", $trato->getFieldValue('Aseguradora')->getEntityId());
         if (empty($aseguradora)) {
-            $home = new home;
-            $home->error();
+           
+                        require_once "views/error.php";
+
             exit();
         }
 

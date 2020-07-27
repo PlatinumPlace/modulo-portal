@@ -24,9 +24,9 @@
                 <?php if ($cotizacion->getFieldValue('Deal_Name') == null) : ?>
                     <a href="<?= constant("url") ?>cotizaciones/emitir_auto/<?= $id ?>" class="btn btn-primary">Emitir</a>
                 <?php else : ?>
-                    <a href="<?= constant("url") ?>tratos/detalles_auto/<?= $cotizacion->getFieldValue('Deal_Name')->getEntityId() ?>" class="btn btn-success">Ver Emision</a>
+                    <a href="<?= constant("url") ?>tratos/detalles_auto/<?= $cotizacion->getFieldValue('Deal_Name')->getEntityId() ?>" class="btn btn-success">Ver Emisión</a>
                 <?php endif ?>
-                <a href="<?= constant("url") ?>cotizaciones/descargar_auto/<?= $id ?>" class="btn btn-secondary">Descargar</a>
+                <a href="<?= constant("url") ?>cotizaciones/detalles_auto/<?= $id ?>/descargar" class="btn btn-secondary">Descargar</a>
             </div>
         </div>
 

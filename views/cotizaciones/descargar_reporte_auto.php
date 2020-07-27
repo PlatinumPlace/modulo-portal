@@ -52,7 +52,6 @@
             <thead class="thead-dark">
                     <tr>
                         <th scope="col">Emision</th>
-                        <th scope="col">Vigencia</th>
                         <th scope="col">Marca</th>
                         <th scope="col">Modelo</th>
                         <th scope="col">Tipo</th>
@@ -80,8 +79,6 @@
                                     date("Y-m-d", strtotime($cotizacion->getFieldValue("Fecha_emisi_n")))  <= $_POST["hasta"]
                                     and
                                     $cotizacion->getFieldValue("Tipo") == "Auto"
-                                    and
-                                    $cotizacion->getFieldValue("Deal_Name") == null
                                 ) {
                                     $planes = $cotizacion->getLineItems();
 
@@ -93,7 +90,6 @@
 
                                                 echo "<tr>";
                                                 echo '<th scope="col">' . date("Y-m-d", strtotime($cotizacion->getFieldValue("Fecha_emisi_n"))) . "</th>";
-                                                echo "<td>" . date("Y-m-d", strtotime($cotizacion->getFieldValue("Valid_Till"))) . "</th>";
                                                 echo "<td>" . $cotizacion->getFieldValue('Marca')->getLookupLabel() . "</th>";
                                                 echo "<td>" . $cotizacion->getFieldValue('Modelo')->getLookupLabel() . "</th>";
                                                 echo "<td>" . $cotizacion->getFieldValue('Tipo_Veh_culo') . "</th>";
@@ -109,7 +105,6 @@
 
                                                 echo "<tr>";
                                                 echo '<th scope="col">' . date("Y-m-d", strtotime($cotizacion->getFieldValue("Fecha_emisi_n"))) . "</th>";
-                                                echo "<td>" . date("Y-m-d", strtotime($cotizacion->getFieldValue("Valid_Till"))) . "</th>";
                                                 echo "<td>" . $cotizacion->getFieldValue('Marca')->getLookupLabel() . "</th>";
                                                 echo "<td>" . $cotizacion->getFieldValue('Modelo')->getLookupLabel() . "</th>";
                                                 echo "<td>" . $cotizacion->getFieldValue('Tipo_Veh_culo') . "</th>";

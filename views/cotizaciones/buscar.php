@@ -76,7 +76,7 @@
                                         echo '<a href="' . constant("url") . 'cotizaciones/emitir_' . strtolower($cotizacion->getFieldValue('Tipo')) . '/' . $cotizacion->getEntityId() . '" title="Emitir"><i class="fas fa-user"></i></i></a>';
                                         echo "&nbsp;";
                                     }
-                                    echo '<a href="' . constant("url") . 'cotizaciones/descargar_' . strtolower($cotizacion->getFieldValue('Tipo')) . '/' . $cotizacion->getEntityId() . '" title="Descargar"><i class="fas fa-file-download"></i></a>';
+                                    echo '<a href="' . constant("url") . 'cotizaciones/detalles_' . strtolower($cotizacion->getFieldValue('Tipo')) . '/' . $cotizacion->getEntityId() . '/descargar" title="Descargar"><i class="fas fa-file-download"></i></a>';
                                     echo "</td>";
                                 }
                                 ?>
