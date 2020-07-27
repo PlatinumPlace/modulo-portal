@@ -56,9 +56,11 @@
                         <th scope="col">Marca</th>
                         <th scope="col">Modelo</th>
                         <th scope="col">Tipo</th>
-                        <th scope="col">Chasis</th>
                         <th scope="col">Valor</th>
                         <th scope="col">Prima</th>
+                        <?php if (!empty($_POST["comision"])) : ?>
+                            <th scope="col">Comisión</th>
+                        <?php endif ?>
                         <th scope="col">Aseguradora</th>
                     </tr>
                 </thead>
@@ -90,16 +92,19 @@
                                     if (empty($_POST["aseguradora_id"])) {
                                         $prima_sumatoria += $trato->getFieldValue('Prima_Total');
                                         $valor_sumatoria += $trato->getFieldValue('Valor_Asegurado');
+                                        $comision_sumatoria += $trato->getFieldValue('Comisi_n_Socio');
 
                                         echo "<tr>";
                                         echo '<th scope="col">' . date("Y-m-d", strtotime($trato->getFieldValue("Fecha_de_emisi_n"))) . "</th>";
-                                        echo "<td>" . $cliente->getFieldValue('RNC_C_dula') . "</th>";
+                                        echo "<td>" . $cliente->getFieldValue('Name') . "</th>";
                                         echo "<td>" . $bien->getFieldValue('Marca') . "</th>";
                                         echo "<td>" . $bien->getFieldValue('Modelo') . "</th>";
                                         echo "<td>" . $bien->getFieldValue('Tipo_de_veh_culo') . "</th>";
-                                        echo "<td>" . $bien->getFieldValue('Chasis') . "</th>";
                                         echo "<td>" . number_format($trato->getFieldValue('Valor_Asegurado'), 2) . "</th>";
                                         echo "<td>" . number_format($trato->getFieldValue('Prima_Total'), 2) . "</th>";
+                                        if (!empty($_POST["comision"])) {
+                                            echo "<td>" . number_format($trato->getFieldValue('Comisi_n_Socio'), 2) . "</th>";
+                                        }
                                         echo "<td>" . $trato->getFieldValue('Aseguradora')->getLookupLabel() . "</th>";
                                         echo "</tr>";
                                     } elseif ($_POST["aseguradora_id"] == $trato->getFieldValue('Aseguradora')->getEntityId()) {
@@ -108,13 +113,15 @@
 
                                         echo "<tr>";
                                         echo '<th scope="col">' . date("Y-m-d", strtotime($trato->getFieldValue("Fecha_de_emisi_n"))) . "</th>";
-                                        echo "<td>" . $cliente->getFieldValue('RNC_C_dula') . "</th>";
+                                        echo "<td>" . $cliente->getFieldValue('Name') . "</th>";
                                         echo "<td>" . $bien->getFieldValue('Marca') . "</th>";
                                         echo "<td>" . $bien->getFieldValue('Modelo') . "</th>";
                                         echo "<td>" . $bien->getFieldValue('Tipo_de_veh_culo') . "</th>";
-                                        echo "<td>" . $bien->getFieldValue('Chasis') . "</th>";
                                         echo "<td>" . number_format($trato->getFieldValue('Valor_Asegurado'), 2) . "</th>";
                                         echo "<td>" . number_format($trato->getFieldValue('Prima_Total'), 2) . "</th>";
+                                        if (!empty($_POST["comision"])) {
+                                            echo "<td>" . number_format($trato->getFieldValue('Comisi_n_Socio'), 2) . "</th>";
+                                        }
                                         echo "<td>" . $trato->getFieldValue('Aseguradora')->getLookupLabel() . "</th>";
                                         echo "</tr>";
                                     }
@@ -136,6 +143,10 @@
                 <div class="col">
                     <b>Total Primas:</b> <br>
                     <b>Total Valores:</b>
+                    <?php if (!empty($_POST["comision"])) : ?>
+                        <br>
+                        <b>Total Comisiones:</b>
+                    <?php endif ?>
                 </div>
                 <div class="col">
                     <?php
@@ -143,6 +154,10 @@
                         echo "RD$" . number_format($prima_sumatoria, 2);
                         echo "<br>";
                         echo "RD$" . number_format($valor_sumatoria, 2);
+                        if (!empty($_POST["comision"])) {
+                            echo "<br>";
+                            echo "RD$" . number_format($comision_sumatoria, 2);
+                        }
                     } else {
                         header("Location:" . constant("url") . "tratos/reporte/No se encontraton resultados.");
                         exit;

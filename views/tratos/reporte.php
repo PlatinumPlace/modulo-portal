@@ -20,9 +20,9 @@
                 <form method="POST" action="<?= constant("url") ?>tratos/reporte">
 
                     <div class="form-group row">
-                        <label for="tipo_reporte" class="col-sm-3 col-form-label font-weight-bold">Tipo de emision</label>
+                        <label class="col-sm-3 col-form-label font-weight-bold">Tipo de emision</label>
                         <div class="col-sm-9">
-                            <select name="tipo_reporte" id="tipo_reporte" class="form-control">
+                            <select name="tipo_reporte" class="form-control">
                                 <option value="auto" selected>Auto</option>
                             </select>
                         </div>
@@ -32,29 +32,29 @@
                         <div class="col-sm-3 font-weight-bold">¿Incluir comisión?</div>
                         <div class="col-sm-9">
                             <div class="form-check">
-                                <input class="form-check-input" type="checkbox" id="gridCheck1" name="comision">
+                                <input class="form-check-input" type="checkbox" name="comision">
                             </div>
                         </div>
                     </div>
 
                     <div class="form-group row">
-                        <label for="desde" class="col-sm-3 col-form-label font-weight-bold">Desde</label>
+                        <label class="col-sm-3 col-form-label font-weight-bold">Desde</label>
                         <div class="col-sm-9">
-                            <input type="date" class="form-control" name="desde" id="desde" required>
+                            <input type="date" class="form-control" name="desde" required>
                         </div>
                     </div>
 
                     <div class="form-group row">
-                        <label for="hasta" class="col-sm-3 col-form-label font-weight-bold">Hasta</label>
+                        <label class="col-sm-3 col-form-label font-weight-bold">Hasta</label>
                         <div class="col-sm-9">
-                            <input type="date" class="form-control" name="hasta" id="hasta" required>
+                            <input type="date" class="form-control" name="hasta" required>
                         </div>
                     </div>
 
                     <div class="form-group row">
-                        <label for="aseguradora_id" class="col-sm-3 col-form-label font-weight-bold">Aseguradora</label>
+                        <label class="col-sm-3 col-form-label font-weight-bold">Aseguradora</label>
                         <div class="col-sm-9">
-                            <select name="aseguradora_id" id="aseguradora_id" class="form-control">
+                            <select name="aseguradora_id" class="form-control">
                                 <option value="" selected>Todas</option>
                                 <?php
                                 $criterio = "Socio:equals:" . $_SESSION["usuario"]["empresa_id"];

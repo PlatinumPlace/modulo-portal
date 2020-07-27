@@ -31,7 +31,7 @@ do {
                     $aseguradoras[] = $trato->getFieldValue('Aseguradora')->getLookupLabel();
                 }
 
-                if (date("Y-m", strtotime($cotizacion->getFieldValue("Closing_Date"))) == date('Y-m')) {
+                if (date("Y-m", strtotime($cotizacion->getFieldValue("Valid_Till"))) == date('Y-m')) {
                     $tratos_venciendo += 1;
                 }
             }

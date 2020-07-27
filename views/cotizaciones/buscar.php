@@ -70,13 +70,13 @@
                                     echo "<td>" . $cotizacion->getFieldValue('Quote_Stage') . "</td>";
                                     echo "<td>" . $cotizacion->getFieldValue('Valid_Till') . "</td>";
                                     echo "<td>";
-                                    echo '<a href="' . constant("url") . 'cotizaciones/detalles_' . strtolower($cotizacion->getFieldValue('Tipo')) . '/' . $cotizacion->getEntityId() . '" title="Detalles"><i class="fas fa-info-circle"></i></a>';
+                                    echo '<a href="' . constant("url") . 'cotizaciones/detalles/' . strtolower($cotizacion->getFieldValue('Tipo')) . "/" . $cotizacion->getEntityId() . '" title="Detalles"><i class="fas fa-info-circle"></i></a>';
                                     echo "&nbsp;";
                                     if ($cotizacion->getFieldValue("Deal_Name") == null) {
-                                        echo '<a href="' . constant("url") . 'cotizaciones/emitir_' . strtolower($cotizacion->getFieldValue('Tipo')) . '/' . $cotizacion->getEntityId() . '" title="Emitir"><i class="fas fa-user"></i></i></a>';
+                                        echo '<a href="' . constant("url") . 'cotizaciones/emitir/' . strtolower($cotizacion->getFieldValue('Tipo')) . "/" . $cotizacion->getEntityId()  . '" title="Emitir"><i class="fas fa-user"></i></i></a>';
                                         echo "&nbsp;";
                                     }
-                                    echo '<a href="' . constant("url") . 'cotizaciones/detalles_' . strtolower($cotizacion->getFieldValue('Tipo')) . '/' . $cotizacion->getEntityId() . '/descargar" title="Descargar"><i class="fas fa-file-download"></i></a>';
+                                    echo '<a href="' . constant("url") . 'cotizaciones/descargar/' . strtolower($cotizacion->getFieldValue('Tipo')) . "/" . $cotizacion->getEntityId() . '/descargar" title="Descargar"><i class="fas fa-file-download"></i></a>';
                                     echo "</td>";
                                 }
                                 ?>
@@ -97,6 +97,6 @@
                 </li>
             </ul>
         </nav>
-        
+
     </div>
 </div>

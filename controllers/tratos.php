@@ -23,27 +23,86 @@ class tratos
         require_once "views/layout/footer_main.php";
     }
 
-    public function reporte()
+    public function detalles()
     {
         $api = new api;
-
         $url = obtener_url();
-        $alerta = (isset($url[0])) ? $url[0] : null;
 
-        if (isset($_POST["csv"]) and $_POST["tipo_reporte"] == "auto") {
-            $alerta = $this->reporte_auto($api, $_POST);
-        } elseif (isset($_POST["pdf"]) and $_POST["tipo_reporte"] == "auto") {
-            $titulo = "Reporte Cotizaciones Auto";
-            $prima_sumatoria = 0;
-            $valor_sumatoria = 0;
+        if (!isset($url[0]) and !isset($url[1])) {
+            require_once "views/error.php";
+            exit();
+        }
 
-            require_once "views/tratos/descargar_reporte_auto.php";
+        $id = $url[1];
+        $num_pagina = (isset($url[2]) and is_numeric($url[2])) ? $url[2] : 1;
+        $alerta = (isset($url[2]) and !is_numeric($url[2])) ? $url[2] : null;
+
+        $trato = $api->detalles_registro("Deals", $id);
+
+        if (empty($trato)) {
+            require_once "views/error.php";
+            exit();
+        }
+
+        $poliza = $api->detalles_registro("P_lizas", $trato->getFieldValue('P_liza')->getEntityId());
+        $bien = $api->detalles_registro("Bienes", $trato->getFieldValue('Bien')->getEntityId());
+        $cliente = $api->detalles_registro("Clientes", $trato->getFieldValue('Cliente')->getEntityId());
+
+        if (
+            empty($poliza)
+            or
+            empty($bien)
+            or
+            empty($cliente)
+        ) {
+            require_once "views/error.php";
             exit();
         }
 
         require_once "views/layout/header_main.php";
-        require_once "views/tratos/reporte.php";
+        require_once "views/tratos/" . $url[0] . "/detalles.php";
         require_once "views/layout/footer_main.php";
+    }
+
+    public function descargar()
+    {
+        $api = new api;
+        $url = obtener_url();
+
+        if (!isset($url[0]) and !isset($url[1])) {
+            require_once "views/error.php";
+            exit();
+        }
+
+        $id = $url[1];
+        $trato = $api->detalles_registro("Deals", $id);
+
+        if (empty($trato)) {
+            require_once "views/error.php";
+            exit();
+        }
+
+        $coberturas = $api->detalles_registro("Contratos", $trato->getFieldValue('Contrato')->getEntityId());
+        $bien = $api->detalles_registro("Bienes", $trato->getFieldValue('Bien')->getEntityId());
+        $aseguradora = $api->detalles_registro("Vendors", $trato->getFieldValue('Aseguradora')->getEntityId());
+        $cliente = $api->detalles_registro("Clientes", $trato->getFieldValue('Cliente')->getEntityId());
+
+        if (
+            empty($aseguradora)
+            or
+            empty($bien)
+            or
+            empty($coberturas)
+            or
+            empty($cliente)
+        ) {
+            require_once "views/error.php";
+            exit();
+        }
+
+        $imagen_aseguradora = $api->obtener_imagen("Vendors", $trato->getFieldValue('Aseguradora')->getEntityId(), "public/img");
+
+        require_once "views/tratos/" . $url[0] . "/descargar.php";
     }
 
     public function adjuntar()
@@ -52,9 +111,7 @@ class tratos
         $url = obtener_url();
 
         if (!isset($url[0])) {
-           
-                        require_once "views/error.php";
-
+            require_once "views/error.php";
             exit();
         }
 
@@ -62,9 +119,7 @@ class tratos
         $trato = $api->detalles_registro("Deals", $id);
 
         if (empty($trato)) {
-           
-                        require_once "views/error.php";
-
+            require_once "views/error.php";
             exit();
         }
 
@@ -84,7 +139,7 @@ class tratos
                 }
             }
 
-            header("Location:" . constant("url") . "tratos/detalles_" . strtolower($trato->getFieldValue('Type')) . "/" . $id . "/Documentos Adjuntados.");
+            header("Location:" . constant("url") . "tratos/detalles/" . strtolower($trato->getFieldValue('Type')) . "/" . $id . "/Documentos Adjuntados.");
             exit();
         }
 
@@ -93,115 +148,28 @@ class tratos
         require_once "views/layout/footer_main.php";
     }
 
-    public function detalles_auto()
+    public function reporte()
     {
         $api = new api;
+
         $url = obtener_url();
+        $alerta = (isset($url[0])) ? $url[0] : null;
 
-        if (!isset($url[0])) {
-           
-                        require_once "views/error.php";
+        if (isset($_POST["csv"]) and $_POST["tipo_reporte"] == "auto") {
+            $alerta = $this->reporte_auto($api);
+        } elseif (isset($_POST["pdf"]) and $_POST["tipo_reporte"] == "auto") {
+            $titulo = "Reporte Cotizaciones Auto";
+            $prima_sumatoria = 0;
+            $valor_sumatoria = 0;
+            $comision_sumatoria = 0;
 
-            exit();
-        }
-
-        $id = $url[0];
-        $num_pagina = (isset($url[1]) and is_numeric($url[1])) ? $url[1] : 1;
-        $alerta = (isset($url[1]) and !is_numeric($url[1])) ? $url[1] : null;
-
-        $trato = $api->detalles_registro("Deals", $id);
-        if (empty($trato)) {
-           
-                        require_once "views/error.php";
-
-            exit();
-        }
-
-        $poliza = $api->detalles_registro("P_lizas", $trato->getFieldValue('P_liza')->getEntityId());
-        if (empty($poliza)) {
-           
-                        require_once "views/error.php";
-
-            exit();
-        }
-
-        $bien = $api->detalles_registro("Bienes", $trato->getFieldValue('Bien')->getEntityId());
-        if (empty($bien)) {
-           
-                        require_once "views/error.php";
-
-            exit();
-        }
-
-        $cliente = $api->detalles_registro("Clientes", $trato->getFieldValue('Cliente')->getEntityId());
-        if (empty($cliente)) {
-           
-                        require_once "views/error.php";
-
+            require_once "views/tratos/auto/descargar_reporte.php";
             exit();
         }
 
         require_once "views/layout/header_main.php";
-        require_once "views/tratos/detalles_auto.php";
+        require_once "views/tratos/reporte.php";
         require_once "views/layout/footer_main.php";
-    }
-
-    public function descargar_auto()
-    {
-        $api = new api;
-        $url = obtener_url();
-
-        if (!isset($url[0])) {
-           
-                        require_once "views/error.php";
-
-            exit();
-        }
-
-        $id = $url[0];
-        $trato = $api->detalles_registro("Deals", $id);
-        if (empty($trato)) {
-           
-                        require_once "views/error.php";
-
-            exit();
-        }
-
-        $coberturas = $api->detalles_registro("Contratos", $trato->getFieldValue('Contrato')->getEntityId());
-        if (empty($coberturas)) {
-           
-                        require_once "views/error.php";
-
-            exit();
-        }
-
-        $bien = $api->detalles_registro("Bienes", $trato->getFieldValue('Bien')->getEntityId());
-        if (empty($bien)) {
-           
-                        require_once "views/error.php";
-
-            exit();
-        }
-
-        $cliente = $api->detalles_registro("Clientes", $trato->getFieldValue('Cliente')->getEntityId());
-        if (empty($cliente)) {
-           
-                        require_once "views/error.php";
-
-            exit();
-        }
-
-        $aseguradora = $api->detalles_registro("Vendors", $trato->getFieldValue('Aseguradora')->getEntityId());
-        if (empty($aseguradora)) {
-           
-                        require_once "views/error.php";
-
-            exit();
-        }
-
-        $imagen_aseguradora = $api->obtener_imagen("Vendors", $trato->getFieldValue('Aseguradora')->getEntityId(), "public/img");
-
-        require_once "views/tratos/descargar_auto.php";
     }
 
     public function reporte_auto($api)
@@ -276,7 +244,7 @@ class tratos
                                 $trato->getFieldValue('P_liza')->getLookupLabel(),
                                 $cliente->getFieldValue('Name'),
                                 $cliente->getFieldValue('Apellido'),
-                                $cliente->getFieldValue('RNC_C_dula'),
+                                $cliente->getFieldValue('Name'),
                                 $bien->getFieldValue('Marca'),
                                 $bien->getFieldValue('Modelo'),
                                 $bien->getFieldValue('Tipo_de_veh_culo'),
@@ -284,7 +252,7 @@ class tratos
                                 $bien->getFieldValue('Color'),
                                 $bien->getFieldValue('Placa'),
                                 $bien->getFieldValue('Condicion'),
-                                $bien->getFieldValue('Chasis'),
+                                $bien->getFieldValue('Name'),
                                 number_format($trato->getFieldValue('Valor_Asegurado'), 2),
                                 number_format($trato->getFieldValue('Prima_Total'), 2),
                                 $trato->getFieldValue('Aseguradora')->getLookupLabel()
@@ -299,7 +267,7 @@ class tratos
                                 $trato->getFieldValue('P_liza')->getLookupLabel(),
                                 $cliente->getFieldValue('Name'),
                                 $cliente->getFieldValue('Apellido'),
-                                $cliente->getFieldValue('RNC_C_dula'),
+                                $cliente->getFieldValue('Name'),
                                 $bien->getFieldValue('Marca'),
                                 $bien->getFieldValue('Modelo'),
                                 $bien->getFieldValue('Tipo_de_veh_culo'),
@@ -307,7 +275,7 @@ class tratos
                                 $bien->getFieldValue('Color'),
                                 $bien->getFieldValue('Placa'),
                                 $bien->getFieldValue('Condicion'),
-                                $bien->getFieldValue('Chasis'),
+                                $bien->getFieldValue('Name'),
                                 number_format($trato->getFieldValue('Valor_Asegurado'), 2),
                                 number_format($trato->getFieldValue('Prima_Total'), 2),
                                 $trato->getFieldValue('Aseguradora')->getLookupLabel()
@@ -322,7 +290,7 @@ class tratos
 
 
         $contenido_csv[] = array("");
-        $contenido_csv[] = array("Total Primas:", number_format($prima_sumatoria, 2,));
+        $contenido_csv[] = array("Total Primas:", number_format($prima_sumatoria, 2));
         $contenido_csv[] = array("Total Valores:", number_format($valor_sumatoria, 2));
 
         if ($valor_sumatoria > 0) {

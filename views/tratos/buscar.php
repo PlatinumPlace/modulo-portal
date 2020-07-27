@@ -43,7 +43,7 @@
                     <tr>
                         <th>No. Emisión</th>
                         <th>Póliza</th>
-                        <th>Cliente</th>
+                        <th>RNC/Cédula</th>
                         <th>Bien Asegurado</th>
                         <th>Suma Asegurada</th>
                         <th>Estado</th>
@@ -65,9 +65,9 @@
                                         and
                                         date("Y-m", strtotime($trato->getFieldValue("Fecha_de_emisi_n"))) == date("Y-m"))
                                     or
-                                    ($filtro == "vencimientos_mensuales" 
-                                    and 
-                                    date("Y-m", strtotime($cotizacion->getFieldValue("Closing_Date"))) == date("Y-m"))
+                                    ($filtro == "vencimientos_mensuales"
+                                        and
+                                        date("Y-m", strtotime($cotizacion->getFieldValue("Closing_Date"))) == date("Y-m"))
                                 ) {
                                     echo "<td>" . $trato->getFieldValue('No_Emisi_n') . "</td>";
                                     echo "<td>" . $trato->getFieldValue('P_liza')->getLookupLabel() . "</td>";
@@ -77,11 +77,11 @@
                                     echo "<td>" . $trato->getFieldValue('Stage') . "</td>";
                                     echo "<td>" . $trato->getFieldValue('Closing_Date') . "</td>";
                                     echo "<td>";
-                                    echo '<a href="' . constant("url") . "tratos/detalles_" . strtolower($trato->getFieldValue('Type')) . '/' . $trato->getEntityId() . '" title="Detalles"><i class="fas fa-info-circle"></i></a>';
+                                    echo '<a href="' . constant("url") . "tratos/detalles/" . strtolower($trato->getFieldValue('Type')) . '/' . $trato->getEntityId() . '" title="Detalles"><i class="fas fa-info-circle"></i></a>';
                                     echo "&nbsp;";
                                     echo '<a href="' . constant("url") . "tratos/adjuntar" . '/' . $trato->getEntityId() . '" title="Adjuntar Documentos"><i class="fas fa-file-upload"></i></a>';
                                     echo "&nbsp;";
-                                    echo '<a href="' . constant("url") . "tratos/descargar_" . strtolower($trato->getFieldValue('Type')) . '/' . $trato->getEntityId() . '" title="Descargar"><i class="fas fa-file-download"></i></a>';
+                                    echo '<a href="' . constant("url") . "tratos/descargar/" . strtolower($trato->getFieldValue('Type')) . '/' . $trato->getEntityId() . '" title="Descargar"><i class="fas fa-file-download"></i></a>';
                                     echo "</td>";
                                 }
                                 ?>
@@ -94,9 +94,9 @@
         <br>
         <nav aria-label="Page navigation example">
             <ul class="pagination justify-content-end">
-                <li class="page-item"><a class="page-link" href="<?= constant("url") ?>cotizaciones/buscar/<?= (!empty($filtro)) ? $filtro  : "todos"; ?>/<?= $num_pagina - 1 ?>">Anterior</a>
+                <li class="page-item"><a class="page-link" href="<?= constant("url") ?>tratos/buscar/<?= (!empty($filtro)) ? $filtro  : "todos"; ?>/<?= $num_pagina - 1 ?>">Anterior</a>
                 </li>
-                <li class="page-item"><a class="page-link" href="<?= constant("url") ?>cotizaciones/buscar/<?= (!empty($filtro)) ? $filtro  : "todos"; ?>/<?= $num_pagina + 1 ?>">Siguente</a>
+                <li class="page-item"><a class="page-link" href="<?= constant("url") ?>tratos/buscar/<?= (!empty($filtro)) ? $filtro  : "todos"; ?>/<?= $num_pagina + 1 ?>">Siguente</a>
                 </li>
             </ul>
         </nav>
