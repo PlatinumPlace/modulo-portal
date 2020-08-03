@@ -1,8 +1,7 @@
-<h1 class="mt-4 text-uppercase">reporte de cotizaciones pendientes</h1>
+<h1 class="mt-4 text-uppercase">reporte de cotizaciones</h1>
 
 <ol class="breadcrumb mb-4">
     <li class="breadcrumb-item"><a href="<?= constant("url") ?>">Panel de Control</a></li>
-    <li class="breadcrumb-item"><a href="<?= constant("url") ?>cotizaciones/buscar">Cotizaciones</a></li>
     <li class="breadcrumb-item active"><a href="<?= constant("url") ?>cotizaciones/reporte">Reporte</a></li>
 </ol>
 
@@ -20,32 +19,42 @@
                 <form method="POST" action="<?= constant("url") ?>cotizaciones/reporte">
 
                     <div class="form-group row">
-                        <label for="tipo_reporte" class="col-sm-3 col-form-label font-weight-bold">Tipo de emision</label>
+                        <label class="col-sm-3 col-form-label font-weight-bold">Plan</label>
                         <div class="col-sm-9">
-                            <select name="tipo_reporte" id="tipo_reporte" class="form-control">
-                                <option value="auto" selected>Auto</option>
+                            <select name="plan" class="form-control">
+                                <option value="full" selected>Full</option>
+                                <option value="ley">Ley</option>
                             </select>
                         </div>
                     </div>
 
                     <div class="form-group row">
-                        <label for="desde" class="col-sm-3 col-form-label font-weight-bold">Desde</label>
+                        <label class="col-sm-3 col-form-label font-weight-bold">Tipo</label>
                         <div class="col-sm-9">
-                            <input type="date" class="form-control" name="desde" id="desde" required>
+                            <select name="tipo" class="form-control">
+                                <option value="pendientes" selected>Pendientes</option>
+                            </select>
                         </div>
                     </div>
 
                     <div class="form-group row">
-                        <label for="hasta" class="col-sm-3 col-form-label font-weight-bold">Hasta</label>
+                        <label class="col-sm-3 col-form-label font-weight-bold">Desde</label>
                         <div class="col-sm-9">
-                            <input type="date" class="form-control" name="hasta" id="hasta" required>
+                            <input type="date" class="form-control" name="desde" required>
                         </div>
                     </div>
 
                     <div class="form-group row">
-                        <label for="aseguradora" class="col-sm-3 col-form-label font-weight-bold">Aseguradora</label>
+                        <label class="col-sm-3 col-form-label font-weight-bold">Hasta</label>
                         <div class="col-sm-9">
-                            <select name="aseguradora" id="aseguradora" class="form-control">
+                            <input type="date" class="form-control" name="hasta" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-3 col-form-label font-weight-bold">Aseguradora</label>
+                        <div class="col-sm-9">
+                            <select name="aseguradora" class="form-control">
                                 <option value="" selected>Todas</option>
                                 <?php
                                 $criterio = "Socio:equals:" . $_SESSION["usuario"]["empresa_id"];
@@ -60,8 +69,6 @@
 
                     <br>
                     <button type="submit" name="csv" class="btn btn-primary">Exportar a CSV</button>
-                    |
-                    <button type="submit" name="pdf" class="btn btn-success">Exportar a PDF</button>
 
                 </form>
             </div>

@@ -9,7 +9,7 @@
 	<meta name="author" content="" />
 
 	<title>IT - Insurance Tech</title>
-	<link rel="icon" type="image/png" href="<?= constant("url") ?>img/logo.png">
+	<link rel="icon" type="image/png" href="<?= constant("url") ?>public/img/logo.png">
 
 	<link href="<?= constant("url") ?>public/vendor/css/styles.css" rel="stylesheet" />
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js" crossorigin="anonymous"></script>

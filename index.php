@@ -4,6 +4,7 @@ include 'php_sdk/vendor/autoload.php';
 include 'config/config.php';
 include 'config/config_api.php';
 include "models/api.php";
+include "controllers/cotizaciones.php";
 
 session_start();
 
@@ -30,16 +31,13 @@ $_SESSION["usuario"]["tiempo_activo"] = time();
 function obtener_url()
 {
     $url = rtrim($_GET['url'], "/");
-    $url =  explode('/', $url);
-    $resultado = array();
-    $cont = 0;
-    foreach ($url as $posicion => $valor) {
-        if ($posicion > 1) {
-            $resultado[$cont] = $valor;
-            $cont++;
-        }
-    }
-    return $resultado;
+    return explode('/', $url);
+}
+
+function calcular_edad($fecha)
+{
+    list($Y, $m, $d) = explode("-", $fecha);
+    return (date("md") < $m . $d ? date("Y") - $Y - 1 : date("Y") - $Y);
 }
 
 if (isset($_GET['url'])) {

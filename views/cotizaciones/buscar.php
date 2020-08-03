@@ -1,6 +1,10 @@
 <h1 class="mt-4 text-uppercase">
     <?php
-    if ($filtro == "pendientes") {
+    if ($filtro == "emisiones_mensuales") {
+        echo "emisiones del mes";
+    } elseif ($filtro == "vencimientos_mensuales") {
+        echo "vencimientos del mes";
+    } elseif ($filtro == "pendientes") {
         echo "cotizaciones pendientes";
     } else {
         echo "buscar cotizaciones";
@@ -41,7 +45,7 @@
                 <thead>
                     <tr>
                         <th>No. Cotización</th>
-                        <th>Bien Asegurado</th>
+                        <th>Plan</th>
                         <th>Suma Asegurada</th>
                         <th>Estado</th>
                         <th>Fecha de Cierre </th>
@@ -63,20 +67,41 @@
                                         $cotizacion->getFieldValue("Deal_Name") == null
                                         and
                                         date("Y-m", strtotime($cotizacion->getFieldValue("Fecha_emisi_n"))) == date("Y-m"))
+                                    or
+                                    ($filtro == "emisiones_mensuales"
+                                        and
+                                        $cotizacion->getFieldValue("Deal_Name") != null
+                                        and
+                                        date("Y-m", strtotime($cotizacion->getFieldValue("Fecha_emisi_n"))) == date("Y-m"))
+                                    or
+                                    ($filtro == "vencimientos_mensuales"
+                                        and
+                                        $cotizacion->getFieldValue("Deal_Name") != null
+                                        and
+                                        date("Y-m", strtotime($cotizacion->getFieldValue("Valid_Till"))) == date("Y-m"))
                                 ) {
                                     echo "<td>" . $cotizacion->getFieldValue('Quote_Number') . "</td>";
-                                    echo "<td>" . $cotizacion->getFieldValue('Tipo') . "</td>";
+                                    echo "<td>" . $cotizacion->getFieldValue('Plan') . "</td>";
                                     echo "<td>RD$" . number_format($cotizacion->getFieldValue('Valor_Asegurado'), 2) . "</td>";
                                     echo "<td>" . $cotizacion->getFieldValue('Quote_Stage') . "</td>";
                                     echo "<td>" . $cotizacion->getFieldValue('Valid_Till') . "</td>";
                                     echo "<td>";
-                                    echo '<a href="' . constant("url") . 'cotizaciones/detalles/' . strtolower($cotizacion->getFieldValue('Tipo')) . "/" . $cotizacion->getEntityId() . '" title="Detalles"><i class="fas fa-info-circle"></i></a>';
+
+                                    if ($cotizacion->getFieldValue('Plan') == "Full" or $cotizacion->getFieldValue('Plan') == "Ley") {
+                                        $plan = "auto";
+                                    } else {
+                                        $plan = strtolower($cotizacion->getFieldValue('Plan'));
+                                    }
+
+                                    echo '<a href="' . constant("url") . $plan . '/detalles/' . $cotizacion->getEntityId() . '" title="Detalles"><i class="fas fa-info-circle"></i></a>';
                                     echo "&nbsp;";
                                     if ($cotizacion->getFieldValue("Deal_Name") == null) {
-                                        echo '<a href="' . constant("url") . 'cotizaciones/emitir/' . strtolower($cotizacion->getFieldValue('Tipo')) . "/" . $cotizacion->getEntityId()  . '" title="Emitir"><i class="fas fa-user"></i></i></a>';
-                                        echo "&nbsp;";
+                                        echo '<a href="' . constant("url") . $plan . '/emitir/' . $cotizacion->getEntityId()  . '" title="Emitir"><i class="fas fa-user"></i></i></a>';
+                                    } else {
+                                        echo '<a href="' . constant("url") . $plan . '/adjuntar/' . $cotizacion->getEntityId()  . '" title="Adjuntar"><i class="fas fa-file-upload"></i></a>';
                                     }
-                                    echo '<a href="' . constant("url") . 'cotizaciones/descargar/' . strtolower($cotizacion->getFieldValue('Tipo')) . "/" . $cotizacion->getEntityId() . '/descargar" title="Descargar"><i class="fas fa-file-download"></i></a>';
+                                    echo "&nbsp;";
+                                    echo '<a href="' . constant("url") . $plan . '/descargar/' . $cotizacion->getEntityId() . '/descargar" title="Descargar"><i class="fas fa-file-download"></i></a>';
                                     echo "</td>";
                                 }
                                 ?>

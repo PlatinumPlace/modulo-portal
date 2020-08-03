@@ -192,12 +192,32 @@ class api extends config_api
         return $ruta . "/" . $fileResponseIns->getFileName();
     }
 
-    public function guardar_cambios_registro($nombre_modulo, $id_registro, $registro)
+    public function guardar_cambios_registro($nombre_modulo, $id_registro, $registro, $productos = null)
     {
         $record = ZCRMRestClient::getInstance()->getRecordInstance($nombre_modulo, $id_registro);
+
         foreach ($registro as $campo => $valor) {
             $record->setFieldValue($campo, $valor);
         }
+
+        if (!empty($productos)) {
+            foreach ($productos as $producto) {
+                $lineItem = ZCRMInventoryLineItem::getInstance(null);
+
+                $lineItem->setProduct(ZCRMRecord::getInstance("Products", $producto["id"]));
+                $lineItem->setDescription($producto["descripcion"]);
+                $lineItem->setQuantity($producto["cantidad"]);
+                $lineItem->setListPrice($producto["prima"]);
+
+                $taxInstance1 = ZCRMTax::getInstance($producto["impuesto"]);
+                $taxInstance1->setPercentage($producto["impuesto_valor"]);
+                $taxInstance1->setValue(50);
+                $lineItem->addLineTax($taxInstance1);
+
+                $record->addLineItem($lineItem);
+            }
+        }
+
         $responseIns = $record->update();
         /*
         echo "HTTP Status Code:" . $responseIns->getHttpStatusCode();

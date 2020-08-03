@@ -38,6 +38,7 @@
 
         <div class="row">
 
+
             <div class="col-2">
                 <img src="<?= constant("url") ?>public/img/logo.png" width="100" height="100">
             </div>
@@ -50,7 +51,7 @@
 
             <div class="col-2">
                 <b>Fecha</b> <br> <?= $cotizacion->getFieldValue('Fecha_emisi_n') ?> <br>
-                <b> Cotización No.</b> <br> <?= $cotizacion->getFieldValue('Quote_Number') ?> <br>
+                <b>Cotización No.</b> <br> <?= $cotizacion->getFieldValue('Quote_Number') ?> <br>
             </div>
 
             <div class="col-12 d-flex justify-content-center bg-primary text-white">
@@ -98,7 +99,7 @@
             </div>
             <div class="col-12 border">
                 <div class="row">
-                    
+
                     <div class="col-4">
                         <div class="card border-0">
                             <div class="card-body">
@@ -247,7 +248,7 @@
         var id = "<?= $id ?>";
         setTimeout(function() {
             window.print();
-            window.location = url + "cotizaciones/detalles/auto/" + id;
+            window.location = url + "auto/detalles/" + id;
         }, time);
     </script>
 

@@ -6,8 +6,8 @@
 
 <ol class="breadcrumb mb-4">
     <li class="breadcrumb-item"><a href="<?= constant("url") ?>">Panel de control</a></li>
-    <li class="breadcrumb-item"><a href="<?= constant("url") ?>cotizaciones/buscar">Cotizaciones</a></li>
-    <li class="breadcrumb-item"><a href="<?= constant("url") ?>cotizaciones/detalles/auto/<?= $id ?>">No. <?= $cotizacion->getFieldValue('Quote_Number') ?></a></li>
+    <li class="breadcrumb-item"><a href="<?= constant("url") ?>cotizaciones/buscar">Buscar Cotizaciones</a></li>
+    <li class="breadcrumb-item"><a href="<?= constant("url") ?>auto/detalles/<?= $id ?>">No. <?= $cotizacion->getFieldValue('Quote_Number') ?></a></li>
 </ol>
 
 <div class="row justify-content-center">
@@ -21,11 +21,11 @@
 
         <div class="card mb-4">
             <div class="card-body">
-                <form enctype="multipart/form-data" method="POST" action="<?= constant("url") ?>cotizaciones/emitir/auto/<?= $id ?>">
+                <form enctype="multipart/form-data" method="POST" action="<?= constant("url") ?>auto/emitir/<?= $id ?>">
 
                     <h4>Cliente</h4>
                     <hr>
-
+                    
                     <div class="form-group row">
                         <label class="col-sm-3 col-form-label font-weight-bold">RNC/Cédula</label>
                         <div class="col-sm-9">

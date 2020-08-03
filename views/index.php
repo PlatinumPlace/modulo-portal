@@ -3,8 +3,8 @@ $api = new api;
 
 $cotizaciones_total = 0;
 $cotizaciones_pendientes = 0;
-$tratos_emitidos = 0;
-$tratos_venciendo = 0;
+$cotizaciones_emitidas = 0;
+$cotizaciones_vencidas = 0;
 $criterio = "Contact_Name:equals:" . $_SESSION["usuario"]["id"];
 
 $num_pagina = 1;
@@ -16,24 +16,19 @@ do {
         foreach ($cotizaciones as $cotizacion) {
             $cotizaciones_total += 1;
 
-            if (
-                date('Y-m') >= date("Y-m", strtotime($cotizacion->getFieldValue("Fecha_emisi_n")))
-                and
-                date('Y-m') <= date("Y-m", strtotime($cotizacion->getFieldValue("Valid_Till")))
-                and
-                $cotizacion->getFieldValue("Deal_Name") == null
-            ) {
+            if ($cotizacion->getFieldValue("Deal_Name") == null and date("Y-m", strtotime($cotizacion->getFieldValue("Fecha_emisi_n"))) == date('Y-m')) {
                 $cotizaciones_pendientes += 1;
-            } elseif ($cotizacion->getFieldValue("Deal_Name") != null) {
-                if (date("Y-m", strtotime($cotizacion->getFieldValue("Fecha_emisi_n"))) == date('Y-m')) {
-                    $tratos_emitidos += 1;
-                    $trato = $api->detalles_registro("Deals", $cotizacion->getFieldValue("Deal_Name")->getEntityId());
-                    $aseguradoras[] = $trato->getFieldValue('Aseguradora')->getLookupLabel();
-                }
+            }
+            
+            if ($cotizacion->getFieldValue("Deal_Name") != null and date("Y-m", strtotime($cotizacion->getFieldValue("Fecha_emisi_n"))) == date('Y-m')) {
+                $trato = $api->detalles_registro("Deals", $cotizacion->getFieldValue("Deal_Name")->getEntityId());
+                $cotizaciones_emitidas += 1;
+                $poliza = $api->detalles_registro("P_lizas", $trato->getFieldValue("P_liza")->getEntityId());
+                $aseguradoras[] = $poliza->getFieldValue('Aseguradora')->getLookupLabel();
+            }
 
-                if (date("Y-m", strtotime($cotizacion->getFieldValue("Valid_Till"))) == date('Y-m')) {
-                    $tratos_venciendo += 1;
-                }
+            if ($cotizacion->getFieldValue("Deal_Name") != null and date("Y-m", strtotime($cotizacion->getFieldValue("Valid_Till"))) == date('Y-m')) {
+                $cotizaciones_vencidas += 1;
             }
         }
     } else {
@@ -72,7 +67,7 @@ do {
     <div class="col-xl-3 col-md-6">
         <div class="card bg-warning text-white mb-4">
             <div class="card-body">
-                Cotizaciones al Mes <br>
+                Pendientes del Mes <br>
                 <?= $cotizaciones_pendientes ?>
             </div>
             <div class="card-footer d-flex align-items-center justify-content-between">
@@ -87,11 +82,11 @@ do {
     <div class="col-xl-3 col-md-6">
         <div class="card bg-success text-white mb-4">
             <div class="card-body">
-                Emisiones al Mes <br>
-                <?= $tratos_emitidos ?>
+                Emisiones del Mes <br>
+                <?= $cotizaciones_emitidas ?>
             </div>
             <div class="card-footer d-flex align-items-center justify-content-between">
-                <a class="small text-white stretched-link" href="<?= constant("url") ?>tratos/buscar/emisiones_mensuales">Ver más</a>
+                <a class="small text-white stretched-link" href="<?= constant("url") ?>cotizaciones/buscar/emisiones_mensuales">Ver más</a>
                 <div class="small text-white">
                     <i class="fas fa-angle-right"></i>
                 </div>
@@ -102,11 +97,11 @@ do {
     <div class="col-xl-3 col-md-6">
         <div class="card bg-danger text-white mb-4">
             <div class="card-body">
-                Vencimientos al Mes <br>
-                <?= $tratos_venciendo ?>
+                Vencimientos del Mes <br>
+                <?= $cotizaciones_vencidas ?>
             </div>
             <div class="card-footer d-flex align-items-center justify-content-between">
-                <a class="small text-white stretched-link" href="<?= constant("url") ?>tratos/buscar/vencimientos_mensuales">Ver más</a>
+                <a class="small text-white stretched-link" href="<?= constant("url") ?>cotizaciones/buscar/vencimientos_mensuales">Ver más</a>
                 <div class="small text-white">
                     <i class="fas fa-angle-right"></i>
                 </div>
