@@ -1,6 +1,6 @@
 <?php
 
-class auto extends cotizaciones
+class auto
 {
     function crear()
     {
@@ -143,6 +143,41 @@ class auto extends cotizaciones
         require_once "views/layout/footer_main.php";
     }
 
+    function detalles()
+    {
+        $api = new api;
+        $url = obtener_url();
+        $alerta = (isset($url[3]) and !is_numeric($url[3])) ? $url[3] : null;
+        $num_pagina = (isset($url[3]) and is_numeric($url[3])) ? $url[3] : 1;
+
+        if (!isset($url[2])) {
+            require_once "views/error.php";
+            exit();
+        }
+
+        $id = $url[2];
+        $cotizacion = $api->detalles_registro("Quotes", $id);
+
+        if (empty($cotizacion)) {
+            require_once "views/error.php";
+            exit();
+        }
+
+        if ($cotizacion->getFieldValue("Deal_Name") != null) {
+
+            $trato = $api->detalles_registro("Deals", $cotizacion->getFieldValue('Deal_Name')->getEntityId());
+            $cliente = $api->detalles_registro("Contacts", $trato->getFieldValue('Contact_Name')->getEntityId());
+            $poliza = $api->detalles_registro("P_lizas", $trato->getFieldValue('P_liza')->getEntityId());
+            $bien = $api->detalles_registro("Bienes", $trato->getFieldValue('Bien')->getEntityId());
+
+            $documentos_aduntos = $api->lista_adjuntos("Deals", $cotizacion->getFieldValue("Deal_Name")->getEntityId(), $num_pagina, 2);
+        }
+
+        require_once "views/layout/header_main.php";
+        require_once "views/auto/detalles.php";
+        require_once "views/layout/footer_main.php";
+    }
+
     public function extracto()
     {
         $api = new api;
@@ -243,7 +278,7 @@ class auto extends cotizaciones
 
                     $poliza_nueva["Name"] = $poliza;
                     $poliza_nueva["Estado"] =  true;
-                    $poliza_nueva["Plan"] =  $cotizacion->getFieldValue('Plan');
+                    $poliza_nueva["Plan"] =  $cotizacion->getFieldValue('Subject');
                     $poliza_nueva["Aseguradora"] =  $plan_detalles->getFieldValue("Vendor_Name")->getEntityId();
                     $poliza_nueva["Prima"] =  round($prima, 2);
                     $poliza_nueva["Deudor"] =  $cliente_nuevo_id;
@@ -273,8 +308,8 @@ class auto extends cotizaciones
                     $nuevo_bien_id = $api->crear_registro("Bienes", $nuevo_bien);
 
 
-                    $nuevo_trato["Deal_Name"] = "Plan " . $cotizacion->getFieldValue('Plan') . " Auto";
-                    $nuevo_trato["Contact_Name"] = $_SESSION["usuario"]['id'];
+                    $nuevo_trato["Deal_Name"] = $cotizacion->getFieldValue('Subject');
+                    $nuevo_trato["Contact_Name"] = $cliente_nuevo_id;
                     $nuevo_trato["Account_Name"] = $_SESSION["usuario"]['empresa_id'];
                     $nuevo_trato["Stage"] = "En trámite";
                     $nuevo_trato["Fecha_de_emisi_n"] =  date("Y-m-d");
@@ -292,6 +327,7 @@ class auto extends cotizaciones
                     $nuevo_trato["Prima_Total"] = round($prima, 2);
                     $nuevo_trato["Prima_Neta"] = round($prima_neta, 2);
                     $nuevo_trato["ISC"] = round($isc, 2);
+                    $nuevo_trato["Lead_Source"] = "Portal";
                     $nuevo_trato_id = $api->crear_registro("Deals", $nuevo_trato);
 
                     $tmp_name = $_FILES["cotizacion_firmada"]["tmp_name"];
@@ -307,21 +343,60 @@ class auto extends cotizaciones
                         "id" => $plan_id,
                         "prima" => $prima,
                         "cantidad" => 1,
-                        "descripcion" => $plan_detalles->getFieldValue("Vendor_Name")->getEntityId(),
+                        "descripcion" => $plan_detalles->getFieldValue("Vendor_Name")->getLookupLabel(),
                         "impuesto" => "ITBIS 16",
                         "impuesto_valor" => 16
                     );
 
-                    $api->guardar_cambios_registro("Quotes", $id, $cambios_cotizacion,$plan_seleccionado);
+                    $api->guardar_cambios_registro("Quotes", $id, $cambios_cotizacion, $plan_seleccionado);
 
                     header("Location:" . constant("url") . "auto/detalles/$id/Póliza emitida, descargue para obtener el carnet");
                     exit();
                 }
+            }elseif (!empty($_FILES["documentos"]['name'][0])) {
+                $ruta = "public/tmp";
+                if (!is_dir($ruta)) {
+                    mkdir($ruta, 0755, true);
+                }
+    
+                foreach ($_FILES["documentos"]["error"] as $key => $error) {
+                    if ($error == UPLOAD_ERR_OK) {
+                        $tmp_name = $_FILES["documentos"]["tmp_name"][$key];
+                        $name = basename($_FILES["documentos"]["name"][$key]);
+                        move_uploaded_file($tmp_name, "$ruta/$name");
+                        $api->adjuntar_archivo("Deals", $cotizacion->getFieldValue("Deal_Name")->getEntityId(), "$ruta/$name");
+                        unlink("$ruta/$name");
+                    }
+                }
+    
+                header("Location:" . constant("url") ."auto/detalles/$id/Documentos Adjuntados.");
+                exit();
             }
         }
 
         require_once "views/layout/header_main.php";
         require_once "views/auto/emitir.php";
         require_once "views/layout/footer_main.php";
+    }
+
+    function descargar()
+    {
+        $api = new api;
+        $url = obtener_url();
+
+        if (!isset($url[2])) {
+            require_once "views/error.php";
+            exit();
+        }
+
+        $id = $url[2];
+        $cotizacion = $api->detalles_registro("Quotes", $id);
+
+        if (empty($cotizacion)) {
+            require_once "views/error.php";
+            exit();
+        }
+
+        require_once "views/auto/descargar.php";
     }
 }

@@ -2,6 +2,50 @@
 
 class cotizaciones
 {
+    public function inicio()
+    {
+        $api = new api;
+
+        $cotizaciones_total = 0;
+        $cotizaciones_pendientes = 0;
+        $cotizaciones_emitidas = 0;
+        $cotizaciones_vencidas = 0;
+        $criterio = "Contact_Name:equals:" . $_SESSION["usuario"]["id"];
+
+        $num_pagina = 1;
+        do {
+            $cotizaciones = $api->buscar_criterio("Quotes", $criterio, $num_pagina, 200);
+            if (!empty($cotizaciones)) {
+                $num_pagina++;
+
+                foreach ($cotizaciones as $cotizacion) {
+                    $cotizaciones_total += 1;
+
+                    if ($cotizacion->getFieldValue("Deal_Name") == null and date("Y-m", strtotime($cotizacion->getFieldValue("Fecha_emisi_n"))) == date('Y-m')) {
+                        $cotizaciones_pendientes += 1;
+                    }
+
+                    if ($cotizacion->getFieldValue("Deal_Name") != null and date("Y-m", strtotime($cotizacion->getFieldValue("Fecha_emisi_n"))) == date('Y-m')) {
+                        $trato = $api->detalles_registro("Deals", $cotizacion->getFieldValue("Deal_Name")->getEntityId());
+                        $cotizaciones_emitidas += 1;
+                        $poliza = $api->detalles_registro("P_lizas", $trato->getFieldValue("P_liza")->getEntityId());
+                        $aseguradoras[] = $poliza->getFieldValue('Aseguradora')->getLookupLabel();
+                    }
+
+                    if ($cotizacion->getFieldValue("Deal_Name") != null and date("Y-m", strtotime($cotizacion->getFieldValue("Valid_Till"))) == date('Y-m')) {
+                        $cotizaciones_vencidas += 1;
+                    }
+                }
+            } else {
+                $num_pagina = 0;
+            }
+        } while ($num_pagina > 0);
+
+        require_once "views/layout/header_main.php";
+        require_once "views/cotizaciones/index.php";
+        require_once "views/layout/footer_main.php";
+    }
+
     public function buscar()
     {
         $api = new api;
@@ -26,31 +70,6 @@ class cotizaciones
     {
         require_once "views/layout/header_main.php";
         require_once "views/cotizaciones/crear.php";
-        require_once "views/layout/footer_main.php";
-    }
-
-    function detalles()
-    {
-        $api = new api;
-        $url = obtener_url();
-        $alerta = (isset($url[3]) and !is_numeric($url[3])) ? $url[3] : null;
-        $num_pagina = (isset($url[3]) and is_numeric($url[3])) ? $url[3] : 1;
-
-        if (!isset($url[2])) {
-            require_once "views/error.php";
-            exit();
-        }
-
-        $id = $url[2];
-        $cotizacion = $api->detalles_registro("Quotes", $id);
-
-        if (empty($cotizacion)) {
-            require_once "views/error.php";
-            exit();
-        }
-
-        require_once "views/layout/header_main.php";
-        require_once "views/" . $url[0] . "/detalles.php";
         require_once "views/layout/footer_main.php";
     }
 
@@ -201,69 +220,5 @@ class cotizaciones
         require_once "views/layout/header_main.php";
         require_once "views/cotizaciones/reporte.php";
         require_once "views/layout/footer_main.php";
-    }
-
-    public function adjuntar()
-    {
-        $api = new api;
-        $url = obtener_url();
-
-        if (!isset($url[2])) {
-            require_once "views/error.php";
-            exit();
-        }
-
-        $id = $url[2];
-        $cotizacion = $api->detalles_registro("Quotes", $id);
-
-        if (empty($cotizacion)) {
-            require_once "views/error.php";
-            exit();
-        }
-
-        if (!empty($_FILES["documentos"]['name'][0])) {
-            $ruta = "public/tmp";
-            if (!is_dir($ruta)) {
-                mkdir($ruta, 0755, true);
-            }
-
-            foreach ($_FILES["documentos"]["error"] as $key => $error) {
-                if ($error == UPLOAD_ERR_OK) {
-                    $tmp_name = $_FILES["documentos"]["tmp_name"][$key];
-                    $name = basename($_FILES["documentos"]["name"][$key]);
-                    move_uploaded_file($tmp_name, "$ruta/$name");
-                    $api->adjuntar_archivo("Deals", $cotizacion->getFieldValue("Deal_Name")->getEntityId(), "$ruta/$name");
-                    unlink("$ruta/$name");
-                }
-            }
-
-            header("Location:" . constant("url") . $url[0] . "/detalles/$id/Documentos Adjuntados.");
-            exit();
-        }
-
-        require_once "views/layout/header_main.php";
-        require_once "views/cotizaciones/adjuntar.php";
-        require_once "views/layout/footer_main.php";
-    }
-
-    function descargar()
-    {
-        $api = new api;
-        $url = obtener_url();
-
-        if (!isset($url[2])) {
-            require_once "views/error.php";
-            exit();
-        }
-
-        $id = $url[2];
-        $cotizacion = $api->detalles_registro("Quotes", $id);
-
-        if (empty($cotizacion)) {
-            require_once "views/error.php";
-            exit();
-        }
-
-        require_once "views/" . $url[0] . "/descargar.php";
     }
 }

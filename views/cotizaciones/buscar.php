@@ -86,22 +86,11 @@
                                     echo "<td>" . $cotizacion->getFieldValue('Quote_Stage') . "</td>";
                                     echo "<td>" . $cotizacion->getFieldValue('Valid_Till') . "</td>";
                                     echo "<td>";
-
-                                    if ($cotizacion->getFieldValue('Plan') == "Full" or $cotizacion->getFieldValue('Plan') == "Ley") {
-                                        $plan = "auto";
-                                    } else {
-                                        $plan = strtolower($cotizacion->getFieldValue('Plan'));
-                                    }
-
-                                    echo '<a href="' . constant("url") . $plan . '/detalles/' . $cotizacion->getEntityId() . '" title="Detalles"><i class="fas fa-info-circle"></i></a>';
+                                    echo '<a href="' . constant("url") . strtolower($cotizacion->getFieldValue('Plan')) . '/detalles/' . $cotizacion->getEntityId() . '" title="Detalles"><i class="fas fa-info-circle"></i></a>';
                                     echo "&nbsp;";
-                                    if ($cotizacion->getFieldValue("Deal_Name") == null) {
-                                        echo '<a href="' . constant("url") . $plan . '/emitir/' . $cotizacion->getEntityId()  . '" title="Emitir"><i class="fas fa-user"></i></i></a>';
-                                    } else {
-                                        echo '<a href="' . constant("url") . $plan . '/adjuntar/' . $cotizacion->getEntityId()  . '" title="Adjuntar"><i class="fas fa-file-upload"></i></a>';
-                                    }
+                                    echo '<a href="' . constant("url") . strtolower($cotizacion->getFieldValue('Plan')) . '/emitir/' . $cotizacion->getEntityId()  . '" title="Emitir"><i class="fas fa-user"></i></i></a>';
                                     echo "&nbsp;";
-                                    echo '<a href="' . constant("url") . $plan . '/descargar/' . $cotizacion->getEntityId() . '/descargar" title="Descargar"><i class="fas fa-file-download"></i></a>';
+                                    echo '<a href="' . constant("url") . strtolower($cotizacion->getFieldValue('Plan')) . '/descargar/' . $cotizacion->getEntityId() . '/descargar" title="Descargar"><i class="fas fa-file-download"></i></a>';
                                     echo "</td>";
                                 }
                                 ?>

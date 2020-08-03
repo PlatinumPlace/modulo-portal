@@ -22,8 +22,7 @@
                         <label class="col-sm-3 col-form-label font-weight-bold">Plan</label>
                         <div class="col-sm-9">
                             <select name="plan" class="form-control">
-                                <option value="full" selected>Full</option>
-                                <option value="ley">Ley</option>
+                                <option value="auto" selected>Auto</option>
                             </select>
                         </div>
                     </div>

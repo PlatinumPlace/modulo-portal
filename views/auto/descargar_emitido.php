@@ -50,7 +50,7 @@
 
             <div class="col-2">
                 <b>Fecha</b> <br> <?= $trato->getFieldValue('Fecha_de_emisi_n') ?> <br>
-                <b>Póliza No.</b> <br> <?= $trato->getFieldValue('P_liza')->getLookupLabel() ?> <br>
+                <b>Cotización No.</b> <br> <?= $cotizacion->getFieldValue('Quote_Number') ?> <br>
             </div>
 
             <div class="col-12 d-flex justify-content-center bg-primary text-white">

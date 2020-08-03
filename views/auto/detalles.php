@@ -13,7 +13,7 @@
 
 <ol class="breadcrumb mb-4">
     <li class="breadcrumb-item"><a href="<?= constant("url") ?>">Panel de control</a></li>
-    <li class="breadcrumb-item"><a href="<?= constant("url") ?>cotizaciones/buscar">Buscar Cotizaciones</a></li>
+    <li class="breadcrumb-item"><a href="<?= constant("url") ?>cotizaciones/buscar">Cotizaciones</a></li>
     <li class="breadcrumb-item"><a href="<?= constant("url") ?>auto/detalles/<?= $id ?>">No. <?= $cotizacion->getFieldValue('Quote_Number') ?></a></li>
 </ol>
 
@@ -28,11 +28,7 @@
 
         <div class="card mb-4">
             <div class="card-body">
-                <?php if ($cotizacion->getFieldValue('Deal_Name') == null) : ?>
-                    <a href="<?= constant("url") ?>auto/emitir/<?= $id ?>" class="btn btn-primary">Emitir</a>
-                <?php else : ?>
-                    <a href="<?= constant("url") ?>auto/adjuntar/<?= $id ?>" class="btn btn-success">Adjuntar</a>
-                <?php endif ?>
+                <a href="<?= constant("url") ?>auto/emitir/<?= $id ?>" class="btn btn-primary">Emitir</a>
                 <a href="<?= constant("url") ?>auto/descargar/<?= $id ?>" class="btn btn-secondary">Descargar</a>
             </div>
         </div>
@@ -54,7 +50,6 @@
                     <h5 class="card-header">Documentos Adjuntos</h5>
                     <div class="card-body">
 
-                        <?php $documentos_aduntos = $api->lista_adjuntos("Deals", $cotizacion->getFieldValue("Deal_Name")->getEntityId(), $num_pagina, 2) ?>
                         <?php if (!empty($documentos_aduntos)) : ?>
                             <ul class="list-group">
                                 <?php foreach ($documentos_aduntos as $documento) : ?>
@@ -141,14 +136,6 @@
 
         <?php if ($cotizacion->getFieldValue("Deal_Name") != null) : ?>
 
-            <?php
-            $trato = $api->detalles_registro("Deals", $cotizacion->getFieldValue('Deal_Name')->getEntityId());
-
-            $cliente = $api->detalles_registro("Contacts", $trato->getFieldValue('Contact_Name')->getEntityId());
-            $poliza = $api->detalles_registro("P_lizas", $trato->getFieldValue('P_liza')->getEntityId());
-            $bien = $api->detalles_registro("Bienes", $trato->getFieldValue('Bien')->getEntityId());
-
-            ?>
             <div class="card mb-4">
                 <h5 class="card-header">Cliente</h5>
                 <div class="card-body">

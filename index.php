@@ -63,7 +63,6 @@ if (isset($_GET['url'])) {
         require_once "views/error.php";
     }
 } else {
-    require_once "views/layout/header_main.php";
-    require_once "views/index.php";
-    require_once "views/layout/footer_main.php";
+    $cotizaciones = new cotizaciones;
+    $cotizaciones->inicio();
 }

@@ -1,6 +1,6 @@
 <?php
 
-class incendio extends cotizaciones
+class incendio
 {
     function crear()
     {
@@ -43,7 +43,7 @@ class incendio extends cotizaciones
             }
 
             $nueva_cotizacion["Subject"] = "Plan Incendio";
-            $nueva_cotizacion["Fecha_de_Nacimiento_Deudor"] = $_POST["fecha_deudor"];
+            $nueva_cotizacion["Fecha_Nacimiento_Deudor"] = $_POST["fecha_deudor"];
             $nueva_cotizacion["Quote_Stage"] = "Cotizando";
             $nueva_cotizacion["Contact_Name"] = $_SESSION["usuario"]['id'];
             $nueva_cotizacion["Account_Name"] = $_SESSION["usuario"]['empresa_id'];
@@ -62,6 +62,31 @@ class incendio extends cotizaciones
 
         require_once "views/layout/header_main.php";
         require_once "views/incendio/crear.php";
+        require_once "views/layout/footer_main.php";
+    }
+
+    public function detalles()
+    {
+        $api = new api;
+        $url = obtener_url();
+        $alerta = (isset($url[3]) and !is_numeric($url[3])) ? $url[3] : null;
+        $num_pagina = (isset($url[3]) and is_numeric($url[3])) ? $url[3] : 1;
+
+        if (!isset($url[2])) {
+            require_once "views/error.php";
+            exit();
+        }
+
+        $id = $url[2];
+        $cotizacion = $api->detalles_registro("Quotes", $id);
+
+        if (empty($cotizacion)) {
+            require_once "views/error.php";
+            exit();
+        }
+
+        require_once "views/layout/header_main.php";
+        require_once "views/incendio/detalles.php";
         require_once "views/layout/footer_main.php";
     }
 }
