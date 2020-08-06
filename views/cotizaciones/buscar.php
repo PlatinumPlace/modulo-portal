@@ -86,11 +86,11 @@
                                     echo "<td>" . $cotizacion->getFieldValue('Quote_Stage') . "</td>";
                                     echo "<td>" . $cotizacion->getFieldValue('Valid_Till') . "</td>";
                                     echo "<td>";
-                                    echo '<a href="' . constant("url") . strtolower($cotizacion->getFieldValue('Plan')) . '/detalles/' . $cotizacion->getEntityId() . '" title="Detalles"><i class="fas fa-info-circle"></i></a>';
+                                    echo '<a href="' . constant("url") . 'cotizaciones/detalles/' . $cotizacion->getEntityId() . '" title="Detalles"><i class="fas fa-info-circle"></i></a>';
                                     echo "&nbsp;";
-                                    echo '<a href="' . constant("url") . strtolower($cotizacion->getFieldValue('Plan')) . '/emitir/' . $cotizacion->getEntityId()  . '" title="Emitir"><i class="fas fa-user"></i></i></a>';
+                                    echo '<a href="' . constant("url") . 'cotizaciones/emitir/' . $cotizacion->getEntityId()  . '" title="Emitir"><i class="fas fa-user"></i></i></a>';
                                     echo "&nbsp;";
-                                    echo '<a href="' . constant("url") . strtolower($cotizacion->getFieldValue('Plan')) . '/descargar/' . $cotizacion->getEntityId() . '/descargar" title="Descargar"><i class="fas fa-file-download"></i></a>';
+                                    echo '<a href="' . constant("url") . 'cotizaciones/descargar/' . $cotizacion->getEntityId() . '" title="Descargar"><i class="fas fa-file-download"></i></a>';
                                     echo "</td>";
                                 }
                                 ?>

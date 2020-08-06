@@ -132,7 +132,7 @@
         var id = "<?= $id ?>";
         setTimeout(function() {
             window.print();
-            window.location = url + "auto/detalles/" + id;
+            window.location = url + "cotizaciones/detalles/" + id;
         }, time);
     </script>
 

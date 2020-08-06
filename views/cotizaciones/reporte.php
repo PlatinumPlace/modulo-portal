@@ -19,19 +19,20 @@
                 <form method="POST" action="<?= constant("url") ?>cotizaciones/reporte">
 
                     <div class="form-group row">
-                        <label class="col-sm-3 col-form-label font-weight-bold">Plan</label>
+                        <label class="col-sm-3 col-form-label font-weight-bold">Tipo de cotización</label>
                         <div class="col-sm-9">
-                            <select name="plan" class="form-control">
-                                <option value="auto" selected>Auto</option>
+                            <select name="tipo_cotizacion" class="form-control">
+                                <option value="Auto" selected>Auto</option>
                             </select>
                         </div>
                     </div>
 
                     <div class="form-group row">
-                        <label class="col-sm-3 col-form-label font-weight-bold">Tipo</label>
+                        <label class="col-sm-3 col-form-label font-weight-bold">Estado de la cotización</label>
                         <div class="col-sm-9">
-                            <select name="tipo" class="form-control">
+                            <select name="estado_cotizacion" class="form-control">
                                 <option value="pendientes" selected>Pendientes</option>
+                                <option value="emitidos">Emitidos</option>
                             </select>
                         </div>
                     </div>
