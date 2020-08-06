@@ -41,17 +41,17 @@
 
                 <div class="col-8">
                     <h4 class="text-uppercase text-center">
-                        cotización coberturas <br>
+                        cotización coberturas
 
                         <?php
                         switch ($cotizacion->getFieldValue("Tipo")) {
                             case 'Auto':
-                                echo "seguro vehículo de motor";
+                                echo "<br> seguro vehículo de motor";
                                 break;
                         }
                         ?>
-                        <br>
 
+                        <br>
                         <?= $cotizacion->getFieldValue('Subject') ?>
                     </h4>
                 </div>
@@ -143,6 +143,7 @@
                     <div class="col-12 d-flex justify-content-center bg-primary text-white">
                         <h6>COBERTURAS</h6>
                     </div>
+
                     <div class="col-12 border">
                         <div class="row">
 
@@ -254,6 +255,79 @@
                                                 <h6 class="card-title"><small>RD$<?= number_format($plan->getListPrice(), 2) ?></small></h6>
                                                 <h6 class="card-title"><small>RD$<?= number_format($plan->getTaxAmount(), 2) ?></small></h6>
                                                 <h6 class="card-title"><small>RD$<?= number_format($plan->getNetTotal(), 2) ?></small></h6>
+                                            </div>
+                                        </div>
+                                    </div>
+                                <?php endif ?>
+                            <?php endforeach ?>
+                        </div>
+                    </div>
+                <?php elseif (
+                    $cotizacion->getFieldValue("Tipo") == "Vida"
+                    or
+                    $cotizacion->getFieldValue("Tipo") == "Desempleo"
+                    or
+                    $cotizacion->getFieldValue("Tipo") == "Incendio"
+                ) : ?>
+                    <div class="col-12 d-flex justify-content-center bg-primary text-white">
+                        <h6>COBERTURAS</h6>
+                    </div>
+
+                    <div class="col-12 border">
+                        <div class="row">
+
+                            <div class="col-4">
+                                <div class="card border-0">
+                                    <div class="card-body">
+
+                                        <h3 class="card-title">
+                                            Suma Asegurada:<br>
+                                            RD$<?= number_format($cotizacion->getFieldValue('Valor_Asegurado'), 2) ?>
+                                        </h3>
+
+                                        <hr>
+
+                                        <p class="card-text">
+                                            Prima Neta<br>
+                                            ISC<br>
+                                            Prima Mensual
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <?php $planes = $cotizacion->getLineItems() ?>
+                            <?php foreach ($planes as $plan) : ?>
+                                <?php if ($plan->getNetTotal() > 0) : ?>
+                                    <?php
+                                    $plan_detalles = $api->detalles_registro("Products", $plan->getProduct()->getEntityId());
+
+                                    $criterio = "Socio:equals:" . $_SESSION["usuario"]["empresa_id"];
+                                    $contratos = $api->buscar_criterio("Contratos", $criterio, 1, 10);
+                                    foreach ($contratos as $contrato) {
+                                        if ($contrato->getFieldValue("Aseguradora")->getEntityId() == $plan_detalles->getFieldValue("Vendor_Name")->getEntityId()) {
+                                            $coberturas = $contrato;
+                                        }
+                                    }
+
+                                    $imagen_aseguradora = $api->obtener_imagen("Vendors", $plan_detalles->getFieldValue("Vendor_Name")->getEntityId(), "public/img");
+                                    ?>
+                                    <div class="col-2">
+                                        <div class="card border-0">
+                                            <div class="card-body">
+
+                                                <div class="card-title">
+                                                    <img height="65" width="125" src="<?= constant("url") . $imagen_aseguradora ?>">
+                                                </div>
+
+                                                <hr>
+
+                                                <p class="card-text">
+                                                    RD$<?= number_format($plan->getListPrice(), 2) ?><br>
+                                                    RD$<?= number_format($plan->getTaxAmount(), 2) ?><br>
+                                                    RD$<?= number_format($plan->getNetTotal(), 2) ?>
+                                                </p>
+
                                             </div>
                                         </div>
                                     </div>
@@ -504,6 +578,7 @@
                             </div>
                         </div>
                     </div>
+
                 <?php endif ?>
 
             </div>
@@ -593,6 +668,7 @@
                     </div>
 
                 </div>
+
             <?php endif ?>
 
         <?php endif ?>

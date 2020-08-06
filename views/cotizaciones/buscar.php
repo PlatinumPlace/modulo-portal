@@ -45,10 +45,10 @@
                 <thead>
                     <tr>
                         <th>No. Cotización</th>
+                        <th>Emision</th>
                         <th>Plan</th>
                         <th>Suma Asegurada</th>
                         <th>Estado</th>
-                        <th>Fecha de Cierre </th>
                         <th>Opciones</th>
                     </tr>
                 </thead>
@@ -81,10 +81,10 @@
                                         date("Y-m", strtotime($cotizacion->getFieldValue("Valid_Till"))) == date("Y-m"))
                                 ) {
                                     echo "<td>" . $cotizacion->getFieldValue('Quote_Number') . "</td>";
+                                    echo "<td>" . $cotizacion->getFieldValue('Fecha_emisi_n') . "</td>";
                                     echo "<td>" . $cotizacion->getFieldValue('Plan') . "</td>";
                                     echo "<td>RD$" . number_format($cotizacion->getFieldValue('Valor_Asegurado'), 2) . "</td>";
                                     echo "<td>" . $cotizacion->getFieldValue('Quote_Stage') . "</td>";
-                                    echo "<td>" . $cotizacion->getFieldValue('Valid_Till') . "</td>";
                                     echo "<td>";
                                     echo '<a href="' . constant("url") . 'cotizaciones/detalles/' . $cotizacion->getEntityId() . '" title="Detalles"><i class="fas fa-info-circle"></i></a>';
                                     echo "&nbsp;";

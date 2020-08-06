@@ -82,11 +82,11 @@ class cotizaciones
                     break;
 
                 case 'desempleo':
-                    # code...
+                    crear_cotizacion_desempleo($api);
                     break;
 
                 case 'auto':
-                    # code...
+                    crear_cotizacion_incendio($api);
                     break;
             }
         }

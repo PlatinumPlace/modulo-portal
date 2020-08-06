@@ -1,15 +1,14 @@
 <h2 class="mt-4 text-uppercase">
 
-    cotización <br>
+    cotización
 
     <?php
     switch ($cotizacion->getFieldValue("Tipo")) {
         case 'Auto':
-            echo "seguro vehículo de motor";
+            echo "<br> seguro vehículo de motor <br>";
             break;
     }
     ?>
-    <br>
 
     <?= $cotizacion->getFieldValue('Subject') ?>
 

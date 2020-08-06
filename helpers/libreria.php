@@ -636,88 +636,220 @@ function emitir_auto($cotizacion, $api)
 function crear_cotizacion_vida($api)
 {
     $criterio = "((Socio:equals:" . $_SESSION["usuario"]['empresa_id'] . ") and (Tipo:equals:Vida))";
-        $contratos = $api->buscar_criterio("Contratos", $criterio, 1, 200);
+    $contratos = $api->buscar_criterio("Contratos", $criterio, 1, 200);
 
-        $edad_deudor = calcular_edad($_POST["fecha_nacimiento"]);
-        $edad_codeudor = (!empty($_POST["fecha_codeudor"])) ?  calcular_edad($_POST["fecha_codeudor"]) : null;
+    $edad_deudor = calcular_edad($_POST["fecha_nacimiento"]);
+    $edad_codeudor = (!empty($_POST["fecha_codeudor"])) ?  calcular_edad($_POST["fecha_codeudor"]) : null;
 
-        foreach ($contratos as $contrato) {
-            $prima = 0;
+    foreach ($contratos as $contrato) {
+        $prima = 0;
 
-            $criterio = "Vendor_Name:equals:" . $contrato->getFieldValue('Aseguradora')->getEntityId();
-            $planes = $api->buscar_criterio("Products", $criterio, 1, 2);
-            foreach ($planes as $plan) {
-                if ($plan->getFieldValue('Product_Category') == "Plan Vida") {
-                    $plan_id = $plan->getEntityId();
-                }
+        $criterio = "Vendor_Name:equals:" . $contrato->getFieldValue('Aseguradora')->getEntityId();
+        $planes = $api->buscar_criterio("Products", $criterio, 1, 2);
+        foreach ($planes as $plan) {
+            if ($plan->getFieldValue('Product_Category') == "Plan Vida") {
+                $plan_id = $plan->getEntityId();
             }
-
-            $criterio = "Contrato:equals:" . $contrato->getEntityId();
-            $tasas = $api->buscar_criterio("Tasas", $criterio, 1, 200);
-            foreach ($tasas as $tasa) {
-                if ($tasa->getFieldValue('Codeudor') == true) {
-                    $tasa_codeudor = $tasa->getFieldValue('Valor');
-                } else {
-                    $tasa_deudor = $tasa->getFieldValue('Valor');
-                }
-            }
-
-            $tasa_deudor = $tasa_deudor / 100;
-            $tasa_codeudor = $tasa_codeudor / 100;
-            $prima = $_POST["valor"] / 1000 * $tasa_deudor;
-
-            if (!empty($edad_codeudor)) {
-                $prima += $_POST["valor"] / 1000 * ($tasa_codeudor - $tasa_deudor);
-            }
-
-            if (
-                $edad_deudor > $contrato->getFieldValue('Edad_Max')
-                or
-                $edad_deudor < $contrato->getFieldValue('Edad_Min')
-                or
-                (!empty($edad_codeudor)
-                    and
-                    $edad_codeudor > $contrato->getFieldValue('Edad_Max')
-                    or
-                    $edad_codeudor < $contrato->getFieldValue('Edad_Min'))
-            ) {
-                $prima = 0;
-            }
-
-            $plan_seleccionado[] = array(
-                "id" => $plan_id,
-                "prima" => $prima,
-                "cantidad" => 1,
-                "descripcion" => $contrato->getFieldValue('Aseguradora')->getLookupLabel(),
-                "impuesto" => "ITBIS 16",
-                "impuesto_valor" => 16
-            );
         }
 
-        $nueva_cotizacion["Subject"] = "Plan Vida";
-        $nueva_cotizacion["Fecha_Nacimiento_Codeudor"] = $_POST["fecha_codeudor"];
-        $nueva_cotizacion["Quote_Stage"] = "Cotizando";
-        $nueva_cotizacion["Contact_Name"] = $_SESSION["usuario"]['id'];
-        $nueva_cotizacion["Account_Name"] = $_SESSION["usuario"]['empresa_id'];
-        $nueva_cotizacion["Fecha_emisi_n"] =  date("Y-m-d");
-        $nueva_cotizacion["Valid_Till"] = date("Y-m-d", strtotime(date("Y-m-d") . "+ 10 days"));
-        $nueva_cotizacion["Tipo_P_liza"] = "Declarativa";
-        $nueva_cotizacion["Plan"] = "Vida";
-        $nueva_cotizacion["Valor_Asegurado"] = $_POST["valor"];
-        $nueva_cotizacion["Plazo"] =  $_POST["plazo"];
+        $criterio = "Contrato:equals:" . $contrato->getEntityId();
+        $tasas = $api->buscar_criterio("Tasas", $criterio, 1, 200);
+        foreach ($tasas as $tasa) {
+            if ($tasa->getFieldValue('Codeudor') == true) {
+                $tasa_codeudor = $tasa->getFieldValue('Valor');
+            } else {
+                $tasa_deudor = $tasa->getFieldValue('Valor');
+            }
+        }
 
-        $nueva_cotizacion["RNC_C_dula"] = $_POST["rnc_cedula"];
-        $nueva_cotizacion["Nombre"] = $_POST["nombre"];
-        $nueva_cotizacion["Apellido"] = $_POST["apellido"];
-        $nueva_cotizacion["Direcci_n"] = $_POST["direccion"];
-        $nueva_cotizacion["Tel_Celular"] = $_POST["telefono"];
-        $nueva_cotizacion["Tel_Residencial"] = $_POST["tel_residencia"];
-        $nueva_cotizacion["Tel_Trabajo"] = $_POST["tel_trabajo"];
-        $nueva_cotizacion["Fecha_Nacimiento"] = $_POST["fecha_nacimiento"];
-        $nueva_cotizacion["Correo"] = $_POST["correo"];
+        $tasa_deudor = $tasa_deudor / 100;
+        $tasa_codeudor = $tasa_codeudor / 100;
+        $prima = $_POST["valor"] / 1000 * $tasa_deudor;
 
-        $nuevo_cotizacion_id = $api->crear_registro("Quotes", $nueva_cotizacion, $plan_seleccionado);
+        if (!empty($edad_codeudor)) {
+            $prima += $_POST["valor"] / 1000 * ($tasa_codeudor - $tasa_deudor);
+        }
 
-        header("Location:" . constant("url") . "cotizaciones/detalles/$nuevo_cotizacion_id");
-        exit();
+        if (
+            $edad_deudor > $contrato->getFieldValue('Edad_Max')
+            or
+            $edad_deudor < $contrato->getFieldValue('Edad_Min')
+            or
+            (!empty($edad_codeudor)
+                and
+                $edad_codeudor > $contrato->getFieldValue('Edad_Max')
+                or
+                $edad_codeudor < $contrato->getFieldValue('Edad_Min'))
+        ) {
+            $prima = 0;
+        }
+
+        $plan_seleccionado[] = array(
+            "id" => $plan_id,
+            "prima" => $prima,
+            "cantidad" => 1,
+            "descripcion" => $contrato->getFieldValue('Aseguradora')->getLookupLabel(),
+            "impuesto" => "ITBIS 16",
+            "impuesto_valor" => 16
+        );
+    }
+
+    $nueva_cotizacion["Subject"] = "Plan Vida";
+    $nueva_cotizacion["Fecha_Nacimiento_Codeudor"] = $_POST["fecha_codeudor"];
+    $nueva_cotizacion["Quote_Stage"] = "Cotizando";
+    $nueva_cotizacion["Contact_Name"] = $_SESSION["usuario"]['id'];
+    $nueva_cotizacion["Account_Name"] = $_SESSION["usuario"]['empresa_id'];
+    $nueva_cotizacion["Fecha_emisi_n"] =  date("Y-m-d");
+    $nueva_cotizacion["Valid_Till"] = date("Y-m-d", strtotime(date("Y-m-d") . "+ 10 days"));
+    $nueva_cotizacion["Tipo_P_liza"] = "Declarativa";
+    $nueva_cotizacion["Plan"] = "Vida";
+    $nueva_cotizacion["Tipo"] = "Vida";
+    $nueva_cotizacion["Valor_Asegurado"] = $_POST["valor"];
+    $nueva_cotizacion["Plazo"] =  $_POST["plazo"];
+
+    $nueva_cotizacion["RNC_C_dula"] = $_POST["rnc_cedula"];
+    $nueva_cotizacion["Nombre"] = $_POST["nombre"];
+    $nueva_cotizacion["Apellido"] = $_POST["apellido"];
+    $nueva_cotizacion["Direcci_n"] = $_POST["direccion"];
+    $nueva_cotizacion["Tel_Celular"] = $_POST["telefono"];
+    $nueva_cotizacion["Tel_Residencial"] = $_POST["tel_residencia"];
+    $nueva_cotizacion["Tel_Trabajo"] = $_POST["tel_trabajo"];
+    $nueva_cotizacion["Fecha_Nacimiento"] = $_POST["fecha_nacimiento"];
+    $nueva_cotizacion["Correo"] = $_POST["correo"];
+
+    $nuevo_cotizacion_id = $api->crear_registro("Quotes", $nueva_cotizacion, $plan_seleccionado);
+
+    header("Location:" . constant("url") . "cotizaciones/detalles/$nuevo_cotizacion_id");
+    exit();
+}
+
+function crear_cotizacion_desempleo($api)
+{
+    $criterio = "((Socio:equals:" . $_SESSION["usuario"]['empresa_id'] . ") and (Tipo:equals:Desempleo))";
+    $contratos = $api->buscar_criterio("Contratos", $criterio, 1, 200);
+
+    foreach ($contratos as $contrato) {
+        $prima = 0;
+
+        $criterio = "Vendor_Name:equals:" . $contrato->getFieldValue('Aseguradora')->getEntityId();
+        $planes = $api->buscar_criterio("Products", $criterio, 1, 2);
+        foreach ($planes as $plan) {
+            if ($plan->getFieldValue('Product_Category') == "Plan Vida") {
+                $plan_id = $plan->getEntityId();
+            }
+        }
+
+        $criterio = "Contrato:equals:" . $contrato->getEntityId();
+        $tasas = $api->buscar_criterio("Tasas", $criterio, 1, 200);
+        foreach ($tasas as $tasa) {
+            if ($tasa->getFieldValue('Desempleo') == true) {
+                $tasa_deudor_desempleo = $tasa->getFieldValue('Valor');
+            } else {
+                $tasa_deudor = $tasa->getFieldValue('Valor');
+            }
+        }
+
+        $prima = $_POST["valor"] / 1000 * ($tasa_deudor / 100);
+        $prima += $_POST["cuota"] / 1000 * $tasa_deudor_desempleo;
+
+        $plan_seleccionado[] = array(
+            "id" => $plan_id,
+            "prima" => $prima,
+            "cantidad" => 1,
+            "descripcion" => $contrato->getFieldValue('Aseguradora')->getLookupLabel(),
+            "impuesto" => "ITBIS 16",
+            "impuesto_valor" => 16
+        );
+    }
+
+    $nueva_cotizacion["Subject"] = "Plan Vida/Desempleo";
+    $nueva_cotizacion["Quote_Stage"] = "Cotizando";
+    $nueva_cotizacion["Contact_Name"] = $_SESSION["usuario"]['id'];
+    $nueva_cotizacion["Account_Name"] = $_SESSION["usuario"]['empresa_id'];
+    $nueva_cotizacion["Fecha_emisi_n"] =  date("Y-m-d");
+    $nueva_cotizacion["Valid_Till"] = date("Y-m-d", strtotime(date("Y-m-d") . "+ 10 days"));
+    $nueva_cotizacion["Tipo_P_liza"] = "Declarativa";
+    $nueva_cotizacion["Plan"] = "Vida/Desempleo";
+    $nueva_cotizacion["Tipo"] = "Desempleo";
+    $nueva_cotizacion["Valor_Asegurado"] = $_POST["valor"];
+    $nueva_cotizacion["Plazo"] =  $_POST["plazo"];
+    $nueva_cotizacion["Cuota_Men"] =  $_POST["cuota"];
+
+    $nueva_cotizacion["RNC_C_dula"] = $_POST["rnc_cedula"];
+    $nueva_cotizacion["Nombre"] = $_POST["nombre"];
+    $nueva_cotizacion["Apellido"] = $_POST["apellido"];
+    $nueva_cotizacion["Direcci_n"] = $_POST["direccion"];
+    $nueva_cotizacion["Tel_Celular"] = $_POST["telefono"];
+    $nueva_cotizacion["Tel_Residencial"] = $_POST["tel_residencia"];
+    $nueva_cotizacion["Tel_Trabajo"] = $_POST["tel_trabajo"];
+    $nueva_cotizacion["Fecha_Nacimiento"] = $_POST["fecha_nacimiento"];
+    $nueva_cotizacion["Correo"] = $_POST["correo"];
+
+    $nuevo_cotizacion_id = $api->crear_registro("Quotes", $nueva_cotizacion, $plan_seleccionado);
+
+    header("Location:" . constant("url") . "cotizaciones/detalles/$nuevo_cotizacion_id");
+    exit();
+}
+
+function crear_cotizacion_incendio($api)
+{
+    $criterio = "((Socio:equals:" . $_SESSION["usuario"]['empresa_id'] . ") and (Tipo:equals:Incendio))";
+    $contratos = $api->buscar_criterio("Contratos", $criterio, 1, 200);
+
+    foreach ($contratos as $contrato) {
+        $prima = 0;
+
+        $criterio = "Vendor_Name:equals:" . $contrato->getFieldValue('Aseguradora')->getEntityId();
+        $planes = $api->buscar_criterio("Products", $criterio, 1, 2);
+        foreach ($planes as $plan) {
+            if ($plan->getFieldValue('Product_Category') == "Plan Vida") {
+                $plan_id = $plan->getEntityId();
+            }
+        }
+
+        $criterio = "Contrato:equals:" . $contrato->getEntityId();
+        $tasas = $api->buscar_criterio("Tasas", $criterio, 1, 200);
+        foreach ($tasas as $tasa) {
+            $tasa_deudor = $tasa->getFieldValue('Valor');
+        }
+
+        $tasa_deudor = ($tasa_deudor / 100) / 100;
+        $prima = $_POST["valor"] * $tasa_deudor / 12;
+
+        $plan_seleccionado[] = array(
+            "id" => $plan_id,
+            "prima" => $prima,
+            "cantidad" => 1,
+            "descripcion" => $contrato->getFieldValue('Aseguradora')->getLookupLabel(),
+            "impuesto" => "ITBIS 16",
+            "impuesto_valor" => 16
+        );
+    }
+
+    $nueva_cotizacion["Subject"] = "Plan Incendio";
+    $nueva_cotizacion["Quote_Stage"] = "Cotizando";
+    $nueva_cotizacion["Contact_Name"] = $_SESSION["usuario"]['id'];
+    $nueva_cotizacion["Account_Name"] = $_SESSION["usuario"]['empresa_id'];
+    $nueva_cotizacion["Fecha_emisi_n"] =  date("Y-m-d");
+    $nueva_cotizacion["Valid_Till"] = date("Y-m-d", strtotime(date("Y-m-d") . "+ 10 days"));
+    $nueva_cotizacion["Tipo_P_liza"] = "Declarativa";
+    $nueva_cotizacion["Plan"] = "Incendio";
+    $nueva_cotizacion["Tipo"] = "Incendio";
+    $nueva_cotizacion["Valor_Asegurado"] = $_POST["valor"];
+    $nueva_cotizacion["Plazo"] =  $_POST["plazo"];
+
+    $nueva_cotizacion["RNC_C_dula"] = $_POST["rnc_cedula"];
+    $nueva_cotizacion["Nombre"] = $_POST["nombre"];
+    $nueva_cotizacion["Apellido"] = $_POST["apellido"];
+    $nueva_cotizacion["Direcci_n"] = $_POST["direccion"];
+    $nueva_cotizacion["Tel_Celular"] = $_POST["telefono"];
+    $nueva_cotizacion["Tel_Residencial"] = $_POST["tel_residencia"];
+    $nueva_cotizacion["Tel_Trabajo"] = $_POST["tel_trabajo"];
+    $nueva_cotizacion["Fecha_Nacimiento"] = $_POST["fecha_nacimiento"];
+    $nueva_cotizacion["Correo"] = $_POST["correo"];
+
+    $nuevo_cotizacion_id = $api->crear_registro("Quotes", $nueva_cotizacion, $plan_seleccionado);
+
+    header("Location:" . constant("url") . "cotizaciones/detalles/$nuevo_cotizacion_id");
+    exit();
 }
