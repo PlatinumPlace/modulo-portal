@@ -152,6 +152,19 @@ class cotizaciones
         $url = obtener_url();
         $alerta = (isset($url[0])) ? $url[0] : null;
 
+        if (isset($_POST["pdf"])) {
+            $titulo = "Reporte Pendientes " . $_POST["tipo_cotizacion"];
+
+            $prima_sumatoria = 0;
+            $valor_sumatoria = 0;
+            $comision_sumatoria = 0;
+            $criterio = "Contact_Name:equals:" . $_SESSION["usuario"]["id"];
+            $cotizaciones = $api->buscar_criterio("Quotes", $criterio, 1, 200);
+
+            require_once "views/cotizaciones/descargar_reporte.php";
+            exit();
+        }
+
         if (isset($_POST["csv"])) {
             switch ($_POST["estado_cotizacion"]) {
                 case 'pendientes':

@@ -225,7 +225,7 @@ function crear_cotizacion_auto($api)
 
 function reporte_pendientes($api)
 {
-    $titulo = "Reporte Pendientes" . $_POST["tipo_cotizacion"];
+    $titulo = "Reporte Pendientes " . $_POST["tipo_cotizacion"];
 
     $contenido_csv = array(
         array($_SESSION["usuario"]['empresa_nombre']),
@@ -266,13 +266,17 @@ function reporte_pendientes($api)
                 date("Y-m-d", strtotime($cotizacion->getFieldValue("Fecha_emisi_n")))  <= $_POST["hasta"]
                 and
                 $cotizacion->getFieldValue("Tipo") == $_POST["tipo_cotizacion"]
+                and
+                $cotizacion->getFieldValue('Deal_Name') == null
             ) {
                 $planes = $cotizacion->getLineItems();
                 foreach ($planes as $plan) {
                     if (
                         $plan->getNetTotal() > 0
                         and
-                        (empty($_POST["aseguradora"])) or $_POST["aseguradora"] == $plan->getDescription()
+                        (empty($_POST["aseguradora"])
+                            or
+                            $_POST["aseguradora"] == $plan->getDescription())
                     ) {
                         switch ($_POST["tipo_cotizacion"]) {
                             case 'Auto':
@@ -339,7 +343,7 @@ function reporte_pendientes($api)
 
 function reporte_emitidos($api)
 {
-    $titulo = "Reporte Emitidos" . $_POST["tipo_cotizacion"];
+    $titulo = "Reporte Emitidos " . $_POST["tipo_cotizacion"];
 
     $contenido_csv = array(
         array($_SESSION["usuario"]['empresa_nombre']),
@@ -392,7 +396,9 @@ function reporte_emitidos($api)
                     if (
                         $plan->getNetTotal() > 0
                         and
-                        (empty($_POST["aseguradora"])) or $_POST["aseguradora"] == $plan->getDescription()
+                        (empty($_POST["aseguradora"])
+                            or
+                            $_POST["aseguradora"] == $plan->getDescription())
                     ) {
                         switch ($_POST["tipo_cotizacion"]) {
                             case 'Auto':

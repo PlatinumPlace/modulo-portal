@@ -69,6 +69,8 @@
 
                     <br>
                     <button type="submit" name="csv" class="btn btn-primary">Exportar a CSV</button>
+                    |
+                    <button type="submit" name="pdf" class="btn btn-success">Exportar a PDF</button>
 
                 </form>
             </div>
