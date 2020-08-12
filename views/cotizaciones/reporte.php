@@ -32,7 +32,7 @@
                         <div class="col-sm-9">
                             <select name="estado_cotizacion" class="form-control">
                                 <option value="pendientes" selected>Pendientes</option>
-                                <option value="emitidos">Emitidos</option>
+                                <option value="emitidas">Emitidos</option>
                             </select>
                         </div>
                     </div>
@@ -58,9 +58,14 @@
                                 <option value="" selected>Todas</option>
                                 <?php
                                 $criterio = "Socio:equals:" . $_SESSION["usuario"]["empresa_id"];
-                                $lista_contratos = $api->buscar_criterio("Contratos", $criterio, 1, 200);
-                                foreach ($lista_contratos as $contrato) {
-                                    echo '<option value="' . $contrato->getFieldValue('Aseguradora')->getLookupLabel() . '">' . $contrato->getFieldValue('Aseguradora')->getLookupLabel() . '</option>';
+                                $result = $api->searchRecordsByCriteria("Contratos", $criterio, 1, 10);
+                                $aseguradoras = array();
+                                foreach ($result as $record) {
+                                    $aseguradoras[] = $record->getFieldValue('Aseguradora')->getLookupLabel();
+                                }
+                                $aseguradoras =  array_unique($aseguradoras);
+                                foreach ($aseguradoras as $indice => $valor) {
+                                    echo '<option value="' . $valor . '">' . $valor . '</option>';
                                 }
                                 ?>
                             </select>

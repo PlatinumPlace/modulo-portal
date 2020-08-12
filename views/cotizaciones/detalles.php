@@ -1,17 +1,13 @@
 <h2 class="mt-4 text-uppercase">
-
     cotización
 
     <?php
-    switch ($cotizacion->getFieldValue("Tipo")) {
-        case 'Auto':
-            echo "<br> seguro vehículo de motor <br>";
-            break;
+    if ($cotizacion->getFieldValue("Tipo")) {
+        echo "<br> seguro vehículo de motor <br>";
     }
     ?>
 
     <?= $cotizacion->getFieldValue('Subject') ?>
-
 </h2>
 
 <ol class="breadcrumb mb-4">
@@ -31,297 +27,127 @@
 
         <div class="card mb-4">
             <div class="card-body">
-                <a href="<?= constant("url") ?>cotizaciones/emitir/<?= $id ?>" class="btn btn-primary">Emitir</a>
-                <a href="<?= constant("url") ?>cotizaciones/descargar/<?= $id ?>" class="btn btn-secondary">Descargar</a>
+                <?php if ($cotizacion->getFieldValue("Deal_Name") == null) : ?>
+                    <a href="<?= constant("url") ?>cotizaciones/emitir/<?= $id ?>" class="btn btn-success">Emitir</a>
+                <?php else : ?>
+                    <a href="<?= constant("url") ?>cotizaciones/documentos/<?= $id ?>" class="btn btn-primary">Documentos</a>
+                    <a href="<?= constant("url") ?>cotizaciones/adjuntar/<?= $id ?>" class="btn btn-secondary">Adjuntar</a>
+                <?php endif ?>
+                <a href="<?= constant("url") ?>cotizaciones/descargar/<?= $id ?>" class="btn btn-info">Descargar</a>
             </div>
         </div>
 
-        <?php if ($cotizacion->getFieldValue("Deal_Name") != null) : ?>
-
-            <div class="card-deck">
-
-                <?php if ($cotizacion->getFieldValue('Tipo') == "Auto") : ?>
-
-                    <div class="card">
-                        <h5 class="card-header">Documentos para descargar</h5>
-                        <div class="card-body">
-                            <a download="Condiciones del Vehículos.pdf" href="<?= constant("url") ?>public/files/condiciones_vehiculo.pdf" class="btn btn-link">Condiciones del Vehículos</a>
-                            <a download="Formulario de Conocimiento.pdf" href="<?= constant("url") ?>public/files/for_conocimiento.pdf" class="btn btn-link">Formulario de conocimiento</a>
-                            <a download="Formulario de Inspección de Vehículos.pdf" href="<?= constant("url") ?>public/files/for_inspeccion.pdf" class="btn btn-link">Formulario de Inspección</a>
-                            <a href="<?= constant("url") ?>cotizaciones/extracto/<?= $id ?>" class="btn btn-link">Extracto de las Principales Condiciones</a>
-                        </div>
-                    </div>
-
-                <?php endif ?>
-
-                <div class="card">
-                    <h5 class="card-header">Documentos Adjuntos</h5>
-                    <div class="card-body">
-
-                        <?php $documentos_aduntos = $api->lista_adjuntos("Deals", $cotizacion->getFieldValue("Deal_Name")->getEntityId(), $num_pagina, 2) ?>
-                        <?php if (!empty($documentos_aduntos)) : ?>
-                            <ul class="list-group">
-                                <?php foreach ($documentos_aduntos as $documento) : ?>
-                                    <li class="list-group-item"><?= $documento->getFileName() ?></li>
-                                <?php endforeach ?>
-                            </ul>
-                        <?php endif ?>
-
-                        <br>
-                        <nav aria-label="Page navigation example">
-                            <ul class="pagination justify-content-end">
-                                <li class="page-item">
-                                    <a class="page-link" href="<?= constant("url") ?>cotizaciones/detalles/<?= $id ?>/<?= $num_pagina - 1 ?>">Anterior</a>
-                                </li>
-                                <li class="page-item">
-                                    <a class="page-link" href="<?= constant("url") ?>cotizaciones/detalles/<?= $id ?>/<?= $num_pagina + 1 ?>">Siguente</a>
-                                </li>
-                            </ul>
-                        </nav>
-
-                    </div>
-                </div>
-
-            </div>
-            <br>
-
-        <?php endif ?>
-
         <div class="card mb-4">
-            <h5 class="card-header">Detalles</h5>
             <div class="card-body">
 
+                <h4>Detalles</h4>
+                <hr>
 
-                <div class="row">
-
-                    <div class="col">
-                        <div class="form-group row">
-                            <label class="col-sm-4 col-form-label font-weight-bold">Emisión</label>
-                            <div class="col-sm-8">
-                                <input type="text" readonly class="form-control-plaintext" value="<?= $cotizacion->getFieldValue('Fecha_emisi_n') ?>">
-                            </div>
-                        </div>
+                <div class="form-group row">
+                    <label class="col-sm-4 col-form-label font-weight-bold">Estado</label>
+                    <div class="col-sm-8">
+                        <label class="col-form-label">
+                            <?= $cotizacion->getFieldValue('Quote_Stage') ?>
+                        </label>
                     </div>
-
-                    <div class="col">
-                        <div class="form-group row">
-                            <label class="col-sm-4 col-form-label font-weight-bold">Cierre</label>
-                            <div class="col-sm-8">
-                                <input type="text" readonly class="form-control-plaintext" value="<?= $cotizacion->getFieldValue('Valid_Till') ?>">
-                            </div>
-                        </div>
-                    </div>
-
                 </div>
 
-                <div class="row">
-
-                    <div class="col">
-                        <div class="form-group row">
-                            <label class="col-sm-4 col-form-label font-weight-bold">Estado</label>
-                            <div class="col-sm-8">
-                                <input type="text" readonly class="form-control-plaintext" value="<?= $cotizacion->getFieldValue('Quote_Stage') ?>">
-                            </div>
-                        </div>
+                <div class="form-group row">
+                    <label class="col-sm-4 col-form-label font-weight-bold">Fecha de emisión</label>
+                    <div class="col-sm-8">
+                        <label class="col-form-label">
+                            <?= $cotizacion->getFieldValue('Fecha_emisi_n') ?>
+                        </label>
                     </div>
+                </div>
 
-                    <div class="col">
-                        <div class="form-group row">
-                            <label class="col-sm-4 col-form-label font-weight-bold">Póliza</label>
-                            <div class="col-sm-8">
-                                <input type="text" readonly class="form-control-plaintext" value="<?= $cotizacion->getFieldValue('Tipo_P_liza') ?>">
-                            </div>
-                        </div>
+                <div class="form-group row">
+                    <label class="col-sm-4 col-form-label font-weight-bold">Fecha de cierre</label>
+                    <div class="col-sm-8">
+                        <label class="col-form-label">
+                            <?= $cotizacion->getFieldValue('Valid_Till') ?>
+                        </label>
                     </div>
-
                 </div>
 
                 <div class="form-group row">
                     <label class="col-sm-4 col-form-label font-weight-bold">Valor Asegurado</label>
                     <div class="col-sm-8">
-                        <input type="text" readonly class="form-control-plaintext" value="RD$<?= number_format($cotizacion->getFieldValue('Valor_Asegurado'), 2) ?>">
-                    </div>
-                </div>
-
-            </div>
-        </div>
-
-        <div class="card mb-4">
-            <h5 class="card-header">Deudor</h5>
-            <div class="card-body">
-
-                <div class="form-group row">
-                    <label class="col-sm-2 col-form-label font-weight-bold">Nombre</label>
-                    <div class="col-sm-10">
-                        <input type="text" readonly class="form-control-plaintext" value="<?= $cotizacion->getFieldValue('Nombre') . " " . $cotizacion->getFieldValue('Apellido') ?>">
+                        <label class="col-form-label">
+                            RD$<?= number_format($cotizacion->getFieldValue('Valor_Asegurado'), 2) ?>
+                        </label>
                     </div>
                 </div>
 
                 <div class="form-group row">
-                    <label class="col-sm-2 col-form-label font-weight-bold">Dirección</label>
-                    <div class="col-sm-10">
-                        <input type="text" readonly class="form-control-plaintext" value="<?= $cotizacion->getFieldValue('Direcci_n') ?>">
+                    <label class="col-sm-4 col-form-label font-weight-bold">Deudor</label>
+                    <div class="col-sm-8">
+                        <label class="col-form-label">
+                            <?= $cotizacion->getFieldValue('Nombre') . " " . $cotizacion->getFieldValue('Apellido') ?>
+                        </label>
                     </div>
                 </div>
 
-                <div class="row">
-
-                    <div class="col">
-                        <div class="form-group row">
-                            <label class="col-sm-4 col-form-label font-weight-bold">Correo electronico</label>
-                            <div class="col-sm-8">
-                                <input type="text" readonly class="form-control-plaintext" value="<?= $cotizacion->getFieldValue('Correo') ?>">
-                            </div>
-                        </div>
+                <div class="form-group row">
+                    <label class="col-sm-4 col-form-label font-weight-bold">Codeudor</label>
+                    <div class="col-sm-8">
+                        <label class="col-form-label">
+                            <?= (!empty($cotizacion->getFieldValue('Fecha_Nacimiento_Codeudor'))) ? "Si" : "No" ?>
+                        </label>
                     </div>
-
-                    <div class="col">
-                        <div class="form-group row">
-                            <label class="col-sm-4 col-form-label font-weight-bold">RNC/Cédula</label>
-                            <div class="col-sm-8">
-                                <input type="text" readonly class="form-control-plaintext" value="<?= $cotizacion->getFieldValue('RNC_C_dula') ?>">
-                            </div>
-                        </div>
-                    </div>
-
                 </div>
 
-                <div class="row">
+                <?php if ($cotizacion->getFieldValue('Tipo') == "Auto") : ?>
 
-                    <div class="col">
-                        <div class="form-group row">
-                            <label class="col-sm-4 col-form-label font-weight-bold">
-                                Fecha de nacimiento
+                    <br>
+                    <h4>Vehículo</h4>
+                    <hr>
+
+                    <div class="form-group row">
+                        <label class="col-sm-4 col-form-label font-weight-bold">Marca</label>
+                        <div class="col-sm-8">
+                            <label class="col-form-label">
+                                <?= $cotizacion->getFieldValue('Marca')->getLookupLabel() ?>
                             </label>
-                            <div class="col-sm-8">
-                                <input type="text" readonly class="form-control-plaintext" value="<?= $cotizacion->getFieldValue('Fecha_Nacimiento') ?>">
-                                <?php
-                                if (!empty($cotizacion->getFieldValue('Fecha_Nacimiento'))) {
-                                    echo "(" . calcular_edad($cotizacion->getFieldValue('Fecha_Nacimiento')) . " Años)";
-                                }
-                                ?>
-                            </div>
                         </div>
                     </div>
 
-                    <div class="col">
-                        <div class="form-group row">
-                            <label class="col-sm-4 col-form-label font-weight-bold">Tel. Celular</label>
-                            <div class="col-sm-8">
-                                <input type="text" readonly class="form-control-plaintext" value="<?= $cotizacion->getFieldValue('Tel_Celular') ?>">
-                            </div>
+                    <div class="form-group row">
+                        <label class="col-sm-4 col-form-label font-weight-bold">Modelo</label>
+                        <div class="col-sm-8">
+                            <label class="col-form-label">
+                                <?= $cotizacion->getFieldValue('Modelo')->getLookupLabel() ?>
+                            </label>
                         </div>
                     </div>
 
-                </div>
-
-                <div class="row">
-
-                    <div class="col">
-                        <div class="form-group row">
-                            <label class="col-sm-4 col-form-label font-weight-bold">Tel. Residencial</label>
-                            <div class="col-sm-8">
-                                <input type="text" readonly class="form-control-plaintext" value="<?= $cotizacion->getFieldValue('Tel_Residencial') ?>">
-                            </div>
+                    <div class="form-group row">
+                        <label class="col-sm-4 col-form-label font-weight-bold">Año de fabricación</label>
+                        <div class="col-sm-8">
+                            <label class="col-form-label">
+                                <?= $cotizacion->getFieldValue('A_o_Fabricaci_n') ?>
+                            </label>
                         </div>
                     </div>
 
-                    <div class="col">
-                        <div class="form-group row">
-                            <label class="col-sm-4 col-form-label font-weight-bold">Tel. Trabajo</label>
-                            <div class="col-sm-8">
-                                <input type="text" readonly class="form-control-plaintext" value="<?= $cotizacion->getFieldValue('Tel_Trabajo') ?>">
-                            </div>
+                    <div class="form-group row">
+                        <label class="col-sm-4 col-form-label font-weight-bold">Tipo</label>
+                        <div class="col-sm-8">
+                            <label class="col-form-label">
+                                <?= $cotizacion->getFieldValue('Tipo_Veh_culo') ?>
+                            </label>
                         </div>
                     </div>
 
-                </div>
+                <?php endif ?>
 
             </div>
         </div>
-
-        <?php if ($cotizacion->getFieldValue('Tipo') == "Auto") : ?>
-
-            <div class="card mb-4">
-                <h5 class="card-header">Vehículo</h5>
-                <div class="card-body">
-
-                    <div class="row">
-
-                        <div class="col">
-                            <div class="form-group row">
-                                <label class="col-sm-4 col-form-label font-weight-bold">Marca</label>
-                                <div class="col-sm-8">
-                                    <input type="text" readonly class="form-control-plaintext" value="<?= $cotizacion->getFieldValue('Marca')->getLookupLabel() ?>">
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="col">
-                            <div class="form-group row">
-                                <label class="col-sm-4 col-form-label font-weight-bold">Modelo</label>
-                                <div class="col-sm-8">
-                                    <input type="text" readonly class="form-control-plaintext" value="<?= $cotizacion->getFieldValue('Modelo')->getLookupLabel() ?>">
-                                </div>
-                            </div>
-                        </div>
-
-                    </div>
-
-                    <div class="row">
-
-                        <div class="col">
-                            <div class="form-group row">
-                                <label class="col-sm-4 col-form-label font-weight-bold">Año de fabricación</label>
-                                <div class="col-sm-8">
-                                    <input type="text" readonly class="form-control-plaintext" value="<?= $cotizacion->getFieldValue('A_o_Fabricaci_n') ?>">
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="col">
-                            <div class="form-group row">
-                                <label class="col-sm-4 col-form-label font-weight-bold">Tipo</label>
-                                <div class="col-sm-8">
-                                    <input type="text" readonly class="form-control-plaintext" value="<?= $cotizacion->getFieldValue('Tipo_Veh_culo') ?>">
-                                </div>
-                            </div>
-                        </div>
-
-                    </div>
-
-                    <div class="row">
-
-                        <div class="col">
-                            <div class="form-group row">
-                                <label class="col-sm-4 col-form-label font-weight-bold">Uso</label>
-                                <div class="col-sm-8">
-                                    <input type="text" readonly class="form-control-plaintext" value="<?= $cotizacion->getFieldValue('Uso_Veh_culo') ?>">
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="col">
-                            <div class="form-group row">
-                                <label class="col-sm-4 col-form-label font-weight-bold">Condiciones</label>
-                                <div class="col-sm-8">
-                                    <input type="text" readonly class="form-control-plaintext" value="<?= ($cotizacion->getFieldValue('Estado_Veh_culo') == 1) ? "Nuevo" : "Usado"; ?>">
-                                </div>
-                            </div>
-                        </div>
-
-                    </div>
-
-                </div>
-            </div>
-
-        <?php endif ?>
 
         <div class="card mb-4">
             <div class="card-body">
                 <div class="table-responsive">
                     <table class="table table-striped table-borderless">
-
                         <thead>
                             <tr>
                                 <th scope="col">Aseguradora</th>
@@ -342,10 +168,10 @@
                                 </tr>
                             <?php endforeach ?>
                         </tbody>
-
                     </table>
                 </div>
             </div>
         </div>
+
     </div>
 </div>

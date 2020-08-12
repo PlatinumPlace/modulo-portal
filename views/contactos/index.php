@@ -9,7 +9,7 @@
     <meta name="author" content="" />
 
     <title>IT - Insurance Tech</title>
-    <link rel="icon" type="image/png" href="<?= constant("url") ?>public/img/logo.png">
+    <link rel="icon" type="image/png" href="<?= constant("url") ?>public/icons/logo.png">
 
     <link href="<?= constant("url") ?>public/vendor/css/styles.css" rel="stylesheet" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js" crossorigin="anonymous"></script>
@@ -30,7 +30,7 @@
                             <div class="card shadow-lg border-0 rounded-lg mt-5">
                                 <div class="card-header">
                                     <div class="text-center">
-                                        <img src="<?= constant("url") ?>public/img/logo.png" height="150" width="150">
+                                        <img src="<?= constant("url") ?>public/icons/logo.png" height="150" width="150">
                                     </div>
                                 </div>
                                 <div class="card-body">

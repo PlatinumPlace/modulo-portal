@@ -9,7 +9,7 @@
     <meta name="author" content="" />
 
     <title>IT - Insurance Tech</title>
-    <link rel="icon" type="image/png" href="<?= constant("url") ?>public/img/logo.png">
+    <link rel="icon" type="image/png" href="<?= constant("url") ?>public/icons/logo.png">
 
     <link href="<?= constant("url") ?>public/vendor/css/styles.css" rel="stylesheet" />
     <link href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css" rel="stylesheet" crossorigin="anonymous" />
@@ -40,7 +40,7 @@
                 <div class="sb-sidenav-menu">
                     <div class="nav">
                         <div class="sb-sidenav-menu-heading text-center">
-                            <img src="<?= constant("url") ?>public/img/logo.png" height="100" width="100">
+                            <img src="<?= constant("url") ?>public/icons/logo.png" height="100" width="100">
                         </div>
 
                         <div class="sb-sidenav-menu-heading"></div>
@@ -50,18 +50,21 @@
                             Panel de Control
                         </a>
 
-                        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseLayouts1" aria-expanded="false" aria-controls="collapseLayouts">
-                            <div class="sb-nav-link-icon"><i class="fas  fa-book-open"></i></div>
-                            Cotizaciones
-                            <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                        <a class="nav-link" href="<?= constant("url") ?>cotizaciones/crear">
+                            <div class="sb-nav-link-icon"><i class="fas fa-plus-square"></i></div>
+                            Crear Cotización
                         </a>
-                        <div class="collapse" id="collapseLayouts1" aria-labelledby="headingOne" data-parent="#sidenavAccordion">
-                            <nav class="sb-sidenav-menu-nested nav">
-                                <a class="nav-link" href="<?= constant("url") ?>cotizaciones/crear">Crear</a>
-                                <a class="nav-link" href="<?= constant("url") ?>cotizaciones/buscar">Buscar</a>
-                                <a class="nav-link" href="<?= constant("url") ?>cotizaciones/reporte">Reporte</a>
-                            </nav>
-                        </div>
+
+                        <a class="nav-link" href="<?= constant("url") ?>cotizaciones/buscar">
+                            <div class="sb-nav-link-icon"><i class="fas fa-search"></i></div>
+                            Buscar Cotización
+                        </a>
+
+                        <a class="nav-link" href="<?= constant("url") ?>cotizaciones/reporte">
+                            <div class="sb-nav-link-icon"><i class="fas fa-book-open"></i></div>
+                            Reporte
+                        </a>
+
                     </div>
                 </div>
             </nav>

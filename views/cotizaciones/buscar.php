@@ -1,13 +1,21 @@
 <h1 class="mt-4 text-uppercase">
     <?php
-    if ($filtro == "emisiones_mensuales") {
-        echo "emisiones del mes";
-    } elseif ($filtro == "vencimientos_mensuales") {
-        echo "vencimientos del mes";
-    } elseif ($filtro == "pendientes") {
-        echo "cotizaciones pendientes";
-    } else {
-        echo "buscar cotizaciones";
+    switch ($filtro) {
+        case 'emisiones_mensuales':
+            echo "emisiones del mes";
+            break;
+
+        case 'vencimientos_mensuales':
+            echo "vencimientos del mes";
+            break;
+
+        case 'pendientes':
+            echo "cotizaciones pendientes";
+            break;
+
+        default:
+            echo "buscar cotizaciones";
+            break;
     }
     ?>
 </h1>
@@ -45,7 +53,7 @@
                 <thead>
                     <tr>
                         <th>No. Cotización</th>
-                        <th>Emision</th>
+                        <th>Fecha Emision</th>
                         <th>Plan</th>
                         <th>Suma Asegurada</th>
                         <th>Estado</th>
@@ -53,50 +61,52 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <?php if (!empty($cotizaciones)) : ?>
-                        <?php foreach ($cotizaciones as $cotizacion) : ?>
-                            <tr>
-                                <?php
-                                if (
-                                    empty($filtro)
-                                    or
-                                    $filtro == "todos"
-                                    or
-                                    ($filtro == "pendientes"
-                                        and
-                                        $cotizacion->getFieldValue("Deal_Name") == null
-                                        and
-                                        date("Y-m", strtotime($cotizacion->getFieldValue("Fecha_emisi_n"))) == date("Y-m"))
-                                    or
-                                    ($filtro == "emisiones_mensuales"
-                                        and
-                                        $cotizacion->getFieldValue("Deal_Name") != null
-                                        and
-                                        date("Y-m", strtotime($cotizacion->getFieldValue("Fecha_emisi_n"))) == date("Y-m"))
-                                    or
-                                    ($filtro == "vencimientos_mensuales"
-                                        and
-                                        $cotizacion->getFieldValue("Deal_Name") != null
-                                        and
-                                        date("Y-m", strtotime($cotizacion->getFieldValue("Valid_Till"))) == date("Y-m"))
-                                ) {
-                                    echo "<td>" . $cotizacion->getFieldValue('Quote_Number') . "</td>";
-                                    echo "<td>" . $cotizacion->getFieldValue('Fecha_emisi_n') . "</td>";
-                                    echo "<td>" . $cotizacion->getFieldValue('Plan') . "</td>";
-                                    echo "<td>RD$" . number_format($cotizacion->getFieldValue('Valor_Asegurado'), 2) . "</td>";
-                                    echo "<td>" . $cotizacion->getFieldValue('Quote_Stage') . "</td>";
-                                    echo "<td>";
-                                    echo '<a href="' . constant("url") . 'cotizaciones/detalles/' . $cotizacion->getEntityId() . '" title="Detalles"><i class="fas fa-info-circle"></i></a>';
-                                    echo "&nbsp;";
-                                    echo '<a href="' . constant("url") . 'cotizaciones/emitir/' . $cotizacion->getEntityId()  . '" title="Emitir"><i class="fas fa-user"></i></i></a>';
-                                    echo "&nbsp;";
-                                    echo '<a href="' . constant("url") . 'cotizaciones/descargar/' . $cotizacion->getEntityId() . '" title="Descargar"><i class="fas fa-file-download"></i></a>';
-                                    echo "</td>";
-                                }
-                                ?>
-                            </tr>
-                        <?php endforeach ?>
-                    <?php endif ?>
+                    <?php
+                    foreach ($result as $cotizacion) {
+                        if (
+                            empty($filtro)
+                            or
+                            $filtro == "todos"
+                            or
+                            ($filtro == "pendientes"
+                                and
+                                $cotizacion->getFieldValue("Deal_Name") == null
+                                and
+                                date("Y-m", strtotime($cotizacion->getFieldValue("Fecha_emisi_n"))) == date("Y-m"))
+                            or
+                            ($filtro == "emisiones_mensuales"
+                                and
+                                $cotizacion->getFieldValue("Deal_Name") != null
+                                and
+                                date("Y-m", strtotime($cotizacion->getFieldValue("Fecha_emisi_n"))) == date("Y-m"))
+                            or
+                            ($filtro == "vencimientos_mensuales"
+                                and
+                                $cotizacion->getFieldValue("Deal_Name") != null
+                                and
+                                date("Y-m", strtotime($cotizacion->getFieldValue("Valid_Till"))) == date("Y-m"))
+                        ) {
+                            echo "<tr>";
+                            echo "<td>" . $cotizacion->getFieldValue('Quote_Number') . "</td>";
+                            echo "<td>" . $cotizacion->getFieldValue('Fecha_emisi_n') . "</td>";
+                            echo "<td>" . $cotizacion->getFieldValue('Plan') . "</td>";
+                            echo "<td>RD$" . number_format($cotizacion->getFieldValue('Valor_Asegurado'), 2) . "</td>";
+                            echo "<td>" . $cotizacion->getFieldValue('Quote_Stage') . "</td>";
+                            echo "<td>";
+                            echo '<a href="' . constant("url") . 'cotizaciones/detalles/' . $cotizacion->getEntityId() . '" title="Detalles"><i class="fas fa-info-circle"></i></a>';
+                            echo "&nbsp;";
+                            if ($cotizacion->getFieldValue("Deal_Name") == null) {
+                                echo '<a href="' . constant("url") . 'cotizaciones/emitir/' . $cotizacion->getEntityId() .'" title="Emitir"><i class="fas fa-user"></i></i></a>';
+                            }else {
+                                echo '<a href="' . constant("url") . 'cotizaciones/adjuntar/' . $cotizacion->getEntityId() .'" title="Adjuntar"><i class="fas fa-file-upload"></i></i></a>';
+                            }
+                            echo "&nbsp;";
+                            echo '<a href="'. constant("url") . 'cotizaciones/descargar/' . $cotizacion->getEntityId() .'" title="Descargar"><i class="fas fa-file-download"></i></a>';
+                            echo "</td>";
+                            echo "</tr>";
+                        }
+                    }
+                    ?>
                 </tbody>
             </table>
         </div>

@@ -72,7 +72,8 @@
     </div>
 
 </div>
-<?php if (!empty($aseguradoras)) : ?>
+
+<?php if (isset($aseguradoras)) : ?>
     <div class="row">
 
         <div class="col-xl-12">
