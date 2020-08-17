@@ -1,11 +1,36 @@
+<?php
+$alerta = (isset($url[2]) and!is_numeric($url[1])) ? $url[2] : null;
+$num_pagina = (isset($url[2]) and is_numeric($url[1])) ? $url[2] : 1;
+$documentos_aduntos = $api->getAttachments("Deals", $cotizacion->getFieldValue("Deal_Name")->getEntityId(), $num_pagina, 5);
+if ($_FILES) {
+    $ruta_archivo = "public/path";
+    if (!is_dir($ruta_archivo)) {
+        mkdir($ruta_archivo, 0755, true);
+    }
+
+    foreach ($_FILES["documentos"]["error"] as $key => $error) {
+        if ($error == UPLOAD_ERR_OK) {
+            $tmp_name = $_FILES["documentos"]["tmp_name"][$key];
+            $name = basename($_FILES["documentos"]["name"][$key]);
+            move_uploaded_file($tmp_name, "$ruta_archivo/$name");
+            $api->uploadAttachment("Deals", $cotizacion->getFieldValue("Deal_Name")->getEntityId(), "$ruta_archivo/$name");
+            unlink("$ruta_archivo/$name");
+        }
+    }
+
+    header("Location:" . constant('url') . "adjuntar/$id/Documentos Adjuntados");
+    exit();
+}
+require_once 'views/layout/header.php';
+?>
 <h2 class="mt-4 text-uppercase">
     adjuntar documentos
 </h2>
 
 <ol class="breadcrumb mb-4">
     <li class="breadcrumb-item"><a href="<?= constant("url") ?>">Panel de control</a></li>
-    <li class="breadcrumb-item"><a href="<?= constant("url") ?>cotizaciones/buscar">Cotizaciones</a></li>
-    <li class="breadcrumb-item"><a href="<?= constant("url") ?>cotizaciones/detalles/<?= $id ?>">No. <?= $cotizacion->getFieldValue('Quote_Number') ?></a></li>
+    <li class="breadcrumb-item"><a href="<?= constant("url") ?>buscar">Cotizaciones</a></li>
+    <li class="breadcrumb-item"><a href="<?= constant("url") ?>detalles/<?= $id ?>">No. <?= $cotizacion->getFieldValue('Quote_Number') ?></a></li>
 </ol>
 
 <div class="row justify-content-center">
@@ -33,10 +58,10 @@
                     <nav aria-label="Page navigation example">
                         <ul class="pagination justify-content-end">
                             <li class="page-item">
-                                <a class="page-link" href="<?= constant("url") ?>cotizaciones/adjuntar/<?= $id ?>/<?= $num_pagina - 1 ?>">Anterior</a>
+                                <a class="page-link" href="<?= constant("url") ?>adjuntar/<?= $id ?>/<?= $num_pagina - 1 ?>">Anterior</a>
                             </li>
                             <li class="page-item">
-                                <a class="page-link" href="<?= constant("url") ?>cotizaciones/adjuntar/<?= $id ?>/<?= $num_pagina + 1 ?>">Siguente</a>
+                                <a class="page-link" href="<?= constant("url") ?>adjuntar/<?= $id ?>/<?= $num_pagina + 1 ?>">Siguente</a>
                             </li>
                         </ul>
                     </nav>
@@ -46,7 +71,7 @@
 
         <div class="card mb-4">
             <div class="card-body">
-                <form enctype="multipart/form-data" method="POST" action="<?= constant("url") ?>cotizaciones/adjuntar/<?= $id ?>">
+                <form enctype="multipart/form-data" method="POST" action="<?= constant("url") ?>adjuntar/<?= $id ?>">
 
                     <div class="form-group row">
                         <label for="modelo" class="col-sm-3 col-form-label font-weight-bold">
@@ -60,10 +85,12 @@
                     <br>
                     <button type="submit" class="btn btn-primary">Adjuntar</button>
                     |
-                    <a href="<?= constant("url") ?>cotizaciones/detalles/<?= $id ?>" class="btn btn-info">Cancelar</a>
+                    <a href="<?= constant("url") ?>detalles/<?= $id ?>" class="btn btn-info">Cancelar</a>
 
                 </form>
             </div>
         </div>
     </div>
 </div>
+
+<?php require_once 'views/layout/footer.php'; ?>

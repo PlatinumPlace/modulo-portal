@@ -1,7 +1,4 @@
-php_sdk/zcrm_oauthtokens.txt
-php_sdk/ZCRMClientLibrary.log
-public/icons/auto.jpg
-public/icons/desempleo.jpg
-public/icons/incendio.png
 public/icons/logo.png
-public/icons/vida.png
+models/api.php
+zoho_sdk/ZCRMClientLibrary.log
+zoho_sdk/zcrm_oauthtokens.txt
