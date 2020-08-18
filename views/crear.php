@@ -1,7 +1,17 @@
 <?php
-$cotizaciones = new cotizaciones();
+$api = new api();
 $tipo = (isset($url[1])) ? $url[1] : null;
-$result = $cotizaciones->dispobible_crear();
+$criterio = "Socio:equals:" . $_SESSION["usuario"]["empresa_id"];
+$contratos = $api->searchRecordsByCriteria("Contratos", $criterio);
+foreach ($contratos as $contrato) {
+    if ($contrato->getFieldValue('Tipo') == "Auto") {
+        $auto = true;
+    } elseif ($contrato->getFieldValue('Tipo') == "Vida") {
+        $vida = true;
+    } elseif ($contrato->getFieldValue('Tipo') == "Incendio") {
+        $incendio = true;
+    }
+}
 require_once 'views/layout/header.php';
 ?>
 <h1 class="mt-4 text-uppercase text-center">crear cotización</h1>
@@ -13,7 +23,7 @@ require_once 'views/layout/header.php';
 
 <div class="row">
 
-    <?php if (isset($result["auto"])) : ?>
+    <?php if (isset($auto)) : ?>
         <div class="card col-3">
             <img src="<?= constant("url") ?>public/icons/auto.png" class="card-img-top"> <a class="small text-white  stretched-link" href="<?= constant("url") ?>crear/auto"></a>
             <div class="card-body">
@@ -26,7 +36,7 @@ require_once 'views/layout/header.php';
         </div>
     <?php endif ?>
 
-    <?php if (isset($result["vida"])) : ?>
+    <?php if (isset($vida)) : ?>
         <div class="card col-3">
             <img src="<?= constant("url") ?>public/icons/vida.png" class="card-img-top"> <a class="small text-white  stretched-link" href="<?= constant("url") ?>crear/vida"></a>
             <div class="card-body">
@@ -39,7 +49,7 @@ require_once 'views/layout/header.php';
         </div>
     <?php endif ?>
 
-    <?php if (isset($result["incendio"])) : ?>
+    <?php if (isset($incendio)) : ?>
         <div class="card col-3">
             <img src="<?= constant("url") ?>public/icons/incendio.png" class="card-img-top"> <a class="small text-white  stretched-link" href="<?= constant("url") ?>crear/incendio"></a>
             <div class="card-body">

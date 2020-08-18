@@ -1,39 +1,58 @@
 <?php
 
-class controller {
+class controller
+{
 
-    function error() {
+    function error()
+    {
         require_once 'views/error.php';
     }
 
-    function iniciar_sesion() {
+    function iniciar_sesion()
+    {
         require_once 'views/iniciar_sesion.php';
     }
 
-    function cerrar_sesion() {
+    function cerrar_sesion()
+    {
         session_destroy();
         header("Location:" . constant("url"));
         exit();
     }
 
-    function inicio() {
+    function inicio()
+    {
         require_once 'views/inicio.php';
     }
 
-    function buscar() {
+    function buscar()
+    {
         require_once 'views/buscar.php';
     }
 
-    function reportes() {
+    function reportes()
+    {
         require_once 'views/reportes.php';
     }
 
-    function crear() {
+    function crear()
+    {
+        $api = new api;
         $url = obtener_url();
         $url[1] = (isset($url[1])) ? $url[1] : null;
         switch ($url[1]) {
             case "auto":
                 require_once 'views/crear/auto.php';
+                exit();
+                break;
+
+            case "vida":
+                require_once 'views/crear/vida.php';
+                exit();
+                break;
+
+            case "incendio":
+                require_once 'views/crear/incendio.php';
                 exit();
                 break;
 
@@ -43,11 +62,13 @@ class controller {
         }
     }
 
-    function detalles() {
+    function detalles()
+    {
         require_once 'views/detalles.php';
     }
 
-    function descargar() {
+    function descargar()
+    {
         $api = new api();
         $url = obtener_url();
         $id = (isset($url[1])) ? $url[1] : null;
@@ -67,13 +88,18 @@ class controller {
                 require_once 'views/descargar/auto.php';
                 break;
 
+            case 'Vida':
+                require_once 'views/descargar/vida.php';
+                break;
+
             default:
                 require_once "views/error.php";
                 break;
         }
     }
 
-    function emitir() {
+    function emitir()
+    {
         $api = new api;
         $url = obtener_url();
         $id = (isset($url[1])) ? $url[1] : null;
@@ -94,13 +120,18 @@ class controller {
                 require_once "views/emitir/auto.php";
                 break;
 
+            case 'Vida':
+                require_once "views/emitir/vida.php";
+                break;
+
             default:
                 require_once "views/error.php";
                 break;
         }
     }
 
-    function documentos() {
+    function documentos()
+    {
         $api = new api;
         $url = obtener_url();
         $id = (isset($url[1])) ? $url[1] : null;
@@ -119,7 +150,8 @@ class controller {
         require_once 'views/documentos.php';
     }
 
-    function adjuntar() {
+    function adjuntar()
+    {
         $api = new api;
         $url = obtener_url();
         $id = (isset($url[1])) ? $url[1] : null;
@@ -137,5 +169,4 @@ class controller {
 
         require_once 'views/adjuntar.php';
     }
-
 }

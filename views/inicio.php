@@ -1,6 +1,41 @@
 <?php
-$cotizaciones = new cotizaciones();
-$result = $cotizaciones->resumen();
+$api = new api;
+$cotizaciones_total = 0;
+$cotizaciones_pendientes = 0;
+$cotizaciones_emitidas = 0;
+$cotizaciones_vencidas = 0;
+$aseguradoras = array();
+
+$criterio = "Contact_Name:equals:" . $_SESSION["usuario"]["id"];
+$num_pagina = 1;
+
+do {
+    $cotizaciones = $api->searchRecordsByCriteria("Quotes", $criterio, $num_pagina);
+    if (!empty($cotizaciones)) {
+        $num_pagina++;
+        foreach ($cotizaciones as $cotizacion) {
+            $cotizaciones_total += 1;
+
+            if ($cotizacion->getFieldValue("Deal_Name") == null and date("Y-m", strtotime($cotizacion->getFieldValue("Fecha_emisi_n"))) == date('Y-m')) {
+                $cotizaciones_pendientes += 1;
+            }
+
+            if ($cotizacion->getFieldValue("Deal_Name") != null and date("Y-m", strtotime($cotizacion->getFieldValue("Fecha_emisi_n"))) == date('Y-m')) {
+                $cotizaciones_emitidas += 1;
+                $planes = $cotizacion->getLineItems();
+                foreach ($planes as $plan) {
+                    $aseguradoras[] = $plan->getDescription();
+                }
+            }
+
+            if ($cotizacion->getFieldValue("Deal_Name") != null and date("Y-m", strtotime($cotizacion->getFieldValue("Valid_Till"))) == date('Y-m')) {
+                $cotizaciones_vencidas += 1;
+            }
+        }
+    } else {
+        $num_pagina = 0;
+    }
+} while ($num_pagina > 0);
 require_once 'views/layout/header.php';
 ?>
 <h1 class="mt-4 text-uppercase text-center">panel de control</h1>
@@ -21,7 +56,7 @@ require_once 'views/layout/header.php';
         <div class="card bg-primary text-white mb-4">
             <div class="card-body">
                 Cotizaciones Totales <br>
-                <?= $result["cotizaciones_total"] ?>
+                <?= $cotizaciones_total ?>
             </div>
             <div class="card-footer d-flex align-items-center justify-content-between">
                 <a class="small text-white stretched-link" href="<?= constant("url") ?>buscar">Buscar</a>
@@ -36,7 +71,7 @@ require_once 'views/layout/header.php';
         <div class="card bg-success text-white mb-4">
             <div class="card-body">
                 Emisiones del Mes <br>
-                <?= $result["cotizaciones_emitidas"] ?>
+                <?= $cotizaciones_emitidas ?>
             </div>
             <div class="card-footer d-flex align-items-center justify-content-between">
                 <a class="small text-white stretched-link" href="<?= constant("url") ?>buscar/emisiones_mensuales">Ver más</a>
@@ -51,7 +86,7 @@ require_once 'views/layout/header.php';
         <div class="card bg-danger text-white mb-4">
             <div class="card-body">
                 Vencimientos del Mes <br>
-                <?= $result["cotizaciones_vencidas"] ?>
+                <?= $cotizaciones_vencidas ?>
             </div>
             <div class="card-footer d-flex align-items-center justify-content-between">
                 <a class="small text-white stretched-link" href="<?= constant("url") ?>buscar/vencimientos_mensuales">Ver más</a>
@@ -79,7 +114,7 @@ require_once 'views/layout/header.php';
                         </thead>
                         <tbody>
                             <?php
-                            $aseguradoras = array_count_values($result["aseguradoras"]);
+                            $aseguradoras = array_count_values($aseguradoras);
                             foreach ($aseguradoras as $nombre => $cantidad_polizas) {
                                 echo "<tr>";
                                 echo '<th scope="row">' . $nombre . '</th>';

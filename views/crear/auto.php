@@ -1,7 +1,66 @@
 <?php
-$cotizacion = new auto();
 if ($_POST) {
-    $cotizacion->crear();
+    $marca = $api->getRecord("Marcas", $_POST["marca"]);
+    $modelo = $api->getRecord("Modelos", $_POST["modelo"]);
+    $criterio = "((Socio:equals:" . $_SESSION["usuario"]['empresa_id'] . ") and (Tipo:equals:Auto))";
+    $contratos = $api->searchRecordsByCriteria("Contratos", $criterio);
+    foreach ($contratos as $contrato) {
+        $prima = 0;
+
+        if ($_POST["tipo_plan"] == "Ley") {
+            $plan = $api->getRecord("Products", $contrato->getFieldValue('Plan')->getEntityId());
+            $prima = $plan->getFieldValue('Unit_Price');
+        } else {
+            $prima = calcular_prima($api, $contrato, $modelo->getFieldValue("Tipo"));
+        }
+
+        if ($_POST["facturacion"] == "Mensual") {
+            $prima = $prima / 12;
+        }
+
+        $prima = verificar_restringido($prima, $plan, $marca, $modelo);
+
+        $plan_seleccionado[] = array(
+            "id" => $contrato->getFieldValue('Plan')->getEntityId(),
+            "prima" => $prima,
+            "cantidad" => 1,
+            "descripcion" => $contrato->getFieldValue('Aseguradora')->getLookupLabel(),
+            "impuesto" => "ITBIS 16",
+            "impuesto_valor" => 16
+        );
+    }
+
+    $cotizacion["Subject"] = "Plan " . $_POST["facturacion"] . " " . $_POST["tipo_plan"];
+    $cotizacion["Quote_Stage"] = "Cotizando";
+    $cotizacion["Plan"] = $_POST["tipo_plan"];
+    $cotizacion["Contact_Name"] = $_SESSION["usuario"]['id'];
+    $cotizacion["Account_Name"] = $_SESSION["usuario"]['empresa_id'];
+    $cotizacion["Fecha_emisi_n"] = date("Y-m-d");
+    $cotizacion["Valid_Till"] = date("Y-m-d", strtotime(date("Y-m-d") . "+ 10 days"));
+    $cotizacion["Tipo_P_liza"] = "Declarativa";
+    $cotizacion["Plan"] = $_POST["tipo_plan"];
+    $cotizacion["Valor_Asegurado"] = $_POST["valor"];
+
+    $cotizacion["RNC_C_dula"] = $_POST["rnc_cedula"];
+    $cotizacion["Nombre"] = $_POST["nombre"];
+    $cotizacion["Apellido"] = $_POST["apellido"];
+    $cotizacion["Direcci_n"] = $_POST["direccion"];
+    $cotizacion["Tel_Celular"] = $_POST["telefono"];
+    $cotizacion["Tel_Residencial"] = $_POST["tel_residencia"];
+    $cotizacion["Tel_Trabajo"] = $_POST["tel_trabajo"];
+    $cotizacion["Fecha_Nacimiento"] = $_POST["fecha_nacimiento"];
+    $cotizacion["Correo"] = $_POST["correo"];
+
+    $cotizacion["A_o_Fabricaci_n"] = $_POST["fabricacion"];
+    $cotizacion["Marca"] = $_POST["marca"];
+    $cotizacion["Modelo"] = $_POST["modelo"];
+    $cotizacion["Uso_Veh_culo"] = $_POST["uso"];
+    $cotizacion["Estado_Veh_culo"] = (!empty($_POST["estado"])) ? true : false;
+    $cotizacion["Tipo_Veh_culo"] = $modelo->getFieldValue('Tipo');
+
+    $id = $api->createRecords("Quotes", $cotizacion, $plan_seleccionado);
+    header("Location:" . constant("url") . "detalles/$id");
+    exit();
 }
 require_once 'views/layout/header.php';
 ?>
@@ -93,7 +152,12 @@ require_once 'views/layout/header.php';
                         <div class="col-sm-9">
                             <select class="form-control" name="marca" id="marca" onchange="obtener_modelos(this)" required>
                                 <option value="" selected disabled>Selecciona una Marca</option>
-                                <?php $cotizacion->lista_marcas();
+                                <?php
+                                $marcas = $api->getRecords("Marcas");
+                                sort($marcas);
+                                foreach ($marcas as $marca) {
+                                    echo '<option value="' . $marca->getEntityId() . '">' . strtoupper($marca->getFieldValue("Name")) . '</option>';
+                                }
                                 ?>
                             </select>
                         </div>
@@ -186,7 +250,7 @@ require_once 'views/layout/header.php';
             data: {
                 marcas_id: val.value
             },
-            success: function (response) {
+            success: function(response) {
                 document.getElementById("modelo").innerHTML = response;
             }
         });

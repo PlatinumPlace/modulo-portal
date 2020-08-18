@@ -1,7 +1,7 @@
 <?php
 $api = new api();
 $url = obtener_url();
-$alerta = (isset($url[2]) and!is_numeric($url[2])) ? $url[2] : null;
+$alerta = (isset($url[2]) and !is_numeric($url[2])) ? $url[2] : null;
 $num_pagina = (isset($url[2]) and is_numeric($url[2])) ? $url[2] : 1;
 $id = (isset($url[1])) ? $url[1] : null;
 $cotizacion = $api->getRecord("Quotes", $id);
@@ -136,6 +136,35 @@ require_once 'views/layout/header.php';
                         <div class="col-sm-8">
                             <label class="col-form-label">
                                 <?= $cotizacion->getFieldValue('Tipo_Veh_culo') ?>
+                            </label>
+                        </div>
+                    </div>
+                <?php elseif ($cotizacion->getFieldValue('Plan') == "Vida") : ?>
+                    <div class="form-group row">
+                        <label class="col-sm-4 col-form-label font-weight-bold">Edad</label>
+                        <div class="col-sm-8">
+                            <label class="col-form-label">
+                                <?php
+                                echo calcular_edad($cotizacion->getFieldValue("Fecha_Nacimiento")) . " Años";
+                                ?>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-4 col-form-label font-weight-bold">Codeudor</label>
+                        <div class="col-sm-8">
+                            <label class="col-form-label">
+                                <?php
+                                if (!empty($cotizacion->getFieldValue('Fecha_Nacimiento_Codeudor'))) {
+                                    echo
+                                        date("d-m-Y", strtotime($cotizacion->getFieldValue("Fecha_Nacimiento_Codeudor")))
+                                            . " (" .
+                                            calcular_edad($cotizacion->getFieldValue("Fecha_Nacimiento")) . " Años)";
+                                } else {
+                                    echo "No Aplica";
+                                }
+                                ?>
                             </label>
                         </div>
                     </div>

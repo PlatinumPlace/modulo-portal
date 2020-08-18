@@ -1,3 +1,101 @@
+<?php
+if ($_POST) {
+    $edad_deudor = calcular_edad($_POST["fecha_nacimiento"]);
+    $edad_codeudor = (!empty($_POST["fecha_codeudor"])) ?  calcular_edad($_POST["fecha_codeudor"]) : null;
+    $criterio = "((Socio:equals:" . $_SESSION["usuario"]['empresa_id'] . ") and (Tipo:equals:Vida))";
+    $contratos = $api->searchRecordsByCriteria("Contratos", $criterio);
+    foreach ($contratos as $contrato) {
+        $prima = 0;
+
+        $criterio = "Contrato:equals:" . $contrato->getEntityId();
+        $tasas = $api->searchRecordsByCriteria("Tasas", $criterio);
+        foreach ($tasas as $tasa) {
+            switch ($tasa->getFieldValue('Tipo')) {
+                case 'Deudor':
+                    $tasa_deudor = $tasa->getFieldValue('Valor');
+                    break;
+
+                case 'Codeudor':
+                    $tasa_codeudor = $tasa->getFieldValue('Valor');
+                    break;
+
+                case 'Vida':
+                    $tasa_vida = $tasa->getFieldValue('Valor');
+                    break;
+
+                case 'Desempleo':
+                    $tasa_desempleo = $tasa->getFieldValue('Valor');
+                    break;
+            }
+        }
+
+        if (!empty($_POST["desempleo"])) {
+            $cuota = (!empty($_POST["cuota"])) ? $_POST["cuota"] : 0;
+            $prima = $_POST["valor"] / 1000 * ($tasa_vida / 100);
+            $prima +=  $cuota / 1000 * $tasa_desempleo;
+        } else {
+            if (!empty($edad_codeudor)) {
+                $prima += $_POST["valor"] / 1000 * (($tasa_codeudor - $tasa_deudor) / 100);
+            } else {
+                $prima = $_POST["valor"] / 1000 * ($tasa_deudor / 100);
+            }
+        }
+
+        if (
+            $edad_deudor > $contrato->getFieldValue('Edad_Max')
+            or
+            $edad_deudor < $contrato->getFieldValue('Edad_Min')
+            or
+            (!empty($edad_codeudor)
+                and
+                $edad_codeudor > $contrato->getFieldValue('Edad_Max')
+                or
+                $edad_codeudor < $contrato->getFieldValue('Edad_Min'))
+        ) {
+            $prima = 0;
+        }
+
+        $plan_seleccionado[] = array(
+            "id" => $contrato->getFieldValue('Plan')->getEntityId(),
+            "prima" => $prima,
+            "cantidad" => 1,
+            "descripcion" => $contrato->getFieldValue('Aseguradora')->getLookupLabel(),
+            "impuesto" => "ITBIS 16",
+            "impuesto_valor" => 16
+        );
+    }
+
+    $nueva_cotizacion["Subject"] = "Plan Vida";
+    $nueva_cotizacion["Fecha_Nacimiento_Codeudor"] = $_POST["fecha_codeudor"];
+    $nueva_cotizacion["Quote_Stage"] = "Cotizando";
+    $nueva_cotizacion["Contact_Name"] = $_SESSION["usuario"]['id'];
+    $nueva_cotizacion["Account_Name"] = $_SESSION["usuario"]['empresa_id'];
+    $nueva_cotizacion["Fecha_emisi_n"] =  date("Y-m-d");
+    $nueva_cotizacion["Valid_Till"] = date("Y-m-d", strtotime(date("Y-m-d") . "+ 10 days"));
+    $nueva_cotizacion["Tipo_P_liza"] = "Declarativa";
+    $nueva_cotizacion["Plan"] = "Vida";
+    $nueva_cotizacion["Valor_Asegurado"] = $_POST["valor"];
+    $nueva_cotizacion["Plazo"] =  $_POST["plazo"];
+    $nueva_cotizacion["RNC_C_dula"] = $_POST["rnc_cedula"];
+    $nueva_cotizacion["Nombre"] = $_POST["nombre"];
+    $nueva_cotizacion["Apellido"] = $_POST["apellido"];
+    $nueva_cotizacion["Direcci_n"] = $_POST["direccion"];
+    $nueva_cotizacion["Tel_Celular"] = $_POST["telefono"];
+    $nueva_cotizacion["Tel_Residencial"] = $_POST["tel_residencia"];
+    $nueva_cotizacion["Tel_Trabajo"] = $_POST["tel_trabajo"];
+    $nueva_cotizacion["Fecha_Nacimiento"] = $_POST["fecha_nacimiento"];
+    $nueva_cotizacion["Correo"] = $_POST["correo"];
+    $nueva_cotizacion["Cuota_Men"] =  $_POST["cuota"];
+
+    $nuevo_cotizacion_id = $api->createRecords("Quotes", $nueva_cotizacion, $plan_seleccionado);
+    header("Location:" . constant("url") . "detalles/$nuevo_cotizacion_id");
+    exit();
+}
+
+
+
+require_once 'views/layout/header.php';
+?>
 <h1 class="mt-4 text-uppercase text-center">crear cotización vida/desempleo</h1>
 
 <ol class="breadcrumb mb-4">
@@ -132,3 +230,5 @@
         </div>
     </div>
 </div>
+
+<?php require_once 'views/layout/footer.php'; ?>

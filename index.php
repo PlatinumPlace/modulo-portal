@@ -3,12 +3,6 @@
 include 'helpers/libs.php';
 include 'zoho_sdk/vendor/autoload.php';
 include 'models/api.php';
-include 'models/usuarios.php';
-include 'models/cotizaciones.php';
-include 'models/aseguradoras.php';
-include 'models/auto.php';
-include 'models/vida.php';
-include 'models/incendio.php';
 include 'controllers/controller.php';
 
 session_start();
