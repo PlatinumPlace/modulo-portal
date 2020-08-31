@@ -1,5 +1,4 @@
 <?php
-
 include dirname(__FILE__, 2) . '/zcrm_php_sdk/vendor/autoload.php';
 include dirname(__FILE__, 2) . '/zcrm_php_sdk/api.php';
 
@@ -15,10 +14,7 @@ $criteria = "Marca:equals:" . $_POST["marcas_id"];
 $moduleIns = ZCRMRestClient::getInstance()->getModuleInstance("Modelos");
 
 do {
-    $param_map = array(
-        "page" => $num_pag,
-        "per_page" => 200
-    );
+    $param_map = array("page" => $num_pag, "per_page" => 200);
 
     try {
         $response = $moduleIns->searchRecordsByCriteria($criteria, $param_map);
@@ -39,5 +35,3 @@ do {
         $num_pag = 0;
     }
 } while ($num_pag > 1);
-
-

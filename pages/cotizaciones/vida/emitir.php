@@ -1,5 +1,5 @@
 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-    <h1 class="h2 text-uppercase">emitir cotización auto</h1>
+    <h1 class="h2 text-uppercase">emitir cotización vida</h1>
 </div>
 
 <?php if (!empty($alerta)) : ?>
@@ -8,9 +8,10 @@
     </div>
 <?php endif ?>
 
+
 <form enctype="multipart/form-data" method="POST" action="<?= constant("url") ?>?page=emitir&id=<?= $id ?>">
 
-    <h4>Cliente</h4>
+    <h4>Deudor</h4>
     <hr>
     <div class="form-row">
 
@@ -35,7 +36,7 @@
         <div class="form-group col-md-3">
             <label><b>Fecha de Nacimiento</b></label>
 
-            <input type="date" class="form-control" name="fecha_nacimiento">
+            <input type="date" class="form-control" name="fecha_nacimiento" value="<?= $cotizacion->getFieldValue('Fecha_Nacimiento') ?>">
         </div>
     </div>
 
@@ -77,52 +78,43 @@
 
     </div>
 
-    <br>
-    <h4>Vehículo</h4>
-    <hr>
-    <div class="form-row">
+    <?php if (!empty($cotizacion->getFieldValue('Fecha_Nacimiento_Codeudor'))) : ?>
+        <br>
+        <h4>Codeudor</h4>
+        <hr>
+        <div class="form-row">
 
-        <div class="form-group col-md-4">
-            <label><b>Chasis</b></label>
+            <div class="form-group col-md-4">
+                <label><b>Nombre</b></label>
 
-            <input required type="text" class="form-control" name="chasis">
-        </div>
-
-        <div class="form-group col-md-4">
-            <label><b>Placa</b></label>
-
-            <input type="text" class="form-control" name="placa">
-        </div>
-
-        <div class="form-group col-md-4">
-            <label><b>Color</b></label>
-
-            <input type="text" class="form-control" name="color">
-        </div>
-
-    </div>
-
-    <div class="form-row">
-
-        <div class="form-group col-md-6">
-            <label><b>Uso</b></label>
-
-            <select name="uso" class="form-control">
-                <option value="Privado" selected>Privado</option>
-                <option value="Publico">Publico</option>
-            </select>
-        </div>
-
-        <div class="form-group col-md-6">
-            <label><b>Estado</b></label>
-
-            <div class="form-check">
-                <input class="form-check-input" type="checkbox" id="gridCheck" name="estado">
-                <label class="form-check-label" for="gridCheck"> Nuevo </label>
+                <input required type="text" class="form-control" name="nombre_codeudor">
             </div>
+
+            <div class="form-group col-md-4">
+                <label><b>Tel.</b></label>
+
+                <input required type="tel" class="form-control" name="telefono_codeudor">
+            </div>
+
+            <div class="form-group col-md-4">
+                <label><b>Fecha de Nacimiento</b></label>
+
+                <input type="date" class="form-control" name="fecha_nacimiento_codeudor" value="<?= $cotizacion->getFieldValue('Fecha_Nacimiento_Codeudor') ?>">
+            </div>
+
         </div>
 
-    </div>
+        <div class="form-row">
+
+            <div class="form-group col-md-4">
+                <label><b>Dirección</b></label>
+
+                <input type="text" class="form-control" name="direccion_codeudor">
+            </div>
+
+        </div>
+    <?php endif ?>
+
 
     <br>
     <h4>Emitir con:</h4>

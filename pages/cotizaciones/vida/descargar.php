@@ -17,7 +17,11 @@
     <div class="row">
 
         <div class="col-2">
-            <img src="<?= constant("url") ?>public/icons/logo.png" width="100" height="100">
+            <?php if ($cotizacion->getFieldValue("Deal_Name") == null) : ?>
+                <img src="<?= constant("url") ?>public/icons/logo.png" width="100" height="100">
+            <?php else : ?>
+                <img height="100" width="100" src="<?= constant("url") . $imagen_aseguradora ?>">
+            <?php endif ?>
         </div>
 
         <div class="col-8">
@@ -100,6 +104,11 @@
                         $planes_detalles = detalles_registro("Products", $plan->getProduct()->getEntityId());
                         $imagen_aseguradora = obtener_imagen_registro("Vendors", $planes_detalles->getFieldValue('Vendor_Name')->getEntityId());
                         ?>
+                        
+                        <?php if ($cotizacion->getFieldValue("Deal_Name") != null) : ?>
+                            <div class="col-2">&nbsp;</div>
+                        <?php endif ?>
+
                         <div class="col-2">
                             <div class="card border-0">
                                 <div class="card-body">
@@ -167,7 +176,7 @@
     setTimeout(function() {
         window.document.title = titulo;
         window.print();
-        window.location = url + "detalles_vida/" + id;
+        window.location = url + "?page=detalles&id=" + id;
     }, time);
 </script>
 

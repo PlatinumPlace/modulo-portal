@@ -10,6 +10,12 @@
 
 <table class="table">
 
+    <thead class="thead-dark">
+        <tr>
+            <th scope="col">Nombre</th>
+        </tr>
+    </thead>
+
     <tbody>
         <?php
         foreach ($documentos_adjuntos as $documento) {
@@ -23,18 +29,23 @@
 </table>
 
 <br>
-<nav aria-label="Page navigation example">
+<nav>
+
     <ul class="pagination justify-content-end">
+
         <li class="page-item">
-            <a class="page-link" href="<?= constant("url") ?>adjuntar/<?= $id ?>/<?= $num_pagina - 1 ?>">Anterior</a>
+            <a class="page-link" href="<?= constant("url") ?>?page=adjuntar&id=<?= $id ?>&num=<?= $num_pagina - 1 ?>">Anterior</a>
         </li>
+
         <li class="page-item">
-            <a class="page-link" href="<?= constant("url") ?>adjuntar/<?= $id ?>/<?= $num_pagina + 1 ?>">Siguente</a>
+            <a class="page-link" href="<?= constant("url") ?>?page=adjuntar&id=<?= $id ?>&num=<?= $num_pagina + 1 ?>">Siguente</a>
         </li>
+
     </ul>
+
 </nav>
 
-<form enctype="multipart/form-data" method="POST" action="<?= constant("url") ?>adjuntar/<?= $id ?>">
+<form enctype="multipart/form-data" method="POST" action="<?= constant("url") ?>?page=adjuntar&id=<?= $id ?>">
 
     <div class="form-group">
         <label>
@@ -48,5 +59,7 @@
 
     <br>
     <button type="submit" class="btn btn-success">Adjuntar</button>
-    | <a href="<?= constant("url") ?>detalles_<?= $tipo . "/" . $id ?>" class="btn btn-info">Cancelar</a>
+    |
+    <a href="<?= constant("url") ?>?page=detalles&id=<?= $id ?>" class="btn btn-info">Cancelar</a>
+
 </form>

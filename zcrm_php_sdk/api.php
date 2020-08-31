@@ -4,8 +4,8 @@ use zcrmsdk\crm\setup\restclient\ZCRMRestClient;
 
 require 'vendor/autoload.php';
 
-class api {
-
+class api
+{
     public $configuration = array(
         "client_id" => "",
         "client_secret" => "",
@@ -13,9 +13,9 @@ class api {
         "redirect_uri" => "index.php",
         "token_persistence_path" => "zcrm_php_sdk"
     );
-
-    public function __construct() {
+    
+    public function __construct()
+    {
         ZCRMRestClient::initialize($this->configuration);
     }
-
 }

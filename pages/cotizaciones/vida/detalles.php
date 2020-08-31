@@ -6,12 +6,12 @@
         <div class="btn-group mr-2">
 
             <?php if ($cotizacion->getFieldValue("Deal_Name") != null) : ?>
-                <a href="<?= constant("url") ?>adjuntar/<?= $id ?>" class="btn btn-sm btn-outline-secondary">Adjuntar</a>
+                <a href="<?= constant("url") ?>?page=adjuntar&id=<?= $id ?>" class="btn btn-sm btn-outline-secondary">Adjuntar</a>
             <?php else : ?>
-                <a href="<?= constant("url") ?>emitir_vida/<?= $id ?>" class="btn btn-sm btn-outline-secondary">Emitir</a>
+                <a href="<?= constant("url") ?>?page=emitir&id=<?= $id ?>" class="btn btn-sm btn-outline-secondary">Emitir</a>
             <?php endif ?>
 
-            <a href="<?= constant("url") ?>descargar_vida/<?= $id ?>" class="btn btn-sm btn-outline-secondary">Descargar</a>
+            <a href="<?= constant("url") ?>?page=descargar&id=<?= $id ?>" class="btn btn-sm btn-outline-secondary">Descargar</a>
         </div>
     </div>
 
@@ -29,25 +29,25 @@
 <div class="form-row">
 
     <div class="form-group col-md-3">
-        <label><strong>Nombre</strong></label>
+        <label><b>Nombre</b></label>
 
         <input readonly type="text" class="form-control-plaintext" value="<?= $cotizacion->getFieldValue('Nombre') ?>">
     </div>
 
     <div class="form-group col-md-3">
-        <label><strong>RNC/Cédula</strong></label>
+        <label><b>RNC/Cédula</b></label>
 
         <input readonly type="text" class="form-control-plaintext" value="<?= $cotizacion->getFieldValue('RNC_C_dula') ?>">
     </div>
 
     <div class="form-group col-md-3">
-        <label><strong>Valor Asegurado</strong></label>
+        <label><b>Valor Asegurado</b></label>
 
         <input readonly type="text" class="form-control-plaintext" value="RD$<?= number_format($cotizacion->getFieldValue('Valor_Asegurado'), 2) ?>">
     </div>
 
     <div class="form-group col-md-3">
-        <label><strong>Plan</strong></label>
+        <label><b>Plan</b></label>
 
         <input readonly type="text" class="form-control-plaintext" value="<?= $cotizacion->getFieldValue('Subject') ?>">
     </div>
@@ -60,29 +60,29 @@
 <div class="form-row">
 
     <div class="form-group col-md-3">
-        <label><strong>Desempleo</strong></label>
+        <label><b>Desempleo</b></label>
 
-        <input readonly type="text" class="form-control-plaintext" value="<?= (!empty($cotizacion->getFieldValue('Desempleo'))) ? "Aplica" : "No Aplica" ; ?>">
+        <input readonly type="text" class="form-control-plaintext" value="<?= (!empty($cotizacion->getFieldValue('Desempleo'))) ? "Aplica" : "No Aplica"; ?>">
     </div>
 
     <div class="form-group col-md-3">
-        <label><strong>Edad Deudor</strong></label>
+        <label><b>Edad Deudor</b></label>
 
-        <input readonly type="text" class="form-control-plaintext" value="<?= calcular_edad($cotizacion->getFieldValue('Fecha_Nacimiento')) ?>">
+        <input readonly type="text" class="form-control-plaintext" value="<?= calcular_edad($cotizacion->getFieldValue('Fecha_Nacimiento')) ?>  Años">
     </div>
 
     <?php if (!empty($cotizacion->getFieldValue('Fecha_Nacimiento_Codeudor'))) : ?>
         <div class="form-group col-md-3">
-            <label><strong>Edad Codeudor</strong></label>
+            <label><b>Edad Codeudor</b></label>
 
-            <input readonly type="text" class="form-control-plaintext" value="<?= calcular_edad($cotizacion->getFieldValue('Fecha_Nacimiento_Codeudor')) ?>">
+            <input readonly type="text" class="form-control-plaintext" value="<?= calcular_edad($cotizacion->getFieldValue('Fecha_Nacimiento_Codeudor')) ?> Años">
         </div>
     <?php endif ?>
 
     <div class="form-group col-md-3">
-        <label><strong>Plazo (Meses)</strong></label>
+        <label><b>Plazo</b></label>
 
-        <input readonly type="text" class="form-control-plaintext" value="<?= $cotizacion->getFieldValue('Plazo') ?>">
+        <input readonly type="text" class="form-control-plaintext" value="<?= $cotizacion->getFieldValue('Plazo') ?> Meses">
     </div>
 </div>
 
@@ -113,7 +113,12 @@
             echo "<td>RD$" . number_format($plan->getNetTotal(), 2) . "</td>";
 
             foreach ($adjuntos as $adjunto) {
-                echo '<td><a href="' . constant("url") . 'detalles_auto/' . $id . '/' . $plan->getDescription() . '/' . $adjunto->getId() . ' ">Descargar</a></td>';
+                if ($plan->getNetTotal() > 0) {
+                    echo '<td><a href="' . constant("url") .
+                        '?page=detalles&id=' . $id .
+                        '&contract_id=' . $plan->getDescription() .
+                        '&attachment_id=' . $adjunto->getId() . ' ">Descargar</a></td>';
+                }
             }
 
             echo "</tr>";

@@ -2,40 +2,37 @@
     <h1 class="h2 text-uppercase">crear cotización auto</h1>
 </div>
 
-<form method="POST" action="<?= constant("url") ?>crear_auto">
+
+<form method="POST" action="<?= constant("url") ?>?page=crear&type=auto">
 
     <h4>Cliente</h4>
     <hr>
     <div class="form-row">
 
         <div class="form-group col-md-6">
-            <label><strong>Nombre</strong></label>
-
+            <label><b>Nombre</b></label>
             <input required type="text" class="form-control" name="nombre">
         </div>
 
         <div class="form-group col-md-6">
-            <label><strong>RNC/Cédula</strong></label>
-
+            <label><b>RNC/Cédula</b></label>
             <input type="text" class="form-control" name="rnc_cedula">
         </div>
 
     </div>
 
     <br>
-    <h4>Vehí­culo</h4>
+    <h4>Vehículo</h4>
     <hr>
     <div class="form-row">
 
         <div class="form-group col-md-4">
-            <label><strong>Marca</strong></label>
-
+            <label><b>Marca</b></label>
             <select class="form-control" name="marca" id="marca" onchange="obtener_modelos(this)" required>
                 <option value="" selected disabled>Selecciona una Marca</option>
                 <?php
-                $marcas = lista_registros("Marcas");
-                sort($marcas);
-                foreach ($marcas as $marca) {
+                sort($lista_marcas);
+                foreach ($lista_marcas as $marca) {
                     echo '<option value="' . $marca->getEntityId() . '">' . strtoupper($marca->getFieldValue("Name")) . '</option>';
                 }
                 ?>
@@ -43,8 +40,7 @@
         </div>
 
         <div class="form-group col-md-4">
-            <label><strong>Modelos</strong></label>
-
+            <label><b>Modelos</b></label>
             <select class="form-control" name="modelo" id="modelo" required>
                 <option value="" selected disabled>Selecciona un Modelo</option>
                 <div id="modelo"></div>
@@ -52,8 +48,7 @@
         </div>
 
         <div class="form-group col-md-4">
-            <label><strong>Año de fabricación</strong></label>
-
+            <label><b>Año de fabricación</b></label>
             <input required type="number" class="form-control" name="fabricacion" maxlength="4">
         </div>
 
@@ -65,23 +60,20 @@
     <div class="form-row">
 
         <div class="form-group col-md-4">
-            <label><strong>Valor Asegurado</strong></label>
-
+            <label><b>Valor Asegurado</b></label>
             <input required type="number" class="form-control" name="valor">
         </div>
 
         <div class="form-group col-md-4">
-            <label><strong>Tipo</strong></label>
-
+            <label><b>Tipo</b></label>
             <select name="tipo_plan" class="form-control">
-                <option value="Full" selected>Full</option>
-                <option value="Ley">Ley</option>
+                <option value="Plan Full" selected>Full</option>
+                <option value="Plan Ley">Ley</option>
             </select>
         </div>
 
         <div class="form-group col-md-4">
-            <label><strong>Facturación</strong></label>
-
+            <label><b>Facturación</b></label>
             <select name="facturacion" class="form-control">
                 <option value="Mensual" selected>Mensual</option>
                 <option value="Anual">Anual</option>
@@ -90,8 +82,9 @@
     </div>
 
     <br>
-    <button type="submit" class="btn btn-primary">Crear</button>
-    | <a href="<?= constant("url") ?>crear" class="btn btn-info">Cancelar</a>
+    <button type="submit" class="btn btn-success">Crear</button>
+    |
+    <a href="<?= constant("url") ?>?page=crear" class="btn btn-info">Cancelar</a>
 
 </form>
 
@@ -99,7 +92,7 @@
     function obtener_modelos(val) {
         var url = "<?= constant("url") ?>";
         $.ajax({
-            url: url + "libraries/lista_modelos.php",
+            url: url + "helpers/lista_modelos.php",
             type: "POST",
             data: {
                 marcas_id: val.value

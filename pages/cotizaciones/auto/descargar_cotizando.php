@@ -284,7 +284,7 @@
 	setTimeout(function() {
 		window.document.title = titulo;
 		window.print();
-		window.location = url + "detalles_auto/" + id;
+		window.location = url + "?page=detalles&id=" + id;
 	}, time);
 </script>
 
