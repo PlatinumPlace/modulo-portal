@@ -1,11 +1,12 @@
 <?php
+
 include dirname(__FILE__, 2) . '/zcrm_php_sdk/vendor/autoload.php';
-include dirname(__FILE__, 2) . '/zcrm_php_sdk/api.php';
+include dirname(__FILE__, 2) . '/config/api.php';
 
 use zcrmsdk\crm\exception\ZCRMException;
 use zcrmsdk\crm\setup\restclient\ZCRMRestClient;
 
-$api = new api;
+$api = new api();
 $api->configuration["token_persistence_path"] = dirname(__FILE__, 2) . "/zcrm_php_sdk";
 ZCRMRestClient::initialize($api->configuration);
 
@@ -25,12 +26,14 @@ do {
             echo '<option value="' . $record->getEntityId() . '">' . strtoupper($record->getFieldValue("Name")) . '</option>';
         }
     } catch (ZCRMException $ex) {
-        // echo $ex->getMessage();
-        // echo "<br>";
-        // echo $ex->getExceptionCode();
-        // echo "<br>";
-        // echo $ex->getFile();
-        // echo "<br>";
+        /*
+          echo $ex->getMessage();
+          echo "<br>";
+          echo $ex->getExceptionCode();
+          echo "<br>";
+          echo $ex->getFile();
+          echo "<br>";
+         */
 
         $num_pag = 0;
     }
