@@ -58,7 +58,7 @@ do {
         <div class="card-body">
             <h5 class="card-title"><?= $emisiones ?></h5>
 
-            <a href="<?= constant("url") ?>emisiones/lista/emisiones" class="stretched-link"></a>
+            <a href="<?= constant("url") ?>emisiones/lista?filtro=emisiones" class="stretched-link"></a>
         </div>
     </div>
 
@@ -68,7 +68,7 @@ do {
         <div class="card-body">
             <h5 class="card-title"><?= $vencimientos ?></h5>
 
-            <a href="<?= constant("url") ?>emisiones/lista/vencimientos" class="stretched-link"></a>
+            <a href="<?= constant("url") ?>emisiones/lista?filtro=vencimientos" class="stretched-link"></a>
         </div>
     </div>
 

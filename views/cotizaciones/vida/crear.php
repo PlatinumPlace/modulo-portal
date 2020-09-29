@@ -1,7 +1,6 @@
 <?php
 if ($_POST) {
     $trato["Stage"] = "Cotizando";
-    $trato["Closing_Date"] = date("Y-m-d", strtotime(date("Y-m-d") . "+ 10 days"));
     $trato["Fecha"] = date("Y-m-d");
     $trato["Nombre"] = $_POST["nombre"];
     $trato["Contact_Name"] = $_SESSION["usuario"]['id'];
@@ -21,62 +20,78 @@ if ($_POST) {
     foreach ($contratos as $contrato) {
         $prima = 0;
 
-        $criteria = "Vendor_Name:equals:" . $contrato->getFieldValue('Aseguradora')->getEntityId();
-        $planes = listaPorCriterio("Products", $criteria);
+        $criterio = "Vendor_Name:equals:" . $contrato->getFieldValue('Aseguradora')->getEntityId();
+        $planes = listaPorCriterio("Products", $criterio);
         foreach ($planes as $plan) {
             $plan_id = $plan->getEntityId();
         }
 
-        $criterio = "Contrato:equals:" . $contrato->getEntityId();
-        $tasas = listaPorCriterio("Tasas", $criterio);
-        foreach ($tasas as $tasa) {
-            switch ($tasa->getFieldValue('Tipo')) {
-                case 'Deudor':
-                    $tasa_deudor = $tasa->getFieldValue('Valor') / 100;
-                    break;
+        if (
+            $_POST["suma"] < $contrato->getFieldValue('Suma_Asegurada_Max')
+            and
+            $_POST["edad_deudor"] < $contrato->getFieldValue('Edad_Max')
+            and
+            $_POST["Plazo"] < $contrato->getFieldValue('Plazo_Max')
+            and
+            $_POST["edad_deudor"] > $contrato->getFieldValue('Edad_Min')
+        ) {
+            $criterio = "Contrato:equals:" . $contrato->getEntityId();
+            $tasas = listaPorCriterio("Tasas", $criterio);
+            foreach ($tasas as $tasa) {
+                switch ($tasa->getFieldValue('Tipo')) {
+                    case 'Deudor':
+                        $tasa_deudor = $tasa->getFieldValue('Valor') / 100;
+                        break;
 
-                case 'Codeudor':
-                    $tasa_codeudor = $tasa->getFieldValue('Valor') / 100;
-                    break;
+                    case 'Codeudor':
+                        if (
+                            !empty($_POST["edad_codeudor"])
+                            and
+                            $_POST["edad_codeudor"] < $contrato->getFieldValue('Edad_Max')
+                            and
+                            $_POST["edad_codeudor"] > $contrato->getFieldValue('Edad_Min')
+                        ) {
+                            $tasa_codeudor = $tasa->getFieldValue('Valor') / 100;
+                        }
+                        break;
 
+                    case 'Vida':
+                        $tasa_vida = $tasa->getFieldValue('Valor') / 100;
+                        break;
+
+                    case 'Desempleo':
+                        $tasa_desempleo = $tasa->getFieldValue('Valor');
+                        break;
+                }
+            }
+
+            switch ($_POST["tipo_plan"]) {
                 case 'Vida':
-                    $tasa_vida = $tasa->getFieldValue('Valor') / 100;
+                    $prima = ($_POST["suma"] / 1000) * $tasa_deudor;
+
+                    if (!empty($_POST["edad_codeudor"])) {
+                        $prima += ($_POST["suma"] / 1000) * ($tasa_codeudor - $tasa_deudor);
+                    }
                     break;
 
-                case 'Desempleo':
-                    $tasa_desempleo = $tasa->getFieldValue('Valor');
+                case 'Vida/Desempleo':
+                    $prima = ($_POST["suma"] / 1000) * $tasa_vida;
+                    $prima += ($_POST["cuota"] / 1000) * $tasa_desempleo;
                     break;
             }
         }
 
-        switch ($_POST["tipo_plan"]) {
-            case 'Vida':
-                $prima = ($_POST["suma"] / 1000) * $tasa_deudor;
-
-                if (!empty($_POST["edad_codeudor"])) {
-                    $prima += ($_POST["suma"] / 1000) * ($tasa_codeudor - $tasa_deudor);
-                }
-                break;
-
-            case 'Vida/Desempleo':
-                $prima = ($_POST["suma"] / 1000) * $tasa_vida;
-                $prima += ($_POST["cuota"] / 1000) * $tasa_desempleo;
-                break;
-        }
-
-
-        $cotizacion["Subject"] = "Plan " . $_POST["facturacion"] . " " . $_POST["plan"];
+        $cotizacion["Subject"] = "Plan " . $_POST["tipo_plan"];
         $cotizacion["Contrato"] = $contrato->getEntityId();
         $cotizacion["Aseguradora"] = $contrato->getFieldValue('Aseguradora')->getEntityId();
         $cotizacion["Contact_Name"] = $_SESSION["usuario"]['id'];
         $cotizacion["Account_Name"] = $_SESSION["usuario"]['empresa_id'];
         $cotizacion["Deal_Name"] = $trato_id;
-        $cotizacion["Valid_Till"] = date("Y-m-d", strtotime(date("Y-m-d") . "+ 10 days"));
         $cotizacion["Quote_Stage"] = "Negociación";
         crear("Quotes", $cotizacion, $plan_id, $prima);
     }
 
-    header("Location:" . constant("url") . "cotizaciones/detallesVida/$trato_id");
+    header("Location:" . constant("url") . "cotizaciones/detalles?tipo=vida&id=$trato_id");
     exit();
 }
 ?>
@@ -84,7 +99,7 @@ if ($_POST) {
     <h1 class="h2 text-uppercase">crear cotización vida</h1>
 </div>
 
-<form method="POST" class="row" action="<?= constant("url") ?>cotizaciones/crearVida">
+<form method="POST" class="row" action="<?= constant("url") ?>cotizaciones/crear?tipo=vida">
 
     <div class="mx-auto col-10" style="width: 200px;">
 
@@ -149,7 +164,7 @@ if ($_POST) {
         <br>
         <button type="submit" class="btn btn-success">Crear</button>
         |
-        <a href="<?= constant("url") ?>cotizaciones/crearVida" class="btn btn-info">Limpiar</a>
+        <a href="<?= constant("url") ?>cotizaciones/crear?tipo=vida" class="btn btn-info">Limpiar</a>
 
     </div>
 

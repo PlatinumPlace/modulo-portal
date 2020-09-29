@@ -1,16 +1,14 @@
 <?php
-$url = explode("/", $_GET["url"]);
-$id = (isset($url[2])) ? $url[2] : null;
+$id = (isset($_GET["id"])) ? $_GET["id"] : null;
 $trato = detalles("Deals", $id);
 
-if (
-        empty($trato)
-        or
-        date("Y-m-d", strtotime($trato->getFieldValue("Closing_Date"))) < date('Y-m-d')
-        or
-        $trato->getFieldValue("P_liza") == null
-) {
+if (empty($trato)) {
     require_once "views/portal/error.php";
+    exit();
+}
+
+if ($trato->getFieldValue("P_liza") == null) {
+    header("Location:" . constant("url") . "cotizaciones/detalles?tipo=auto&id=$id");
     exit();
 }
 ?>
@@ -19,17 +17,13 @@ if (
 
     <div class="btn-toolbar mb-2 mb-md-0">
         <div class="btn-group mr-2">
-
-            <a href="<?= constant("url") ?>emisiones/adjuntar/<?= $id ?>" 
-               class="btn btn-sm btn-outline-secondary">
+            <a href="<?= constant("url") ?>emisiones/adjuntar?id=<?= $id ?>" class="btn btn-sm btn-outline-secondary">
                 Adjuntar
             </a>
 
-            <a href="<?= constant("url") ?>emisiones/descargarAuto/<?= $id ?>" 
-               class="btn btn-sm btn-outline-secondary">
+            <a href="<?= constant("url") ?>emisiones/descargar?tipo=auto&id=<?= $id ?>" class="btn btn-sm btn-outline-secondary">
                 Descargar
             </a>
-
         </div>
     </div>
 
@@ -42,9 +36,7 @@ if (
             <label class="col-sm-4 col-form-label font-weight-bold">Nombre del cliente</label>
 
             <div class="col-sm-8">
-                <input readonly type="text" 
-                       class="form-control-plaintext" 
-                       value="<?= $trato->getFieldValue('Nombre') ?>">
+                <input readonly type="text" class="form-control-plaintext" value="<?= $trato->getFieldValue('Nombre') ?>">
             </div>
         </div>
 
@@ -52,8 +44,7 @@ if (
             <label class="col-sm-4 col-form-label font-weight-bold">Plan</label>
 
             <div class="col-sm-8">
-                <input readonly type="text" class="form-control-plaintext" 
-                       value="<?= $trato->getFieldValue('Plan') ?>">
+                <input readonly type="text" class="form-control-plaintext" value="<?= $trato->getFieldValue('Plan') ?>">
             </div>
         </div>
 
@@ -61,8 +52,7 @@ if (
             <label class="col-sm-4 col-form-label font-weight-bold">Suma Asegurado</label>
 
             <div class="col-sm-8">
-                <input readonly type="text" class="form-control-plaintext"
-                       value="RD$<?= number_format($trato->getFieldValue('Suma_asegurada'), 2) ?>">
+                <input readonly type="text" class="form-control-plaintext" value="RD$<?= number_format($trato->getFieldValue('Suma_asegurada'), 2) ?>">
             </div>
         </div>
 
@@ -70,8 +60,7 @@ if (
             <label class="col-sm-4 col-form-label font-weight-bold">Aseguradora</label>
 
             <div class="col-sm-8">
-                <input readonly type="text" class="form-control-plaintext" 
-                       value="<?= $trato->getFieldValue('Aseguradora')->getLookupLabel() ?>">
+                <input readonly type="text" class="form-control-plaintext" value="<?= $trato->getFieldValue('Aseguradora')->getLookupLabel() ?>">
             </div>
         </div>
 
@@ -79,8 +68,7 @@ if (
             <label class="col-sm-4 col-form-label font-weight-bold">Prima neta</label>
 
             <div class="col-sm-8">
-                <input readonly type="text" class="form-control-plaintext" 
-                       value="RD$<?= number_format($trato->getFieldValue('Prima_neta'), 2) ?>">
+                <input readonly type="text" class="form-control-plaintext" value="RD$<?= number_format($trato->getFieldValue('Prima_neta'), 2) ?>">
             </div>
         </div>
 
@@ -88,8 +76,7 @@ if (
             <label class="col-sm-4 col-form-label font-weight-bold">ISC</label>
 
             <div class="col-sm-8">
-                <input readonly type="text" class="form-control-plaintext" 
-                       value="RD$<?= number_format($trato->getFieldValue('ISC'), 2) ?>">
+                <input readonly type="text" class="form-control-plaintext" value="RD$<?= number_format($trato->getFieldValue('ISC'), 2) ?>">
             </div>
         </div>
 
@@ -97,8 +84,7 @@ if (
             <label class="col-sm-4 col-form-label font-weight-bold">Prima total</label>
 
             <div class="col-sm-8">
-                <input readonly type="text" class="form-control-plaintext" 
-                       value="RD$<?= number_format($trato->getFieldValue('Prima_total'), 2) ?>">
+                <input readonly type="text" class="form-control-plaintext" value="RD$<?= number_format($trato->getFieldValue('Prima_total'), 2) ?>">
             </div>
         </div>
 
@@ -109,8 +95,7 @@ if (
             <label class="col-sm-4 col-form-label font-weight-bold">Marca</label>
 
             <div class="col-sm-8">
-                <input readonly type="text" class="form-control-plaintext" 
-                       value="<?= $trato->getFieldValue('Marca') ?>">
+                <input readonly type="text" class="form-control-plaintext" value="<?= $trato->getFieldValue('Marca') ?>">
             </div>
         </div>
 
@@ -118,8 +103,7 @@ if (
             <label class="col-sm-4 col-form-label font-weight-bold">Modelo</label>
 
             <div class="col-sm-8">
-                <input readonly type="text" class="form-control-plaintext" 
-                       value="<?= $trato->getFieldValue('Modelo') ?>">
+                <input readonly type="text" class="form-control-plaintext" value="<?= $trato->getFieldValue('Modelo') ?>">
             </div>
         </div>
 
@@ -127,8 +111,7 @@ if (
             <label class="col-sm-4 col-form-label font-weight-bold">Año</label>
 
             <div class="col-sm-8">
-                <input readonly type="text" class="form-control-plaintext" 
-                       value="<?= $trato->getFieldValue('A_o_veh_culo') ?>">
+                <input readonly type="text" class="form-control-plaintext" value="<?= $trato->getFieldValue('A_o_veh_culo') ?>">
             </div>
         </div>
 
@@ -136,8 +119,7 @@ if (
             <label class="col-sm-4 col-form-label font-weight-bold">Tipo</label>
 
             <div class="col-sm-8">
-                <input readonly type="text" class="form-control-plaintext" 
-                       value="<?= $trato->getFieldValue('Tipo_veh_culo') ?>">
+                <input readonly type="text" class="form-control-plaintext" value="<?= $trato->getFieldValue('Tipo_veh_culo') ?>">
             </div>
         </div>
 

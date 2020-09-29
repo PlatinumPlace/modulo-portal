@@ -1,4 +1,4 @@
-Options +FollowSymLinks
-Options -Indexes
 RewriteEngine on
-RewriteRule ^([a-zA-Z0-9/]+)$ index.php?url=$1
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*)$ /it/index.php?path=$1 [NC,L,QSA]

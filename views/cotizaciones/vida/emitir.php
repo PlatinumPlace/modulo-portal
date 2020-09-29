@@ -1,16 +1,14 @@
 <?php
-$url = explode("/", $_GET["url"]);
-$id = (isset($url[2])) ? $url[2] : null;
+$id = (isset($_GET["id"])) ? $_GET["id"] : null;
 $trato = detalles("Deals", $id);
 
-if (
-        empty($trato)
-        or
-        date("Y-m-d", strtotime($trato->getFieldValue("Closing_Date"))) < date('Y-m-d')
-        or
-        $trato->getFieldValue("P_liza") != null
-) {
+if (empty($trato)) {
     require_once "views/portal/error.php";
+    exit();
+}
+
+if ($trato->getFieldValue("P_liza") != null) {
+    header("Location:" . constant("url") . "emisiones/detalles?tipo=vida&id=$id");
     exit();
 }
 
@@ -34,7 +32,7 @@ if ($_POST) {
 
                 $contrato = detalles("Contratos", $cotizacion->getFieldValue('Contrato')->getEntityId());
 
-                //$coberturas_id = $cotizacion->getFieldValue('Coberturas')->getEntityId();
+                $contrato_id = $cotizacion->getFieldValue('Contrato')->getEntityId();
                 $no_poliza = $contrato->getFieldValue('No_P_liza');
                 $comision_nobe = $prima_total * $contrato->getFieldValue('Comisi_n_GrupoNobe') / 100;
                 $comision_aseguradora = $prima_total * $contrato->getFieldValue('Comisi_n_Aseguradora') / 100;
@@ -54,7 +52,7 @@ if ($_POST) {
         $deudor["Date_of_Birth"] = date("Y-m-d", strtotime($_POST["fecha_nacimiento"]));
         $deudor["Email"] = $_POST["correo"];
         $deudor["RNC_C_dula"] = $_POST["rnc_cedula"];
-        $deudor["Tipo"] = "Deudor";
+        $deudor["Title"] = "Deudor";
         $deudor["Reporting_To"] = $_SESSION["usuario"]['id'];
         $deudor["Account_Name"] = $_SESSION["usuario"]['empresa_id'];
         $deudor["Vendor_Name"] = $_POST["aseguradora_id"];
@@ -70,7 +68,7 @@ if ($_POST) {
             $codeudor["Date_of_Birth"] = date("Y-m-d", strtotime($_POST["fecha_nacimiento_codeudor"]));
             $codeudor["Email"] = $_POST["correo_codeudor"];
             $codeudor["RNC_C_dula"] = $_POST["rnc_cedula_codeudor"];
-            $codeudor["Tipo"] = "Codeudor";
+            $codeudor["Title"] = "Codeudor";
             $codeudor["Reporting_To"] = $deudor_id;
             $codeudor["Account_Name"] = $_SESSION["usuario"]['empresa_id'];
             $codeudor["Vendor_Name"] = $_POST["aseguradora_id"];
@@ -81,6 +79,7 @@ if ($_POST) {
         $poliza["Name"] = $no_poliza;
         $poliza["Estado"] = true;
         $poliza["Informar_a"] = $deudor_id;
+        $poliza["Codeudor"] = $codeudor_id;
         $poliza["Plan"] = $trato->getFieldValue('Plan');
         $poliza["Aseguradora"] = $_POST["aseguradora_id"];
         $poliza["Prima"] = $prima_total;
@@ -102,7 +101,7 @@ if ($_POST) {
         $cambios["ISC"] = $isc;
         $cambios["Prima_total"] = $prima_total;
         $cambios["Aseguradora"] = $_POST["aseguradora_id"];
-        //$cambios["Coberturas"] = $coberturas_id;
+        $cambios["Contrato"] = $contrato_id;
         $cambios["Comisi_n_socio"] = round($comision_socio, 2);
         $cambios["Amount"] = round($comision_nobe, 2);
         $cambios["Comisi_n_aseguradora"] = round($comision_aseguradora, 2);
@@ -115,7 +114,7 @@ if ($_POST) {
         adjuntar("Deals", $id, "$ruta/$name");
         unlink("$ruta/$name");
 
-        header("Location:" . constant("url") . "emisiones/detallesVida/$id");
+        header("Location:" . constant("url") . "emisiones/detalles?tipo=vida&id=$id");
         exit();
     }
 }
@@ -130,8 +129,7 @@ if ($_POST) {
     </div>
 <?php endif ?>
 
-<form enctype="multipart/form-data" class="row" method="POST" 
-      action="<?= constant("url") ?>cotizaciones/emitirVida/<?= $id ?>">
+<form enctype="multipart/form-data" class="row" method="POST" action="<?= constant("url") ?>cotizaciones/emitir?tipo=vida&id=<?= $id ?>">
 
     <div class="mx-auto col-10" style="width: 200px;">
 
@@ -319,7 +317,7 @@ if ($_POST) {
         <br>
         <button type="submit" class="btn btn-success">Emitir</button>
         |
-        <a href="<?= constant("url") ?>cotizaciones/emitirVida/<?= $id ?>" class="btn btn-info">Cancelar</a>
+        <a href="<?= constant("url") ?>cotizaciones/detalles?tipo=vida&id=<?= $id ?>" class="btn btn-info">Cancelar</a>
 
     </div>
 </form>

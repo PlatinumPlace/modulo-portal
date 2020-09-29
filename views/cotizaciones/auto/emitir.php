@@ -1,16 +1,14 @@
 <?php
-$url = explode("/", $_GET["url"]);
-$id = (isset($url[2])) ? $url[2] : null;
+$id = (isset($_GET["id"])) ? $_GET["id"] : null;
 $trato = detalles("Deals", $id);
 
-if (
-        empty($trato)
-        or
-        date("Y-m-d", strtotime($trato->getFieldValue("Closing_Date"))) < date('Y-m-d')
-        or
-        $trato->getFieldValue("P_liza") != null
-) {
+if (empty($trato)) {
     require_once "views/portal/error.php";
+    exit();
+}
+
+if ($trato->getFieldValue("P_liza") != null) {
+    header("Location:" . constant("url") . "emisiones/adjunar?id=$id");
     exit();
 }
 
@@ -34,7 +32,7 @@ if ($_POST) {
 
                 $contrato = detalles("Contratos", $cotizacion->getFieldValue('Contrato')->getEntityId());
 
-                $coberturas_id = $cotizacion->getFieldValue('Coberturas')->getEntityId();
+                $contrato_id = $cotizacion->getFieldValue('Contrato')->getEntityId();
                 $no_poliza = $contrato->getFieldValue('No_P_liza');
                 $comision_nobe = $prima_total * $contrato->getFieldValue('Comisi_n_GrupoNobe') / 100;
                 $comision_aseguradora = $prima_total * $contrato->getFieldValue('Comisi_n_Aseguradora') / 100;
@@ -54,7 +52,7 @@ if ($_POST) {
         $cliente["Date_of_Birth"] = date("Y-m-d", strtotime($_POST["fecha_nacimiento"]));
         $cliente["Email"] = $_POST["correo"];
         $cliente["RNC_C_dula"] = $_POST["rnc_cedula"];
-        $cliente["Tipo"] = "Deudor";
+        $cliente["Title"] = "Deudor";
         $cliente["Reporting_To"] = $_SESSION["usuario"]['id'];
         $cliente["Account_Name"] = $_SESSION["usuario"]['empresa_id'];
         $cliente["Vendor_Name"] = $_POST["aseguradora_id"];
@@ -97,7 +95,7 @@ if ($_POST) {
         $cambios["ISC"] = $isc;
         $cambios["Prima_total"] = $prima_total;
         $cambios["Aseguradora"] = $_POST["aseguradora_id"];
-        $cambios["Coberturas"] = $coberturas_id;
+        $cambios["Contrato"] = $contrato_id;
         $cambios["Comisi_n_socio"] = round($comision_socio, 2);
         $cambios["Amount"] = round($comision_nobe, 2);
         $cambios["Comisi_n_aseguradora"] = round($comision_aseguradora, 2);
@@ -110,7 +108,7 @@ if ($_POST) {
         adjuntar("Deals", $id, "$ruta/$name");
         unlink("$ruta/$name");
 
-        header("Location:" . constant("url") . "emisiones/detallesAuto/$id");
+        header("Location:" . constant("url") . "emisiones/detalles?tipo=auto&id=$id");
         exit();
     }
 }
@@ -125,8 +123,7 @@ if ($_POST) {
     </div>
 <?php endif ?>
 
-<form enctype="multipart/form-data" class="row" method="POST" 
-      action="<?= constant("url") ?>cotizaciones/emitirAuto/<?= $id ?>">
+<form enctype="multipart/form-data" class="row" method="POST" action="<?= constant("url") ?>cotizaciones/emitir?tipo=auto&id=<?= $id ?>">
 
     <div class="mx-auto col-10" style="width: 200px;">
 
@@ -286,7 +283,7 @@ if ($_POST) {
         <br>
         <button type="submit" class="btn btn-success">Emitir</button>
         |
-        <a href="<?= constant("url") ?>cotizaciones/detallesAuto/<?= $id ?>" class="btn btn-info">Cancelar</a>
+        <a href="<?= constant("url") ?>cotizaciones/detalles?tipo=auto&id=<?= $id ?>" class="btn btn-info">Cancelar</a>
 
     </div>
 </form>

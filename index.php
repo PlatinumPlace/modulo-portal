@@ -8,17 +8,18 @@ include 'controllers/cotizaciones.php';
 include 'controllers/emisiones.php';
 
 session_start();
-define("url", "http://localhost/portal/");
-$api = new api();
-$portal = new portal();
+define("url", "http://localhost/it/");
+
+$api = new api;
+$portal = new portal;
 
 if (!isset($_SESSION["usuario"])) {
     $portal->ingresar();
     exit();
 }
 
-if (!empty($_GET["url"])) {
-    $url = explode("/", $_GET["url"]);
+if (!empty($_GET["path"])) {
+    $url = explode("/", $_GET["path"]);
 
     if (class_exists($url[0])) {
         $controlador = new $url[0];

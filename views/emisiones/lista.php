@@ -1,7 +1,6 @@
 <?php
-$url = explode("/", $_GET["url"]);
-$num_pag = (isset($url[3])) ? $url[3] : 1;
-$filtro = (isset($url[2])) ? $url[2] : null;
+$num_pag = (isset($_GET["num"])) ? $_GET["num"] : 1;
+$filtro = (isset($_GET["filtro"])) ? $_GET["filtro"] : 1;
 $criteria = "Contact_Name:equals:" . $_SESSION["usuario"]["id"];
 $lista = listaPorCriterio("Deals", $criteria, $num_pag, 200);
 ?>
@@ -39,13 +38,13 @@ $lista = listaPorCriterio("Deals", $criteria, $num_pag, 200);
         <?php
         foreach ($lista as $trato) {
             if (
-                    ($filtro == "emisiones"
+                ($filtro == "emisiones"
                     and
                     $trato->getFieldValue('P_liza') != null
                     and
                     date("Y-m", strtotime($trato->getFieldValue("Fecha"))) == date("Y-m"))
-                    or
-                    ($filtro == "vencimientos"
+                or
+                ($filtro == "vencimientos"
                     and
                     $trato->getFieldValue('P_liza') != null
                     and
@@ -59,7 +58,11 @@ $lista = listaPorCriterio("Deals", $criteria, $num_pag, 200);
                 echo "<td>" . $trato->getFieldValue('Fecha') . "</td>";
                 echo "<td>" . $trato->getFieldValue('Closing_Date') . "</td>";
                 echo "<td>";
-                echo '<a href="' . constant("url") . 'emisiones/detalles' . $trato->getFieldValue('Type') . "/" . $trato->getEntityId() . '" title="Detalles"><i class="fas fa-info-circle"></i></a>';
+                echo '<a href="' . constant("url") . 'emisiones/detalles?tipo=' . strtolower($trato->getFieldValue('Type')) . "&id=" . $trato->getEntityId() . '" title="Detalles"><i class="fas fa-info-circle"></i></a>';
+                echo "&nbsp;";
+                echo '<a href="' . constant("url") . 'emisiones/adjuntar?&id=' . $trato->getEntityId() . '" title="Adjuntar"><i class="fas fa-upload"></i></a>';
+                echo "&nbsp;";
+                echo '<a href="' . constant("url") . 'emisiones/descargar?tipo=' . strtolower($trato->getFieldValue('Type')) . "&id=" . $trato->getEntityId() . '" title="Descargar"><i class="fas fa-download"></i></a>';
                 echo "</td>";
                 echo "</tr>";
             }
@@ -75,11 +78,11 @@ $lista = listaPorCriterio("Deals", $criteria, $num_pag, 200);
     <ul class="pagination justify-content-end">
 
         <li class="page-item">
-            <a class="page-link" href="<?= constant("url") ?>emisiones/lista/<?= $filtro . "/" . ($num_pag - 1) ?>">Anterior</a>
+            <a class="page-link" href="<?= constant("url") ?>emisiones/lista?filtro=<?= $filtro . "&num=" . ($num_pag - 1) ?>">Anterior</a>
         </li>
 
         <li class="page-item">
-            <a class="page-link" href="<?= constant("url") ?>emisiones/lista/<?= $filtro . "/" . ($num_pag + 1) ?>">Siguente</a>
+            <a class="page-link" href="<?= constant("url") ?>emisiones/lista?filtro=<?= $filtro . "&num=" . ($num_pag + 1) ?>">Siguente</a>
         </li>
 
     </ul>

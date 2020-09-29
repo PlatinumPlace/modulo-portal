@@ -1,6 +1,5 @@
 <?php
-$url = explode("/", $_GET["url"]);
-$num_pag = (isset($url[2])) ? $url[2] : 1;
+$num_pag = (isset($_GET["num"])) ? $_GET["num"] : 1;
 
 if ($_POST) {
     $criterio = "((Contact_Name:equals:" . $_SESSION["usuario"]["id"] . ") and (" . $_POST['parametro'] . ":equals:" . $_POST['busqueda'] . "))";
@@ -42,8 +41,8 @@ $lista = listaPorCriterio("Deals", $criterio, $num_pag, $cantidad);
             <th scope="col">Cliente</th>
             <th scope="col">Plan</th>
             <th scope="col">Suma Asegurada</th>
+            <th scope="col">Estado</th>
             <th scope="col">Inicio</th>
-            <th scope="col">Fin</th>
             <th scope="col">Opciones</th>
         </tr>
     </thead>
@@ -56,10 +55,14 @@ $lista = listaPorCriterio("Deals", $criterio, $num_pag, $cantidad);
             echo "<td>" . $trato->getFieldValue('Nombre') . "</td>";
             echo "<td>" . $trato->getFieldValue('Plan') . "</td>";
             echo "<td>RD$" . number_format($trato->getFieldValue('Suma_asegurada'), 2) . "</td>";
+            echo "<td>" . $trato->getFieldValue('Stage') . "</td>";
             echo "<td>" . $trato->getFieldValue('Fecha') . "</td>";
-            echo "<td>" . $trato->getFieldValue('Closing_Date') . "</td>";
             echo "<td>";
-            echo '<a href="' . constant("url") . 'cotizaciones/detalles' . $trato->getFieldValue('Type') . "/" . $trato->getEntityId() . '" title="Detalles"><i class="fas fa-info-circle"></i></a>';
+            echo '<a href="' . constant("url") . 'cotizaciones/detalles?tipo=' . strtolower($trato->getFieldValue('Type')) . "&id=" . $trato->getEntityId() . '" title="Detalles"><i class="fas fa-info-circle"></i></a>';
+            echo "&nbsp;";
+            echo '<a href="' . constant("url") . 'cotizaciones/emitir?tipo=' . strtolower($trato->getFieldValue('Type')) . "&id=" . $trato->getEntityId() . '" title="Emitir"><i class="fas fa-user"></i></a>';
+            echo "&nbsp;";
+            echo '<a href="' . constant("url") . 'cotizaciones/descargar?tipo=' . strtolower($trato->getFieldValue('Type')) . "&id=" . $trato->getEntityId() . '" title="Descargar"><i class="fas fa-download"></i></a>';
             echo "</td>";
             echo "</tr>";
         }
@@ -74,11 +77,11 @@ $lista = listaPorCriterio("Deals", $criterio, $num_pag, $cantidad);
     <ul class="pagination justify-content-end">
 
         <li class="page-item">
-            <a class="page-link" href="<?= constant("url") ?>cotizaciones/buscar/<?= ($num_pag - 1) ?>">Anterior</a>
+            <a class="page-link" href="<?= constant("url") ?>cotizaciones/buscar?num=<?= ($num_pag - 1) ?>">Anterior</a>
         </li>
 
         <li class="page-item">
-            <a class="page-link" href="<?= constant("url") ?>cotizaciones/buscar/<?= ($num_pag + 1) ?>">Siguente</a>
+            <a class="page-link" href="<?= constant("url") ?>cotizaciones/buscar?num=<?= ($num_pag + 1) ?>">Siguente</a>
         </li>
 
     </ul>

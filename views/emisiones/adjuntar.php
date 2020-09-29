@@ -1,17 +1,15 @@
 <?php
-$url = explode("/", $_GET["url"]);
-$id = (isset($url[2])) ? $url[2] : null;
-$num_pag = (isset($url[3])) ? $url[3] : 1;
+$num_pag = (isset($_GET["num"])) ? $_GET["num"] : 1;
+$id = (isset($_GET["id"])) ? $_GET["id"] : null;
 $trato = detalles("Deals", $id);
 
-if (
-        empty($trato)
-        or
-        date("Y-m-d", strtotime($trato->getFieldValue("Closing_Date"))) < date('Y-m-d')
-        or
-        $trato->getFieldValue("P_liza") == null
-) {
+if (empty($trato)) {
     require_once "views/portal/error.php";
+    exit();
+}
+
+if ($trato->getFieldValue("P_liza") == null) {
+    header("Location:" . constant("url") . "cotizaciones/detalles?tipo=auto&id=$id");
     exit();
 }
 
@@ -30,7 +28,7 @@ if ($_FILES) {
         }
     }
 
-    header("Location:" . constant("url") . "emisiones/adjuntar/$id");
+    header("Location:" . constant("url") . "emisiones/adjuntar?id=$id");
     exit();
 }
 ?>
@@ -63,17 +61,17 @@ if ($_FILES) {
     <ul class="pagination justify-content-end">
 
         <li class="page-item">
-            <a class="page-link" href="<?= constant("url") ?>emisiones/adjuntar/<?= $id . "/" . ($num_pag - 1) ?>">Anterior</a>
+            <a class="page-link" href="<?= constant("url") ?>emisiones/adjuntar?id=<?= $id . "&num=" . ($num_pag - 1) ?>">Anterior</a>
         </li>
 
         <li class="page-item">
-            <a class="page-link" href="<?= constant("url") ?>emisiones/adjuntar/<?= $id . "/" . ($num_pag + 1) ?>">Siguente</a>
+            <a class="page-link" href="<?= constant("url") ?>emisiones/adjuntar?id=<?= $id . "&num=" . ($num_pag + 1) ?>">Siguente</a>
         </li>
 
     </ul>
 </nav>
 
-<form enctype="multipart/form-data" method="POST" action="<?= constant("url") ?>emisiones/adjuntar/<?= $id ?>">
+<form enctype="multipart/form-data" method="POST" action="<?= constant("url") ?>emisiones/adjuntar?id=<?= $id ?>">
 
     <div class="form-group">
         <label>
@@ -88,8 +86,7 @@ if ($_FILES) {
     <br>
     <button type="submit" class="btn btn-success">Adjuntar</button>
     |
-    <a href="<?= constant("url") ?>emisiones/detalles<?= $trato->getFieldValue("Type") . "/" . $id ?>" 
-       class="btn btn-info">Cancelar</a>
+    <a href="<?= constant("url") ?>emisiones/detalles?tipo=<?= strtolower($trato->getFieldValue("Type")) . "&id=" . $id ?>" class="btn btn-info">Cancelar</a>
 
 </form>
 

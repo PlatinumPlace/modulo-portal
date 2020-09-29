@@ -4,7 +4,6 @@ if ($_POST) {
     $modelo = detalles("Modelos", $_POST["modelo"]);
 
     $trato["Stage"] = "Cotizando";
-    $trato["Closing_Date"] = date("Y-m-d", strtotime(date("Y-m-d") . "+ 10 days"));
     $trato["Fecha"] = date("Y-m-d");
     $trato["Marca"] = $marca->getFieldValue("Name");
     $trato["Modelo"] = $modelo->getFieldValue("Name");
@@ -34,22 +33,26 @@ if ($_POST) {
         }
 
         if (
-                empty($prima)
-                and
-                !in_array($contrato->getFieldValue('Aseguradora')->getLookupLabel(),
-                        $marca->getFieldValue('Restringido_en'))
-                and
-                !in_array($contrato->getFieldValue('Aseguradora')->getLookupLabel(),
-                        $modelo->getFieldValue('Restringido_en'))
+            empty($prima)
+            and
+            !in_array(
+                $contrato->getFieldValue('Aseguradora')->getLookupLabel(),
+                $marca->getFieldValue('Restringido_en')
+            )
+            and
+            !in_array(
+                $contrato->getFieldValue('Aseguradora')->getLookupLabel(),
+                $modelo->getFieldValue('Restringido_en')
+            )
         ) {
             $criterio = "Contrato:equals:" . $contrato->getEntityId();
 
-            $tasas = listaPorCriterio("Tasas", $criteria);
+            $tasas = listaPorCriterio("Tasas", $criterio);
             foreach ($tasas as $tasa) {
                 if (
-                        in_array($modelo->getFieldValue("Tipo"), $tasa->getFieldValue('Grupo_de_veh_culo'))
-                        and
-                        $tasa->getFieldValue('A_o') == $_POST["fabricacion"]
+                    in_array($modelo->getFieldValue("Tipo"), $tasa->getFieldValue('Grupo_de_veh_culo'))
+                    and
+                    $tasa->getFieldValue('A_o') == $_POST["fabricacion"]
                 ) {
                     $tasa_valor = $tasa->getFieldValue('Valor');
                 }
@@ -58,15 +61,15 @@ if ($_POST) {
             $recargos = listaPorCriterio("Recargos", $criterio);
             foreach ($recargos as $recargo) {
                 if (
-                        $recargo->getFieldValue('Marca')->getEntityId() == $_POST["marca"]
-                        and
-                        (empty($recargo->getFieldValue("Tipo"))
+                    $recargo->getFieldValue('Marca')->getEntityId() == $_POST["marca"]
+                    and
+                    (empty($recargo->getFieldValue("Tipo"))
                         or
                         $recargo->getFieldValue("Tipo") == $modelo->getFieldValue("Tipo")
                         or
                         ($_POST["fabricacion"] > $recargo->getFieldValue('Desde')
-                        and
-                        $_POST["fabricacion"] < $recargo->getFieldValue('Hasta'))
+                            and
+                            $_POST["fabricacion"] < $recargo->getFieldValue('Hasta'))
                         or
                         $_POST["fabricacion"] > $recargo->getFieldValue('Desde')
                         or
@@ -91,24 +94,17 @@ if ($_POST) {
             $prima = $prima / 12;
         }
 
-        $criterio = "Contrato:equals:" . $contrato->getEntityId();
-        $coberturas = listaPorCriterio("Coberturas", $criterio);
-        foreach ($coberturas as $cobertura) {
-            $cotizacion["Coberturas"] = $cobertura->getEntityId();
-        }
-
         $cotizacion["Subject"] = "Plan " . $_POST["facturacion"] . " " . $_POST["plan"];
         $cotizacion["Contrato"] = $contrato->getEntityId();
         $cotizacion["Aseguradora"] = $contrato->getFieldValue('Aseguradora')->getEntityId();
         $cotizacion["Contact_Name"] = $_SESSION["usuario"]['id'];
         $cotizacion["Account_Name"] = $_SESSION["usuario"]['empresa_id'];
         $cotizacion["Deal_Name"] = $trato_id;
-        $cotizacion["Valid_Till"] = date("Y-m-d", strtotime(date("Y-m-d") . "+ 10 days"));
         $cotizacion["Quote_Stage"] = "Negociación";
         crear("Quotes", $cotizacion, $plan_id, $prima);
     }
 
-    header("Location:" . constant("url") . "cotizaciones/detallesAuto/$trato_id");
+    header("Location:" . constant("url") . "cotizaciones/detalles?tipo=auto&id=$trato_id");
     exit();
 }
 ?>
@@ -116,7 +112,7 @@ if ($_POST) {
     <h1 class="h2 text-uppercase">crear cotización auto</h1>
 </div>
 
-<form method="POST" class="row" action="<?= constant("url") ?>cotizaciones/crearAuto">
+<form method="POST" class="row" action="<?= constant("url") ?>cotizaciones/crear?tipo=auto">
 
     <div class="mx-auto col-10" style="width: 200px;">
 
@@ -201,7 +197,7 @@ if ($_POST) {
         <br>
         <button type="submit" class="btn btn-success">Crear</button>
         |
-        <a href="<?= constant("url") ?>cotizaciones/crearAuto" class="btn btn-info">Limpiar</a>
+        <a href="<?= constant("url") ?>cotizaciones/crear?tipo=auto" class="btn btn-info">Limpiar</a>
 
     </div>
 
@@ -219,7 +215,7 @@ if ($_POST) {
             data: {
                 marcas_id: val.value
             },
-            success: function (response) {
+            success: function(response) {
                 document.getElementById("modelo").innerHTML = response;
             }
         });

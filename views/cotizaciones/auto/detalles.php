@@ -1,9 +1,14 @@
 <?php
-$id = (isset($url[2])) ? $url[2] : null;
+$id = (isset($_GET["id"])) ? $_GET["id"] : null;
 $trato = detalles("Deals", $id);
 
 if (empty($trato)) {
     require_once "views/portal/error.php";
+    exit();
+}
+
+if ($trato->getFieldValue("P_liza") != null) {
+    header("Location:" . constant("url") . "emisiones/detalles?tipo=auto&id=$id");
     exit();
 }
 ?>
@@ -12,21 +17,13 @@ if (empty($trato)) {
 
     <div class="btn-toolbar mb-2 mb-md-0">
         <div class="btn-group mr-2">
-            <?php if (date("Y-m-d", strtotime($trato->getFieldValue("Closing_Date"))) > date('Y-m-d')) : ?>
+            <a href="<?= constant("url") ?>cotizaciones/emitir?tipo=auto&id=<?= $id ?>" class="btn btn-sm btn-outline-secondary">
+                Emitir
+            </a>
 
-                <?php if ($trato->getFieldValue("P_liza") == null) : ?>
-                    <a href="<?= constant("url") ?>cotizaciones/emitirAuto/<?= $id ?>" 
-                       class="btn btn-sm btn-outline-secondary">
-                        Emitir
-                    </a>
-                <?php endif ?>
-
-                <a href="<?= constant("url") ?>cotizaciones/descargarAuto/<?= $id ?>"
-                   class="btn btn-sm btn-outline-secondary">
-                    Descargar
-                </a>
-
-            <?php endif ?>
+            <a href="<?= constant("url") ?>cotizaciones/descargar?tipo=auto&id=<?= $id ?>" class="btn btn-sm btn-outline-secondary">
+                Descargar
+            </a>
         </div>
     </div>
 
@@ -125,7 +122,7 @@ if (empty($trato)) {
 
                     $adjuntos = listaAdjuntos("Contratos", $cotizacion->getFieldValue('Contrato')->getEntityId());
                     foreach ($adjuntos as $adjunto) {
-                        echo '<td><a href="' . constant("url") . 'cotizaciones/detallesAuto/' . $id . '/' . $cotizacion->getFieldValue('Contrato')->getEntityId() . '/' . $adjunto->getId() . '" class="btn btn-link">Descargar</a></td>';
+                        echo '<td><a href="' . constant("url") . 'cotizaciones/detalles?tipo=auto&id=' . $id . '&contratoid=' . $cotizacion->getFieldValue('Contrato')->getEntityId() . '&adjuntoid=' . $adjunto->getId() . '" class="btn btn-link">Descargar</a></td>';
                     }
 
                     echo "</tr>";
@@ -136,5 +133,3 @@ if (empty($trato)) {
         </table>
     </div>
 </div>
-
-<br><br>

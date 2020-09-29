@@ -2,4 +2,3 @@
 *.png
 sdk/zcrm_oauthtokens.txt
 sdk/ZCRMClientLibrary.log
-api.php

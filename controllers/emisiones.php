@@ -1,34 +1,39 @@
 <?php
 
-class emisiones {
+class emisiones
+{
 
-    function lista() {
+    function lista()
+    {
         require_once 'views/layout/header.php';
         require_once 'views/emisiones/lista.php';
         require_once 'views/layout/footer.php';
     }
 
-    public function detallesAuto() {
-        require_once 'views/layout/header.php';
-        require_once 'views/emisiones/auto/detalles.php';
-        require_once 'views/layout/footer.php';
+    public function detalles()
+    {
+        if (isset($_GET["tipo"])) {
+            require_once 'views/layout/header.php';
+            require_once 'views/emisiones/' . $_GET["tipo"] . '/detalles.php';
+            require_once 'views/layout/footer.php';
+        } else {
+            require_once "views/portal/error.php";
+            exit();
+        }
     }
 
-    public function descargarAuto() {
-        require_once 'views/emisiones/auto/descargar.php';
+    public function descargar()
+    {
+        if (isset($_GET["tipo"])) {
+            require_once 'views/emisiones/' . $_GET["tipo"] . '/descargar.php';
+        } else {
+            require_once "views/portal/error.php";
+            exit();
+        }
     }
 
-    public function detallesVida() {
-        require_once 'views/layout/header.php';
-        require_once 'views/emisiones/vida/detalles.php';
-        require_once 'views/layout/footer.php';
-    }
-
-    public function descargarVida() {
-        require_once 'views/emisiones/vida/descargar.php';
-    }
-
-    function adjuntar() {
+    function adjuntar()
+    {
         if ($_FILES) {
             require_once 'views/emisiones/adjuntar.php';
         } else {
@@ -37,5 +42,4 @@ class emisiones {
             require_once 'views/layout/footer.php';
         }
     }
-
 }

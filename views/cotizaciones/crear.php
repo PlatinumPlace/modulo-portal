@@ -21,7 +21,7 @@ foreach ($contratos as $contrato) {
         <div class="card col-3">
             <img src="<?= constant("url") ?>public/img/auto.png" class="card-img-top">
 
-            <a class="small text-white  stretched-link" href="<?= constant("url") ?>cotizaciones/crearAuto"></a>
+            <a class="small text-white  stretched-link" href="<?= constant("url") ?>cotizaciones/crear?tipo=auto"></a>
 
             <div class="card-body">
                 <h5 class="card-title text-center">AUTO</h5>
@@ -35,7 +35,7 @@ foreach ($contratos as $contrato) {
         <div class="card col-3">
             <img src="<?= constant("url") ?>public/img/vida.png" class="card-img-top">
 
-            <a class="small text-white  stretched-link" href="<?= constant("url") ?>cotizaciones/crearVida"></a>
+            <a class="small text-white  stretched-link" href="<?= constant("url") ?>cotizaciones/crear?tipo=vida"></a>
 
             <div class="card-body">
                 <h5 class="card-title text-center">VIDA/DESEMPLEO</h5>
@@ -49,7 +49,7 @@ foreach ($contratos as $contrato) {
         <div class="card col-3">
             <img src="<?= constant("url") ?>public/img/incendio.png" class="card-img-top">
 
-            <a class="small text-white  stretched-link" href="<?= constant("url") ?>cotizaciones/crearIncendio"></a>
+            <a class="small text-white  stretched-link" href="<?= constant("url") ?>cotizaciones/crear?tipo=incendio"></a>
 
             <div class="card-body">
                 <h5 class="card-title text-center">INCENDIO</h5>
