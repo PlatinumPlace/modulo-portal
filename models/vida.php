@@ -1,6 +1,6 @@
 <?php
 
-class vida extends tratos
+class vida extends api
 {
     public function crearTrato($plan)
     {

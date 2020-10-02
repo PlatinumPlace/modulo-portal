@@ -3,8 +3,6 @@
 require "zcrm-php-sdk/vendor/autoload.php";
 require 'PhpSpreadsheet/vendor/autoload.php';
 include 'api.php';
-include 'models/usuarios.php';
-include 'models/tratos.php';
 include 'models/vida.php';
 include 'models/auto.php';
 include 'controllers/portal.php';

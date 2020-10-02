@@ -2,15 +2,6 @@
 
 class tratos extends api
 {
-    public function selecionarPlan($contrato)
-    {
-        $criterio = "Vendor_Name:equals:" . $contrato->getFieldValue('Aseguradora')->getEntityId();
-        $planes = $this->searchRecordsByCriteria("Products", $criterio);
-        foreach ($planes as $plan) {
-            return $plan;
-        }
-    }
-
     public function descargarAdjunto()
     {
         $documento = $this->downloadAttachment("Contratos", $_GET["contratoid"], $_GET["adjuntoid"]);

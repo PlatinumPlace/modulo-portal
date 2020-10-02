@@ -1,6 +1,6 @@
 <?php
 
-class auto extends tratos
+class auto extends api
 {
     public function crearTrato($marca, $modelo)
     {
@@ -29,7 +29,7 @@ class auto extends tratos
                 and
                 $tasa->getFieldValue('A_o') == $_POST["fabricacion"]
             ) {
-                return $tasa->getFieldValue('Name');
+                return $tasa->getFieldValue('Name') / 100;
             }
         }
     }
@@ -42,19 +42,24 @@ class auto extends tratos
             if (
                 $recargo->getFieldValue('Marca')->getEntityId() == $_POST["marca"]
                 and
-                (empty($recargo->getFieldValue("Tipo"))
+                (($modelo->getFieldValue("Tipo") == $recargo->getFieldValue("Tipo")
                     or
-                    $recargo->getFieldValue("Tipo") == $modelo->getFieldValue("Tipo")
-                    or
-                    ($_POST["fabricacion"] > $recargo->getFieldValue('Desde')
+                    empty($recargo->getFieldValue("Tipo")))
+                    and
+                    ((empty($recargo->getFieldValue('Desde'))
                         and
-                        $_POST["fabricacion"] < $recargo->getFieldValue('Hasta'))
-                    or
-                    $_POST["fabricacion"] > $recargo->getFieldValue('Desde')
-                    or
-                    $_POST["fabricacion"] < $recargo->getFieldValue('Hasta'))
+                        empty($recargo->getFieldValue('Hasta')))
+                        or
+                        ($_POST["fabricacion"] > $recargo->getFieldValue('Desde')
+                            and
+                            $_POST["fabricacion"] < $recargo->getFieldValue('Hasta'))
+                        or
+                        ($_POST["fabricacion"] > $recargo->getFieldValue('Desde')
+                            or
+                            $_POST["fabricacion"] < $recargo->getFieldValue('Hasta'))))
             ) {
-                return $recargo->getFieldValue('Name');
+                echo $recargo->getFieldValue("Tipo");
+                return $recargo->getFieldValue('Name') / 100;
             }
         }
     }
@@ -79,15 +84,13 @@ class auto extends tratos
                 $tasa = ($tasa + ($tasa * $recargo));
             }
 
-            $prima = $_POST["suma"] * $tasa / 100;
+            $prima = $_POST["suma"] * $tasa;
 
             if (!empty($prima) and $prima < $contrato->getFieldValue('Prima_M_nima')) {
                 $prima = $contrato->getFieldValue('Prima_M_nima');
             }
 
             return $prima;
-        } else {
-            return 0;
         }
     }
 
@@ -100,7 +103,7 @@ class auto extends tratos
         $cotizacion["Account_Name"] = $_SESSION["usuario"]['empresa_id'];
         $cotizacion["Deal_Name"] = $trato_id;
         $cotizacion["Quote_Stage"] = "Negociación";
-        $this->createRecords("Quotes", $cotizacion, $plan_id, $prima / 12);
+        $this->createRecords("Quotes", $cotizacion, $plan_id, $prima);
     }
 
     public function crearCliente()

@@ -9,15 +9,23 @@ if ($_POST) {
     $criterio = "((Corredor:equals:" . $_SESSION["usuario"]['empresa_id'] . ") and (Tipo:equals:Auto))";
     $contratos = $auto->searchRecordsByCriteria("Contratos", $criterio);
     foreach ($contratos as $contrato) {
-        $plan = $auto->selecionarPlan($contrato);
+        $prima = 0;
 
-        if (strpos($_POST["plan"], "ley") === true) {
-            $prima = $plan->getFieldValue('Unit_Price');
-        } else {
+        $criterio = "Vendor_Name:equals:" . $contrato->getFieldValue('Aseguradora')->getEntityId();
+        $planes = $auto->searchRecordsByCriteria("Products", $criterio);
+        foreach ($planes as $plan) {
+            $plan_id = $plan->getEntityId();
+
+            if (strpos($_POST["plan"], "ley") === true) {
+                $prima = $plan->getFieldValue('Unit_Price');
+            }
+        }
+
+        if (empty($prima)) {
             $prima = $auto->calcularPrima($contrato, $marca, $modelo);
         }
 
-        $auto->crearCotizacion($contrato, $trato_id, $plan->getEntityId(), $prima);
+        $auto->crearCotizacion($contrato, $trato_id, $plan_id, $prima / 12);
     }
 
     header("Location:?pagina=detallesAuto&id=$trato_id");

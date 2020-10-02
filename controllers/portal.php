@@ -27,17 +27,17 @@ class portal
     public function inicio()
     {
         require_once 'views/layout/header.php';
-        require_once 'views/tratos/inicio.php';
+        require_once 'views/inicio.php';
         require_once 'views/layout/footer.php';
     }
 
     function buscar()
     {
         if ($_POST) {
-            require_once "views/tratos/buscar.php";
+            require_once "views/buscar.php";
         } else {
             require_once "views/layout/header.php";
-            require_once "views/tratos/buscar.php";
+            require_once "views/buscar.php";
             require_once "views/layout/footer.php";
         }
     }
@@ -45,17 +45,17 @@ class portal
     public function crear()
     {
         require_once "views/layout/header.php";
-        require_once "views/tratos/crear.php";
+        require_once "views/crear.php";
         require_once "views/layout/footer.php";
     }
 
     public function adjuntar()
     {
-        if ($_POST) {
-            require_once "views/tratos/adjuntar.php";
+        if ($_FILES) {
+            require_once "views/adjuntar.php";
         } else {
             require_once "views/layout/header.php";
-            require_once "views/tratos/adjuntar.php";
+            require_once "views/adjuntar.php";
             require_once "views/layout/footer.php";
         }
     }
@@ -63,10 +63,10 @@ class portal
     public function reportes()
     {
         if ($_POST) {
-            require_once "views/tratos/reportes.php";
+            require_once "views/reportes.php";
         } else {
             require_once "views/layout/header.php";
-            require_once "views/tratos/reportes.php";
+            require_once "views/reportes.php";
             require_once "views/layout/footer.php";
         }
     }
@@ -85,8 +85,19 @@ class portal
     public function detallesAuto()
     {
         if (isset($_GET["contratoid"]) and isset($_GET["adjuntoid"])) {
-            $auto = new auto;
-            $auto->descargarAdjunto();
+            $api = new api;
+            $documento = $api->downloadAttachment("Contratos", $_GET["contratoid"], $_GET["adjuntoid"]);
+            $fileName = basename($documento);
+            header('Content-Description: File Transfer');
+            header('Content-Type: application/octet-stream');
+            header('Content-Disposition: attachment; filename="' . $fileName . '"');
+            header('Expires: 0');
+            header('Cache-Control: must-revalidate');
+            header('Pragma: ');
+            header('Content-Length: ' . filesize($documento));
+            readfile($documento);
+            unlink($documento);
+            exit();
         }
 
         require_once "views/layout/header.php";
@@ -129,8 +140,19 @@ class portal
     public function detallesVida()
     {
         if (isset($_GET["contratoid"]) and isset($_GET["adjuntoid"])) {
-            $vida = new vida;
-            $vida->descargarAdjunto();
+            $api = new api;
+            $documento = $api->downloadAttachment("Contratos", $_GET["contratoid"], $_GET["adjuntoid"]);
+            $fileName = basename($documento);
+            header('Content-Description: File Transfer');
+            header('Content-Type: application/octet-stream');
+            header('Content-Disposition: attachment; filename="' . $fileName . '"');
+            header('Expires: 0');
+            header('Cache-Control: must-revalidate');
+            header('Pragma: ');
+            header('Content-Length: ' . filesize($documento));
+            readfile($documento);
+            unlink($documento);
+            exit();
         }
 
         require_once "views/layout/header.php";
