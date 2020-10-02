@@ -72,7 +72,7 @@ if ($_POST) {
             $trato->getEntityId()
         );
 
-        header("Location:?pagina=detallesVida_2&id=$id");
+        header("Location:?pagina=detallesVida&id=$id");
         exit();
     }
 }

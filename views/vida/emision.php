@@ -7,6 +7,15 @@ if (empty($trato)) {
     require_once "views/error.php";
     exit();
 }
+
+if ($trato->getFieldValue("P_liza") == null) {
+    header("Location:?pagina=cotizacionVida&id=$id");
+    exit();
+}
+
+$imagen_aseguradora = $vida->downloadPhoto("Vendors", $trato->getFieldValue('Aseguradora')->getEntityId());
+$cliente = $vida->getRecord("Contacts", $trato->getFieldValue('Cliente')->getEntityId());
+$contrato = $vida->getRecord("Contratos", $trato->getFieldValue('Contrato')->getEntityId());
 ?>
 <!doctype html>
 <html lang="en">
@@ -20,7 +29,7 @@ if (empty($trato)) {
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js" crossorigin="anonymous"></script>
 
-    <title>Cotizacion</title>
+    <title>Resumen</title>
 
     <link rel="icon" type="image/png" href="public/img/logo.png">
 </head>
@@ -31,12 +40,12 @@ if (empty($trato)) {
         <div class="row">
 
             <div class="col-2">
-                <img src="public/img/logo.png" width="100" height="100">
+                <img height="60" width="150" alt="50" src="<?= $imagen_aseguradora ?>">
             </div>
 
             <div class="col-8">
                 <h4 class="text-uppercase text-center">
-                    cotización <br> plan <?= $trato->getFieldValue('Plan') ?>
+                    certificado <br> plan <?= $trato->getFieldValue('Deal_Name') ?>
                 </h4>
             </div>
 
@@ -64,7 +73,15 @@ if (empty($trato)) {
                     </div>
 
                     <div class="col-8">
-                        <?= $trato->getFieldValue('Deal_Name') ?>
+                        <?php
+                        echo $cliente->getFieldValue('First_Name') . " " . $cliente->getFieldValue('Last_Name');
+                        echo "<br>";
+                        echo $cliente->getFieldValue('RNC_C_dula');
+                        echo "<br>";
+                        echo $cliente->getFieldValue('Email');
+                        echo "<br>";
+                        echo $cliente->getFieldValue('Mailing_Street');
+                        ?>
                     </div>
 
                 </div>
@@ -74,13 +91,19 @@ if (empty($trato)) {
                 <div class="row">
 
                     <div class="col-4">
-                        <b>Tel. Residencia:</b> <br>
-                        <b>Tel. Celular:</b> <br>
+                        <b>Tel. Residencia:</b><br>
+                        <b>Tel. Celular:</b><br>
                         <b>Tel. Trabajo:</b>
                     </div>
 
                     <div class="col-8">
-                        &nbsp;
+                        <?php
+                        echo $cliente->getFieldValue('Phone');
+                        echo "<br>";
+                        echo $cliente->getFieldValue('Home_Phone');
+                        echo "<br>";
+                        echo $cliente->getFieldValue('Other_Phone');
+                        ?>
                     </div>
 
                 </div>
@@ -145,40 +168,30 @@ if (empty($trato)) {
                     </div>
 
                     <?php
-                    $criteria = "Deal_Name:equals:" . $trato->getEntityId();
-                    $cotizaciones = $vida->searchRecordsByCriteria("Quotes", $criteria);
-                    foreach ($cotizaciones as $cotizacion) {
-                        if ($cotizacion->getFieldValue('Grand_Total') > 0) {
-                            echo '<div class="col-2">';
-                            echo '<div class="card border-0">';
+                    echo '<div class="col-2">';
+                    echo '<div class="card border-0">';
 
-                            $imagen =  $vida->downloadPhoto("Vendors", $cotizacion->getFieldValue('Aseguradora')->getEntityId());
-                            echo '<img src="' . $imagen . '" height="43" width="90" class="card-img-top">';
+                    echo '<img src="public/img/espacio.png" height="43" width="90" class="card-img-top">';
 
-                            echo '<div class="card-body small">';
-                            echo '<p>';
+                    echo '<div class="card-body small">';
+                    echo '<p>';
 
-                            echo "<br>";
+                    echo "<br>";
 
-                            if ($trato->getFieldValue('Cuota') != null) {
-                                echo "<br>";
-                            }
-
-                            echo "<br>";
-                            
-                            $planes = $cotizacion->getLineItems();
-                            foreach ($planes as $plan) {
-                                echo "RD$" . number_format($plan->getListPrice(), 2) . "<br>";
-                                echo "RD$" . number_format($plan->getTaxAmount(), 2) . "<br>";
-                                echo "RD$" . number_format($plan->getNetTotal(), 2) . "<br>";
-                            }
-
-                            echo '</p>';
-                            echo '</div>';
-                            echo '</div>';
-                            echo '</div>';
-                        }
+                    if ($trato->getFieldValue('Cuota') != null) {
+                        echo "<br>";
                     }
+
+                    echo "<br>";
+
+                    echo "RD$" . number_format($trato->getFieldValue('Prima_neta'), 2) . "<br>";
+                    echo "RD$" . number_format($trato->getFieldValue('ISC'), 2) . "<br>";
+                    echo "RD$" . number_format($trato->getFieldValue('Prima_total'), 2) . "<br>";
+
+                    echo '</p>';
+                    echo '</div>';
+                    echo '</div>';
+                    echo '</div>';
                     ?>
                 </div>
             </div>
@@ -204,19 +217,8 @@ if (empty($trato)) {
 
                 <ul>
                     <?php
-                    $criteria = "Deal_Name:equals:" . $trato->getEntityId();
-                    $cotizaciones = $vida->searchRecordsByCriteria("Quotes", $criteria);
-                    foreach ($cotizaciones as $cotizacion) {
-                        if ($cotizacion->getFieldValue('Grand_Total') > 0) {
-                            $contrato = $vida->getRecord("Contratos", $cotizacion->getFieldValue('Contrato')->getEntityId());
-                            echo "<li><b>" . $cotizacion->getFieldValue('Aseguradora')->getLookupLabel() . ":</b>";
-
-                            foreach ($contrato->getFieldValue('Requisitos_deudor') as $requisito) {
-                                echo $requisito . ",";
-                            }
-
-                            echo "</li>";
-                        }
+                    foreach ($contrato->getFieldValue('Requisitos_deudor') as $requisito) {
+                        echo  "<li>" . $requisito . "</li>";
                     }
                     ?>
                 </ul>
@@ -225,19 +227,12 @@ if (empty($trato)) {
 
                 <ul>
                     <?php
-                    $criteria = "Deal_Name:equals:" . $trato->getEntityId();
-                    $cotizaciones = $vida->searchRecordsByCriteria("Quotes", $criteria);
-                    foreach ($cotizaciones as $cotizacion) {
-                        if ($cotizacion->getFieldValue('Grand_Total') > 0) {
-                            $contrato = $vida->getRecord("Contratos", $cotizacion->getFieldValue('Contrato')->getEntityId());
-                            echo "<li><b>" . $cotizacion->getFieldValue('Aseguradora')->getLookupLabel() . ":</b>";
-
-                            foreach ($contrato->getFieldValue('Requisitos_codeudor') as $requisito) {
-                                echo $requisito . ",";
-                            }
-                            
-                            echo "</li>";
+                    if ($contrato->getFieldValue('Requisitos_codeudor') != null) {
+                        foreach ($contrato->getFieldValue('Requisitos_codeudor') as $requisito) {
+                            echo  "<li>" . $requisito . "</li>";
                         }
+                    } else {
+                        echo "<br>";
                     }
                     ?>
                 </ul>
@@ -289,11 +284,7 @@ if (empty($trato)) {
         </div>
 
         <div class="col-6">
-            <p class="text-center">
-                _______________________________
-                <br>
-                Aseguradora Elegida
-            </p>
+            &nbsp;
         </div>
 
         <div class="col-3">
@@ -311,10 +302,9 @@ if (empty($trato)) {
         var id = "<?= $id ?>";
         setTimeout(function() {
             window.print();
-            window.location = "?pagina=detallesVida_1&id=" + id;
+            window.location = "?pagina=detallesVida&id=" + id;
         }, time);
     </script>
-
 
 </body>
 

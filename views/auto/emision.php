@@ -8,6 +8,11 @@ if (empty($trato)) {
     exit();
 }
 
+if ($trato->getFieldValue("P_liza") == null) {
+    header("Location:?pagina=cotizacionAuto&id=$id");
+    exit();
+}
+
 $imagen_aseguradora = $auto->downloadPhoto("Vendors", $trato->getFieldValue('Aseguradora')->getEntityId());
 $cliente = $auto->getRecord("Contacts", $trato->getFieldValue('Cliente')->getEntityId());
 $bien = $auto->getRecord("Bienes", $trato->getFieldValue('Bien')->getEntityId());
@@ -377,7 +382,7 @@ $coberturas = $auto->getRecord("Contratos", $trato->getFieldValue('Contrato')->g
         var id = "<?= $id ?>";
         setTimeout(function() {
             window.print();
-            window.location = "?pagina=detallesAuto_2&id=" + id;
+            window.location = "?pagina=detallesAuto&id=" + id;
         }, time);
     </script>
 

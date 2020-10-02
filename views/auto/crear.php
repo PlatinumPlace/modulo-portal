@@ -20,7 +20,7 @@ if ($_POST) {
         $auto->crearCotizacion($contrato, $trato_id, $plan->getEntityId(), $prima);
     }
 
-    header("Location:?pagina=detallesAuto_1&id=$trato_id");
+    header("Location:?pagina=detallesAuto&id=$trato_id");
     exit();
 }
 ?>

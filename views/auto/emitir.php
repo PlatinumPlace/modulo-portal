@@ -66,7 +66,7 @@ if ($_POST) {
             $trato->getEntityId()
         );
 
-        header("Location:?pagina=detallesAuto_2&id=$id");
+        header("Location:?pagina=detallesAuto&id=$id");
         exit();
     }
 }

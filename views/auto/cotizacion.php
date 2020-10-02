@@ -7,6 +7,11 @@ if (empty($trato)) {
     require_once "views/error.php";
     exit();
 }
+
+if ($trato->getFieldValue("P_liza") != null) {
+    header("Location:?pagina=emisionAuto&id=$id");
+    exit();
+}
 ?>
 <!doctype html>
 <html lang="en">
@@ -314,7 +319,7 @@ if (empty($trato)) {
         var id = "<?= $id ?>";
         setTimeout(function() {
             window.print();
-            window.location = "?pagina=detallesAuto_1&id=" + id;
+            window.location = "?pagina=detallesAuto&id=" + id;
         }, time);
     </script>
 

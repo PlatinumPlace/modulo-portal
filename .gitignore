@@ -1,4 +1,4 @@
 
 *.png
-sdk/zcrm_oauthtokens.txt
-sdk/ZCRMClientLibrary.log
+zcrm-php-sdk/zcrm_oauthtokens.txt
+zcrm-php-sdk/ZCRMClientLibrary.log

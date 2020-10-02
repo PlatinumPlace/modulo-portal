@@ -14,7 +14,7 @@ if (empty($trato)) {
     <div class="btn-toolbar mb-2 mb-md-0">
         <div class="btn-group mr-2">
             <a href="?pagina=emitirVida&id=<?= $id ?>" class="btn btn-sm btn-outline-secondary">Emitir</a>
-            <a href="?pagina=descargarVida&id=<?= $id ?>" class="btn btn-sm btn-outline-secondary">Descargar</a>
+            <a href="?pagina=cotizacionVida&id=<?= $id ?>" class="btn btn-sm btn-outline-secondary">Descargar</a>
         </div>
     </div>
 
@@ -101,22 +101,28 @@ if (empty($trato)) {
                 $criteria = "Deal_Name:equals:" . $trato->getEntityId();
                 $cotizaciones = $vida->searchRecordsByCriteria("Quotes", $criteria);
                 foreach ($cotizaciones as $cotizacion) {
-                    echo "<tr>";
-                    echo "<td>" . $cotizacion->getFieldValue('Aseguradora')->getLookupLabel() . "</td>";
+                    if (
+                        $trato->getFieldValue("P_liza") == null
+                        or
+                        $cotizacion->getFieldValue('Aseguradora')->getEntityId() == $trato->getFieldValue('Aseguradora')->getEntityId()
+                    ) {
+                        echo "<tr>";
+                        echo "<td>" . $cotizacion->getFieldValue('Aseguradora')->getLookupLabel() . "</td>";
 
-                    $planes = $cotizacion->getLineItems();
-                    foreach ($planes as $plan) {
-                        echo "<td>RD$" . number_format($plan->getListPrice(), 2) . "</td>";
-                        echo "<td>RD$" . number_format($plan->getTaxAmount(), 2) . "</td>";
-                        echo "<td>RD$" . number_format($plan->getNetTotal(), 2) . "</td>";
+                        $planes = $cotizacion->getLineItems();
+                        foreach ($planes as $plan) {
+                            echo "<td>RD$" . number_format($plan->getListPrice(), 2) . "</td>";
+                            echo "<td>RD$" . number_format($plan->getTaxAmount(), 2) . "</td>";
+                            echo "<td>RD$" . number_format($plan->getNetTotal(), 2) . "</td>";
+                        }
+
+                        $adjuntos = $auto->getAttachments("Contratos", $cotizacion->getFieldValue('Contrato')->getEntityId());
+                        foreach ($adjuntos as $adjunto) {
+                            echo '<td><a href="?pagina=detallesAuto&id=' . $id . '&contratoid=' . $cotizacion->getFieldValue('Contrato')->getEntityId() . '&adjuntoid=' . $adjunto->getId() . '" class="btn btn-link">Descargar</a></td>';
+                        }
+
+                        echo "</tr>";
                     }
-
-                    $adjuntos = $vida->getAttachments("Contratos", $cotizacion->getFieldValue('Contrato')->getEntityId());
-                    foreach ($adjuntos as $adjunto) {
-                        echo '<td><a href="?pagina=detallesAuto&id=' . $id . '&contratoid=' . $cotizacion->getFieldValue('Contrato')->getEntityId() . '&adjuntoid=' . $adjunto->getId() . '" class="btn btn-link">Descargar</a></td>';
-                    }
-
-                    echo "</tr>";
                 }
                 ?>
             </tbody>

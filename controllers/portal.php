@@ -82,7 +82,7 @@ class portal
         }
     }
 
-    public function detallesAuto_1()
+    public function detallesAuto()
     {
         if (isset($_GET["contratoid"]) and isset($_GET["adjuntoid"])) {
             $auto = new auto;
@@ -90,30 +90,18 @@ class portal
         }
 
         require_once "views/layout/header.php";
-        require_once "views/auto/detalles_1.php";
+        require_once "views/auto/detalles.php";
         require_once "views/layout/footer.php";
     }
 
-    public function detallesAuto_2()
+    public function cotizacionAuto()
     {
-        if (isset($_GET["contratoid"]) and isset($_GET["adjuntoid"])) {
-            $auto = new auto;
-            $auto->descargarAdjunto();
-        }
-
-        require_once "views/layout/header.php";
-        require_once "views/auto/detalles_2.php";
-        require_once "views/layout/footer.php";
+        require_once "views/auto/cotizacion.php";
     }
 
-    public function descargarAuto_1()
+    public function emisionAuto()
     {
-        require_once "views/auto/descargar_1.php";
-    }
-
-    public function descargarAuto_2()
-    {
-        require_once "views/auto/descargar_2.php";
+        require_once "views/auto/emision.php";
     }
 
     public function emitirAuto()
@@ -138,7 +126,7 @@ class portal
         }
     }
 
-    public function detallesVida_1()
+    public function detallesVida()
     {
         if (isset($_GET["contratoid"]) and isset($_GET["adjuntoid"])) {
             $vida = new vida;
@@ -146,30 +134,18 @@ class portal
         }
 
         require_once "views/layout/header.php";
-        require_once "views/vida/detalles_1.php";
+        require_once "views/vida/detalles.php";
         require_once "views/layout/footer.php";
     }
 
-    public function detallesVida_2()
-    {
-        if (isset($_GET["contratoid"]) and isset($_GET["adjuntoid"])) {
-            $vida = new vida;
-            $vida->descargarAdjunto();
-        }
-
-        require_once "views/layout/header.php";
-        require_once "views/vida/detalles_2.php";
-        require_once "views/layout/footer.php";
-    }
-
-    public function descargarVida_1()
+    public function cotizacionVida()
     {
         require_once "views/vida/descargar_1.php";
     }
 
-    public function descargarVida_2()
+    public function emisionVida()
     {
-        require_once "views/vida/descargar_2.php";
+        require_once "views/vida/emision.php";
     }
 
     public function emitirVida()

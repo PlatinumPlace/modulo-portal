@@ -92,12 +92,6 @@ if ($_POST) {
                     and
                     date("Y-m", strtotime($trato->getFieldValue("Closing_Date"))) == date("Y-m"))
             ) {
-                if ($trato->getFieldValue("P_liza") == null) {
-                    $tipo = "_1";
-                } else {
-                    $tipo = "_2";
-                }
-
                 echo "<tr>";
                 echo "<td>" . $trato->getFieldValue('No') . "</td>";
                 echo "<td>" . $trato->getFieldValue('Deal_Name') . "</td>";
@@ -106,17 +100,11 @@ if ($_POST) {
                 echo "<td>" . $trato->getFieldValue('Stage') . "</td>";
                 echo "<td>" . $trato->getFieldValue('Fecha') . "</td>";
                 echo "<td>";
-                echo '<a href="?pagina=detalles' . $trato->getFieldValue('Type') . $tipo . '&id=' . $trato->getEntityId() . '" title="Detalles"><i class="fas fa-info-circle"></i></a>';
+                echo '<a href="?pagina=detalles' . $trato->getFieldValue('Type') . '&id=' . $trato->getEntityId() . '" title="Detalles"><i class="fas fa-info-circle"></i></a>';
                 echo "&nbsp;";
-
-                if ($trato->getFieldValue("P_liza") == null) {
-                    echo '<a href="?pagina=emitir' . $trato->getFieldValue('Type')  . '&id=' . $trato->getEntityId() . '" title="Emitir"><i class="fas fa-user"></i></a>';
-                } else {
-                    echo '<a href="?pagina=adjuntar&id=' . $trato->getEntityId() . '" title="Emitir"><i class="fas fa-user"></i></a>';
-                }
-
+                echo '<a href="?pagina=emitir' . $trato->getFieldValue('Type')  . '&id=' . $trato->getEntityId() . '" title="Emitir"><i class="fas fa-user"></i></a>';
                 echo "&nbsp;";
-                echo '<a href="?pagina=descargar' . $trato->getFieldValue('Type')  . $tipo . '&id=' . $trato->getEntityId() . '" title="Descargar"><i class="fas fa-download"></i></a>';
+                echo '<a href="?pagina=cotizacion' . $trato->getFieldValue('Type')  . '&id=' . $trato->getEntityId() . '" title="Descargar"><i class="fas fa-download"></i></a>';
                 echo "</td>";
                 echo "</tr>";
             }
