@@ -1,16 +1,16 @@
 <?php
 
-require "sdk/vendor/autoload.php";
+require "zcrm-php-sdk/vendor/autoload.php";
+require 'PhpSpreadsheet/vendor/autoload.php';
 include 'api.php';
-include 'helpers/libs.php';
+include 'models/usuarios.php';
+include 'models/tratos.php';
+include 'models/vida.php';
+include 'models/auto.php';
 include 'controllers/portal.php';
-include 'controllers/cotizaciones.php';
-include 'controllers/emisiones.php';
 
 session_start();
-define("url", "http://localhost/it/");
 
-$api = new api;
 $portal = new portal;
 
 if (!isset($_SESSION["usuario"])) {
@@ -18,16 +18,9 @@ if (!isset($_SESSION["usuario"])) {
     exit();
 }
 
-if (!empty($_GET["path"])) {
-    $url = explode("/", $_GET["path"]);
-
-    if (class_exists($url[0])) {
-        $controlador = new $url[0];
-        if (method_exists($controlador, $url[1])) {
-            $controlador->{$url[1]}();
-        } else {
-            $portal->error();
-        }
+if (!empty($_GET["pagina"])) {
+    if (method_exists($portal, $_GET["pagina"])) {
+        $portal->{$_GET["pagina"]}();
     } else {
         $portal->error();
     }
