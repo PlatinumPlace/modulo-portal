@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Models;
 
 use zcrmsdk\crm\crud\ZCRMRecord;
@@ -143,5 +144,80 @@ class Zoho
         }
 
         return $details["id"];
+    }
+
+    public function update($module_api_name, $record_id, $registro)
+    {
+        $record = ZCRMRestClient::getInstance()->getRecordInstance($module_api_name, $record_id);
+
+        foreach ($registro as $campo => $valor) {
+            $record->setFieldValue($campo, $valor);
+        }
+
+        $responseIns = $record->update();
+
+        //echo "HTTP Status Code:" . $responseIns->getHttpStatusCode();
+        //echo "<br>";
+        //echo "Status:" . $responseIns->getStatus();
+        //echo "<br>";
+        //echo "Message:" . $responseIns->getMessage();
+        //echo "<br>";
+        //echo "Code:" . $responseIns->getCode();
+        //echo "<br>";
+        //echo "Details:" . json_encode($responseIns->getDetails());
+        //echo "<br>";
+    }
+
+    public function uploadAttachment($module_api_name, $record_id, $path)
+    {
+        $record = ZCRMRestClient::getInstance()->getRecordInstance($module_api_name, $record_id);
+        $responseIns = $record->uploadAttachment($path);
+
+        //echo "HTTP Status Code:" . $responseIns->getHttpStatusCode();
+        //echo "<br>";
+        //echo "Status:" . $responseIns->getStatus();
+        //echo "<br>";
+        //echo "Message:" . $responseIns->getMessage();
+        //echo "<br>";
+        //echo "Code:" . $responseIns->getCode();
+        //echo "<br>";
+        //echo "Details:" . $responseIns->getDetails()['id'];
+        //echo "<br>";
+    }
+
+    public function getAttachments($module_api_name, $record_id, $page, $per_page)
+    {
+        $record = ZCRMRestClient::getInstance()->getRecordInstance($module_api_name, $record_id);
+        $param_map = array("page" => $page, "per_page" => $per_page);
+
+        try {
+            $responseIns = $record->getAttachments($param_map);
+            return $responseIns->getData();
+        } catch (ZCRMException $ex) {
+            //echo $ex->getMessage();
+            //echo "<br>";
+            //echo $ex->getExceptionCode();
+            //echo "<br>";
+            //echo $ex->getFile();
+            //echo "<br>";
+        }
+    }
+
+    public function downloadAttachment($module_api_name, $record_id, $attachment_id, $filePath)
+    {
+        $record = ZCRMRestClient::getInstance()->getRecordInstance($module_api_name, $record_id);
+        $fileResponseIns = $record->downloadAttachment($attachment_id);
+        $fp = fopen($filePath . "/" . $fileResponseIns->getFileName(), "w");
+
+        //echo "HTTP Status Code:" . $fileResponseIns->getHttpStatusCode();
+        //echo "<br>";
+        //echo "File Name:" . $fileResponseIns->getFileName();
+        //echo "<br>";
+
+        $stream = $fileResponseIns->getFileContent();
+        fputs($fp, $stream);
+        fclose($fp);
+
+        return $filePath . "/" . $fileResponseIns->getFileName();
     }
 }

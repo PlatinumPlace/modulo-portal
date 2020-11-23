@@ -1,27 +1,42 @@
 @extends('layouts.portal')
 
-@section('title', 'Cotizar')
+@section('title', 'No. ' . $detalles->getFieldValue('Quote_Number'))
 
 @section('content')
 
     <div class="row justify-content-center">
         <div class="col-lg-10">
             <div class="card mb-4">
-                @if ($tipo == 'vehiculo')
+                @if ($detalles->getFieldValue('Tipo') == 'Vehículo')
                     <div class="card-header">
-                        Formulario para cotizar seguro de vehículos
+                        Formulario para emitir seguro de vehículos
                     </div>
 
                     <div class="card-body">
-                        <form method="POST" action=" {{ url('cotizar/vehiculo') }}">
+                        <form enctype="multipart/form-data" method="POST" action=" {{ url('emitir/vehiculo') }}">
                             @csrf
 
-                            <h5>Cliente (opcional)</h5>
+                            <input type="text" value="{{ $detalles->getEntityId() }}" name="id" hidden>
+                            <input type="text" value="{{ $detalles->getFieldValue('Plan') }}" name="plantipo" hidden>
+                            <input type="text" value="{{ $detalles->getFieldValue('Marca')->getLookupLabel() }}"
+                                name="marca" hidden>
+                            <input type="text" value="{{ $detalles->getFieldValue('Modelo')->getLookupLabel() }}"
+                                name="modelo" hidden>
+                            <input type="text" value="{{ $detalles->getFieldValue('A_o') }}" name="a_o" hidden>
+                            <input type="text" value="{{ $detalles->getFieldValue('Tipo_veh_culo') }}" name="modelotipo"
+                                hidden>
+                            <input type="text" value="{{ $detalles->getFieldValue('Condiciones') }}" name="condiciones"
+                                hidden>
+                            <input type="text" value="{{ $detalles->getFieldValue('Suma_Asegurada') }}" name="suma" hidden>
+                            <input type="text" value="{{ $detalles->getFieldValue('Uso') }}" name="uso" hidden>
+
+                            <h5>Cliente</h5>
                             <hr>
                             <div class="form-group row">
                                 <label class="col-sm-3 col-form-label font-weight-bold">Nombre</label>
                                 <div class="col-sm-9">
-                                    <input required type="text" class="form-control" name="nombre">
+                                    <input required type="text" class="form-control" name="nombre"
+                                        value="{{ $detalles->getFieldValue('Nombre_cliente') }}">
                                 </div>
                             </div>
 
@@ -85,72 +100,84 @@
                             <h5>Vehículo</h5>
                             <hr>
                             <div class="form-group row">
-                                <label class="col-sm-3 col-form-label font-weight-bold">Marca</label>
+                                <label class="col-sm-3 col-form-label font-weight-bold">Chasis</label>
                                 <div class="col-sm-9">
-                                    <select name="marca" class="form-control" id="marca" onchange="modelosAJAX(this)"
-                                        required>
-                                        <option value="" selected disabled>Selecciona una Marca</option>
-                                        @foreach ($marcas as $marca)
-                                            <option value="{{ $marca->getEntityId() }}">
-                                                {{ strtoupper($marca->getFieldValue('Name')) }}
-                                            </option>
+                                    <input required type="text" class="form-control" name="chasis">
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <label class="col-sm-3 col-form-label font-weight-bold">Placa</label>
+                                <div class="col-sm-9">
+                                    <input type="text" class="form-control" name="placa">
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <label class="col-sm-3 col-form-label font-weight-bold">Color</label>
+                                <div class="col-sm-9">
+                                    <input type="text" class="form-control" name="color">
+                                </div>
+                            </div>
+
+                            <br>
+                            <h5>Emitir con</h5>
+                            <hr>
+                            <div class="form-group row">
+                                <label class="col-sm-3 col-form-label font-weight-bold">Aseguradora</label>
+                                <div class="col-sm-9">
+                                    <select name="plan" class="form-control" required>
+                                        @foreach ($planes as $plan)
+                                            @if ($plan->getListPrice() > 0)
+                                                @php
+                                                $plandetalles=
+                                                $api->getRecord("Products",$plan->getProduct()->getEntityId());
+
+                                                $comisionnobe = $plan->getNetTotal() *(
+                                                $plandetalles->getFieldValue('Comisi_n_grupo_nobe') / 100);
+                                                $comisionintermediario =$plan->getNetTotal() *
+                                                ($plandetalles->getFieldValue('Comisi_n_intermediario') / 100);
+                                                $comisionaseguradora = $plan->getNetTotal() *
+                                                ($plandetalles->getFieldValue('Comisi_n_aseguradora') / 100);
+                                                $comisioncorredor = $plan->getNetTotal() *
+                                                ($plandetalles->getFieldValue('Comisi_n_corredor') / 100);
+
+                                                $detalles=
+                                                $plan->getProduct()->getEntityId()
+                                                . ',' .
+                                                round($plan->getListPrice(), 2)
+                                                . ',' .
+                                                round($plan->getTaxAmount(), 2)
+                                                . ',' .
+                                                round($plan->getNetTotal(), 2)
+                                                . ',' .
+                                                $plandetalles->getFieldValue('P_liza')
+                                                . ',' .
+                                                round($comisionnobe, 2)
+                                                . ',' .
+                                                round($comisionintermediario, 2)
+                                                . ',' .
+                                                round($comisionaseguradora, 2)
+                                                . ',' .
+                                                round($comisioncorredor, 2)
+                                                . ',' .
+                                                $plandetalles->getFieldValue('Vendor_Name')->getEntityId()
+                                                ;
+                                                @endphp
+
+                                                <option value="{{ $detalles }}">
+                                                    {{ $plandetalles->getFieldValue('Vendor_Name')->getLookupLabel() }}
+                                                </option>
+                                            @endif
                                         @endforeach
                                     </select>
                                 </div>
                             </div>
 
                             <div class="form-group row">
-                                <label class="col-sm-3 col-form-label font-weight-bold">Modelo</label>
+                                <label class="col-sm-3 col-form-label font-weight-bold">Cotización Firmada</label>
                                 <div class="col-sm-9">
-                                    <select name="modelo" class="form-control" id="modelos" required>
-                                        <option value="" selected disabled>Selecciona un modelo</option>
-                                    </select>
-                                </div>
-                            </div>
-
-                            <div class="form-group row">
-                                <label class="col-sm-3 col-form-label font-weight-bold">Año</label>
-                                <div class="col-sm-9">
-                                    <input type="number" class="form-control" name="a_o" maxlength="4" required>
-                                </div>
-                            </div>
-
-                            <div class="form-group row">
-                                <label class="col-sm-3 col-form-label font-weight-bold">Uso</label>
-                                <div class="col-sm-9">
-                                    <select name="uso" class="form-control">
-                                        <option value="Privado" selected>Privado</option>
-                                        <option value="Publico ">Publico</option>
-                                        <option value="Taxi">Taxi</option>
-                                        <option value="Rentado">Rentado</option>
-                                        <option value="Deportivo">Deportivo</option>
-                                    </select>
-                                </div>
-                            </div>
-
-                            <div class="form-group row">
-                                <label class="col-sm-3 col-form-label font-weight-bold">Condiciones</label>
-                                <div class="col-sm-9">
-                                    <select name="condiciones" class="form-control">
-                                        <option value="Nuevo" selected>Nuevo</option>
-                                        <option value="Usado ">Usado</option>
-                                    </select>
-                                </div>
-                            </div>
-
-                            <div class="form-group row">
-                                <label class="col-sm-3 col-form-label font-weight-bold">Plan</label>
-                                <div class="col-sm-9">
-                                    <select name="plan" class="form-control">
-                                        <option value="Mensual full" selected>Mensual Full</option>
-                                    </select>
-                                </div>
-                            </div>
-
-                            <div class="form-group row">
-                                <label class="col-sm-3 col-form-label font-weight-bold">Suma Asegurada</label>
-                                <div class="col-sm-9">
-                                    <input type="number" class="form-control" name="suma" required>
+                                    <input required type="file" class="form-control-file" name="cotizacion">
                                 </div>
                             </div>
 
@@ -160,26 +187,19 @@
                                 </div>
 
                                 <div class="col-sm-6">
-                                    <button class="btn btn-success btn-block" type="submit">Cotizar</button>
+                                    <button class="btn btn-success btn-block" type="submit">Emitir</button>
                                 </div>
                             </div>
                         </form>
                     </div>
-                @elseif($tipo=="persona")
+                @elseif ($detalles->getFieldValue('Tipo') == 'Persona')
                     <div class="card-header">
-                        Formulario para cotizar seguro de vida/desempleo
+                        Formulario para emitir seguro de vida/desempleo
                     </div>
 
                     <div class="card-body">
-                        <form method="POST" action=" {{ url('cotizar/persona') }}">
+                        <form method="POST" action=" {{ url('emitir') . '/' . $detalles->getEntityId() }}">
                             @csrf
-
-                            <div class="form-group row">
-                                <label class="col-sm-3 col-form-label font-weight-bold">Nombre Cliente</label>
-                                <div class="col-sm-9">
-                                    <input type="text" class="form-control" name="nombre" required>
-                                </div>
-                            </div>
 
                             <div class="form-group row">
                                 <label class="col-sm-3 col-form-label font-weight-bold">Edad del deudor</label>
@@ -214,7 +234,7 @@
                                 <div class="col-sm-9">
                                     <select name="plan" class="form-control">
                                         <option value="Vida" selected>Vida</option>
-                                        <option value="Vida/desempleo">Vida/Desempleo</option>
+                                        <option value="Vida/desempleo">Desempleo</option>
                                     </select>
                                 </div>
                             </div>
@@ -241,30 +261,5 @@
             </div>
         </div>
     </div>
-
-    <script>
-        function modelosAJAX(val) {
-            $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                }
-            });
-
-            $.ajax({
-                url: "{{ url('ajax/modelos') }}",
-                type: "POST",
-                data: {
-                    marcaid: val.value
-                },
-                success: function(response) {
-                    document.getElementById("modelos").innerHTML = response;
-                },
-                error: function(data) {
-                    console.log(data);
-                }
-            });
-        }
-
-    </script>
 
 @endsection

@@ -14,7 +14,7 @@
             <div class="card-header">Cotizaciones Totales</div>
             <div class="card-body">
                 <h5 class="card-title">{{ $total }}</h5>
-                <a href="#" class="stretched-link"> </a>
+                <a href="{{ url('cotizaciones') }}" class="stretched-link"> </a>
             </div>
         </div>
 
@@ -33,6 +33,27 @@
                 <a href="#" class="stretched-link"></a>
             </div>
         </div>
+    </div>
+
+    <h4>Pólizas emitidas este mes</h4>
+    <div class="table-responsive">
+        <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+            <thead>
+                <tr>
+                    <th>Aseguradora</th>
+                    <th>Cantidad</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                @foreach ($aseguradoras as $nombre => $cantidad)
+                    <tr>
+                        <td>{{ $nombre }}</td>
+                        <td>{{ $cantidad }}</td>
+                    </tr>
+                @endforeach
+            </tbody>
+        </table>
     </div>
 
 @endsection

@@ -31,12 +31,10 @@
                     cotización <br>
 
                     @if ($detalles->getFieldValue('Tipo') == 'Vehículo')
-                        seguro vehí­culo de motor <br> Plan Mensual
-                    @elseif ($detalles->getFieldValue('Tipo') == 'Persona')
-                        Plan
+                        seguro vehí­culo de motor <br>
                     @endif
 
-                    {{ $detalles->getFieldValue('Plan') }}
+                    Plan {{ $detalles->getFieldValue('Plan') }}
                 </h4>
             </div>
 

@@ -64,7 +64,8 @@ class Persona extends Zoho
             "Cuota" => $cuota,
             "Plazo" => $plazo,
             "Tipo" => "Persona",
-            "Suma_Asegurada" => $suma
+            "Suma_Asegurada" => $suma,
+            "Nombre_cliente" =>  $request->input("nombre")
         ];
 
         return $this->createRecords("Quotes", $registro, $planes);
@@ -89,7 +90,7 @@ class Persona extends Zoho
                     break;
 
                 case 'Desempleo':
-                    $desempleo = ($tasa->getFieldValue('Valor') / 100);
+                    $desempleo = $tasa->getFieldValue('Valor');
                     break;
             }
         }
