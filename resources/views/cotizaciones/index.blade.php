@@ -10,7 +10,7 @@
         </div>
 
         <div class="card-body">
-            <form class="form-inline" method="POST" action="{{ url('cotizaciones/buscar') }}">
+            <form class="form-inline" method="POST" action="{{ url('cotizaciones') }}">
                 @csrf
 
                 <div class="form-group mb-2">
@@ -18,7 +18,7 @@
                 </div>
 
                 <div class="form-group mx-sm-3 mb-2 col-6">
-                    <input type="text" class="form-control col-9" name="no" required>
+                    <input type="text" class="form-control col-9" name="busqueda" required>
                 </div>
 
                 <button type="submit" class="btn btn-success mb-2">Buscar</button>
@@ -27,6 +27,10 @@
             </form>
         </div>
     </div>
+
+    @if (session()->get('alerta'))
+        <div class="alert alert-danger" role="alert">{{ session()->get('alerta') }}</div>
+    @endif
 
     <div class="card mb-4">
         <div class="card-header">

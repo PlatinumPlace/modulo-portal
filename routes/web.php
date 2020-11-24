@@ -39,12 +39,16 @@ Route::post('ajax/modelos', [CotizacionesController::class, 'modelosAJAX'])->mid
 Route::post('cotizar/vehiculo', [CotizacionesController::class, 'vehiculo'])->middleware('sesion');
 
 //Cotizaciones - Persona
-Route::any('cotizar/persona', [CotizacionesController::class, 'persona'])->middleware('sesion');
+Route::post('cotizar/persona', [CotizacionesController::class, 'persona'])->middleware('sesion');
 
 
 //Polizas
-Route::get('emitir/{id}', [PolizasController::class, 'index'])->middleware('sesion');
+Route::get('polizas/{pagina?}', [PolizasController::class, 'index'])->middleware('sesion');
+Route::post('polizas', [PolizasController::class, 'buscar'])->middleware('sesion');
+Route::get('emitir/{id}', [PolizasController::class, 'emitir'])->middleware('sesion');
 Route::get('poliza/{id}', [PolizasController::class, 'detalles'])->middleware('sesion');
+Route::get('adjunto/{id}', [PolizasController::class, 'adjunto'])->middleware('sesion');
+Route::get('poliza/descargar/{id}', [PolizasController::class, 'descargar'])->middleware('sesion');
 
 //Polizas - Vehiculo
 Route::post('emitir/vehiculo', [PolizasController::class, 'vehiculo'])->middleware('sesion');

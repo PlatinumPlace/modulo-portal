@@ -9,7 +9,7 @@
             <div class="card mb-4">
                 @if ($tipo == 'vehiculo')
                     <div class="card-header">
-                        Formulario para cotizar seguro de vehículos
+                        Formulario para cotizar seguros para vehículos
                     </div>
 
                     <div class="card-body">
@@ -21,28 +21,28 @@
                             <div class="form-group row">
                                 <label class="col-sm-3 col-form-label font-weight-bold">Nombre</label>
                                 <div class="col-sm-9">
-                                    <input required type="text" class="form-control" name="nombre">
+                                    <input type="text" class="form-control" name="nombre">
                                 </div>
                             </div>
 
                             <div class="form-group row">
                                 <label class="col-sm-3 col-form-label font-weight-bold">Apellido</label>
                                 <div class="col-sm-9">
-                                    <input required type="text" class="form-control" name="apellido">
+                                    <input type="text" class="form-control" name="apellido">
                                 </div>
                             </div>
 
                             <div class="form-group row">
                                 <label class="col-sm-3 col-form-label font-weight-bold">RNC/Cédula</label>
                                 <div class="col-sm-9">
-                                    <input required type="text" class="form-control" name="rnc_cedula">
+                                    <input type="text" class="form-control" name="rnc_cedula">
                                 </div>
                             </div>
 
                             <div class="form-group row">
                                 <label class="col-sm-3 col-form-label font-weight-bold">Fecha de Nacimiento</label>
                                 <div class="col-sm-9">
-                                    <input required type="date" class="form-control" name="fecha_nacimiento">
+                                    <input type="date" class="form-control" name="fecha_nacimiento">
                                 </div>
                             </div>
 

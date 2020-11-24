@@ -22,11 +22,11 @@ class CotizacionesController extends Controller
     public function buscar(Request $request)
     {
         $api = new Zoho;
-        $criterio = "((Account_Name:equals:" . session("empresaid") . ") and (Quote_Number:equals:" . $request->input("num") . "))";
+        $criterio = "((Account_Name:equals:" . session("empresaid") . ") and (Quote_Number:equals:" . $request->input("busqueda") . "))";
         if (!$lista = $api->searchRecordsByCriteria("Quotes", $criterio, 1, 1)) {
-            $lista = array();
+            return back()->with("alerta", "No se pudo encontrar el parametro.");
         }
-        return view("cotizaciones.index", ["lista" => $lista, "pag" => 1]);
+        return view("cotizaciones.index", ["lista" => $lista, "pagina" => 1]);
     }
 
     public function cotizar($tipo)
@@ -113,6 +113,15 @@ class CotizacionesController extends Controller
             "Subject" => "Cotización",
             "Account_Name" => session("empresaid"),
             "Contact_Name" => session("id"),
+            "Nombre" => $request->input("nombre"),
+            "Apellido" => $request->input("apellido"),
+            "RNC_C_dula" => $request->input("rnc_cedula"),
+            "Correo_electr_nico" => $request->input("correo"),
+            "Direcci_n" => $request->input("direccion"),
+            "Fecha_de_nacimiento" => $request->input("fecha_nacimiento"),
+            "Tel_Celular" => $request->input("telefono"),
+            "Tel_Residencia" => $request->input("tel_residencia"),
+            "Tel_Trabajo" => $request->input("tel_trabajo"),
             "Plan" => $request->input("plan"),
             "A_o" => $request->input("a_o"),
             "Marca" => $request->input("marca"),
@@ -121,7 +130,6 @@ class CotizacionesController extends Controller
             "Tipo" => "Vehículo",
             "Tipo_veh_culo" => $modelotipo,
             "Suma_Asegurada" =>  $request->input("suma"),
-            "Nombre_cliente" =>  $request->input("nombre"),
             "Condiciones" =>  $request->input("condiciones")
         ];
 

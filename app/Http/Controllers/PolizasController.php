@@ -7,12 +7,32 @@ use Illuminate\Http\Request;
 
 class PolizasController extends Controller
 {
-    public function index($id)
+    public function index($pagina = 1)
+    {
+        $api = new Zoho;
+        $criterio = "Account_Name:equals:" . session("empresaid");
+        if (!$lista = $api->searchRecordsByCriteria("Deals", $criterio, $pagina, 10)) {
+            $lista = array();
+        }
+        return view("polizas.index", ["lista" => $lista, "pagina" => $pagina]);
+    }
+
+    public function buscar(Request $request)
+    {
+        $api = new Zoho;
+        $criterio = "((Account_Name:equals:" . session("empresaid") . ") and (" . $request->input("parametro") . ":equals:" . $request->input("busqueda") . "))";
+        if (!$lista = $api->searchRecordsByCriteria("Deals", $criterio, 1, 200)) {
+            return back()->with("alerta", "No se pudo encontrar el parametro.");
+        }
+        return view("polizas.index", ["lista" => $lista, "pagina" => 1]);
+    }
+
+    public function emitir($id)
     {
         $api = new Zoho;
         $detalles = $api->getRecord("Quotes", $id);
         $planes = $detalles->getLineItems();
-        return view("polizas.index", [
+        return view("polizas.emitir", [
             "detalles" => $detalles,
             "planes" => $planes,
             "api" => $api
@@ -96,5 +116,38 @@ class PolizasController extends Controller
             "detalles" => $detalles,
             "api" => $api
         ]);
+    }
+
+    public function descargar($id)
+    {
+        $api = new Zoho;
+        $detalles = $api->getRecord("Deals", $id);
+        $imagen = $api->downloadPhoto("Vendors", $detalles->getFieldValue('Aseguradora')->getEntityId());
+        $planDetalles = $api->getRecord("Products", $detalles->getFieldValue('Coberturas')->getEntityId());
+
+        return view("polizas.descargar", [
+            "detalles" => $detalles,
+            "api" => $api,
+            "imagen" => $imagen,
+            "planDetalles" => $planDetalles,
+        ]);
+    }
+
+    public function adjunto($id)
+    {
+        $api = new Zoho;
+        $id = explode(",", $id);
+        $planid = $id[0];
+        $adjuntoid = $id[1];
+        $fichero = $api->downloadAttachment("Products", $planid, $adjuntoid, storage_path("app/public"));
+        header('Content-Description: File Transfer');
+        header('Content-Type: application/octet-stream');
+        header('Content-Disposition: attachment; filename="' . basename($fichero) . '"');
+        header('Expires: 0');
+        header('Cache-Control: must-revalidate');
+        header('Pragma: public');
+        header('Content-Length: ' . filesize($fichero));
+        readfile($fichero);
+        unlink($fichero);
     }
 }

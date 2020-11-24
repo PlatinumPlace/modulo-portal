@@ -22,18 +22,17 @@ class HomeController extends Controller
             $pag++;
             foreach ($lista as $cotizacion) {
                $total++;
-               if (
-                  $cotizacion->getFieldValue("Deal_Name") != null
-                  and
-                  date("Y-m", strtotime($cotizacion->getCreatedTime())) == date('Y-m')
-               ) {
-                  $emisiones++;
+               if ($cotizacion->getFieldValue("Deal_Name") != null) {
                   $poliza = $api->getRecord("Deals", $cotizacion->getFieldValue("Deal_Name")->getEntityId());
-                  $aseguradoras[] = $poliza->getFieldValue('Aseguradora')->getLookupLabel();
 
-                  //if (date("Y-m", strtotime($poliza->getFieldValue("Closing_Date"))) == date('Y-m')) {
-                  //$vencimientos++;
-                  //}
+                  if (date("Y-m", strtotime($poliza->getFieldValue("Vigencia_desde"))) == date('Y-m')) {
+                     $emisiones++;
+                     $aseguradoras[] = $poliza->getFieldValue('Aseguradora')->getLookupLabel();
+                  }
+
+                  if (date("Y-m", strtotime($poliza->getFieldValue("Vigencia_hasta"))) == date('Y-m')) {
+                     $vencimientos++;
+                  }
                }
             }
          } else {

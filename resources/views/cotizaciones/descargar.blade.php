@@ -23,7 +23,7 @@
     <div class="container">
         <div class="row">
             <div class="col-2">
-                <img src="{{ asset('img/logo.png') }}" alt="60" width="100" height="100">
+                <img src="{{ asset('img/logo.png') }}" width="100" height="100">
             </div>
 
             <div class="col-8">
@@ -47,7 +47,45 @@
                 &nbsp;
             </div>
 
+            <div class="col-12 d-flex justify-content-center bg-primary text-white">
+                <h6>CLIENTE</h6>
+            </div>
 
+            <div class="col-6 border">
+                <div class="row">
+                    <div class="col-4">
+                        <b>Nombre:</b><br>
+                        <b>RNC/Cédula:</b><br>
+                        <b>Email:</b><br>
+                        <b>Dirección:</b>
+                    </div>
+
+                    <div class="col-8">
+                        {{ $detalles->getFieldValue('Nombre')." ".$detalles->getFieldValue('Apellido') }} <br>
+                        {{ $detalles->getFieldValue('RNC_C_dula') }} <br>
+                        {{ $detalles->getFieldValue('Correo_electr_nico') }} <br>
+                        {{ $detalles->getFieldValue('Direcci_n') }}
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-6 border">
+                <div class="row">
+
+                    <div class="col-4">
+                        <b>Tel. Residencia:</b><br>
+                        <b>Tel. Celular:</b><br>
+                        <b>Tel. Trabajo:</b>
+                    </div>
+
+                    <div class="col-8">
+                        {{ $detalles->getFieldValue('Tel_Celular') }} <br>
+                        {{ $detalles->getFieldValue('Tel_Residencia') }} <br>
+                        {{ $detalles->getFieldValue('Tel_Trabajo') }}
+                    </div>
+
+                </div>
+            </div>
 
             @if ($detalles->getFieldValue('Tipo') == 'Vehículo')
                 <div class="col-12 d-flex justify-content-center bg-primary text-white">
@@ -81,13 +119,9 @@
                         <div class="col-8">
                             {{ $detalles->getFieldValue('Tipo_veh_culo') }} <br>
                             {{ $detalles->getFieldValue('Uso') }} <br>
-                            RD${{ number_format($detalles->getFieldValue('Suma_Asegurada'), 2) }}
+                            RD${{ number_format($detalles->getFieldValue('Suma_asegurada'), 2) }}
                         </div>
                     </div>
-                </div>
-
-                <div class="col-12">
-                    &nbsp;
                 </div>
 
                 <div class="col-12 d-flex justify-content-center bg-primary text-white">
@@ -160,11 +194,11 @@
 
                                         <div class="card-body small">
                                             @php
-                                            $riesgo_compresivo = $detalles->getFieldValue('Suma_Asegurada') *
+                                            $riesgo_compresivo = $detalles->getFieldValue('Suma_asegurada') *
                                             ($planDetalles->getFieldValue('Riesgos_comprensivos') / 100);
-                                            $colision = $detalles->getFieldValue('Suma_Asegurada') *
+                                            $colision = $detalles->getFieldValue('Suma_asegurada') *
                                             ($planDetalles->getFieldValue('Colisi_n_y_vuelco') / 100);
-                                            $incendio = $detalles->getFieldValue('Suma_Asegurada') *
+                                            $incendio = $detalles->getFieldValue('Suma_asegurada') *
                                             ($planDetalles->getFieldValue('Incendio_y_robo') / 100);
                                             @endphp
 
