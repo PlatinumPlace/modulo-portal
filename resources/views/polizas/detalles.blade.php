@@ -205,12 +205,23 @@
                             @if ($detalles->getFieldValue('Coberturas'))
                                 @php
                                 $adjuntos =
-                                $api->getAttachments("Products",$detalles->getFieldValue('Coberturas')->getEntityId(),1,1);
+                                $api->getAttachments("Products",$detalles->getFieldValue('Coberturas')->getEntityId(),1,200);
                                 @endphp
 
                                 @foreach ($adjuntos as $adjunto)
-                                    <a
-                                        href="{{ url('adjunto') . '/' . $detalles->getFieldValue('Coberturas')->getEntityId() . ',' . $adjunto->getId() }}">Descargar</a>
+
+                                    @if ($adjunto->getFileName() == 'vida.pdf' and $detalles->getFieldValue('Plan') == 'Vida')
+                                        <a
+                                            href="{{ url('adjunto') . '/' . $detalles->getFieldValue('Coberturas')->getEntityId() . ',' . $adjunto->getId() }}">Descargar</a>
+                                    @elseif($adjunto->getFileName() =="desempleo.pdf" and
+                                        $detalles->getFieldValue('Plan')=="Vida/desempleo")
+                                        <a
+                                            href="{{ url('adjunto') . '/' . $detalles->getFieldValue('Coberturas')->getEntityId() . ',' . $adjunto->getId() }}">Descargar</a>
+                                    @elseif($detalles->getFieldValue('Type')=="Vehículo")
+                                        <a
+                                            href="{{ url('adjunto') . '/' . $detalles->getFieldValue('Coberturas')->getEntityId() . ',' . $adjunto->getId() }}">Descargar</a>
+                                    @endif
+
                                 @endforeach
                             @endif
                         </label>

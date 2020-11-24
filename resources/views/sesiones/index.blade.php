@@ -4,10 +4,6 @@
 
 @section('content')
 
-    @if (session()->get('alerta'))
-        <div class="alert alert-danger" role="alert">{{ session()->get('alerta') }}</div>
-    @endif
-
     <body class="bg-primary">
         <div id="layoutAuthentication">
             <div id="layoutAuthentication_content">
@@ -15,6 +11,11 @@
                     <div class="container">
                         <div class="row justify-content-center">
                             <div class="col-lg-5">
+
+                                @if (session()->get('alerta'))
+                                <div class="alert alert-danger" role="alert">{{ session()->get('alerta') }}</div>
+                            @endif
+                            
                                 <div class="card shadow-lg border-0 rounded-lg mt-5">
                                     <div class="card-header text-center">
                                         <img src="{{ asset('img/logo.png') }}" width="150" height="150">

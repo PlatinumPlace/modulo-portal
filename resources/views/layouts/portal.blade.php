@@ -39,7 +39,9 @@
                     <i class="fas fa-user fa-fw"></i>
                 </a>
                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
-                    <a class="dropdown-item" href="{{ url('salir') }}"
+                    <a class="dropdown-item" href="{{ url('cambiar') }}" >Cambiar contraseña</a>
+                    <hr>
+                        <a class="dropdown-item" href="{{ url('salir') }}"
                         onclick="return confirm('¿Deseas cerrar sesión?')">Cerrar sesión</a>
                 </div>
             </li>

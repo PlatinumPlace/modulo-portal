@@ -174,13 +174,68 @@
                         <form method="POST" action=" {{ url('cotizar/persona') }}">
                             @csrf
 
+                            <h5>Cliente (opcional)</h5>
+                            <hr>
                             <div class="form-group row">
-                                <label class="col-sm-3 col-form-label font-weight-bold">Nombre Cliente</label>
+                                <label class="col-sm-3 col-form-label font-weight-bold">Nombre</label>
                                 <div class="col-sm-9">
-                                    <input type="text" class="form-control" name="nombre" required>
+                                    <input type="text" class="form-control" name="nombre">
                                 </div>
                             </div>
 
+                            <div class="form-group row">
+                                <label class="col-sm-3 col-form-label font-weight-bold">Apellido</label>
+                                <div class="col-sm-9">
+                                    <input type="text" class="form-control" name="apellido">
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <label class="col-sm-3 col-form-label font-weight-bold">RNC/Cédula</label>
+                                <div class="col-sm-9">
+                                    <input type="text" class="form-control" name="rnc_cedula">
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <label class="col-sm-3 col-form-label font-weight-bold">Correo Electrónico</label>
+                                <div class="col-sm-9">
+                                    <input type="email" class="form-control" name="correo">
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <label class="col-sm-3 col-form-label font-weight-bold">Dirección</label>
+                                <div class="col-sm-9">
+                                    <input type="text" class="form-control" name="direccion">
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <label class="col-sm-3 col-form-label font-weight-bold">Tel. Celular</label>
+                                <div class="col-sm-9">
+                                    <input type="tel" class="form-control" name="telefono">
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <label class="col-sm-3 col-form-label font-weight-bold">Tel. Residencial</label>
+                                <div class="col-sm-9">
+                                    <input type="tel" class="form-control" name="tel_residencia">
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <label class="col-sm-3 col-form-label font-weight-bold">Tel. Trabajo</label>
+                                <div class="col-sm-9">
+                                    <input type="tel" class="form-control" name="tel_trabajo">
+                                </div>
+                            </div>
+
+
+                            <br>
+                            <h5>Para cotizar</h5>
+                            <hr>
                             <div class="form-group row">
                                 <label class="col-sm-3 col-form-label font-weight-bold">Edad del deudor</label>
                                 <div class="col-sm-9">

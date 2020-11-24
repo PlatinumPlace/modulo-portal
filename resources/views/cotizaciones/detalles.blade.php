@@ -32,6 +32,41 @@
                             {{ $detalles->getFieldValue('Plan') }}
                         </label>
                     </div>
+
+                    @if ($detalles->getFieldValue('Tipo') == 'Persona')
+                        <div class="form-group row">
+                            <label class="col-sm-3 col-form-label font-weight-bold">Edad del deudor</label>
+                            <label class="col-sm-9 col-form-label">
+                                {{ $detalles->getFieldValue('Edad_deudor') }} años
+                            </label>
+                        </div>
+
+                        @if ($detalles->getFieldValue('Edad_codeudor'))
+                            <div class="form-group row">
+                                <label class="col-sm-3 col-form-label font-weight-bold">Edad del codeudor</label>
+                                <label class="col-sm-9 col-form-label">
+                                    {{ $detalles->getFieldValue('Edad_codeudor') }} años
+                                </label>
+                            </div>
+                        @endif
+
+                        <div class="form-group row">
+                            <label class="col-sm-3 col-form-label font-weight-bold">Plazo</label>
+                            <label class="col-sm-9 col-form-label">
+                                {{ $detalles->getFieldValue('Plazo') }} meses
+                            </label>
+                        </div>
+
+                        @if ($detalles->getFieldValue('Cuota'))
+                            <div class="form-group row">
+                                <label class="col-sm-3 col-form-label font-weight-bold">Cuota Mensual</label>
+                                <label class="col-sm-9 col-form-label">
+                                    RD${{ number_format($detalles->getFieldValue('Cuota'), 2) }}
+                                </label>
+                            </div>
+                        @endif
+
+                    @endif
                 </div>
             </div>
 
@@ -44,7 +79,7 @@
                     <div class="form-group row">
                         <label class="col-sm-3 col-form-label font-weight-bold">Nombre</label>
                         <label class="col-sm-9 col-form-label">
-                            {{ $detalles->getFieldValue('Nombre')." ".$detalles->getFieldValue('Apellido') }}
+                            {{ $detalles->getFieldValue('Nombre') . ' ' . $detalles->getFieldValue('Apellido') }}
                         </label>
                     </div>
 
@@ -75,21 +110,21 @@
                             {{ $detalles->getFieldValue('Direcci_n') }}
                         </label>
                     </div>
-                    
+
                     <div class="form-group row">
                         <label class="col-sm-3 col-form-label font-weight-bold">Tel. Celular</label>
                         <label class="col-sm-9 col-form-label">
                             {{ $detalles->getFieldValue('Tel_Celular') }}
                         </label>
                     </div>
-                    
+
                     <div class="form-group row">
                         <label class="col-sm-3 col-form-label font-weight-bold">Tel. Residencial</label>
                         <label class="col-sm-9 col-form-label">
                             {{ $detalles->getFieldValue('Tel_Residencia') }}
                         </label>
                     </div>
-                    
+
                     <div class="form-group row">
                         <label class="col-sm-3 col-form-label font-weight-bold">Tel. Trabajo</label>
                         <label class="col-sm-9 col-form-label">

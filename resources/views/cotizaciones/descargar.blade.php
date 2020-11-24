@@ -352,7 +352,7 @@
 
                                 <div class="card-body small">
                                     <p>
-                                        RD${{ number_format($detalles->getFieldValue('Suma_Asegurada'), 2) }}<br>
+                                        RD${{ number_format($detalles->getFieldValue('Suma_asegurada'), 2) }}<br>
 
                                         @if ($detalles->getFieldValue('Cuota') and $detalles->getFieldValue('Plan') == 'Vida/desempleo')
                                             RD${{ number_format($detalles->getFieldValue('Cuota'), 2) }} <br>

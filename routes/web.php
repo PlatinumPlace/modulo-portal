@@ -25,6 +25,7 @@ Route::get('/', HomeController::class)->middleware('sesion');
 Route::get('ingresar', [SesionesController::class, 'index']);
 Route::post('ingresar', [SesionesController::class, 'ingresar']);
 Route::get('salir', [SesionesController::class, 'salir']);
+Route::any('cambiar', [SesionesController::class, 'cambiar']);
 
 
 //Cotizaciones
@@ -52,3 +53,6 @@ Route::get('poliza/descargar/{id}', [PolizasController::class, 'descargar'])->mi
 
 //Polizas - Vehiculo
 Route::post('emitir/vehiculo', [PolizasController::class, 'vehiculo'])->middleware('sesion');
+
+//Polizas - Persona
+Route::post('emitir/persona', [PolizasController::class, 'persona'])->middleware('sesion');
