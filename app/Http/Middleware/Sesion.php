@@ -17,7 +17,7 @@ class Sesion
     public function handle(Request $request, Closure $next)
     {
         if (!$request->session()->has("id")) {
-            return redirect("ingresar");
+            return redirect("usuario/ingresar");
         }
 
         return $next($request);

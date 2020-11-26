@@ -1,10 +1,11 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\HomeController;
-use App\Http\Controllers\SesionesController;
+use App\Http\Controllers\UsuariosController;
 use App\Http\Controllers\CotizacionesController;
+use App\Http\Controllers\Cotizaciones\AutoController as cotizacionAuto;
 use App\Http\Controllers\PolizasController;
+use App\Http\Controllers\Polizas\AutoController as polizaAuto;
 
 /*
 |--------------------------------------------------------------------------
@@ -17,42 +18,39 @@ use App\Http\Controllers\PolizasController;
 |
 */
 
-//Inicio
-Route::get('/', HomeController::class)->middleware('sesion');
-
-
 //Sesion
-Route::get('ingresar', [SesionesController::class, 'index']);
-Route::post('ingresar', [SesionesController::class, 'ingresar']);
-Route::get('salir', [SesionesController::class, 'salir']);
-Route::any('cambiar', [SesionesController::class, 'cambiar']);
+Route::get('usuario/ingresar', [UsuariosController::class, 'create']);
+Route::post('usuario/ingresar', [UsuariosController::class, 'store']);
+Route::get('usuario/salir', [UsuariosController::class, 'destroy']);
+Route::get('usuario/editar', [UsuariosController::class, 'edit']);
+Route::post('usuario/editar', [UsuariosController::class, 'update']);
 
 
 //Cotizaciones
-Route::get('cotizaciones/{pagina?}', [CotizacionesController::class, 'index'])->middleware('sesion');
-Route::post('cotizaciones', [CotizacionesController::class, 'buscar'])->middleware('sesion');
-Route::get('cotizar/{tipo}', [CotizacionesController::class, 'cotizar'])->middleware('sesion');
-Route::get('cotizacion/{id}', [CotizacionesController::class, 'detalles'])->middleware('sesion');
-Route::get('cotizacion/descargar/{id}', [CotizacionesController::class, 'descargar'])->middleware('sesion');
+Route::get('cotizaciones/{pag?}', [CotizacionesController::class, 'index'])->middleware('sesion');
+Route::post('cotizaciones', [CotizacionesController::class, 'search'])->middleware('sesion');
+Route::get('cotizacion/crear', [CotizacionesController::class, 'create'])->middleware('sesion');
 
-//Cotizaciones - Vehiculo
-Route::post('ajax/modelos', [CotizacionesController::class, 'modelosAJAX'])->middleware('sesion');
-Route::post('cotizar/vehiculo', [CotizacionesController::class, 'vehiculo'])->middleware('sesion');
 
-//Cotizaciones - Persona
-Route::post('cotizar/persona', [CotizacionesController::class, 'persona'])->middleware('sesion');
+//Cotizaciones - auto
+Route::get('cotizacion/crear/auto', [cotizacionAuto::class, 'create'])->middleware('sesion');
+Route::post('cotizacion/auto/ajax', [cotizacionAuto::class, 'ajax'])->middleware('sesion');
+Route::post('cotizacion/crear/auto', [cotizacionAuto::class, 'store'])->middleware('sesion');
+Route::get('cotizacion/auto/{id}', [cotizacionAuto::class, 'show'])->middleware('sesion');
+Route::get('cotizacion/auto/descargar/{id}', [cotizacionAuto::class, 'download'])->middleware('sesion');
 
 
 //Polizas
-Route::get('polizas/{pagina?}', [PolizasController::class, 'index'])->middleware('sesion');
-Route::post('polizas', [PolizasController::class, 'buscar'])->middleware('sesion');
-Route::get('emitir/{id}', [PolizasController::class, 'emitir'])->middleware('sesion');
-Route::get('poliza/{id}', [PolizasController::class, 'detalles'])->middleware('sesion');
-Route::get('adjunto/{id}', [PolizasController::class, 'adjunto'])->middleware('sesion');
-Route::get('poliza/descargar/{id}', [PolizasController::class, 'descargar'])->middleware('sesion');
+Route::get('/', [PolizasController::class, 'index'])->middleware('sesion');
+Route::get('polizas/{pag?}', [PolizasController::class, 'list'])->middleware('sesion');
+Route::post('polizas', [PolizasController::class, 'search'])->middleware('sesion');
+Route::get('polizas/lista/emisiones', [PolizasController::class, 'emisiones'])->middleware('sesion');
+Route::get('polizas/lista/vencimientos', [PolizasController::class, 'vencimientos'])->middleware('sesion');
+Route::get('poliza/adjunto/descargar/{id}', [PolizasController::class, 'adjunto'])->middleware('sesion');
 
-//Polizas - Vehiculo
-Route::post('emitir/vehiculo', [PolizasController::class, 'vehiculo'])->middleware('sesion');
 
-//Polizas - Persona
-Route::post('emitir/persona', [PolizasController::class, 'persona'])->middleware('sesion');
+//Polizas - auto
+Route::get('poliza/auto/{id}', [polizaAuto::class, 'show'])->middleware('sesion');
+Route::get('poliza/auto/descargar/{id}', [polizaAuto::class, 'download'])->middleware('sesion');
+Route::get('poliza/auto/crear/{id}', [polizaAuto::class, 'create'])->middleware('sesion');
+Route::post('poliza/auto/crear', [polizaAuto::class, 'store'])->middleware('sesion');

@@ -13,16 +13,16 @@
                             <div class="col-lg-5">
 
                                 @if (session()->get('alerta'))
-                                <div class="alert alert-danger" role="alert">{{ session()->get('alerta') }}</div>
-                            @endif
-                            
+                                    <div class="alert alert-danger" role="alert">{{ session()->get('alerta') }}</div>
+                                @endif
+
                                 <div class="card shadow-lg border-0 rounded-lg mt-5">
                                     <div class="card-header text-center">
                                         <img src="{{ asset('img/logo.png') }}" width="150" height="150">
                                     </div>
 
                                     <div class="card-body">
-                                        <form method="POST" action="{{ url('ingresar') }}">
+                                        <form method="POST" action="{{ url('usuario/ingresar') }}">
                                             @csrf
 
                                             <div class="form-group">

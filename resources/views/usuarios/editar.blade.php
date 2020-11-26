@@ -4,19 +4,15 @@
 
 @section('content')
 
-    @if (session()->get('alerta'))
-        <div class="alert alert-info" role="alert">{{ session()->get('alerta') }}</div>
-    @endif
-
     <div class="row justify-content-center">
         <div class="col-lg-10">
-            <div class="card mb-4">
-                <div class="card-header">
-                    Formulario para cambiar de contraseña
-                </div>
+            @if (session()->get('alerta'))
+                <div class="alert alert-info" role="alert">{{ session()->get('alerta') }}</div>
+            @endif
 
+            <div class="card mb-4">
                 <div class="card-body">
-                    <form method="POST" action=" {{ url('cambiar') }}">
+                    <form method="POST" action=" {{ url('usuario/editar') }}">
                         @csrf
 
                         <div class="form-group row">
@@ -36,14 +32,14 @@
                         <div class="form-group row">
                             <label class="col-sm-3 col-form-label font-weight-bold">Contraseña actual</label>
                             <label class="col-sm-9 col-form-label">
-                                {{ session('contrase_a') }}
+                                <input required type="password" class="form-control" name="contrase_a_vieja">
                             </label>
                         </div>
 
                         <div class="form-group row">
-                            <label class="col-sm-3 col-form-label font-weight-bold">Nueva contraseña</label>
+                            <label class="col-sm-3 col-form-label font-weight-bold">Contraseña nueva</label>
                             <div class="col-sm-9">
-                                <input type="text" class="form-control" name="contrase_a">
+                                <input required type="text" class="form-control" name="contrase_a_nueva">
                             </div>
                         </div>
 

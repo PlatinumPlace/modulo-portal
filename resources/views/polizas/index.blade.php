@@ -1,96 +1,51 @@
 @extends('layouts.portal')
 
-@section('title', 'Pólizas')
+@section('title', 'Panel de control')
 
 @section('content')
 
-    <div class="card mb-4">
-        <div class="card-header">
-            Buscar póliza
+    <div class="alert alert-success" role="alert">
+        <h4 class="alert-heading">¡Bienvenido al Insurance Tech de Grupo Nobe!</h4>
+        <p>Desde su panel de control podrás ver la infomación necesaria para manejar sus pólizas y cotizaciones.</p>
+    </div>
+
+    <div class="card-deck">
+        <div class="card text-white bg-success mb-5" style="max-width: 18rem;">
+            <div class="card-header">Emisiones del Mes</div>
+            <div class="card-body">
+                <h5 class="card-title">{{ $emisiones }}</h5>
+                <a href="{{ url('polizas/lista/emisiones') }}" class="stretched-link"></a>
+            </div>
         </div>
 
-        <div class="card-body">
-            <form class="form-inline" method="POST" action="{{ url('polizas') }}">
-                @csrf
-
-                <div class="form-group mb-2">
-                    <select class="form-control" name="parametro" required>
-                        <option value="Nombre">Nombre del cliente</option>
-                        <option value="RNC_C_dula">RNC/Cédula</option>
-                    </select>
-                </div>
-
-                <div class="form-group mx-sm-3 mb-2 col-6">
-                    <input type="text" class="form-control col-9" name="busqueda" required>
-                </div>
-
-                <button type="submit" class="btn btn-success mb-2">Buscar</button>
-                |
-                <a href="{{ url('polizas') }}" class="btn btn-info mb-2">Limpiar</a>
-            </form>
+        <div class="card text-white bg-danger mb-5" style="max-width: 18rem;">
+            <div class="card-header">Vencimientos del Mes</div>
+            <div class="card-body">
+                <h5 class="card-title">{{ $vencimientos }}</h5>
+                <a href="{{ url('polizas/lista/vencimientos') }}" class="stretched-link"></a>
+            </div>
         </div>
     </div>
 
-    @if (session()->get('alerta'))
-        <div class="alert alert-danger" role="alert">{{ session()->get('alerta') }}</div>
-    @endif
+    <h4>Pólizas emitidas este mes</h4>
+    <div class="table-responsive">
+        <table class="table table-bordered" width="100%" cellspacing="0">
+            <thead>
+                <tr>
+                    <th>Aseguradora</th>
+                    <th>Cantidad</th>
+                </tr>
+            </thead>
 
-    <div class="card mb-4">
-        <div class="card-header">
-            <i class="fas fa-table mr-1"></i>
-            Lista de pólizas (Max: 10)
-        </div>
-        <div class="card-body">
-            <div class="table-responsive">
-                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                    <thead>
-                        <tr>
-                            <th>Cliente</th>
-                            <th>RNC/Cédula</th>
-                            <th>Plan</th>
-                            <th>Vigencia hasta</th>
-                            <th>Opcion</th>
-                        </tr>
-                    </thead>
-
-                    <tbody>
-                        @forelse ($lista as $poliza)
-                            <tr>
-                                <td>{{ $poliza->getFieldValue('Nombre') }}</td>
-                                <td>{{ $poliza->getFieldValue('RNC_C_dula') }}</td>
-                                <td>{{ $poliza->getFieldValue('Plan') }}</td>
-                                <td>{{ date('d/m/Y', strtotime($poliza->getFieldValue('Vigencia_hasta'))) }}</td>
-                                <td>
-                                    <a href="{{ url('polizas') . '/' . $poliza->getEntityId() }}" title="Detalles">
-                                        <i class="fas fa-info-circle"></i>
-                                    </a>
-                                    |
-                                    <a href="{{ url('polizas/descargar') . '/' . $poliza->getEntityId() }}" title="Descargar">
-                                        <i class="fas fa-download"></i>
-                                    </a>
-                                </td>
-                            </tr>
-                        @empty
-                            <p>No se encontraron registros.</p>
-                        @endforelse
-                    </tbody>
-                </table>
-
-                <br>
-
-                <nav>
-                    <ul class="pagination justify-content-end">
-                        <li class="page-item">
-                            <a class="page-link" href="{{ url('poliza') . '/' . ($pagina - 1) }}">Anterior</a>
-                        </li>
-
-                        <li class="page-item">
-                            <a class="page-link" href="{{ url('poliza') . '/' . ($pagina + 1) }}">Siguiente</a>
-                        </li>
-                    </ul>
-                </nav>
-            </div>
-        </div>
+            <tbody>
+                @foreach ($aseguradoras as $nombre => $cantidad)
+                    <tr>
+                        <td>{{ $nombre }}</td>
+                        <td>{{ $cantidad }}</td>
+                    </tr>
+                @endforeach
+            </tbody>
+        </table>
     </div>
 
 @endsection
