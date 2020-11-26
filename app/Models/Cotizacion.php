@@ -30,4 +30,9 @@ class Cotizacion extends Zoho
     {
         return $this->getRecord("Products", $planid);
     }
+
+    public function crear($registro, $planes)
+    {
+        return $this->createRecords("Quotes", $registro, $planes);
+    }
 }

@@ -6,6 +6,15 @@
 
     <div class="row justify-content-center">
         <div class="col-lg-10">
+            @if (date("Y-m", strtotime($detalles->getFieldValue("Vigencia_hasta"))) == date('Y-m'))
+            <div class="alert alert-danger text-center" role="alert">
+                <h6 class="alert-heading">
+                    ¡Atencion, esta poliza vencera en {{ $detalles->getFieldValue('Vigencia_hasta') }}!
+                </h6>
+            </div>
+            @endif
+
+
             <div class="card mb-4">
                 <div class="card-header">
                     Detalles
@@ -32,6 +41,52 @@
                             {{ $detalles->getFieldValue('Plan') }}
                         </label>
                     </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-3 col-form-label font-weight-bold">Vigencia desde</label>
+                        <label class="col-sm-9 col-form-label">
+                            {{ $detalles->getFieldValue('Vigencia_desde') }}
+                        </label>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-3 col-form-label font-weight-bold">Vigencia hasta</label>
+                        <label class="col-sm-9 col-form-label">
+                            {{ $detalles->getFieldValue('Vigencia_hasta') }}
+                        </label>
+                    </div>
+
+                    @if ($detalles->getFieldValue('Nombre_codeudor'))
+                        <div class="form-group row">
+                            <label class="col-sm-3 col-form-label font-weight-bold">Nombre del codeudor</label>
+                            <label class="col-sm-9 col-form-label">
+                                {{ $detalles->getFieldValue('Nombre_codeudor') }}
+                            </label>
+                        </div>
+
+                        <div class="form-group row">
+                            <label class="col-sm-3 col-form-label font-weight-bold">Telefono del codeudor</label>
+                            <label class="col-sm-9 col-form-label">
+                                {{ $detalles->getFieldValue('Tel_Celular_codeudor') }}
+                            </label>
+                        </div>
+                    @endif
+
+                    <div class="form-group row">
+                        <label class="col-sm-3 col-form-label font-weight-bold">Plazo</label>
+                        <label class="col-sm-9 col-form-label">
+                            {{ $detalles->getFieldValue('Plazo') }} meses
+                        </label>
+                    </div>
+
+                    @if ($detalles->getFieldValue('Cuota'))
+                        <div class="form-group row">
+                            <label class="col-sm-3 col-form-label font-weight-bold">Cuota Mensual</label>
+                            <label class="col-sm-9 col-form-label">
+                                RD${{ number_format($detalles->getFieldValue('Cuota'), 2) }}
+                            </label>
+                        </div>
+                    @endif
                 </div>
             </div>
 
@@ -99,72 +154,6 @@
                 </div>
             </div>
 
-            @if ($detalles->getFieldValue('Type') == 'Vehículo')
-                <div class="card mb-4">
-                    <div class="card-header">
-                        Vehículo
-                    </div>
-
-                    <div class="card-body">
-                        <div class="form-group row">
-                            <label class="col-sm-3 col-form-label font-weight-bold">Marca</label>
-                            <label class="col-sm-9 col-form-label">
-                                {{ $detalles->getFieldValue('Marca') }}
-                            </label>
-                        </div>
-
-                        <div class="form-group row">
-                            <label class="col-sm-3 col-form-label font-weight-bold">Modelo</label>
-                            <label class="col-sm-9 col-form-label">
-                                {{ $detalles->getFieldValue('Modelo') }}
-                            </label>
-                        </div>
-
-                        <div class="form-group row">
-                            <label class="col-sm-3 col-form-label font-weight-bold">Año</label>
-                            <label class="col-sm-9 col-form-label">
-                                {{ $detalles->getFieldValue('A_o_veh_culo') }}
-                            </label>
-                        </div>
-
-                        <div class="form-group row">
-                            <label class="col-sm-3 col-form-label font-weight-bold">Tipo</label>
-                            <label class="col-sm-9 col-form-label">
-                                {{ $detalles->getFieldValue('Tipo_veh_culo') }}
-                            </label>
-                        </div>
-
-                        <div class="form-group row">
-                            <label class="col-sm-3 col-form-label font-weight-bold">Color</label>
-                            <label class="col-sm-9 col-form-label">
-                                {{ $detalles->getFieldValue('Color') }}
-                            </label>
-                        </div>
-
-                        <div class="form-group row">
-                            <label class="col-sm-3 col-form-label font-weight-bold">Condiciones</label>
-                            <label class="col-sm-9 col-form-label">
-                                {{ $detalles->getFieldValue('Condiciones') }}
-                            </label>
-                        </div>
-
-                        <div class="form-group row">
-                            <label class="col-sm-3 col-form-label font-weight-bold">Uso</label>
-                            <label class="col-sm-9 col-form-label">
-                                {{ $detalles->getFieldValue('Uso') }}
-                            </label>
-                        </div>
-
-                        <div class="form-group row">
-                            <label class="col-sm-3 col-form-label font-weight-bold">Chasis</label>
-                            <label class="col-sm-9 col-form-label">
-                                {{ $detalles->getFieldValue('Chasis') }}
-                            </label>
-                        </div>
-                    </div>
-                </div>
-            @endif
-
             <div class="card mb-4">
                 <div class="card-header">
                     Aseguradora
@@ -204,24 +193,18 @@
                         <label class="col-sm-9 col-form-label">
                             @if ($detalles->getFieldValue('Coberturas'))
                                 @php
-                                $adjuntos =
-                                $api->getAttachments("Products",$detalles->getFieldValue('Coberturas')->getEntityId(),1,200);
+                                $adjuntos = $api->listaAdjunto($detalles->getFieldValue('Coberturas')->getEntityId());
                                 @endphp
 
                                 @foreach ($adjuntos as $adjunto)
-
                                     @if ($adjunto->getFileName() == 'vida.pdf' and $detalles->getFieldValue('Plan') == 'Vida')
                                         <a
-                                            href="{{ url('adjunto') . '/' . $detalles->getFieldValue('Coberturas')->getEntityId() . ',' . $adjunto->getId() }}">Descargar</a>
+                                            href="{{ url('poliza/adjunto/descargar') . '/' . $detalles->getFieldValue('Coberturas')->getEntityId() . ',' . $adjunto->getId() }}">Descargar</a>
                                     @elseif($adjunto->getFileName() =="desempleo.pdf" and
                                         $detalles->getFieldValue('Plan')=="Vida/desempleo")
                                         <a
-                                            href="{{ url('adjunto') . '/' . $detalles->getFieldValue('Coberturas')->getEntityId() . ',' . $adjunto->getId() }}">Descargar</a>
-                                    @elseif($detalles->getFieldValue('Type')=="Vehículo")
-                                        <a
-                                            href="{{ url('adjunto') . '/' . $detalles->getFieldValue('Coberturas')->getEntityId() . ',' . $adjunto->getId() }}">Descargar</a>
+                                            href="{{ url('poliza/adjunto/descargar') . '/' . $detalles->getFieldValue('Coberturas')->getEntityId() . ',' . $adjunto->getId() }}">Descargar</a>
                                     @endif
-
                                 @endforeach
                             @endif
                         </label>
@@ -241,7 +224,7 @@
                         </div>
 
                         <div class="col-sm-6">
-                            <a href="{{ url('poliza/descargar') . '/' . $detalles->getEntityId() }}"
+                            <a href="{{ url('poliza/vida/descargar') . '/' . $detalles->getEntityId() }}"
                                 class="btn btn-primary btn-block">Descargar</a>
                         </div>
                     </div>

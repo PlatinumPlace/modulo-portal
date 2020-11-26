@@ -4,8 +4,10 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UsuariosController;
 use App\Http\Controllers\CotizacionesController;
 use App\Http\Controllers\Cotizaciones\AutoController as cotizacionAuto;
+use App\Http\Controllers\Cotizaciones\VidaController as cotizacionVida;
 use App\Http\Controllers\PolizasController;
 use App\Http\Controllers\Polizas\AutoController as polizaAuto;
+use App\Http\Controllers\Polizas\VidaController as polizaVida;
 
 /*
 |--------------------------------------------------------------------------
@@ -33,11 +35,18 @@ Route::get('cotizacion/crear', [CotizacionesController::class, 'create'])->middl
 
 
 //Cotizaciones - auto
-Route::get('cotizacion/crear/auto', [cotizacionAuto::class, 'create'])->middleware('sesion');
+Route::get('cotizacion/auto/crear', [cotizacionAuto::class, 'create'])->middleware('sesion');
 Route::post('cotizacion/auto/ajax', [cotizacionAuto::class, 'ajax'])->middleware('sesion');
-Route::post('cotizacion/crear/auto', [cotizacionAuto::class, 'store'])->middleware('sesion');
+Route::post('cotizacion/auto/crear', [cotizacionAuto::class, 'store'])->middleware('sesion');
 Route::get('cotizacion/auto/{id}', [cotizacionAuto::class, 'show'])->middleware('sesion');
 Route::get('cotizacion/auto/descargar/{id}', [cotizacionAuto::class, 'download'])->middleware('sesion');
+
+
+//Cotizaciones - vida
+Route::get('cotizacion/vida/crear', [cotizacionVida::class, 'create'])->middleware('sesion');
+Route::post('cotizacion/vida/crear', [cotizacionVida::class, 'store'])->middleware('sesion');
+Route::get('cotizacion/vida/{id}', [cotizacionVida::class, 'show'])->middleware('sesion');
+Route::get('cotizacion/vida/descargar/{id}', [cotizacionVida::class, 'download'])->middleware('sesion');
 
 
 //Polizas
@@ -54,3 +63,10 @@ Route::get('poliza/auto/{id}', [polizaAuto::class, 'show'])->middleware('sesion'
 Route::get('poliza/auto/descargar/{id}', [polizaAuto::class, 'download'])->middleware('sesion');
 Route::get('poliza/auto/crear/{id}', [polizaAuto::class, 'create'])->middleware('sesion');
 Route::post('poliza/auto/crear', [polizaAuto::class, 'store'])->middleware('sesion');
+
+
+//Polizas - vida
+Route::get('poliza/vida/{id}', [polizaVida::class, 'show'])->middleware('sesion');
+Route::get('poliza/vida/descargar/{id}', [polizaVida::class, 'download'])->middleware('sesion');
+Route::get('poliza/vida/crear/{id}', [polizaVida::class, 'create'])->middleware('sesion');
+Route::post('poliza/vida/crear', [polizaVida::class, 'store'])->middleware('sesion');

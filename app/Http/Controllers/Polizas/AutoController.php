@@ -14,12 +14,7 @@ class AutoController extends Controller
     {
         $this->model = $model;
     }
-
-    public function index()
-    {
-        # code...
-    }
-
+    
     public function create($id)
     {
         $detalles = $this->model->detallesCotizacion($id);

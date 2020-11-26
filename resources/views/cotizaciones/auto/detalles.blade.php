@@ -157,7 +157,7 @@
                                 @foreach ($planes as $plan)
                                     <tr>
                                         @php
-                                        $planDetalles = $api->getRecord("Products",$plan->getProduct()->getEntityId())
+                                        $planDetalles = $api->detallesPlan($plan->getProduct()->getEntityId())
                                         @endphp
 
                                         <td>{{ $planDetalles->getFieldValue('Vendor_Name')->getLookupLabel() }}</td>

@@ -10,7 +10,7 @@
             <div class="card-deck">
                 <div class="card col-3">
                     <img src="{{ asset('img/auto.png') }}" class="card-img-top">
-                    <a class="small text-white  stretched-link" href="{{ url('cotizacion/crear/auto') }}"></a>
+                    <a class="small text-white  stretched-link" href="{{ url('cotizacion/auto/crear') }}"></a>
                     <div class="card-body">
                         <h5 class="card-title text-center">AUTO</h5>
                     </div>
@@ -18,7 +18,7 @@
 
                 <div class="card col-3">
                     <img src="{{ asset('img/vida.png') }}" class="card-img-top">
-                    <a class="small text-white  stretched-link" href="{{ url('cotizacion/crear/vida') }}"></a>
+                    <a class="small text-white  stretched-link" href="{{ url('cotizacion/vida/crear') }}"></a>
                     <div class="card-body">
                         <h5 class="card-title text-center">VIDA/DESEMPLEO</h5>
                     </div>

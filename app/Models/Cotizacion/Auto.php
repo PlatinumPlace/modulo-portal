@@ -111,9 +111,4 @@ class Auto extends Cotizacion
 
         return $planes;
     }
-
-    public function crear($registro, $planes)
-    {
-        return $this->createRecords("Quotes", $registro, $planes);
-    }
 }
