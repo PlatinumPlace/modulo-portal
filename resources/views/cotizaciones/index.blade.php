@@ -18,7 +18,7 @@
 
             <div class="card col-3">
                 <img src="{{ asset('img/vida.png') }}" class="card-img-top">
-                <a class="small text-white  stretched-link" href="#"></a>
+                <a class="small text-white  stretched-link" href="{{route("cotizacionVida.create")}}"></a>
                 <div class="card-body">
                     <h5 class="card-title text-center">VIDA/DESEMPLEO</h5>
                 </div>

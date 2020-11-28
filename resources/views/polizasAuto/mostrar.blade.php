@@ -219,23 +219,6 @@
                             RD${{ number_format($detalles->getFieldValue('Prima_total'), 2) }}
                         </label>
                     </div>
-
-                    <div class="form-group row">
-                        <label class="col-sm-3 col-form-label font-weight-bold">Documentos</label>
-                        <label class="col-sm-9 col-form-label">
-                            @if ($detalles->getFieldValue('Coberturas'))
-                                @php
-                                $adjuntos =$api->getAttachments("Products",
-                                $detalles->getFieldValue('Coberturas')->getEntityId(),1,1);
-                                @endphp
-
-                                @foreach ($adjuntos as $adjunto)
-                                    <a
-                                        href="{{ route('poliza.adjunto', ['planid' => $detalles->getFieldValue('Coberturas')->getEntityId(), 'adjuntoid' => $adjunto->getId()]) }}">Descargar</a>
-                                @endforeach
-                            @endif
-                        </label>
-                    </div>
                 </div>
             </div>
 

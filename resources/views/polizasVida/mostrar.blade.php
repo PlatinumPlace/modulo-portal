@@ -1,11 +1,20 @@
 @extends('portal')
 
-@section('title', 'No. ' . $detalles->getFieldValue('Quote_Number'))
+@section('title', 'Póliza ' . $detalles->getFieldValue('P_liza'))
 
 @section('content')
 
     <div class="row justify-content-center">
         <div class="col-lg-10">
+            @if (date("Y-m", strtotime($detalles->getFieldValue("Vigencia_hasta"))) == date('Y-m'))
+            <div class="alert alert-danger text-center" role="alert">
+                <h6 class="alert-heading">
+                    ¡Atencion, esta poliza vencera en {{ $detalles->getFieldValue('Vigencia_hasta') }}!
+                </h6>
+            </div>
+            @endif
+
+
             <div class="card mb-4">
                 <div class="card-header">
                     Detalles
@@ -15,7 +24,7 @@
                     <div class="form-group row">
                         <label class="col-sm-3 col-form-label font-weight-bold">Vendedor</label>
                         <label class="col-sm-9 col-form-label">
-                            {{ $detalles->getFieldValue('Contact_Name')->getLookupLabel() }}
+                            {{ $detalles->getFieldValue('Contact_Name') ? $detalles->getFieldValue('Contact_Name')->getLookupLabel() : '' }}
                         </label>
                     </div>
 
@@ -32,6 +41,52 @@
                             {{ $detalles->getFieldValue('Plan') }}
                         </label>
                     </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-3 col-form-label font-weight-bold">Vigencia desde</label>
+                        <label class="col-sm-9 col-form-label">
+                            {{ $detalles->getFieldValue('Vigencia_desde') }}
+                        </label>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-3 col-form-label font-weight-bold">Vigencia hasta</label>
+                        <label class="col-sm-9 col-form-label">
+                            {{ $detalles->getFieldValue('Vigencia_hasta') }}
+                        </label>
+                    </div>
+
+                        @if ($detalles->getFieldValue('Nombre_codeudor'))
+                            <div class="form-group row">
+                                <label class="col-sm-3 col-form-label font-weight-bold">Nombre del codeudor</label>
+                                <label class="col-sm-9 col-form-label">
+                                    {{ $detalles->getFieldValue('Nombre_codeudor') }}
+                                </label>
+                            </div>
+
+                            <div class="form-group row">
+                                <label class="col-sm-3 col-form-label font-weight-bold">Telefono del codeudor</label>
+                                <label class="col-sm-9 col-form-label">
+                                    {{ $detalles->getFieldValue('Tel_Celular_codeudor') }}
+                                </label>
+                            </div>
+                        @endif
+
+                        <div class="form-group row">
+                            <label class="col-sm-3 col-form-label font-weight-bold">Plazo</label>
+                            <label class="col-sm-9 col-form-label">
+                                {{ $detalles->getFieldValue('Plazo') }} meses
+                            </label>
+                        </div>
+
+                        @if ($detalles->getFieldValue('Cuota'))
+                            <div class="form-group row">
+                                <label class="col-sm-3 col-form-label font-weight-bold">Cuota Mensual</label>
+                                <label class="col-sm-9 col-form-label">
+                                    RD${{ number_format($detalles->getFieldValue('Cuota'), 2) }}
+                                </label>
+                            </div>
+                        @endif
                 </div>
             </div>
 
@@ -101,74 +156,36 @@
 
             <div class="card mb-4">
                 <div class="card-header">
-                    Vehículo
+                    Aseguradora
                 </div>
 
                 <div class="card-body">
                     <div class="form-group row">
-                        <label class="col-sm-3 col-form-label font-weight-bold">Marca</label>
+                        <label class="col-sm-3 col-form-label font-weight-bold">Nombre</label>
                         <label class="col-sm-9 col-form-label">
-                            {{ $detalles->getFieldValue('Marca')->getLookupLabel() }}
+                            {{ $detalles->getFieldValue('Aseguradora')->getLookupLabel() }}
                         </label>
                     </div>
 
                     <div class="form-group row">
-                        <label class="col-sm-3 col-form-label font-weight-bold">Modelo</label>
+                        <label class="col-sm-3 col-form-label font-weight-bold">Prima Neta</label>
                         <label class="col-sm-9 col-form-label">
-                            {{ $detalles->getFieldValue('Modelo')->getLookupLabel() }}
+                            RD${{ number_format($detalles->getFieldValue('Prima_neta'), 2) }}
                         </label>
                     </div>
 
                     <div class="form-group row">
-                        <label class="col-sm-3 col-form-label font-weight-bold">Año</label>
+                        <label class="col-sm-3 col-form-label font-weight-bold">ISC</label>
                         <label class="col-sm-9 col-form-label">
-                            {{ $detalles->getFieldValue('A_o') }}
+                            RD${{ number_format($detalles->getFieldValue('ISC'), 2) }}
                         </label>
                     </div>
 
                     <div class="form-group row">
-                        <label class="col-sm-3 col-form-label font-weight-bold">Tipo</label>
+                        <label class="col-sm-3 col-form-label font-weight-bold">Prima Total</label>
                         <label class="col-sm-9 col-form-label">
-                            {{ $detalles->getFieldValue('Tipo_veh_culo') }}
+                            RD${{ number_format($detalles->getFieldValue('Prima_total'), 2) }}
                         </label>
-                    </div>
-                </div>
-            </div>
-
-            <div class="card mb-4">
-                <div class="card-header">
-                    Aseguradoras disponibles
-                </div>
-
-                <div class="card-body">
-                    <div class="table-responsive">
-                        <table class="table table-bordered" width="100%" cellspacing="0">
-                            <thead>
-                                <tr>
-                                    <th>Nombre</th>
-                                    <th>Motivo</th>
-                                    <th>Prima Neta</th>
-                                    <th>ISC</th>
-                                    <th>Prima Total</th>
-                                </tr>
-                            </thead>
-
-                            <tbody>
-                                @foreach ($planes as $plan)
-                                    <tr>
-                                        @php
-                                        $planDetalles = $api->getRecord("Products",$plan->getProduct()->getEntityId())
-                                        @endphp
-
-                                        <td>{{ $planDetalles->getFieldValue('Vendor_Name')->getLookupLabel() }}</td>
-                                        <td>{{ $plan->getDescription() }}</td>
-                                        <td>RD${{ number_format($plan->getListPrice(), 2) }}</td>
-                                        <td>RD${{ number_format($plan->getTaxAmount(), 2) }}</td>
-                                        <td>RD${{ number_format($plan->getNetTotal(), 2) }}</td>
-                                    </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
                     </div>
                 </div>
             </div>
@@ -185,11 +202,8 @@
                         </div>
 
                         <div class="col-sm-6">
-                            <a href="{{ route('cotizacionAuto.descargar', $detalles->getEntityId()) }}"
+                            <a href="{{ route("polizaVida.descargar", $detalles->getEntityId()) }}"
                                 class="btn btn-primary btn-block">Descargar</a>
-
-                            <a href="{{ route('polizaAuto.create', $detalles->getEntityId()) }}"
-                                class="btn btn-info btn-block">Emitir</a>
                         </div>
                     </div>
                 </div>

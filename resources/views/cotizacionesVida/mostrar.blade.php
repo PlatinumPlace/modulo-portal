@@ -32,6 +32,38 @@
                             {{ $detalles->getFieldValue('Plan') }}
                         </label>
                     </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-3 col-form-label font-weight-bold">Edad del deudor</label>
+                        <label class="col-sm-9 col-form-label">
+                            {{ $detalles->getFieldValue('Edad_deudor') }} años
+                        </label>
+                    </div>
+
+                    @if ($detalles->getFieldValue('Edad_codeudor'))
+                        <div class="form-group row">
+                            <label class="col-sm-3 col-form-label font-weight-bold">Edad del codeudor</label>
+                            <label class="col-sm-9 col-form-label">
+                                {{ $detalles->getFieldValue('Edad_codeudor') }} años
+                            </label>
+                        </div>
+                    @endif
+
+                    <div class="form-group row">
+                        <label class="col-sm-3 col-form-label font-weight-bold">Plazo</label>
+                        <label class="col-sm-9 col-form-label">
+                            {{ $detalles->getFieldValue('Plazo') }} meses
+                        </label>
+                    </div>
+
+                    @if ($detalles->getFieldValue('Cuota'))
+                        <div class="form-group row">
+                            <label class="col-sm-3 col-form-label font-weight-bold">Cuota Mensual</label>
+                            <label class="col-sm-9 col-form-label">
+                                RD${{ number_format($detalles->getFieldValue('Cuota'), 2) }}
+                            </label>
+                        </div>
+                    @endif
                 </div>
             </div>
 
@@ -101,42 +133,6 @@
 
             <div class="card mb-4">
                 <div class="card-header">
-                    Vehículo
-                </div>
-
-                <div class="card-body">
-                    <div class="form-group row">
-                        <label class="col-sm-3 col-form-label font-weight-bold">Marca</label>
-                        <label class="col-sm-9 col-form-label">
-                            {{ $detalles->getFieldValue('Marca')->getLookupLabel() }}
-                        </label>
-                    </div>
-
-                    <div class="form-group row">
-                        <label class="col-sm-3 col-form-label font-weight-bold">Modelo</label>
-                        <label class="col-sm-9 col-form-label">
-                            {{ $detalles->getFieldValue('Modelo')->getLookupLabel() }}
-                        </label>
-                    </div>
-
-                    <div class="form-group row">
-                        <label class="col-sm-3 col-form-label font-weight-bold">Año</label>
-                        <label class="col-sm-9 col-form-label">
-                            {{ $detalles->getFieldValue('A_o') }}
-                        </label>
-                    </div>
-
-                    <div class="form-group row">
-                        <label class="col-sm-3 col-form-label font-weight-bold">Tipo</label>
-                        <label class="col-sm-9 col-form-label">
-                            {{ $detalles->getFieldValue('Tipo_veh_culo') }}
-                        </label>
-                    </div>
-                </div>
-            </div>
-
-            <div class="card mb-4">
-                <div class="card-header">
                     Aseguradoras disponibles
                 </div>
 
@@ -185,10 +181,10 @@
                         </div>
 
                         <div class="col-sm-6">
-                            <a href="{{ route('cotizacionAuto.descargar', $detalles->getEntityId()) }}"
+                            <a href="{{ route('cotizacionVida.descargar', $detalles->getEntityId()) }}"
                                 class="btn btn-primary btn-block">Descargar</a>
 
-                            <a href="{{ route('polizaAuto.create', $detalles->getEntityId()) }}"
+                            <a href="{{ route('polizaVida.create', $detalles->getEntityId()) }}"
                                 class="btn btn-info btn-block">Emitir</a>
                         </div>
                     </div>
