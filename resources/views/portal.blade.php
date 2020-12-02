@@ -69,7 +69,7 @@
                             Panel de control
                         </a>
 
-                        <a class="nav-link" href="{{ route('cotizacion.index') }}">
+                        <a class="nav-link" href="{{ route('cotizaciones.index') }}">
                             <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
                             Cotizaciones
                         </a>

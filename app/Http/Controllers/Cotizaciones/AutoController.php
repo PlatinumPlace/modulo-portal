@@ -1,11 +1,12 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Cotizaciones;
 
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Zoho;
 
-class CotizacionesAutoController extends Controller
+class AutoController extends Controller
 {
     protected $api;
 
@@ -13,29 +14,7 @@ class CotizacionesAutoController extends Controller
     {
         $this->api = $api;
     }
-
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        $marcas = $this->api->getRecords("Marcas");
-        sort($marcas);
-        return view("cotizacionesAuto.crear", ["marcas" => $marcas]);
-    }
-
+    
     /**
      * Store a newly created resource in storage.
      *
@@ -164,78 +143,6 @@ class CotizacionesAutoController extends Controller
         ];
 
         $id = $this->api->createRecords("Quotes", $registro, $planes);
-        return redirect()->route("cotizacionAuto.show", $id);
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        $detalles = $this->api->getRecord("Quotes", $id);
-        $planes = $detalles->getLineItems();
-        return view("cotizacionesAuto.mostrar", ["detalles" => $detalles, "planes" => $planes, "api" => $this->api]);
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
-    }
-
-    public function modelos(Request $request)
-    {
-        $pag = 1;
-        $criteria = "Marca:equals:" . $request->input("marcaid");
-
-        do {
-            if ($modelos = $this->api->searchRecordsByCriteria("Modelos", $criteria, $pag, 200)) {
-                $pag++;
-                asort($modelos);
-                foreach ($modelos as $modelo) {
-                    echo '<option value="' . $modelo->getEntityId() . "," . $modelo->getFieldValue('Tipo') . '">' . strtoupper($modelo->getFieldValue('Name')) . '</option>';
-                }
-            } else {
-                $pag = 0;
-            }
-        } while ($pag > 0);
-    }
-
-    public function descargar($id)
-    {
-        $detalles = $this->api->getRecord("Quotes", $id);
-        $planes = $detalles->getLineItems();
-        return view("cotizacionesAuto.descargar", ["detalles" => $detalles, "planes" => $planes, "api" => $this->api]);
+        return redirect()->route("cotizaciones.detalles", $id);
     }
 }

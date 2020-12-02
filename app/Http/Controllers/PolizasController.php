@@ -14,93 +14,17 @@ class PolizasController extends Controller
         $this->api = $api;
     }
 
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
+    public function detalles($id)
     {
-        //
+        $detalles = $this->api->getRecord("Deals", $id);
+        return view("polizas.detalles", ["detalles" => $detalles, "api" => $this->api]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
+    public function descargar($id)
     {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
-    }
-
-    public function adjunto($planid, $adjuntoid)
-    {
-        $fichero = $this->api->downloadAttachment("Products", $planid, $adjuntoid, storage_path("app/public"));
-        header('Content-Description: File Transfer');
-        header('Content-Type: application/octet-stream');
-        header('Content-Disposition: attachment; filename="' . basename($fichero) . '"');
-        header('Expires: 0');
-        header('Cache-Control: must-revalidate');
-        header('Pragma: public');
-        header('Content-Length: ' . filesize($fichero));
-        readfile($fichero);
-        unlink($fichero);
+        $detalles = $this->api->getRecord("Deals", $id);
+        $imagen = $this->api->downloadPhoto("Vendors", $detalles->getFieldValue('Aseguradora')->getEntityId());
+        $planDetalles = $this->api->getRecord("Products", $detalles->getFieldValue('Coberturas')->getEntityId());
+        return view("polizas.descargar", ["detalles" => $detalles, "imagen" => $imagen, "planDetalles" => $planDetalles]);
     }
 }

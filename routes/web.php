@@ -1,12 +1,12 @@
 <?php
 
-use App\Http\Controllers\CotizacionesAutoController;
+use App\Http\Controllers\Cotizaciones\AutoController as cotizacionesAuto;
 use App\Http\Controllers\CotizacionesController;
-use App\Http\Controllers\CotizacionesVidaController;
+use App\Http\Controllers\Cotizaciones\VidaController as cotizacionesVida;
 use App\Http\Controllers\HomeController;
-use App\Http\Controllers\PolizasAutoController;
+use App\Http\Controllers\Polizas\AutoController as polizasAuto;
 use App\Http\Controllers\PolizasController;
-use App\Http\Controllers\PolizasVidaController;
+use App\Http\Controllers\Polizas\VidaController as polizasVida;
 use App\Http\Controllers\UsuariosController;
 use Illuminate\Support\Facades\Route;
 
@@ -28,27 +28,29 @@ Route::get('/', HomeController::class)->middleware("sesion")->name("inicio");
 Route::resource('usuario', UsuariosController::class);
 
 //CotizacionesController
-Route::resource('cotizacion', CotizacionesController::class)->middleware("sesion");
+Route::get('cotizaciones', [CotizacionesController::class, "index"])->middleware("sesion")->name("cotizaciones.index");
+Route::get('cotizar/{tipo}', [CotizacionesController::class, "cotizar"])->middleware("sesion")->name("cotizaciones.cotizar");
+Route::get('cotizacion/{id}', [CotizacionesController::class, "detalles"])->middleware("sesion")->name("cotizaciones.detalles");
+Route::get('cotizacion/descargar/{id}', [CotizacionesController::class, "descargar"])->middleware("sesion")->name("cotizaciones.descargar");
+Route::get('cotizacion/emitir/{id}', [CotizacionesController::class, "emitir"])->middleware("sesion")->name("cotizaciones.emitir");
+Route::get('cotizar/vida', [CotizacionesController::class, "vida"])->middleware("sesion")->name("vida.cotizar");
+Route::get('cotizacion/documentos/{id}', [CotizacionesController::class, "documentos"])->middleware("sesion")->name("cotizaciones.documentos");
+Route::get('cotizacion/descargar/adjunto/{planid}/{adjuntoid}', [CotizacionesController::class, "adjunto"])->middleware("sesion")->name("cotizaciones.adjunto");
 
-//CotizacionesAutoController
-Route::post('cotizacion/auto/modelos', [CotizacionesAutoController::class, "modelos"])->middleware("sesion")->name("cotizacionAuto.modelos");
-Route::get('cotizacion/auto/descargar/{id}', [CotizacionesAutoController::class, "descargar"])->middleware("sesion")->name("cotizacionAuto.descargar");
-Route::resource('cotizacionAuto', CotizacionesAutoController::class)->middleware("sesion");
+//Auto
+Route::post('coizaciones/modelos', [CotizacionesController::class, "modelos"])->middleware("sesion")->name("cotizaciones.modelos");
+Route::resource('cotizacionesAuto', cotizacionesAuto::class)->middleware("sesion");
 
-//CotizacionesVidaController
-Route::get('cotizacion/vida/descargar/{id}', [CotizacionesVidaController::class, "descargar"])->middleware("sesion")->name("cotizacionVida.descargar");
-Route::resource('cotizacionVida', CotizacionesVidaController::class)->middleware("sesion");
+//Vida
+Route::resource('cotizacionesVida', cotizacionesVida::class)->middleware("sesion");
+
 
 //PolizasController
-Route::get('poliza/descargar/adjunto/{planid}/{adjuntoid}', [PolizasController::class, "adjunto"])->middleware("sesion")->name("poliza.adjunto");
-Route::resource('poliza', PolizasController::class)->middleware("sesion");
+Route::get('poliza/{id}', [PolizasController::class, "detalles"])->middleware("sesion")->name("polizas.detalles");
+Route::get('poliza/descargar/{id}', [PolizasController::class, "descargar"])->middleware("sesion")->name("polizas.descargar");
 
-//PolizasAutoController
-Route::get('poliza/auto/create/{id}', [PolizasAutoController::class, "create"])->middleware("sesion")->name("polizaAuto.create");
-Route::get('poliza/auto/descargar/{id}', [PolizasAutoController::class, "descargar"])->middleware("sesion")->name("polizaAuto.descargar");
-Route::resource('polizaAuto', PolizasAutoController::class)->middleware("sesion");
+//Auto
+Route::resource('polizasAuto', polizasAuto::class)->middleware("sesion");
 
-//PolizasVidaController
-Route::get('poliza/vida/create/{id}', [PolizasVidaController::class, "create"])->middleware("sesion")->name("polizaVida.create");
-Route::get('poliza/vida/descargar/{id}', [PolizasVidaController::class, "descargar"])->middleware("sesion")->name("polizaVida.descargar");
-Route::resource('polizaVida', PolizasVidaController::class)->middleware("sesion");
+//Vida
+Route::resource('polizasVida', polizasVida::class)->middleware("sesion");

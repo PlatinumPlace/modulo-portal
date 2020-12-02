@@ -14,79 +14,92 @@ class CotizacionesController extends Controller
         $this->api = $api;
     }
 
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index()
     {
         return view("cotizaciones.index");
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
+    public function cotizar($tipo)
     {
-        //
+        switch ($tipo) {
+            case 'auto':
+                $marcas = $this->api->getRecords("Marcas");
+                sort($marcas);
+                return view("auto.cotizar", ["marcas" => $marcas]);
+                break;
+
+            case 'vida':
+                return view("vida.cotizar");
+                break;
+        }
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
+    public function modelos(Request $request)
     {
-        //
+        $pag = 1;
+        $criteria = "Marca:equals:" . $request->input("marcaid");
+
+        do {
+            if ($modelos = $this->api->searchRecordsByCriteria("Modelos", $criteria, $pag, 200)) {
+                $pag++;
+                asort($modelos);
+                foreach ($modelos as $modelo) {
+                    echo '<option value="' . $modelo->getEntityId() . "," . $modelo->getFieldValue('Tipo') . '">' . strtoupper($modelo->getFieldValue('Name')) . '</option>';
+                }
+            } else {
+                $pag = 0;
+            }
+        } while ($pag > 0);
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
+    public function detalles($id)
     {
-        //
+        $detalles = $this->api->getRecord("Quotes", $id);
+        $planes = $detalles->getLineItems();
+        return view("cotizaciones.detalles", ["detalles" => $detalles, "planes" => $planes, "api" => $this->api]);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
+    public function descargar($id)
     {
-        //
+        $detalles = $this->api->getRecord("Quotes", $id);
+        $planes = $detalles->getLineItems();
+        return view("cotizaciones.descargar", ["detalles" => $detalles, "planes" => $planes, "api" => $this->api]);
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
+    public function documentos($id)
     {
-        //
+        $detalles = $this->api->getRecord("Quotes", $id);
+        $planes = $detalles->getLineItems();
+        return view("cotizaciones.documentos", ["detalles" => $detalles, "planes" => $planes, "api" => $this->api]);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
+    public function adjunto($planid, $adjuntoid)
     {
-        //
+        $fichero = $this->api->downloadAttachment("Products", $planid, $adjuntoid, storage_path("app/public"));
+        header('Content-Description: File Transfer');
+        header('Content-Type: application/octet-stream');
+        header('Content-Disposition: attachment; filename="' . basename($fichero) . '"');
+        header('Expires: 0');
+        header('Cache-Control: must-revalidate');
+        header('Pragma: public');
+        header('Content-Length: ' . filesize($fichero));
+        readfile($fichero);
+        unlink($fichero);
+    }
+
+    public function emitir($id)
+    {
+        $detalles = $this->api->getRecord("Quotes", $id);
+        $planes = $detalles->getLineItems();
+
+        switch ($detalles->getFieldValue('Tipo')) {
+            case 'Auto':
+                return view("auto.emitir", ["detalles" => $detalles, "planes" => $planes, "api" => $this->api]);
+                break;
+
+            case 'Vida':
+                return view("vida.emitir", ["detalles" => $detalles, "planes" => $planes, "api" => $this->api]);
+                break;
+        }
     }
 }

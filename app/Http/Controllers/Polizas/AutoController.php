@@ -1,11 +1,12 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Polizas;
 
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Zoho;
 
-class PolizasAutoController extends Controller
+class AutoController extends Controller
 {
     protected $api;
 
@@ -13,30 +14,7 @@ class PolizasAutoController extends Controller
     {
         $this->api = $api;
     }
-
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function create($id)
-    {
-        $detalles = $this->api->getRecord("Quotes", $id);
-        $planes = $detalles->getLineItems();
-        return view("polizasAuto.crear", ["detalles" => $detalles, "planes" => $planes, "api" => $this->api]);
-    }
-
+    
     /**
      * Store a newly created resource in storage.
      *
@@ -105,64 +83,12 @@ class PolizasAutoController extends Controller
 
         $this->api->update("Quotes", $request->input("id"), ["Deal_Name" => $id]);
 
-        $ruta = $request->file('cotizacion')->store("public");
-        $this->api->uploadAttachment("Deals", $id, storage_path("app/$ruta"));
-        unlink(storage_path("app/$ruta"));
+        $documentos = $request->file('documentos');
+        foreach ($documentos as $documento) {
+            $this->api->uploadAttachment("Deals", $id, storage_path("app/" . $documento->store("public")));
+            unlink(storage_path("app/" . $documento->store("public")));
+        }
 
-        return redirect()->route("polizaAuto.show", $id);
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        $detalles = $this->api->getRecord("Deals", $id);
-        return view("polizasAuto.mostrar", ["detalles" => $detalles, "api" => $this->api]);
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
-    }
-
-    public function descargar($id)
-    {
-        $detalles = $this->api->getRecord("Deals", $id);
-        $imagen = $this->api->downloadPhoto("Vendors", $detalles->getFieldValue('Aseguradora')->getEntityId());
-        $planDetalles = $this->api->getRecord("Products", $detalles->getFieldValue('Coberturas')->getEntityId());
-        return view("polizasAuto.descargar", ["detalles" => $detalles, "imagen" => $imagen, "planDetalles" => $planDetalles]);
+        return redirect()->route("polizas.detalles", $id);
     }
 }

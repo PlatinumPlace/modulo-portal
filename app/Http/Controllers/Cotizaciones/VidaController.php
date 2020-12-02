@@ -1,11 +1,12 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Cotizaciones;
 
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Zoho;
 
-class CotizacionesVidaController extends Controller
+class VidaController extends Controller
 {
     protected $api;
 
@@ -13,27 +14,7 @@ class CotizacionesVidaController extends Controller
     {
         $this->api = $api;
     }
-
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        return view("cotizacionesVida.crear");
-    }
-
+    
     /**
      * Store a newly created resource in storage.
      *
@@ -140,60 +121,6 @@ class CotizacionesVidaController extends Controller
         ];
 
         $id = $this->api->createRecords("Quotes", $registro, $planes);
-        return redirect()->route("cotizacionVida.show", $id);
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        $detalles = $this->api->getRecord("Quotes", $id);
-        $planes = $detalles->getLineItems();
-        return view("cotizacionesVida.mostrar", ["detalles" => $detalles, "planes" => $planes, "api" => $this->api]);
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
-    }
-
-    public function descargar($id)
-    {
-        $detalles = $this->api->getRecord("Quotes", $id);
-        $planes = $detalles->getLineItems();
-        return view("cotizacionesVida.descargar", ["detalles" => $detalles, "planes" => $planes, "api" => $this->api]);
+        return redirect()->route("cotizaciones.detalles", $id);
     }
 }
