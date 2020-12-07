@@ -74,7 +74,7 @@
                             Cotizaciones
                         </a>
 
-                        <a class="nav-link" href="#">
+                        <a class="nav-link" href="{{ route('polizas.reportes') }}">
                             <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
                             Pólizas
                         </a>

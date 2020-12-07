@@ -27,4 +27,24 @@ class PolizasController extends Controller
         $planDetalles = $this->api->getRecord("Products", $detalles->getFieldValue('Coberturas')->getEntityId());
         return view("polizas.descargar", ["detalles" => $detalles, "imagen" => $imagen, "planDetalles" => $planDetalles]);
     }
+    
+    public function reportes()
+    {
+        if (session("excel")) {
+            $fichero = session("excel");
+            header('Content-Description: File Transfer');
+            header('Content-Type: application/octet-stream');
+            header('Content-Disposition: attachment; filename="' . basename($fichero) . '"');
+            header('Expires: 0');
+            header('Cache-Control: must-revalidate');
+            header('Pragma: public');
+            header('Content-Length: ' . filesize($fichero));
+            readfile($fichero);
+            unlink($fichero);
+        }
+
+        $criterio = "Corredor:equals:" . session("empresaid");
+        $planes = $this->api->searchRecordsByCriteria("Products", $criterio, 1, 200);
+        return view("polizas.reportes", ["planes" => $planes]);
+    }
 }

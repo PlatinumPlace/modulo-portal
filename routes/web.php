@@ -7,6 +7,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\Polizas\AutoController as polizasAuto;
 use App\Http\Controllers\PolizasController;
 use App\Http\Controllers\Polizas\VidaController as polizasVida;
+use App\Http\Controllers\Polizas\ReportesController as reportes;
 use App\Http\Controllers\UsuariosController;
 use Illuminate\Support\Facades\Route;
 
@@ -48,6 +49,8 @@ Route::resource('cotizacionesVida', cotizacionesVida::class)->middleware("sesion
 //PolizasController
 Route::get('poliza/{id}', [PolizasController::class, "detalles"])->middleware("sesion")->name("polizas.detalles");
 Route::get('poliza/descargar/{id}', [PolizasController::class, "descargar"])->middleware("sesion")->name("polizas.descargar");
+Route::get('polizas/reportes', [PolizasController::class, "reportes"])->middleware("sesion")->name("polizas.reportes");
+Route::resource('reportes', reportes::class)->middleware("sesion");
 
 //Auto
 Route::resource('polizasAuto', polizasAuto::class)->middleware("sesion");

@@ -38,6 +38,7 @@ class UsuariosController extends Controller
                 session()->put('id', $usuario->getEntityId());
                 session()->put('nombre', $usuario->getFieldValue("First_Name") . " " . $usuario->getFieldValue("Last_Name"));
                 session()->put('empresaid', $usuario->getFieldValue('Account_Name')->getEntityId());
+                session()->put('empresanombre', $usuario->getFieldValue('Account_Name')->getLookupLabel());
                 session()->put('usuario', $request->input("email"));
                 session()->put('contrase_a', $request->input("contrase_a"));
                 return redirect()->route("inicio");

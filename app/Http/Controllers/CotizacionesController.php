@@ -45,7 +45,6 @@ class CotizacionesController extends Controller
     {
         $pag = 1;
         $criteria = "Marca:equals:" . $request->input("marcaid");
-
         do {
             if ($modelos = $this->api->searchRecordsByCriteria("Modelos", $criteria, $pag, 200)) {
                 $pag++;
