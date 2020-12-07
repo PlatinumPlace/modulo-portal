@@ -66,9 +66,9 @@
             </div>
 
             @if ($detalles->getFieldValue('Type') == 'Auto')
-                @include('auto.descargar.poliza')
+                @include('polizas.auto.descargar')
             @elseif ($detalles->getFieldValue('Type') == 'Vida')
-                @include('vida.descargar.poliza')
+                @include('polizas.vida.descargar')
             @endif
         </div>
     </div>

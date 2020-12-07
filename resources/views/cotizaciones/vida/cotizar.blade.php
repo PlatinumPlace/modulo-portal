@@ -1,17 +1,9 @@
-@extends('portal')
+<div class="card mb-4">
+    <div class="card-header">
+        Deudor
+    </div>
 
-@section('title', 'Cotizar vehiculo')
-
-@section('content')
-
-    <form method="POST" action=" {{ route('cotizacionesVida.store') }}">
-        @csrf
-
-        @include('cotizaciones.formularioCliente')
-
-        <br>
-        <h5>Para cotizar</h5>
-        <hr>
+    <div class="card-body">
         <div class="form-row">
             <div class="col-md-6 mb-3">
                 <label class="font-weight-bold">Edad del deudor</label>
@@ -29,7 +21,7 @@
             </div>
 
             <div class="col-md-6 mb-3">
-                <label class="font-weight-bold">Cuota Mensual</label>
+                <label class="font-weight-bold">Cuota mensual</label>
                 <input type="number" class="form-control" name="cuota">
             </div>
 
@@ -42,13 +34,9 @@
             </div>
 
             <div class="col-md-6 mb-3">
-                <label class="font-weight-bold">Suma Asegurada</label>
+                <label class="font-weight-bold">Suma asegurada</label>
                 <input type="number" class="form-control" name="suma" required>
             </div>
         </div>
-
-        <button class="btn btn-primary" type="submit">Cotizar</button>
-    </form>
-
-    <br>
-@endsection
+    </div>
+</div>

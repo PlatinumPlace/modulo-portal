@@ -21,17 +21,24 @@ class CotizacionesController extends Controller
 
     public function cotizar($tipo)
     {
+        $marcas = $this->api->getRecords("Marcas");
+        sort($marcas);
+
         switch ($tipo) {
             case 'auto':
-                $marcas = $this->api->getRecords("Marcas");
-                sort($marcas);
-                return view("auto.cotizar", ["marcas" => $marcas]);
+                $rutapost = "cotizacionesAuto.store";
                 break;
 
             case 'vida':
-                return view("vida.cotizar");
+                $rutapost = "cotizacionesVida.store";
                 break;
         }
+
+        return view("cotizaciones.cotizar", [
+            "tipo" => $tipo,
+            "marcas" => $marcas,
+            "rutapost" => $rutapost
+        ]);
     }
 
     public function modelos(Request $request)
@@ -90,16 +97,28 @@ class CotizacionesController extends Controller
     public function emitir($id)
     {
         $detalles = $this->api->getRecord("Quotes", $id);
+
+        if (!empty($detalles->getFieldValue('Deal_Name'))) {
+            abort(404);
+        }
+
         $planes = $detalles->getLineItems();
 
         switch ($detalles->getFieldValue('Tipo')) {
             case 'Auto':
-                return view("auto.emitir", ["detalles" => $detalles, "planes" => $planes, "api" => $this->api]);
+                $rutapost = "polizasAuto.store";
                 break;
 
             case 'Vida':
-                return view("vida.emitir", ["detalles" => $detalles, "planes" => $planes, "api" => $this->api]);
+                $rutapost = "polizasVida.store";
                 break;
         }
+
+        return view("cotizaciones.emitir", [
+            "rutapost" => $rutapost,
+            "detalles" => $detalles,
+            "planes" => $planes,
+            "api" => $this->api
+        ]);
     }
 }

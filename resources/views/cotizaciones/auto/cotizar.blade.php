@@ -1,17 +1,9 @@
-@extends('portal')
+<div class="card mb-4">
+    <div class="card-header">
+        Vehículo
+    </div>
 
-@section('title', 'Cotizar vehiculo')
-
-@section('content')
-
-    <form method="POST" action=" {{ route('cotizacionesAuto.store') }}">
-        @csrf
-
-        @include('cotizaciones.formularioCliente')
-
-        <br>
-        <h5>Vehículo</h5>
-        <hr>
+    <div class="card-body">
         <div class="form-row">
             <div class="col-md-6 mb-3">
                 <label class="font-weight-bold">Marca</label>
@@ -64,39 +56,34 @@
             </div>
 
             <div class="col-md-6 mb-3">
-                <label class="font-weight-bold">Suma Asegurada</label>
+                <label class="font-weight-bold">Suma asegurada</label>
                 <input type="number" class="form-control" name="suma" required>
             </div>
         </div>
+    </div>
+</div>
 
-        <button class="btn btn-primary" type="submit">Cotizar</button>
-    </form>
+<script>
+    function modelosAJAX(val) {
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
 
-    <br>
+        $.ajax({
+            url: "{{ route('cotizaciones.modelos') }}",
+            type: "POST",
+            data: {
+                marcaid: val.value
+            },
+            success: function(response) {
+                document.getElementById("modelos").innerHTML = response;
+            },
+            error: function(data) {
+                console.log(data);
+            }
+        });
+    }
 
-    <script>
-        function modelosAJAX(val) {
-            $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                }
-            });
-
-            $.ajax({
-                url: "{{ route('cotizaciones.modelos') }}",
-                type: "POST",
-                data: {
-                    marcaid: val.value
-                },
-                success: function(response) {
-                    document.getElementById("modelos").innerHTML = response;
-                },
-                error: function(data) {
-                    console.log(data);
-                }
-            });
-        }
-
-    </script>
-
-@endsection
+</script>

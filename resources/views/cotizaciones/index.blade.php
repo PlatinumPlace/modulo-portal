@@ -1,8 +1,12 @@
 @extends('portal')
 
-@section('title', 'Cotizaciones')
+@section('title', 'Cotizar')
 
 @section('content')
+
+    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+        <h1 class="h3 mb-0 text-gray-800">@yield('title')</h1>
+    </div>
 
     <div class="row justify-content-center">
         <div class="col-lg-10">

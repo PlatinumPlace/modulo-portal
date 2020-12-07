@@ -86,9 +86,9 @@
             </div>
 
             @if ($detalles->getFieldValue('Tipo') == 'Auto')
-                @include('auto.descargar.cotizacion')
+                @include('cotizaciones.auto.descargar')
             @elseif ($detalles->getFieldValue('Tipo') == 'Vida')
-                @include('vida.descargar.cotizacion')
+                @include('cotizaciones.vida.descargar')
             @endif
 
         </div>
