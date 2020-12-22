@@ -962,3 +962,34 @@ Trace::#0 C:\xampp\htdocs\portal\vendor\zohocrm\php-sdk-archive\src\crm\api\resp
 #12 {main}
 2020-12-18 10:07:33 INFO: Access Token has expired. Hence refreshing.
 2020-12-18 19:25:24 INFO: Access Token has expired. Hence refreshing.
+2020-12-21 16:38:05 INFO: Access Token has expired. Hence refreshing.
+2020-12-21 16:40:10 ERROR: zcrmsdk\crm\exception\ZCRMException Caused by:'No Content' in /opt/lampp/htdocs/portal/vendor/zohocrm/php-sdk-archive/src/crm/api/response/BulkAPIResponse.php(61)
+Trace::#0 /opt/lampp/htdocs/portal/vendor/zohocrm/php-sdk-archive/src/crm/api/response/CommonAPIResponse.php(76): zcrmsdk\crm\api\response\BulkAPIResponse->handleForFaultyResponses()
+#1 /opt/lampp/htdocs/portal/vendor/zohocrm/php-sdk-archive/src/crm/api/response/CommonAPIResponse.php(67): zcrmsdk\crm\api\response\CommonAPIResponse->processResponse()
+#2 /opt/lampp/htdocs/portal/vendor/zohocrm/php-sdk-archive/src/crm/api/response/BulkAPIResponse.php(47): zcrmsdk\crm\api\response\CommonAPIResponse->__construct('HTTP/1.1 204 \r\n...', 204)
+#3 /opt/lampp/htdocs/portal/vendor/zohocrm/php-sdk-archive/src/crm/api/APIRequest.php(148): zcrmsdk\crm\api\response\BulkAPIResponse->__construct('HTTP/1.1 204 \r\n...', 204)
+#4 /opt/lampp/htdocs/portal/vendor/zohocrm/php-sdk-archive/src/crm/api/handler/MassEntityAPIHandler.php(335): zcrmsdk\crm\api\APIRequest->getBulkAPIResponse()
+#5 /opt/lampp/htdocs/portal/vendor/zohocrm/php-sdk-archive/src/crm/crud/ZCRMModule.php(1131): zcrmsdk\crm\api\handler\MassEntityAPIHandler->searchRecords(Array, 'criteria', 'Marca:equals:32...')
+#6 /opt/lampp/htdocs/portal/app/Libraries/Zoho.php(36): zcrmsdk\crm\crud\ZCRMModule->searchRecordsByCriteria('Marca:equals:32...', Array)
+#7 /opt/lampp/htdocs/portal/app/Controllers/Cotizaciones.php(43): App\Libraries\Zoho->searchRecordsByCriteria('Modelos', 'Marca:equals:32...', 2, 200)
+#8 /opt/lampp/htdocs/portal/system/CodeIgniter.php(871): App\Controllers\Cotizaciones->modelos()
+#9 /opt/lampp/htdocs/portal/system/CodeIgniter.php(390): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Cotizaciones))
+#10 /opt/lampp/htdocs/portal/system/CodeIgniter.php(307): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#11 /opt/lampp/htdocs/portal/public/index.php(45): CodeIgniter\CodeIgniter->run()
+#12 {main}
+2020-12-21 18:26:37 INFO: Access Token has expired. Hence refreshing.
+2020-12-21 18:27:14 ERROR: zcrmsdk\crm\exception\ZCRMException Caused by:'Please check if the URL trying to access is a correct one' in /opt/lampp/htdocs/portal/vendor/zohocrm/php-sdk-archive/src/crm/api/response/APIResponse.php(93)
+Trace::#0 /opt/lampp/htdocs/portal/vendor/zohocrm/php-sdk-archive/src/crm/api/response/CommonAPIResponse.php(76): zcrmsdk\crm\api\response\APIResponse->handleForFaultyResponses()
+#1 /opt/lampp/htdocs/portal/vendor/zohocrm/php-sdk-archive/src/crm/api/response/CommonAPIResponse.php(67): zcrmsdk\crm\api\response\CommonAPIResponse->processResponse()
+#2 /opt/lampp/htdocs/portal/vendor/zohocrm/php-sdk-archive/src/crm/api/response/APIResponse.php(34): zcrmsdk\crm\api\response\CommonAPIResponse->__construct('HTTP/1.1 404 \r\n...', 404, NULL)
+#3 /opt/lampp/htdocs/portal/vendor/zohocrm/php-sdk-archive/src/crm/api/APIRequest.php(122): zcrmsdk\crm\api\response\APIResponse->__construct('HTTP/1.1 404 \r\n...', 404)
+#4 /opt/lampp/htdocs/portal/vendor/zohocrm/php-sdk-archive/src/crm/api/handler/EntityAPIHandler.php(45): zcrmsdk\crm\api\APIRequest->getAPIResponse()
+#5 /opt/lampp/htdocs/portal/vendor/zohocrm/php-sdk-archive/src/crm/crud/ZCRMModule.php(1070): zcrmsdk\crm\api\handler\EntityAPIHandler->getRecord(Array, Array)
+#6 /opt/lampp/htdocs/portal/app/Libraries/Zoho.php(71): zcrmsdk\crm\crud\ZCRMModule->getRecord('322237300000992...')
+#7 /opt/lampp/htdocs/portal/app/Controllers/Cotizaciones.php(283): App\Libraries\Zoho->getRecord('Quotes', '322237300000992...')
+#8 /opt/lampp/htdocs/portal/system/CodeIgniter.php(871): App\Controllers\Cotizaciones->detalles('322237300000992...')
+#9 /opt/lampp/htdocs/portal/system/CodeIgniter.php(390): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Cotizaciones))
+#10 /opt/lampp/htdocs/portal/system/CodeIgniter.php(307): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#11 /opt/lampp/htdocs/portal/public/index.php(45): CodeIgniter\CodeIgniter->run()
+#12 {main}
+2020-12-21 19:27:03 INFO: Access Token has expired. Hence refreshing.
