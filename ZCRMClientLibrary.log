@@ -993,3 +993,6 @@ Trace::#0 /opt/lampp/htdocs/portal/vendor/zohocrm/php-sdk-archive/src/crm/api/re
 #11 /opt/lampp/htdocs/portal/public/index.php(45): CodeIgniter\CodeIgniter->run()
 #12 {main}
 2020-12-21 19:27:03 INFO: Access Token has expired. Hence refreshing.
+2020-12-22 08:43:29 INFO: Access Token has expired. Hence refreshing.
+2020-12-22 08:54:38 INFO: Access Token has expired. Hence refreshing.
+2020-12-22 08:58:04 INFO: Access Token has expired. Hence refreshing.

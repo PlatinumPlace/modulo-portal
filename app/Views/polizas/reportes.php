@@ -6,6 +6,10 @@
     <h1 class="h2">Reporteria</h1>
 </div>
 
+<?php if (!empty($alerta)) : ?>
+    <div class="alert alert-danger" role="alert"> <?= $alerta ?> </div>
+<?php endif ?>
+
 
 <form enctype="multipart/form-data" action="<?= site_url("polizas/reporte") ?>" method="post">
     <?= csrf_field() ?>
@@ -28,7 +32,6 @@
                     <select name="plan" class="form-control">
                         <option value="Auto" selected>Auto</option>
                         <option value="Vida">Vida</option>
-                        <option value="desempleo">Vida/Desempleo</option>
                     </select>
                 </div>
 

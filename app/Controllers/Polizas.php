@@ -43,11 +43,11 @@ class POlizas extends BaseController
         ]);
     }
 
-    public function reportes()
+    public function reportes($alerta = null)
     {
         $criteria = "Corredor:equals:" . session("empresaid");
         $planes =  $this->api->searchRecordsByCriteria("Products", $criteria, 1, 200);
-        return view("polizas/reportes", ["planes" => $planes]);
+        return view("polizas/reportes", ["planes" => $planes, "alerta" => $alerta]);
     }
 
     public function reporte()
@@ -55,17 +55,18 @@ class POlizas extends BaseController
         $spreadsheet = new Spreadsheet;
         $sheet = $spreadsheet->getActiveSheet();
 
+        $sheet->setCellValue('A1', session("empresa"))
+            ->setCellValue('A2', 'Vendedor')
+            ->setCellValue('B2', session("nombre"))
+            ->setCellValue('A3', 'Desde')
+            ->setCellValue('B3', $this->request->getVar("desde"))
+            ->setCellValue('C3', 'Hasta')
+            ->setCellValue('D3', $this->request->getVar("hasta"))
+            ->setCellValue('A4', " ");
+
         switch ($this->request->getVar("plan")) {
             case 'Auto':
-                $sheet->setCellValue('A1', session("empresa"))
-                    ->setCellValue('A2', 'Vendedor')
-                    ->setCellValue('B2', session("nombre"))
-                    ->setCellValue('A3', 'Desde')
-                    ->setCellValue('B3', $this->request->getVar("desde"))
-                    ->setCellValue('C3', 'Hasta')
-                    ->setCellValue('D3', $this->request->getVar("hasta"))
-                    ->setCellValue('A4', " ")
-                    ->setCellValue('A5', "Inicio")
+                $sheet->setCellValue('A5', "Inicio")
                     ->setCellValue('B5', "Fin")
                     ->setCellValue('C5', "Cliente")
                     ->setCellValue('D5', "Marca")
@@ -78,6 +79,19 @@ class POlizas extends BaseController
                     ->setCellValue('J5', "Póliza")
                     ->setCellValue('K5', "Prima")
                     ->setCellValue('M5', "Comisión");
+                break;
+
+            case 'Vida':
+                $sheet->setCellValue('A5', "Inicio")
+                    ->setCellValue('B5', "Fin")
+                    ->setCellValue('C5', "Deudor")
+                    ->setCellValue('D5', "Codeudor")
+                    ->setCellValue('E5', "Suma Asegurada")
+                    ->setCellValue('F5', "Plan")
+                    ->setCellValue('G5', "Aseguradora")
+                    ->setCellValue('H5', "Póliza")
+                    ->setCellValue('I5', "Prima")
+                    ->setCellValue('L5', "Comisión");
                 break;
         }
 
@@ -120,6 +134,19 @@ class POlizas extends BaseController
                                     ->setCellValue('K' . $cont, number_format($trato->getFieldValue("Prima_total"), 2))
                                     ->setCellValue('M' . $cont, number_format($trato->getFieldValue("Comisi_n_corredor"), 2));
                                 break;
+
+                            case 'Vida':
+                                $sheet->setCellValue('A' . $cont,  $bien->getFieldValue("Vigencia_desde"))
+                                    ->setCellValue('B' . $cont, $bien->getFieldValue("Vigencia_hasta"))
+                                    ->setCellValue('C' . $cont, $bien->getFieldValue("Nombre") . " " . $bien->getFieldValue("Apellido"))
+                                    ->setCellValue('D' . $cont, $bien->getFieldValue("Nombre_codeudor") . " " . $bien->getFieldValue("Apellido_codeudor"))
+                                    ->setCellValue('E' . $cont, number_format($bien->getFieldValue("Suma_asegurada"), 2))
+                                    ->setCellValue('F' . $cont, $bien->getFieldValue("Plan"))
+                                    ->setCellValue('G' . $cont, $bien->getFieldValue('Aseguradora')->getLookupLabel())
+                                    ->setCellValue('H' . $cont, $bien->getFieldValue('P_liza'))
+                                    ->setCellValue('I' . $cont, number_format($trato->getFieldValue("Prima_total"), 2))
+                                    ->setCellValue('L' . $cont, number_format($trato->getFieldValue("Comisi_n_corredor"), 2));
+                                break;
                         }
 
                         $comision += $trato->getFieldValue("Comisi_n_corredor");
@@ -130,6 +157,11 @@ class POlizas extends BaseController
                 $pag = 0;
             }
         } while ($pag > 1);
+
+        if (empty($comision)) {
+            $alerta = "No se encontraron registros.";
+            return redirect()->to(site_url("polizas/reportes/$alerta"));
+        }
 
         $sheet->setCellValue('A' . ($cont + 1),  "")
             ->setCellValue('A' . ($cont + 2),  "Comisiones totales")
