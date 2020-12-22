@@ -6,7 +6,7 @@ use App\Libraries\Zoho;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
-class POlizas extends BaseController
+class Polizas extends BaseController
 {
     function __construct()
     {
