@@ -438,7 +438,7 @@
     setTimeout(function() {
         window.print();
         window.location = "<?= site_url("cotizaciones/detalles/" . $cotizacion->getEntityId()) ?>";
-    }, 500);
+    }, 1000);
 </script>
 
 <?= $this->endSection() ?>

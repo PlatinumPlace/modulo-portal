@@ -382,21 +382,21 @@ class Cotizaciones extends BaseController
         $bienid =  $this->api->createRecords("Bienes", $bien);
 
         $trato = [
+            "Deal_Name" => "Emisión",
             "Account_Name" => session("empresaid"),
             "Contact_Name" => session("id"),
             "Bien" => $bienid,
             "Aseguradora" => $aseguradoraid,
             "Coberturas" => $this->request->getVar("planid"),
-            "Comisi_n_aseguradora" => $comisionaseguradora,
-            "Comisi_n_corredor" => $comisioncorredor,
-            "Comisi_n_intermediario" => $comisionintermediario,
+            "Comisi_n_aseguradora" => round($comisionaseguradora, 2),
+            "Comisi_n_corredor" => round($comisioncorredor, 2),
+            "Comisi_n_intermediario" => round($comisionintermediario, 2),
             "Stage" => "Pre aprobada",
             "Closing_Date" => date("Y-m-d", strtotime(date("Y-m-d") . "+ 1 years")),
-            "Amount" => $comisionnobe,
-            "ISC" => $isc,
-            "Deal_Name" => "Emisión",
-            "Prima_neta" => $primaneta,
-            "Prima_total" => $primatotal,
+            "Amount" => round($comisionnobe, 2),
+            "ISC" => round($isc, 2),
+            "Prima_neta" => round($primaneta, 2),
+            "Prima_total" => round($primatotal, 2),
             "Type" => "Auto"
         ];
 
@@ -412,11 +412,11 @@ class Cotizaciones extends BaseController
                 $newName = $img->getRandomName();
                 $img->move(WRITEPATH . 'uploads', $newName);
                 $this->api->uploadAttachment("Deals", $tratoid, WRITEPATH . "uploads/$newName");
-                unlink(WRITEPATH . "tmp/$newName");
+                unlink(WRITEPATH . "uploads/$newName");
             }
         }
 
-        return redirect()->to("polizas/detalles/$tratoid");
+        return redirect()->to(site_url("polizas/detalles/$tratoid"));
     }
 
     public function emitirVida()
@@ -501,10 +501,10 @@ class Cotizaciones extends BaseController
                 $newName = $img->getRandomName();
                 $img->move(WRITEPATH . 'uploads', $newName);
                 $this->api->uploadAttachment("Deals", $tratoid, WRITEPATH . "uploads/$newName");
-                unlink(WRITEPATH . "tmp/$newName");
+                unlink(WRITEPATH . "uploads/$newName");
             }
         }
 
-        return redirect()->to("polizas/detalles/$tratoid");
+        return redirect()->to(site_url("polizas/detalles/$tratoid"));
     }
 }

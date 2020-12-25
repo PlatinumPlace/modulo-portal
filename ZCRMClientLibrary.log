@@ -996,3 +996,65 @@ Trace::#0 /opt/lampp/htdocs/portal/vendor/zohocrm/php-sdk-archive/src/crm/api/re
 2020-12-22 08:43:29 INFO: Access Token has expired. Hence refreshing.
 2020-12-22 08:54:38 INFO: Access Token has expired. Hence refreshing.
 2020-12-22 08:58:04 INFO: Access Token has expired. Hence refreshing.
+2020-12-22 09:58:31 INFO: Access Token has expired. Hence refreshing.
+2020-12-23 09:14:39 INFO: Access Token has expired. Hence refreshing.
+2020-12-23 10:56:16 INFO: Access Token has expired. Hence refreshing.
+2020-12-24 09:36:33 INFO: Access Token has expired. Hence refreshing.
+2020-12-25 13:24:41 INFO: Access Token has expired. Hence refreshing.
+2020-12-25 13:47:17 ERROR: zcrmsdk\crm\exception\ZCRMException Caused by:'No Content' in /var/www/html/portal/vendor/zohocrm/php-sdk-archive/src/crm/api/response/BulkAPIResponse.php(61)
+Trace::#0 /var/www/html/portal/vendor/zohocrm/php-sdk-archive/src/crm/api/response/CommonAPIResponse.php(76): zcrmsdk\crm\api\response\BulkAPIResponse->handleForFaultyResponses()
+#1 /var/www/html/portal/vendor/zohocrm/php-sdk-archive/src/crm/api/response/CommonAPIResponse.php(67): zcrmsdk\crm\api\response\CommonAPIResponse->processResponse()
+#2 /var/www/html/portal/vendor/zohocrm/php-sdk-archive/src/crm/api/response/BulkAPIResponse.php(47): zcrmsdk\crm\api\response\CommonAPIResponse->__construct()
+#3 /var/www/html/portal/vendor/zohocrm/php-sdk-archive/src/crm/api/APIRequest.php(148): zcrmsdk\crm\api\response\BulkAPIResponse->__construct()
+#4 /var/www/html/portal/vendor/zohocrm/php-sdk-archive/src/crm/api/handler/MassEntityAPIHandler.php(335): zcrmsdk\crm\api\APIRequest->getBulkAPIResponse()
+#5 /var/www/html/portal/vendor/zohocrm/php-sdk-archive/src/crm/crud/ZCRMModule.php(1131): zcrmsdk\crm\api\handler\MassEntityAPIHandler->searchRecords()
+#6 /var/www/html/portal/app/Libraries/Zoho.php(36): zcrmsdk\crm\crud\ZCRMModule->searchRecordsByCriteria()
+#7 /var/www/html/portal/app/Controllers/Home.php(19): App\Libraries\Zoho->searchRecordsByCriteria()
+#8 /var/www/html/portal/system/CodeIgniter.php(871): App\Controllers\Home->index()
+#9 /var/www/html/portal/system/CodeIgniter.php(390): CodeIgniter\CodeIgniter->runController()
+#10 /var/www/html/portal/system/CodeIgniter.php(307): CodeIgniter\CodeIgniter->handleRequest()
+#11 /var/www/html/portal/public/index.php(45): CodeIgniter\CodeIgniter->run()
+#12 {main}
+2020-12-25 13:47:26 ERROR: zcrmsdk\crm\exception\ZCRMException Caused by:'No Content' in /var/www/html/portal/vendor/zohocrm/php-sdk-archive/src/crm/api/response/BulkAPIResponse.php(61)
+Trace::#0 /var/www/html/portal/vendor/zohocrm/php-sdk-archive/src/crm/api/response/CommonAPIResponse.php(76): zcrmsdk\crm\api\response\BulkAPIResponse->handleForFaultyResponses()
+#1 /var/www/html/portal/vendor/zohocrm/php-sdk-archive/src/crm/api/response/CommonAPIResponse.php(67): zcrmsdk\crm\api\response\CommonAPIResponse->processResponse()
+#2 /var/www/html/portal/vendor/zohocrm/php-sdk-archive/src/crm/api/response/BulkAPIResponse.php(47): zcrmsdk\crm\api\response\CommonAPIResponse->__construct()
+#3 /var/www/html/portal/vendor/zohocrm/php-sdk-archive/src/crm/api/APIRequest.php(148): zcrmsdk\crm\api\response\BulkAPIResponse->__construct()
+#4 /var/www/html/portal/vendor/zohocrm/php-sdk-archive/src/crm/api/handler/MassEntityAPIHandler.php(335): zcrmsdk\crm\api\APIRequest->getBulkAPIResponse()
+#5 /var/www/html/portal/vendor/zohocrm/php-sdk-archive/src/crm/crud/ZCRMModule.php(1131): zcrmsdk\crm\api\handler\MassEntityAPIHandler->searchRecords()
+#6 /var/www/html/portal/app/Libraries/Zoho.php(36): zcrmsdk\crm\crud\ZCRMModule->searchRecordsByCriteria()
+#7 /var/www/html/portal/app/Controllers/Home.php(19): App\Libraries\Zoho->searchRecordsByCriteria()
+#8 /var/www/html/portal/system/CodeIgniter.php(871): App\Controllers\Home->index()
+#9 /var/www/html/portal/system/CodeIgniter.php(390): CodeIgniter\CodeIgniter->runController()
+#10 /var/www/html/portal/system/CodeIgniter.php(307): CodeIgniter\CodeIgniter->handleRequest()
+#11 /var/www/html/portal/public/index.php(45): CodeIgniter\CodeIgniter->run()
+#12 {main}
+2020-12-25 13:59:05 ERROR: zcrmsdk\crm\exception\ZCRMException Caused by:'No Content' in /var/www/html/portal/vendor/zohocrm/php-sdk-archive/src/crm/api/response/BulkAPIResponse.php(61)
+Trace::#0 /var/www/html/portal/vendor/zohocrm/php-sdk-archive/src/crm/api/response/CommonAPIResponse.php(76): zcrmsdk\crm\api\response\BulkAPIResponse->handleForFaultyResponses()
+#1 /var/www/html/portal/vendor/zohocrm/php-sdk-archive/src/crm/api/response/CommonAPIResponse.php(67): zcrmsdk\crm\api\response\CommonAPIResponse->processResponse()
+#2 /var/www/html/portal/vendor/zohocrm/php-sdk-archive/src/crm/api/response/BulkAPIResponse.php(47): zcrmsdk\crm\api\response\CommonAPIResponse->__construct()
+#3 /var/www/html/portal/vendor/zohocrm/php-sdk-archive/src/crm/api/APIRequest.php(148): zcrmsdk\crm\api\response\BulkAPIResponse->__construct()
+#4 /var/www/html/portal/vendor/zohocrm/php-sdk-archive/src/crm/api/handler/MassEntityAPIHandler.php(335): zcrmsdk\crm\api\APIRequest->getBulkAPIResponse()
+#5 /var/www/html/portal/vendor/zohocrm/php-sdk-archive/src/crm/crud/ZCRMModule.php(1131): zcrmsdk\crm\api\handler\MassEntityAPIHandler->searchRecords()
+#6 /var/www/html/portal/app/Libraries/Zoho.php(36): zcrmsdk\crm\crud\ZCRMModule->searchRecordsByCriteria()
+#7 /var/www/html/portal/app/Controllers/Home.php(19): App\Libraries\Zoho->searchRecordsByCriteria()
+#8 /var/www/html/portal/system/CodeIgniter.php(871): App\Controllers\Home->index()
+#9 /var/www/html/portal/system/CodeIgniter.php(390): CodeIgniter\CodeIgniter->runController()
+#10 /var/www/html/portal/system/CodeIgniter.php(307): CodeIgniter\CodeIgniter->handleRequest()
+#11 /var/www/html/portal/public/index.php(45): CodeIgniter\CodeIgniter->run()
+#12 {main}
+2020-12-25 14:05:27 ERROR: zcrmsdk\crm\exception\ZCRMException Caused by:'No Content' in /var/www/html/portal/vendor/zohocrm/php-sdk-archive/src/crm/api/response/BulkAPIResponse.php(61)
+Trace::#0 /var/www/html/portal/vendor/zohocrm/php-sdk-archive/src/crm/api/response/CommonAPIResponse.php(76): zcrmsdk\crm\api\response\BulkAPIResponse->handleForFaultyResponses()
+#1 /var/www/html/portal/vendor/zohocrm/php-sdk-archive/src/crm/api/response/CommonAPIResponse.php(67): zcrmsdk\crm\api\response\CommonAPIResponse->processResponse()
+#2 /var/www/html/portal/vendor/zohocrm/php-sdk-archive/src/crm/api/response/BulkAPIResponse.php(47): zcrmsdk\crm\api\response\CommonAPIResponse->__construct()
+#3 /var/www/html/portal/vendor/zohocrm/php-sdk-archive/src/crm/api/APIRequest.php(148): zcrmsdk\crm\api\response\BulkAPIResponse->__construct()
+#4 /var/www/html/portal/vendor/zohocrm/php-sdk-archive/src/crm/api/handler/MassEntityAPIHandler.php(335): zcrmsdk\crm\api\APIRequest->getBulkAPIResponse()
+#5 /var/www/html/portal/vendor/zohocrm/php-sdk-archive/src/crm/crud/ZCRMModule.php(1131): zcrmsdk\crm\api\handler\MassEntityAPIHandler->searchRecords()
+#6 /var/www/html/portal/app/Libraries/Zoho.php(36): zcrmsdk\crm\crud\ZCRMModule->searchRecordsByCriteria()
+#7 /var/www/html/portal/app/Controllers/Cotizaciones.php(17): App\Libraries\Zoho->searchRecordsByCriteria()
+#8 /var/www/html/portal/system/CodeIgniter.php(871): App\Controllers\Cotizaciones->index()
+#9 /var/www/html/portal/system/CodeIgniter.php(390): CodeIgniter\CodeIgniter->runController()
+#10 /var/www/html/portal/system/CodeIgniter.php(307): CodeIgniter\CodeIgniter->handleRequest()
+#11 /var/www/html/portal/public/index.php(45): CodeIgniter\CodeIgniter->run()
+#12 {main}
+2020-12-25 14:24:43 INFO: Access Token has expired. Hence refreshing.

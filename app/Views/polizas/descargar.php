@@ -460,7 +460,7 @@
     setTimeout(function() {
         window.print();
         window.location = "<?= site_url("polizas/detalles/" . $poliza->getEntityId()) ?>";
-    }, 500);
+    }, 1000);
 </script>
 
 <?= $this->endSection() ?>

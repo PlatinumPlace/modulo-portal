@@ -125,14 +125,5 @@ nb-configuration.xml
 /phpunit*.xml
 /.phpunit.*.cache
 
-app/Views/cotizaciones/emitir.php
-public/img/3222373000005945063_Vendors_photo.png
-public/img/3222373000005945077_Vendors_photo.png
-public/img/3222373000005945074_Vendors_photo.png
-public/img/3222373000005945079_Vendors_photo.png
-public/img/3222373000005945092_Vendors_photo.png
-public/img/auto.png
-public/img/logo.png
-public/img/vida.png
+*.png
 public/token/zcrm_oauthtokens.txt
-ZCRMClientLibrary.log
