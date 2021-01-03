@@ -20,9 +20,8 @@ class Home extends BaseController
 		$lista =  $this->api->searchRecordsByCriteria("Quotes", $criteria, 1, 200);
 		foreach ($lista as $cotizacion) {
 			if (date("Y-m", strtotime($cotizacion->getCreatedTime())) == date('Y-m')) {
-				if (empty($cotizacion->getFieldValue('Deal_Name'))) {
-					$total++;
-				} else {
+				$total++;
+				if (!empty($cotizacion->getFieldValue('Deal_Name'))) {
 					$emisiones++;
 				}
 			}
