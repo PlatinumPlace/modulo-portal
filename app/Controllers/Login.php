@@ -13,10 +13,10 @@ class Login extends BaseController
 
     public function index()
     {
-        return view("login/ingresar");
+        return view("login");
     }
 
-    public function ingresar()
+    public function post()
     {
         $criteria = "((Email:equals:" . $this->request->getVar("email") . ") and (Contrase_a:equals:" . $this->request->getVar("contrase_a") . "))";
         if ($usuarios = $this->api->searchRecordsByCriteria("Contacts", $criteria, 1, 1)) {
@@ -27,19 +27,10 @@ class Login extends BaseController
                 session()->set('empresa', $usuario->getFieldValue('Account_Name')->getLookupLabel());
                 session()->set('usuario', $usuario->getFieldValue("Email"));
                 session()->set('contrase_a',  $usuario->getFieldValue("Contrase_a"));
+                return redirect()->to(site_url());
             }
         }
-
-        if (session()->has("usuario")) {
-            return redirect()->to(site_url());
-        } else {
-            return view("login/ingresar", ["alerta" => "Usuario o contraseña incorrectos"]);
-        }
-    }
-
-    public function salir()
-    {
-        session()->destroy();
-        return redirect()->to(site_url());
+        session()->setFlashdata("alerta", "Usuario o contraseña incorrectos");
+        return redirect()->back();
     }
 }

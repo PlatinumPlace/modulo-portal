@@ -1,127 +1,107 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
-    <!-- Required meta tags -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
-    <title> <?= (!empty($titulo)) ? $titulo : "IT - Insurance Tech" ?> </title>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+    <title>IT - Insurance Tech</title>
+    <link href="<?= base_url("css/styles.css") ?>" rel="stylesheet" />
     <link rel="icon" href="<?= base_url("favicon.ico") ?>" type="image/x-icon" />
-
-    <link rel="canonical" href="https://getbootstrap.com/docs/4.5/examples/dashboard/">
-
-    <!-- Bootstrap core CSS -->
-    <link href="<?= base_url("css/bootstrap.min.css") ?>" rel="stylesheet">
-
-    <!-- Custom styles for this template -->
-    <link href="<?= base_url("css/dashboard.css") ?>" rel="stylesheet">
-
-    <style>
-        .bd-placeholder-img {
-            font-size: 1.125rem;
-            text-anchor: middle;
-            -webkit-user-select: none;
-            -moz-user-select: none;
-            -ms-user-select: none;
-            user-select: none;
-        }
-
-        @media (min-width: 768px) {
-            .bd-placeholder-img-lg {
-                font-size: 3.5rem;
-            }
-        }
-    </style>
+    <link href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css" rel="stylesheet" crossorigin="anonymous" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/js/all.min.js" crossorigin="anonymous"></script>
 </head>
 
-<body>
+<body class="sb-nav-fixed">
+    <nav class="sb-topnav navbar navbar-expand navbar-dark bg-primary">
+        <a class="navbar-brand" href="<?= site_url() ?>">IT - Insurance Tech</a>
+        <button class="btn btn-link btn-sm order-1 order-lg-0" id="sidebarToggle" href="#"><i class="fas fa-bars"></i></button>
 
-    <header class="navbar navbar-dark sticky-top bg-primary flex-md-nowrap p-0 shadow">
-        <a class="navbar-brand col-md-3 col-lg-2 me-0 px-3" href="<?= site_url() ?>">IT - Insurance Tech</a>
-        <ul class="navbar-nav px-3">
-            <li class="nav-item text-nowrap">
-                <a class="nav-link active" href="<?= site_url("login/salir") ?>" onclick="return confirm('¿Deseas cerrar sesión?')"><?= session()->get("nombre") ?></a>
+        <div class="d-none d-md-inline-block form-inline ml-auto mr-0 mr-md-3 my-2 my-md-0">
+            &nbsp;
+        </div>
+
+        <!-- Navbar-->
+        <ul class="navbar-nav ml-auto ml-md-0">
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" id="userDropdown" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-user fa-fw"></i> </a>
+                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
+                    <a class="dropdown-item" href="<?= site_url("editar") ?>">Cambiar contraseña</a>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" href="<?= site_url("logout") ?>" onclick="return confirm('¿Continuar?')">Cerrar sesión</a>
+                </div>
             </li>
         </ul>
-    </header>
+    </nav>
 
-    <div class="container-fluid">
-        <div class="row">
-            <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
-                <div class="sidebar-sticky pt-3">
-                    <div class="text-center">
-                        <img src="<?= base_url("img/logo.png") ?>" alt="" width="150" height="150">
+    <div id="layoutSidenav">
+        <div id="layoutSidenav_nav">
+            <nav class="sb-sidenav accordion sb-sidenav-light" id="sidenavAccordion">
+                <div class="sb-sidenav-menu">
+                    <div class="nav">
+                        <div class="text-center">
+                            <img src="<?= base_url("img/logo.png") ?>" alt="" width="150" height="150">
+                        </div>
+
+                        <div class="sb-sidenav-menu-heading">&nbsp;</div>
+                        <a class="nav-link" href="<?= site_url() ?>">
+                            <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
+                            Panel de control
+                        </a>
+
+                        <div class="sb-sidenav-menu-heading">Cotizaciones</div>
+                        <a class="nav-link" href="<?= site_url("lista/cotizaciones") ?>">
+                            <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
+                            Lista
+                        </a>
+
+                        <a class="nav-link" href="<?= site_url("cotizar/cotizaciones") ?>">
+                            <div class="sb-nav-link-icon"><i class="fas fa-book-open"></i></div>
+                            Cotizar
+                        </a>
+
+                        <div class="sb-sidenav-menu-heading">Pólizas</div>
+                        <a class="nav-link" href="<?= site_url("lista/polizas") ?>">
+                            <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
+                            Lista
+                        </a>
+
+                        <a class="nav-link" href="<?= site_url("reportes") ?>">
+                            <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
+                            Reportes
+                        </a>
                     </div>
-                    <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
-                        <span><?= session("empresa") ?></span>
-                    </h6>
-                    <ul class="nav flex-column">
-                        <li class="nav-item">
-                            <a class="nav-link" href="<?= site_url() ?>">
-                                <span data-feather="home"></span>
-                                Panel de control
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="<?= site_url("usuarios/editar") ?>">
-                                <span data-feather="users"></span>
-                                Cambiar contraseña
-                            </a>
-                        </li>
-                    </ul>
-
-                    <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
-                        <span>Cotizaciones</span>
-                    </h6>
-                    <ul class="nav flex-column">
-                        <li class="nav-item">
-                            <a class="nav-link" href="<?= site_url("cotizaciones") ?>">
-                                <span data-feather="bar-chart-2"></span>
-                                Lista
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="<?= site_url("cotizaciones/cotizar") ?>">
-                                <span data-feather="file"></span>
-                                Cotizar
-                            </a>
-                        </li>
-                    </ul>
-
-                    <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
-                        <span>Pólizas</span>
-                    </h6>
-                    <ul class="nav flex-column mb-2">
-                        <li class="nav-item">
-                            <a class="nav-link" href="<?= site_url("polizas") ?>">
-                                <span data-feather="bar-chart-2"></span>
-                                Lista
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="<?= site_url("polizas/reportes") ?>">
-                                <span data-feather="file-text"></span>
-                                Reportes
-                            </a>
-                        </li>
-                    </ul>
+                </div>
+                <div class="sb-sidenav-footer">
+                    <div class="small"><?= session("empresa") ?></div>
+                    <?= session()->get("nombre") ?>
                 </div>
             </nav>
-
-            <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-md-4">
-                <?= $this->renderSection('content') ?>
+        </div>
+        <div id="layoutSidenav_content">
+            <main>
+                <div class="container-fluid">
+                    <?= $this->renderSection('content') ?>
+                </div>
             </main>
+            <footer class="py-4 bg-light mt-auto">
+                <div class="container-fluid">
+                    <div class="d-flex align-items-center justify-content-between small">
+                        <div class="text-muted">Copyright &copy; Grupo Nobe <?= date("Y") ?></div>
+                    </div>
+                </div>
+            </footer>
         </div>
     </div>
 
     <script src="https://code.jquery.com/jquery-3.5.1.js" integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="anonymous"></script>
-    <script>
-        window.jQuery || document.write('<script src="../assets/js/vendor/jquery.slim.min.js"><\/script>')
-    </script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/feather-icons/4.9.0/feather.min.js"></script>
-    <script src="<?= base_url("js/bootstrap.bundle.min.js") ?>"></script>
-    <script src="<?= base_url("js/dashboard.js") ?>"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+    <script src="<?= base_url("js/scripts.js") ?>"></script>
+    <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js" crossorigin="anonymous"></script>
+    <script src="<?= base_url("assets/demo/datatables-demo.js") ?>"></script>
 </body>
 
 </html>

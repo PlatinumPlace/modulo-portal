@@ -13,6 +13,7 @@ class Home extends BaseController
 
 	public function index()
 	{
+		//Cotizaciones
 		$total = 0;
 		$emisiones = 0;
 		$criteria = "Account_Name:equals:" . session()->get("empresaid");
@@ -26,11 +27,8 @@ class Home extends BaseController
 				}
 			}
 		}
-		return view("home/tarjetas", ["cotizaciones" => $total, "emisiones" => $emisiones]);
-	}
 
-	public function tabla()
-	{
+		//Emisiones
 		$aseguradoras = array();
 		$criteria = "Account_Name:equals:" . session()->get("empresaid");
 		$lista =  $this->api->searchRecordsByCriteria("Deals", $criteria, 1, 200);
@@ -40,6 +38,11 @@ class Home extends BaseController
 			}
 		}
 		$aseguradoras = array_count_values($aseguradoras);
-		return view("home/tabla", ["aseguradoras" => $aseguradoras]);
+
+		return view("index", [
+			"cotizaciones" => $total,
+			"emisiones" => $emisiones,
+			"aseguradoras" => $aseguradoras
+		]);
 	}
 }

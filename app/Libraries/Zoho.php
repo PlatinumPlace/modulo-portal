@@ -17,7 +17,7 @@ class Zoho
             "client_id" => "1000.7FJQ4A2KDH9S2IJWDYL13HATQFMA2H",
             "client_secret" => "c3f1d0589803f294a7c5b27e3968ae1658927da9d7",
             "currentUserEmail" => "tecnologia@gruponobe.com",
-            "redirect_uri" => site_url("/"),
+            "redirect_uri" => site_url(),
             "token_persistence_path" => "token"
         ]);
     }
