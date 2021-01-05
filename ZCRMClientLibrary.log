@@ -597,3 +597,5 @@ Trace::#0 C:\xampp\htdocs\portal\vendor\zohocrm\php-sdk-archive\src\crm\api\resp
 #10 C:\xampp\htdocs\portal\system\CodeIgniter.php(307): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
 #11 C:\xampp\htdocs\portal\public\index.php(45): CodeIgniter\CodeIgniter->run()
 #12 {main}
+2021-01-03 18:02:31 INFO: Access Token has expired. Hence refreshing.
+2021-01-05 07:41:50 INFO: Access Token has expired. Hence refreshing.

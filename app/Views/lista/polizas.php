@@ -12,8 +12,10 @@
                 <thead>
                     <tr>
                         <th>Chasis o RNC/Cédula</th>
+                        <th>Aseguradora</th>
+                        <th>Inicio</th>
+                        <th>Fin</th>
                         <th>Vendedor</th>
-                        <th>Fecha</th>
                         <th>Opcion</th>
                     </tr>
                 </thead>
@@ -22,8 +24,10 @@
                     <?php foreach ($polizas as $poliza) : ?>
                         <tr>
                             <td><?= $poliza->getFieldValue('Bien')->getLookupLabel() ?></td>
-                            <td><?= $poliza->getFieldValue('Contact_Name')->getLookupLabel() ?></td>
+                            <td><?= $poliza->getFieldValue('Aseguradora')->getLookupLabel() ?></td>
                             <td><?= date('d/m/Y', strtotime($poliza->getCreatedTime())) ?></td>
+                            <td><?= date('d/m/Y', strtotime($poliza->getFieldValue('Closing_Date'))) ?></td>
+                            <td><?= $poliza->getFieldValue('Contact_Name')->getLookupLabel() ?></td>
                             <td>
                                 <a href="<?= site_url("detalles/poliza/" . $poliza->getEntityId()) ?>" title="Detalles">
                                     <i class="fas fa-info"></i>
