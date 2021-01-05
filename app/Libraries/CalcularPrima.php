@@ -56,6 +56,7 @@ class CalcularPrima
                 $deudor = ($tasa->getFieldValue('Valor') / 100);
             }
         }
+
         return ($suma / 1000) * $deudor;
     }
 
@@ -72,6 +73,7 @@ class CalcularPrima
                     break;
             }
         }
+
         $prima_codeudor = ($suma / 1000) * ($codeudor - $deudor);
         return $prima + $prima_codeudor;
     }
@@ -89,6 +91,7 @@ class CalcularPrima
                     break;
             }
         }
+
         $prima_vida = ($suma / 1000) * $vida;
         $prima_desempleo =  ($cuota / 1000) * $desempleo;
         return $prima_vida + $prima_desempleo;
