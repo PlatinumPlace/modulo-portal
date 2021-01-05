@@ -1,57 +1,29 @@
-# CodeIgniter 4 Framework
+# ZCRM PHP SDK + CodeIgniter 4 Framework
 
-## What is CodeIgniter?
+## Por que CodeIgniter?
 
-CodeIgniter is a PHP full-stack web framework that is light, fast, flexible, and secure. 
-More information can be found at the [official site](http://codeigniter.com).
+CodeIgniter es un marco web PHP de pila completa que es ligero, rápido, flexible y seguro, es facil de utilizar para principiantes con y sin conocimiento previo sobre Frameworks ademas de ser sencillo de mantener y actualizar. Se puede encontrar más información en el [sitio oficial](http://codeigniter.com).
 
-This repository holds the distributable version of the framework,
-including the user guide. It has been built from the 
-[development repository](https://github.com/codeigniter4/CodeIgniter4).
+Este repositorio contiene la versión distribuible del marco, incluida la guía del usuario. Se ha creado a partir del [repositorio de desarrollo](https://github.com/codeigniter4/CodeIgniter4).
 
-More information about the plans for version 4 can be found in [the announcement](http://forum.codeigniter.com/thread-62615.html) on the forums.
+Puede encontrar más información sobre los planes para la versión 4 en [el anuncio](http://forum.codeigniter.com/thread-62615.html) en los foros.
 
-The user guide corresponding to this version of the framework can be found
-[here](https://codeigniter4.github.io/userguide/). 
+La guía de usuario correspondiente a esta versión del marco se puede encontrar [aquí](https://codeigniter4.github.io/userguide/).
 
+## Por que ZCRM PHP SDK version 2?
 
-## Important Change with index.php
+La version del api proviene del paquete de composer `"zohocrm/php-sdk-archive": "2.2.1"`, esto se debe a que el paguete actual del sdk se actualizo a una version no compatible con el proyecto. Mas informacion [aquí](https://github.com/zoho/zcrm-php-sdk#archival-notice).
 
-`index.php` is no longer in the root of the project! It has been moved inside the *public* folder,
-for better security and separation of components.
+Esta version cuenta con documentacon detalla sobre el uso de sus metodos. Mas informacion [aquí](https://www.zoho.com/crm/developer/docs/php-sdk/sample-codes.html).
 
-This means that you should configure your web server to "point" to your project's *public* folder, and
-not to the project root. A better practice would be to configure a virtual host to point there. A poor practice would be to point your web server to the project root and expect to enter *public/...*, as the rest of your logic and the
-framework are exposed.
+Para mas informacion sobre como instalar esta version de sdk entrar [aquí](https://www.zoho.com/es-xl/crm/developer/docs/server-side-sdks/php.html#Initialization).
 
-**Please** read the user guide for a better explanation of how CI4 works!
-The user guide updating and deployment is a bit awkward at the moment, but we are working on it!
+## Creditos
 
-## Repository Management
+[CodeIgniter4](https://github.com/codeigniter4/CodeIgniter4), framework.
 
-We use Github issues, in our main repository, to track **BUGS** and to track approved **DEVELOPMENT** work packages.
-We use our [forum](http://forum.codeigniter.com) to provide SUPPORT and to discuss
-FEATURE REQUESTS.
+[PhpSpreadsheet](https://github.com/PHPOffice/PhpSpreadsheet), libreria.
 
-This repository is a "distribution" one, built by our release preparation script. 
-Problems with it can be raised on our forum, or as issues in the main repository.
+[zcrm-php-sdk](https://github.com/zoho/zcrm-php-sdk), libreria.
 
-## Contributing
-
-We welcome contributions from the community.
-
-Please read the [*Contributing to CodeIgniter*](https://github.com/codeigniter4/CodeIgniter4/blob/develop/contributing.md) section in the development repository.
-
-## Server Requirements
-
-PHP version 7.2 or higher is required, with the following extensions installed: 
-
-- [intl](http://php.net/manual/en/intl.requirements.php)
-- [libcurl](http://php.net/manual/en/curl.requirements.php) if you plan to use the HTTP\CURLRequest library
-
-Additionally, make sure that the following extensions are enabled in your PHP:
-
-- json (enabled by default - don't turn it off)
-- [mbstring](http://php.net/manual/en/mbstring.installation.php)
-- [mysqlnd](http://php.net/manual/en/mysqlnd.install.php)
-- xml (enabled by default - don't turn it off)
+[startbootstrap-sb-admin](https://github.com/startbootstrap/startbootstrap-sb-admin), template.
