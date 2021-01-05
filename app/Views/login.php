@@ -22,13 +22,13 @@
                   <?= csrf_field() ?>
 
                   <div class="form-group">
-                    <label class="small mb-1" for="inputEmailAddress">Correo electrónico</label>
-                    <input class="form-control py-4" id="inputEmailAddress" type="email" name="email" required autofocus />
+                    <label class="small mb-1">Correo electrónico</label>
+                    <input class="form-control py-4" type="email" name="email" required autofocus />
                   </div>
 
                   <div class="form-group">
-                    <label class="small mb-1" for="inputPassword">Contraseña</label>
-                    <input class="form-control py-4" id="inputPassword" type="password" name="contrase_a" required />
+                    <label class="small mb-1">Contraseña</label>
+                    <input class="form-control py-4" type="password" name="contrase_a" required />
                   </div>
 
                   <div class="form-group d-flex align-items-center justify-content-between mt-4 mb-0">

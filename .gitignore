@@ -128,3 +128,4 @@ nb-configuration.xml
 *.png
 public/token/zcrm_oauthtokens.txt
 app/Libraries/CalcularPrima.php
+public/favicon.ico
