@@ -28,9 +28,9 @@
             <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" id="userDropdown" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-user fa-fw"></i> </a>
                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
-                    <a class="dropdown-item" href="<?= site_url("editar") ?>">Cambiar contraseña</a>
+                    <a class="dropdown-item" href="<?= site_url("login/editar") ?>">Cambiar contraseña</a>
                     <div class="dropdown-divider"></div>
-                    <a class="dropdown-item" href="<?= site_url("logout") ?>" onclick="return confirm('¿Continuar?')">Cerrar sesión</a>
+                    <a class="dropdown-item" href="<?= site_url("login/salir") ?>" onclick="return confirm('¿Continuar?')">Cerrar sesión</a>
                 </div>
             </li>
         </ul>
@@ -52,23 +52,23 @@
                         </a>
 
                         <div class="sb-sidenav-menu-heading">Cotizaciones</div>
-                        <a class="nav-link" href="<?= site_url("lista/cotizaciones") ?>">
+                        <a class="nav-link" href="<?= site_url("cotizaciones") ?>">
                             <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
                             Lista
                         </a>
 
-                        <a class="nav-link" href="<?= site_url("cotizar/cotizaciones") ?>">
+                        <a class="nav-link" href="<?= site_url("cotizaciones/cotizar") ?>">
                             <div class="sb-nav-link-icon"><i class="fas fa-book-open"></i></div>
                             Cotizar
                         </a>
 
                         <div class="sb-sidenav-menu-heading">Pólizas</div>
-                        <a class="nav-link" href="<?= site_url("lista/polizas") ?>">
+                        <a class="nav-link" href="<?= site_url("polizas") ?>">
                             <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
                             Lista
                         </a>
 
-                        <a class="nav-link" href="<?= site_url("reportes") ?>">
+                        <a class="nav-link" href="<?= site_url("polizas/reportes") ?>">
                             <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
                             Reportes
                         </a>

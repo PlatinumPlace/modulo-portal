@@ -13,35 +13,34 @@ class Home extends BaseController
 
 	public function index()
 	{
-		//Cotizaciones
-		$total = 0;
-		$emisiones = 0;
-		$criteria = "Account_Name:equals:" . session()->get("empresaid");
-		$lista =  $this->api->searchRecordsByCriteria("Quotes", $criteria, 1, 200);
-		foreach ($lista as $cotizacion) {
-			if (date("Y-m", strtotime($cotizacion->getCreatedTime())) == date('Y-m')) {
-				$total++;
-				if (!empty($cotizacion->getFieldValue('Deal_Name'))) {
-					$emisiones++;
-				}
-			}
-		}
+        $total = 0;
+        $emisiones = 0;
+        $criteria = "Account_Name:equals:" . session()->get("empresaid");
+        $lista =  $this->api->searchRecordsByCriteria("Quotes", $criteria, 1, 200);
 
-		//Emisiones
-		$aseguradoras = array();
-		$criteria = "Account_Name:equals:" . session()->get("empresaid");
-		$lista =  $this->api->searchRecordsByCriteria("Deals", $criteria, 1, 200);
-		foreach ($lista as $poliza) {
-			if (date("Y-m", strtotime($poliza->getCreatedTime())) == date('Y-m')) {
-				$aseguradoras[] = $poliza->getFieldValue('Aseguradora')->getLookupLabel();
-			}
+        foreach ($lista as $cotizacion) {
+            if (date("Y-m", strtotime($cotizacion->getCreatedTime())) == date('Y-m')) {
+                $total++;
+                if (!empty($cotizacion->getFieldValue('Deal_Name'))) {
+                    $emisiones++;
+                }
+            }
 		}
-		$aseguradoras = array_count_values($aseguradoras);
+		
+		$aseguradoras = array();
+        $criteria = "Account_Name:equals:" . session()->get("empresaid");
+        $lista =  $this->api->searchRecordsByCriteria("Deals", $criteria, 1, 200);
+
+        foreach ($lista as $poliza) {
+            if (date("Y-m", strtotime($poliza->getCreatedTime())) == date('Y-m')) {
+                $aseguradoras[] = $poliza->getFieldValue('Aseguradora')->getLookupLabel();
+            }
+        }
 
 		return view("index", [
 			"cotizaciones" => $total,
 			"emisiones" => $emisiones,
-			"aseguradoras" => $aseguradoras
+			"aseguradoras" =>array_count_values($aseguradoras)
 		]);
 	}
 }
