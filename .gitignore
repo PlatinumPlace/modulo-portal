@@ -127,3 +127,4 @@ nb-configuration.xml
 
 public/favicon.ico
 *.png
+public/zcrm_oauthtokens.txt
