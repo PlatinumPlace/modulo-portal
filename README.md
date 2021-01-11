@@ -25,5 +25,3 @@ Para mas informacion sobre como instalar esta version de sdk entrar [aquí](http
 [zcrm-php-sdk](https://github.com/zoho/zcrm-php-sdk), libreria.
 
 [startbootstrap-sb-admin](https://github.com/startbootstrap/startbootstrap-sb-admin), template.
-
-[Bootstrap](https://getbootstrap.com/), libreria.

@@ -15,10 +15,7 @@ class Portal extends BaseController
 
     public function index()
     {
-        return view("index", [
-            "cotizaciones" => 0,
-            "emisiones" => 0,
-            "aseguradoras" => array()
-        ]);
+        $result = $this->libraries->resumen($this->api);
+        return view("index", ["cotizaciones" => $result["cotizaciones"], "emisiones" => $result["emisiones"], "aseguradoras" => $result["aseguradoras"]]);
     }
 }
