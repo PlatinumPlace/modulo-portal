@@ -18,7 +18,7 @@ class Zoho
             "client_secret" => "c3f1d0589803f294a7c5b27e3968ae1658927da9d7",
             "currentUserEmail" => "tecnologia@gruponobe.com",
             "redirect_uri" => site_url(),
-            "token_persistence_path" => "token"
+            "token_persistence_path" => FCPATH
         ]);
     }
 

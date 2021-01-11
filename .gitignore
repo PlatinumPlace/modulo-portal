@@ -125,7 +125,5 @@ nb-configuration.xml
 /phpunit*.xml
 /.phpunit.*.cache
 
-*.png
-public/token/zcrm_oauthtokens.txt
-app/Libraries/CalcularPrima.php
 public/favicon.ico
+*.png

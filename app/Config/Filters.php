@@ -1,6 +1,4 @@
-<?php
-
-namespace Config;
+<?php namespace Config;
 
 use CodeIgniter\Config\BaseConfig;
 
@@ -12,15 +10,13 @@ class Filters extends BaseConfig
 		'csrf'     => \CodeIgniter\Filters\CSRF::class,
 		'toolbar'  => \CodeIgniter\Filters\DebugToolbar::class,
 		'honeypot' => \CodeIgniter\Filters\Honeypot::class,
-		'sesion' => \App\Filters\Sesion::class,
 	];
 
 	// Always applied before every request
 	public $globals = [
 		'before' => [
 			//'honeypot'
-			//'csrf',
-			'sesion' => ['except' => ['login', 'login/post']]
+			// 'csrf',
 		],
 		'after'  => [
 			'toolbar',
