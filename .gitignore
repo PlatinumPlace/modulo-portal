@@ -130,3 +130,4 @@ public/favicon.ico
 public/zcrm_oauthtokens.txt
 app/Libraries/Portal.php
 app/Views/layouts/portal.php
+app/Libraries/Home.php
