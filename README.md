@@ -1,62 +1,28 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400"></a></p>
+## Sobre Laravel
 
-<p align="center">
-<a href="https://travis-ci.org/laravel/framework"><img src="https://travis-ci.org/laravel/framework.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Laravel es un marco de aplicación web con una sintaxis elegante y expresiva. Creemos que el desarrollo debe ser una experiencia divertida y creativa para ser verdaderamente satisfactorio. Laravel elimina la molestia del desarrollo al facilitar las tareas comunes que se utilizan en muchos proyectos web, como:
 
-## About Laravel
+- [Motor de enrutamiento simple y rápido.](https://laravel.com/docs/routing).
+- [Potente contenedor de inyección de dependencia.](https://laravel.com/docs/container).
+- Múltiples back-end para almacenamiento de [caché y sesión.](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
+- [ORM de base de datos] intuitivo y expresivo.(https://laravel.com/docs/eloquent).
+- [Migraciones de esquemas] independientes de la base de datos.(https://laravel.com/docs/migrations).
+- [Procesamiento robusto de trabajos en segundo plano.](https://laravel.com/docs/queues).
+- [Transmisión de eventos en tiempo real.](https://laravel.com/docs/broadcasting).
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+Laravel es accesible, potente y proporciona las herramientas necesarias para aplicaciones grandes y robustas.
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## ¿Por qué ZCRM PHP SDK version 2?
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+La version del api proviene del paquete de composer `"zohocrm/php-sdk-archive": "2.2.1"`, esto se debe a que el paguete actual del sdk se actualizo a una version no compatible con el proyecto. Mas informacion [aquí](https://github.com/zoho/zcrm-php-sdk#archival-notice).
 
-## Learning Laravel
+Esta version cuenta con documentacon detalla sobre el uso de sus metodos. Mas informacion [aquí](https://www.zoho.com/crm/developer/docs/php-sdk/sample-codes.html).
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+Para mas informacion sobre como instalar esta version de sdk entrar [aquí](https://www.zoho.com/es-xl/crm/developer/docs/server-side-sdks/php.html#Initialization).
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 1500 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+### Creditos
 
-## Laravel Sponsors
-
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
-
-### Premium Partners
-
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[Many](https://www.many.co.uk)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- **[Curotec](https://www.curotec.com/)**
-- **[OP.GG](https://op.gg)**
-
-## Contributing
-
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
-
-## Code of Conduct
-
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
-
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+- **[Laravel](https://github.com/laravel/laravel)**, framework con mvc de patron de diseño.
+- **[startbootstrap-sb-admin](https://github.com/startbootstrap/startbootstrap-sb-admin)**, template para diseño de interfaz.
+- **[zcrm-php-sdk](https://github.com/zoho/zcrm-php-sdk)**, API para comunicarse con ZOHO CRM.
+- **[PhpSpreadsheet](https://github.com/PHPOffice/PhpSpreadsheet)**, libreria para crear reportes con formato .xlsx.
