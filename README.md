@@ -4,8 +4,8 @@ Esta clase está diseñada para consumir **zoho api php** en su versión 2. Dich
 
 ### Documentacion ZOHO
 
-Los metodos estan documentadas junto con su correspondiente enlace a la documentacion de zoho.Mas informacion [aquí](https://www.zoho.com/crm/developer/docs/php-sdk/sample-codes.html).
+Los métodos están documentadas junto con su correspondiente enlace a la documentación de zoho. Más información [aquí](https://www.zoho.com/crm/developer/docs/php-sdk/sample-codes.html).
 
 ### Aviso
 
-Zoho ha desarrollado la version 3 del PHP SDK, esta version es incompatible con la version 2 y , por lo tanto, todos los metodos descritos de este repositorio no funcionan en esa version, no obstante, la version 2 sigui en funcionamiento y los metos funcionan correctamente.Mas informacion [aquí](https://github.com/zoho/zcrm-php-sdk#archival-notice).
+Zoho ha desarrollado la versión 3 del PHP SDK, esta versión es incompatible con la versión 2 y , por lo tanto, todos los métodos descritos de este repositorio no funcionan en esa versión, no obstante, la versión 2 sigue en funcionamiento y los métodos funcionan correctamente. Más información [aquí](https://github.com/zoho/zcrm-php-sdk#archival-notice).
