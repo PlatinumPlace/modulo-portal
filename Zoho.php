@@ -35,7 +35,7 @@ class Zoho
         $oAuthClient->generateAccessToken($grant_token);
     }
 
-//https://www.zoho.com/crm/developer/docs/php-sdk/module-sample.html?src=search_record_criteria
+    //https://www.zoho.com/crm/developer/docs/php-sdk/module-sample.html?src=search_record_criteria
     //Requiere: módulo,criterio, página del módulo, cantidad de registros.
     //Ejemplo de criterio: "Nombre:equals:$nombre".
     //Retorna: múltiples objetos ZCRMRecord.
@@ -58,7 +58,7 @@ class Zoho
         }
     }
 
-   //https://www.zoho.com/crm/developer/docs/php-sdk/module-sample.html?src=records_list
+    //https://www.zoho.com/crm/developer/docs/php-sdk/module-sample.html?src=records_list
     //Requiere: módulo, opcional = página del módulo, cantidad de registros.
     //Retorna: múltiples objetos ZCRMRecord.
     //Descripción: listado de registros.
@@ -80,7 +80,7 @@ class Zoho
         }
     }
 
-   //https://www.zoho.com/crm/developer/docs/php-sdk/module-sample.html?src=get_record
+    //https://www.zoho.com/crm/developer/docs/php-sdk/module-sample.html?src=get_record
     //Requiere: módulo, id del registro.
     //Retorna: objeto ZCRMRecord.
     //Descripción: objeto con las propiedades del registro.
@@ -100,7 +100,7 @@ class Zoho
         }
     }
 
-//https://www.zoho.com/crm/developer/docs/php-sdk/record-samples.html?src=download_photo
+    //https://www.zoho.com/crm/developer/docs/php-sdk/record-samples.html?src=download_photo
     //Requiere: módulo, id del registro.
     //Retorna: ruta del archivo.
     //Descripción: descarga la foto de perfil de un registro.
@@ -119,7 +119,7 @@ class Zoho
         return $fileResponseIns->getFileName();
     }
 
-//https://www.zoho.com/crm/developer/docs/php-sdk/module-sample.html?src=create_records
+    //https://www.zoho.com/crm/developer/docs/php-sdk/module-sample.html?src=create_records
     //Requiere: módulo, arreglo, donde los campos tenga el nombre de api de los campos del
     //módulo, arreglo con los siguientes campos: id del registro producto, descripción, precio.
     //Retorna: id del nuevo registro.
@@ -163,7 +163,7 @@ class Zoho
         return $details["id"];
     }
 
-//https://www.zoho.com/crm/developer/docs/php-sdk/record-samples.html?src=update_record
+    //https://www.zoho.com/crm/developer/docs/php-sdk/record-samples.html?src=update_record
     //Requiere: módulo, id de registro, arreglo, donde los campos tenga el nombre de api de los campos del
     //módulo.
     //Retorna: nada.
@@ -187,7 +187,7 @@ class Zoho
         //echo "<br>";
     }
 
-//https://www.zoho.com/crm/developer/docs/php-sdk/record-samples.html?src=upload_attachments
+    //https://www.zoho.com/crm/developer/docs/php-sdk/record-samples.html?src=upload_attachments
     //Requiere: módulo, id de registro, ruta del archivo.
     //Retorna: nada.
     //Descripción: carga un archivo a un registro.
@@ -207,7 +207,7 @@ class Zoho
         //echo "<br>";
     }
 
-//https://www.zoho.com/crm/developer/docs/php-sdk/record-samples.html?src=get_attachments
+    //https://www.zoho.com/crm/developer/docs/php-sdk/record-samples.html?src=get_attachments
     //Requiere: módulo, id del registro, pagina de los archivos cargados, cantidad de
     //los archivos cargados.
     //Retorna: múltiples objetos ZCRMRestClient asociados a un registro.
@@ -230,7 +230,7 @@ class Zoho
         }
     }
 
-//https://www.zoho.com/crm/developer/docs/php-sdk/record-samples.html?src=download_attachments
+    //https://www.zoho.com/crm/developer/docs/php-sdk/record-samples.html?src=download_attachments
     //Requiere: módulo, id del registro, id del archivo cargado al registro, ruta donde se
     //descarga el archivo.
     //Retorna: ruta del archivo.
