@@ -7,8 +7,13 @@ use zcrmsdk\crm\crud\ZCRMInventoryLineItem;
 use zcrmsdk\crm\crud\ZCRMTax;
 use zcrmsdk\oauth\ZohoOAuth;
 
+//Cada método contiene mensajes de confirmación dados por el api.
+//Glosario
+//página: los módulos tiene 1 página cada 200 registros.
 class Zoho
 {
+    //https://accounts.zoho.com/developerconsole
+    //Requiere: id cliente, clave secreta, email del la cuenta de zoho, ruta al token.
     function __construct()
     {
         ZCRMRestClient::initialize([
@@ -20,12 +25,21 @@ class Zoho
         ]);
     }
 
+    //https://www.zoho.com/es-xl/crm/developer/docs/server-side-sdks/php.html#Initialization
+    //Requiere: token de actualización.
+    //Retorna: nada.
+    //Descripción: usa la clase del api para genera un token .txt.
     public function generateTokens($grant_token)
     {
         $oAuthClient = ZohoOAuth::getClientInstance();
         $oAuthClient->generateAccessToken($grant_token);
     }
 
+//https://www.zoho.com/crm/developer/docs/php-sdk/module-sample.html?src=search_record_criteria
+    //Requiere: módulo,criterio, página del módulo, cantidad de registros.
+    //Ejemplo de criterio: "Nombre:equals:$nombre".
+    //Retorna: múltiples objetos ZCRMRecord.
+    //Descripción: busca registros en un módulo según la cadena de criterio.
     public function searchRecordsByCriteria($module_api_name, $criteria, $page, $per_page)
     {
         $moduleIns = ZCRMRestClient::getInstance()->getModuleInstance($module_api_name);
@@ -44,10 +58,14 @@ class Zoho
         }
     }
 
-    public function getRecords($module_api_name)
+   //https://www.zoho.com/crm/developer/docs/php-sdk/module-sample.html?src=records_list
+    //Requiere: módulo, opcional = página del módulo, cantidad de registros.
+    //Retorna: múltiples objetos ZCRMRecord.
+    //Descripción: listado de registros.
+    public function getRecords($module_api_name, $page = 1, $per_page = 200)
     {
         $moduleIns = ZCRMRestClient::getInstance()->getModuleInstance($module_api_name);
-        $param_map = array("page" => 1, "per_page" => 200);
+        $param_map = array("page" => $page, "per_page" => $per_page);
         try {
             $response = $moduleIns->getRecords($param_map);
             return $response->getData();
@@ -62,6 +80,10 @@ class Zoho
         }
     }
 
+   //https://www.zoho.com/crm/developer/docs/php-sdk/module-sample.html?src=get_record
+    //Requiere: módulo, id del registro.
+    //Retorna: objeto ZCRMRecord.
+    //Descripción: objeto con las propiedades del registro.
     public function getRecord($module_api_name, $record_id)
     {
         $moduleIns = ZCRMRestClient::getInstance()->getModuleInstance($module_api_name);
@@ -78,6 +100,10 @@ class Zoho
         }
     }
 
+//https://www.zoho.com/crm/developer/docs/php-sdk/record-samples.html?src=download_photo
+    //Requiere: módulo, id del registro.
+    //Retorna: ruta del archivo.
+    //Descripción: descarga la foto de perfil de un registro.
     public function downloadPhoto($module_api_name, $record_id)
     {
         $record = ZCRMRestClient::getInstance()->getRecordInstance($module_api_name, $record_id);
@@ -93,6 +119,12 @@ class Zoho
         return $fileResponseIns->getFileName();
     }
 
+//https://www.zoho.com/crm/developer/docs/php-sdk/module-sample.html?src=create_records
+    //Requiere: módulo, arreglo, donde los campos tenga el nombre de api de los campos del
+    //módulo, arreglo con los siguientes campos: id del registro producto, descripción, precio.
+    //Retorna: id del nuevo registro.
+    //Descripción: crea un nuevo registro en un módulo, si contiene una tabla de productos: los
+    //asigna según los valores id del arreglo y si contiene una descripción y precio también.
     public function createRecords($module_api_name, $registro, $productos = array())
     {
         $moduleIns = ZCRMRestClient::getInstance()->getModuleInstance($module_api_name);
@@ -131,6 +163,11 @@ class Zoho
         return $details["id"];
     }
 
+//https://www.zoho.com/crm/developer/docs/php-sdk/record-samples.html?src=update_record
+    //Requiere: módulo, id de registro, arreglo, donde los campos tenga el nombre de api de los campos del
+    //módulo.
+    //Retorna: nada.
+    //Descripción: modifica los valores de un registro.
     public function update($module_api_name, $record_id, $registro)
     {
         $record = ZCRMRestClient::getInstance()->getRecordInstance($module_api_name, $record_id);
@@ -150,6 +187,10 @@ class Zoho
         //echo "<br>";
     }
 
+//https://www.zoho.com/crm/developer/docs/php-sdk/record-samples.html?src=upload_attachments
+    //Requiere: módulo, id de registro, ruta del archivo.
+    //Retorna: nada.
+    //Descripción: carga un archivo a un registro.
     public function uploadAttachment($module_api_name, $record_id, $path)
     {
         $record = ZCRMRestClient::getInstance()->getRecordInstance($module_api_name, $record_id);
@@ -166,6 +207,11 @@ class Zoho
         //echo "<br>";
     }
 
+//https://www.zoho.com/crm/developer/docs/php-sdk/record-samples.html?src=get_attachments
+    //Requiere: módulo, id del registro, pagina de los archivos cargados, cantidad de
+    //los archivos cargados.
+    //Retorna: múltiples objetos ZCRMRestClient asociados a un registro.
+    //Descripción: listado de objetos que representan los archivos cargados a un registro.
     public function getAttachments($module_api_name, $record_id, $page, $per_page)
     {
         $record = ZCRMRestClient::getInstance()->getRecordInstance($module_api_name, $record_id);
@@ -184,6 +230,11 @@ class Zoho
         }
     }
 
+//https://www.zoho.com/crm/developer/docs/php-sdk/record-samples.html?src=download_attachments
+    //Requiere: módulo, id del registro, id del archivo cargado al registro, ruta donde se
+    //descarga el archivo.
+    //Retorna: ruta del archivo.
+    //Descripción: descarga un archivo, que esté cargado a un registro, a un ruta específica.
     public function downloadAttachment($module_api_name, $record_id, $attachment_id, $filePath)
     {
         $record = ZCRMRestClient::getInstance()->getRecordInstance($module_api_name, $record_id);
