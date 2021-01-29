@@ -1,6 +1,20 @@
-## Detalles
+# Descripción
 
 Esta clase está diseñada para consumir **zoho api php** en su versión 2. Dichos métodos están modificados para hacer las ágiles, por ejemplo: todos retornar el objeto de la clase ZCRMRecord.
+
+## Metodos
+
+**Enlasados a su referencia en la documentacion de zoho**.
+
+- [searchRecordsByCriteria](https://www.zoho.com/crm/developer/docs/php-sdk/module-sample.html?src=search_record_criteria)
+- [getRecords](https://www.zoho.com/crm/developer/docs/php-sdk/module-sample.html?src=records_list)
+- [getRecord](https://www.zoho.com/crm/developer/docs/php-sdk/module-sample.html?src=get_record)
+- [downloadPhoto](https://www.zoho.com/crm/developer/docs/php-sdk/record-samples.html?src=download_photo)
+- [createRecords](https://www.zoho.com/crm/developer/docs/php-sdk/module-sample.html?src=create_records)
+- [update](https://www.zoho.com/crm/developer/docs/php-sdk/record-samples.html?src=update_record)
+- [uploadAttachment](https://www.zoho.com/crm/developer/docs/php-sdk/record-samples.html?src=upload_attachments)
+- [getAttachments](https://www.zoho.com/crm/developer/docs/php-sdk/record-samples.html?src=get_attachments)
+- [downloadAttachment](https://www.zoho.com/crm/developer/docs/php-sdk/record-samples.html?src=download_attachments)
 
 ### Documentacion ZOHO
 
