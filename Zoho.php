@@ -235,11 +235,11 @@ class Zoho
     //descarga el archivo.
     //Retorna: ruta del archivo.
     //Descripción: descarga un archivo, que esté cargado a un registro, a un ruta específica.
-    public function downloadAttachment($module_api_name, $record_id, $attachment_id, $filePath)
+    public function downloadAttachment($module_api_name, $record_id, $attachment_id)
     {
         $record = ZCRMRestClient::getInstance()->getRecordInstance($module_api_name, $record_id);
         $fileResponseIns = $record->downloadAttachment($attachment_id);
-        $fp = fopen($filePath . "/" . $fileResponseIns->getFileName(), "w");
+        $fp = fopen("tmp/".$fileResponseIns->getFileName(), "w");
         //echo "HTTP Status Code:" . $fileResponseIns->getHttpStatusCode();
         //echo "<br>";
         //echo "File Name:" . $fileResponseIns->getFileName();
@@ -247,6 +247,6 @@ class Zoho
         $stream = $fileResponseIns->getFileContent();
         fputs($fp, $stream);
         fclose($fp);
-        return $filePath . "/" . $fileResponseIns->getFileName();
+        return $fileResponseIns->getFileName();
     }
 }
